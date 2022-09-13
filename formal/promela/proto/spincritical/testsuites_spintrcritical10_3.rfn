@@ -1,0 +1,124 @@
+/******************************************************************************
+ * FV2-201
+ *
+ * Copyright (C) 2019-2021 Trinity College Dublin (www.tcd.ie)
+ *
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met:
+ *
+ *     * Redistributions of source code must retain the above copyright
+ *       notice, this list of conditions and the following disclaimer.
+ *
+ *     * Redistributions in binary form must reproduce the above
+ *       copyright notice, this list of conditions and the following
+ *       disclaimer in the documentation and/or other materials provided
+ *       with the distribution.
+ *
+ *     * Neither the name of the copyright holders nor the names of its
+ *       contributors may be used to endorse or promote products derived
+ *       from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ ******************************************************************************/
+
+/*
+ *  COPYRIGHT (c) 1989-2012.
+ *  On-Line Applications Research Corporation (OAR).
+ *
+ *  Copyright (c) 2013, 2020 embedded brains GmbH.
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.org/license/LICENSE.
+ */
+
+/*@
+
+export_code \<open>init.c\<close>
+
+enclose_file \<open>enclose_1_head.c\<close>
+             \<open>enclose_2_foot.c\<close>
+
+export_input_yaml \<open>_\<close>
+export_input_only_content
+
+refine_uniform_log
+
+disable_negation_at \<open>send\<close>
+no_atomic_at \<open>send\<close>
+refine_uniform_at \<open>send\<close>
+\<open>
+static T_interrupt_test_state test_send(void *arg)
+{
+  rtems_status_code sc;
+  test_context *ctx = arg;
+  Thread_Control *thread = ctx->thread;
+  Thread_Wait_flags flags = _Thread_Wait_flags_get(thread);
+  T_interrupt_test_state state;
+
+  if (blocks_for_event(flags)) {
+    if (interrupts_blocking_op(flags)) {
+      state = T_INTERRUPT_TEST_DONE;
+    } else {
+      state = T_INTERRUPT_TEST_LATE;
+    }
+
+    T_eq_u32(*(rtems_event_set *) thread->Wait.return_argument, DEADBEEF);
+    T_eq_u32(_Thread_Wait_get_status(thread), STATUS_SUCCESSFUL);
+
+    _Thread_Timeout(&thread->Timer.Watchdog);
+
+    T_eq_u32(*(rtems_event_set *) thread->Wait.return_argument, DEADBEEF);
+    T_eq_u32(_Thread_Wait_get_status(thread), STATUS_TIMEOUT);
+
+    sc = rtems_event_send(thread->Object.id, EVENTS);
+    T_eq_u32(sc, RTEMS_SUCCESSFUL);
+
+    T_eq_u32(*(rtems_event_set *) thread->Wait.return_argument, DEADBEEF);
+    T_eq_u32(_Thread_Wait_get_status(thread), STATUS_TIMEOUT);
+
+    if (state == T_INTERRUPT_TEST_DONE) {
+      T_eq_u32(_Thread_Wait_flags_get(thread), THREAD_WAIT_CLASS_EVENT | THREAD_WAIT_STATE_READY_AGAIN);
+    }
+
+    T_eq_u32(thread->Wait.count, EVENTS);
+  } else {
+    state = T_INTERRUPT_TEST_EARLY;
+  }
+
+  return state;
+}\<close>
+
+disable_negation_at \<open>receive\<close>
+no_atomic_at \<open>receive\<close>
+refine_uniform_at \<open>receive\<close>
+\<open>
+static void test_receive(void *arg)
+{
+  rtems_event_set out;
+  rtems_status_code sc;
+
+  out = DEADBEEF;
+  sc = rtems_event_receive(EVENTS, RTEMS_EVENT_ALL | RTEMS_WAIT, 1, &out);
+  T_eq_u32(sc, RTEMS_TIMEOUT);
+  T_eq_u32(out, DEADBEEF);
+
+  out = DEADBEEF;
+  sc = rtems_event_receive(EVENTS, RTEMS_EVENT_ALL | RTEMS_NO_WAIT, 0, &out);
+  T_eq_u32(sc, RTEMS_SUCCESSFUL);
+  T_eq_u32(out, EVENTS);
+}\<close>
+*/

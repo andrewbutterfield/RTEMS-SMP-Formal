@@ -1,0 +1,38 @@
+/*@
+
+export_code \<open>init.c\<close>
+
+enclose_file \<open>enclose_1_head.c\<close>
+             \<open>enclose_2_foot.c\<close>
+
+export_input_yaml \<open>_\<close>
+export_input_only_content
+
+refine_uniform_log
+
+refine_uniform_at \<open>head_add\<close>
+           \<open>
+    #refine x0 \<^promela>\<open>x\<close>
+    node = _Freechain_Get(&fc0, malloc, 1, sizeof(test_node));
+    node->x = x0;
+    _Freechain_Put(&fc, node);\<close>
+
+refine_uniform_at \<open>head_del\<close>
+           \<open>
+    node = _Freechain_Get(&fc, malloc, 1, sizeof(test_node));\<close>
+
+refine_uniform_at \<open>tail_add\<close>
+           \<open>
+    #refine x0 \<^promela>\<open>x\<close>
+    node = _Freechain_Get(&fc0, malloc, 1, sizeof(test_node));
+    node->x = x0;
+    _Freechain_Put(&fc, node);\<close>
+
+refine_uniform_at \<open>tail_del\<close>
+           \<open>
+    node = _Freechain_Get(&fc, malloc, 1, sizeof(test_node));\<close>
+
+no_printf_at \<open>init_head_add\<close>
+no_printf_at \<open>init_head_del\<close>
+
+*/

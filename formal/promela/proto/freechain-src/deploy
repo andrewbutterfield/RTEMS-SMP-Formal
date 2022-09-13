@@ -1,0 +1,1 @@
+cp _/assert_init/init.c /Users/butrfeld/RTEMS-SP/src/rtems/testsuites/libtests/ttest01/init.c

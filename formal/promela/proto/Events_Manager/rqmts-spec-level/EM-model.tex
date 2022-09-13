@@ -1,0 +1,212 @@
+\chapter{Event Manager Model}
+
+\section{Introduction}
+
+\section{Key Concepts}
+
+\begin{description}
+  \item [Event] 32 distinct event values.
+  \item [Task]  Unit of execution flow.
+  \item [Task Id]  Task identifier,
+   including value \texttt{RTEMS\_SELF}.
+  \item [ISR] Interrupt Service Routine, which can send events.
+  \item [(Input) Condition]
+    Specification of what event-set receiver is waiting for,
+    and how long it is willing to wait.
+    Can also be used to query for pending events using
+    a special ``event-set'' value
+     \texttt{RTEMS\_PENDING\_EVENTS},
+     or to return and clear pending events with
+     \texttt{RTEMS\_ALL\_EVENTS}.
+  \item[Option Set]
+     Defines receiver options: waits, timeouts,
+  \item [E-Lifetime] Posted; Pending; Received.
+  \item [Target Task] Task to which events are being sent.
+  \item [Blocked] A task in the blocked state.
+  \item [Ready] A task ready for execution.
+  \item [Errors]
+     timeout;
+     unsatisfied;
+     invalid task id;
+     invalid address;
+     \dots?
+  \item[Preemption]
+    Task can be en-/dis-abled for preemption.
+    Sending tasks may be pre-empted if the send unblocks a
+    higher priority task.
+  \item[Global Task]
+  \item[Node] Nodes can be global or local.
+  \item[Remote Request] Sends to remote global tasks
+  are forwarded to their node for (re-)sending.
+  \item[Clock Tick]
+\end{description}
+
+\section{Behaviour}
+
+\subsection{Types}
+
+\subsubsection{Basic Types}
+
+\begin{eqnarray*}
+   e              &\in& Event
+\\ i,\sigma       &\in& Id
+\\ s \in Status &\defs& Success | InvId | UnSat | InvAddr | Timeout
+\\ c \in Cond   &\defs& Pending | AllEvt
+\\ x \in Opt    &\defs& Wait | NoWait | All | Any | Default
+\\ I              &\in& Interval
+\end{eqnarray*}
+
+\subsubsection{API Types}
+
+\begin{eqnarray*}
+   E \in Events &\defs& \Set{Event}
+\\ C \in InCond &\defs& Events + Cond
+\\ p              &\in& EventsPtr
+\\ X \in Opts   &\defs& \Set{Opt}
+\end{eqnarray*}
+
+
+\subsubsection{System Types}
+
+\begin{eqnarray*}
+   TStatus &\defs& EvtBlk | OthrBlk | Ready | Running | Preempted \dots
+\\ TPrio &\defs& \Nat
+\\ TNode &\defs& \Nat
+\\ node \in TaskNode &\defs& Id \pfun TNode
+\\ prio \in TaskPrio &\defs& Id \pfun TPrio
+\\ sts \in TaskStatus &\defs& Id \pfun TStatus
+\\ pend \in TaskEvents &\defs& Id \pfun Events
+\\ cond \in TaskCond &\defs& Id \pfun InCond
+\\ opts \in TaskOpts &\defs& Id \pfun Opts
+\\ pmpt \in TaskPreempt &\defs& Id \pfun \Bool
+\\ sys \in Sys
+   &\defs&
+   TaskNode
+   \times TaskPrio
+   \times TaskStatus
+\\ && {} \times TaskEvents
+   \times TaskCond
+   \times TaskOpts
+   \times \dots
+\\ && (node,prio,sts,pend,cond,opts,pmpt\dots)
+\end{eqnarray*}
+
+\subsubsection{System Invariants}
+
+Assuming $sys = (node,prio,sts,pend,cond,opts,pmpt\dots)$:
+
+\begin{eqnarray*}
+  \bigcup
+    \{
+      \dom node
+      , \dots ,
+      \dom pmpt
+    \} &=& \dom node
+\end{eqnarray*}
+
+\subsubsection{System Functions}
+
+Nullary function $self$ return a task's own id (\texttt{RTEMS\_SELF}).
+\begin{eqnarray*}
+   self &:& Id \fun Id
+\\ self_\sigma &\defs& \sigma
+\end{eqnarray*}
+
+\begin{eqnarray*}
+   condsat &:& InCond \times Opts \fun Events \fun \Bool
+\\ condsat(Pending,X)E &\defs& \True
+\\ condsat(AllEvt,X)E     &\defs& \True
+\\ condsat(C,All)E &\defs& C \subseteq E
+\\ condsat(C,Any)E &\defs& C \cap E \neq \emptyset
+\end{eqnarray*}
+
+\begin{eqnarray*}
+   updevts &:& InCond \times Opts \fun Events \fun Events^2
+\\ updevts(Pending,X)E &\defs& (E,E)
+\\ updevts(AllEvt,X)E     &\defs& ()
+\\ updevts(C,All)E &\defs& (E\setminus C,C)
+\\ updevts(C,Any)E &\defs& (E\setminus C,C \cap E)
+\end{eqnarray*}
+
+\newpage
+\subsection{Event Send}
+
+Assuming $i$ is valid,
+then call $send_\sigma(i,E)sys$ adds events $E$
+to the pending events of $i$.
+If this does not result in satisfying the input condition of $i$,
+then no change occurs to the status of $i$,
+and $send_\sigma$ returns success.
+If the input condition of $i$ is satisfied,
+and $i$ is waiting on events, then it is unblocked.
+If $i$ is not waiting on events, its status is not changed.
+If $\sigma$ has lower priority than $i$ and is pre-emptable,
+then it is pre-empted.
+When $\sigma$ is eventually run, then $send_\sigma$ returns success.
+\begin{eqnarray*}
+   send &:& Id \fun (Id \times Events) \fun Sys \fun (Sys \times Status)
+\\ \lefteqn{send_\sigma(i,E)sys}
+\\ &\defs&
+      \IF i \notin \dom sts \THEN (sys,InvId)
+\\ && \ELSE
+\\ && \quad pend(i) := pend(i) \cup E
+\\ && \quad \IF condsat(cond(i),opts(i))(pend(i)) \land sts(i) = EvtBlk \THEN
+\\ && \qquad sts(i) := Ready
+\\ && \qquad \IF pmpt(\sigma) \land prio(i)>prio(\sigma) \THEN sts(\sigma) := OthrBlk
+\\ && \quad \Box
+\\ && \quad (sys',Success)
+\\ && \Box
+\end{eqnarray*}
+
+\newpage
+\subsection{Event Receive}
+
+Call $receive_\sigma(C,X,I,p)sys$ first checks if the
+pending events for $\sigma$ satisfy the input condition $(C,X)$.
+If so, those events are removed from the pending events,
+and are written into the event set indicated by $p$,
+and $receive_\sigma$ returns success.
+If the input condition is not satisfied,
+its behaviour depends on $X$ and $I$.
+If $X$ contains $Wait$, then, depending on $I$,
+$\sigma$ either blocks waiting for events,
+or for events or a timeout.
+If $X$ contains $NoWait$,
+then the currently satisfied events are copied to $p$
+and $receive_\sigma$ returns unsatisfied.
+
+When a blocked call of $receive_\sigma$ is resumed,
+it could be because was waiting for events, timeout,
+or something else.
+
+If woken by something else, it continues from where it was suspended.
+
+If woken by events,
+it first checks that the task that sent the final set of events
+needed to satisfy it,
+has lower priority than it, and is pre-emptable.
+That (most recent sending) task is then pre-empted.
+
+If woken by a timeout, it acts like $NoWait$ was specified.
+
+For a event/timeout wakeup,
+it then proceeds to go back and check the input conditions
+as described above.
+\begin{eqnarray*}
+   receive &:& Id \fun (InCond \times Opts \times Interval \times EventsPtr)
+\\ && {} \fun Sys \fun (Sys \times Status)
+\\ \lefteqn{receive_\sigma(C,X,I,p)sys}
+\\ &\defs& \IF C=Pending \THEN p @= pend(\sigma) ; (sys',Success)
+\\    && \ELIF condsat(cond(\sigma),opts(\sigma))(pend(\sigma)) \THEN
+\\    && \quad (E',C') = updevts(cond(\sigma),opts(\sigma))(pend(\sigma))
+\\    && \quad pend(\sigma) = E' ; p@=C'; (sys',Success)
+\\    && \ELSE \dots\mbox{indeed}\dots
+\end{eqnarray*}
+
+\textbf{Note:}
+\textsf{It seems the best conceptual model is that both send and receive
+really just post their parameter data into an underlying
+event manager sub-system, which then determines if the sender
+should be pre-empted, and if the receiver should be unblocked.
+This sub-system may be implemented by a mix of send, receive, ISR,
+and scheduler(?) code.}

@@ -1,0 +1,98 @@
+/*@
+export_code \<open>init.c\<close>
+
+enclose_file \<open>enclose_1_head.c\<close>
+             \<open>enclose_2_foot.c\<close>
+
+enclose_uniform_file \<open>enclose_init_1_head.c\<close>
+                     \<open>enclose_init_2_foot.c\<close>
+
+export_input_yaml \<open>_\<close>
+export_input_only_content
+
+refine_uniform_log
+
+no_atomic_at \<open>show_node0\<close>
+refine_uniform_at \<open>show_node0\<close>
+\<open>
+#refine nptr0 @{promela [int] \<open>nptr\<close>}
+  T_log(T_NORMAL,"@@@ 0 PTR nptr " xstr(nptr0));
+#if nptr0
+  xT_eq_ptr(nptr,&memory[nptr0]);
+#else
+  T_eq_ptr(nptr,NULL);
+#endif
+\<close>
+
+no_atomic_at \<open>show_node1\<close>
+refine_uniform_at \<open>show_node1\<close>
+\<open>
+  T_log(T_NORMAL,"@@@ 0 STRUCT nptr");
+
+#refine nxt @{promela [int]}
+  T_log(T_NORMAL,"@@@ 0 PTR nxt " xstr(nxt));
+#if nxt
+  xT_eq_ptr(nptr->node.next,&memory[nxt]);
+#else
+  T_eq_ptr(nptr->node.next,&chain.Tail.Node);
+#endif
+
+#refine prv @{promela [int]}
+  T_log(T_NORMAL,"@@@ 0 PTR prv " xstr(prv));
+  T_eq_int(prv, 0);
+  T_eq_ptr(nptr->node.previous,&chain.Head.Node);
+  T_eq_ptr(nptr->node.previous->previous,NULL);
+  T_eq_ptr(nptr->node.previous->next,nptr->node.next);
+
+#refine itm @{promela [int]}
+  T_log(T_NORMAL,"@@@ 0 SCALAR itm " xstr(itm));
+  T_eq_int(nptr->val,itm);
+
+  T_log(T_NORMAL,"@@@ 0 END nptr");
+\<close>
+
+no_atomic_at \<open>show_chain0\<close>
+refine_uniform_at \<open>show_chain0\<close>
+\<open>
+  T_log(T_NORMAL,"@@@ 0 SEQ chain");
+\<close>
+
+no_atomic_at \<open>show_chain1\<close>
+refine_uniform_at \<open>show_chain1\<close>
+\<open>
+#refine itm @{promela [int]}
+  T_log(T_NORMAL,"@@@ 0 SCALAR _ " xstr(itm));
+\<close>
+
+no_atomic_at \<open>show_chain2\<close>
+refine_uniform_at \<open>show_chain2\<close>
+\<open>
+  T_log(T_NORMAL,"@@@ 0 END chain");
+  show_chain(&chain,buffer);
+
+#refine memory0 @{promela ["int[8]"]}
+#refine cnp0 @{promela [int]}
+  T_eq_str(buffer, app(memory0, cnp0) " 0");
+\<close>
+
+no_atomic_at \<open>doAppend0\<close>
+refine_uniform_at \<open>doAppend0\<close>
+\<open>
+#refine val0 @{promela [int] \<open>val\<close>}
+#refine addr @{promela [int]}
+  T_log(T_NORMAL,"@@@ 0 CALL append " xstr(val0) " " xstr(addr));
+  memory[addr].val = val0;
+  rtems_chain_append(&chain,(rtems_chain_node*)&memory[addr]);
+\<close>
+
+disable_negation_at \<open>doGet\<close>
+
+no_atomic_at \<open>doNonNullGet0\<close>
+refine_uniform_at \<open>doNonNullGet0\<close>
+\<open>
+#refine nptr0 @{promela [int] \<open>nptr\<close>}
+  T_log(T_NORMAL,"@@@ 0 CALL getNonNull " xstr(nptr0));
+  nptr = get_item(&chain);
+  xT_eq_ptr(nptr,&memory[nptr0]);
+\<close>
+*/

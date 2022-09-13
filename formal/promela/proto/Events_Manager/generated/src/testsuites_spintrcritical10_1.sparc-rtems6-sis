@@ -1,0 +1,140 @@
+
+ SIS - SPARC/RISCV instruction simulator 2.22,  copyright Jiri Gaisler 2019
+ Bug-reports to jiri@gaisler.se
+
+ LEON3 emulation enabled, 4 cpus online, delta 50 clocks
+
+ Loaded build/sparc/leon3/testsuites/sptests/spintrcritical10.exe, entry 0x40000000
+
+
+*** BEGIN OF TEST SPINTRCRITICAL 10 ***
+*** TEST VERSION: 6.0.0.1fd38c8e1045e4d12de570621a4d0a3f4d9e0061
+*** TEST STATE: EXPECTED_PASS
+*** TEST BUILD: RTEMS_SMP
+*** TEST TOOLS: 10.2.1 20201026 (RTEMS 6, RSB 5f4fd63a0c2b4b0657b64abdcfa70c47bee21c52-modified, Newlib 17b7dfc)
+A:SPINTRCRITICAL 10
+S:Platform:RTEMS
+S:Compiler:10.2.1 20201026 (RTEMS 6, RSB 5f4fd63a0c2b4b0657b64abdcfa70c47bee21c52-modified, Newlib 17b7dfc)
+S:Version:6.0.0.1fd38c8e1045e4d12de570621a4d0a3f4d9e0061
+S:BSP:leon3
+S:RTEMS_DEBUG:0
+S:RTEMS_MULTIPROCESSING:0
+S:RTEMS_POSIX_API:0
+S:RTEMS_PROFILING:0
+S:RTEMS_SMP:1
+B:Event
+P:0.0:0:ISR:init.c:123
+P:0.1:0:ISR:init.c:124
+P:0.2:0:ISR:init.c:127
+P:0.3:0:ISR:init.c:129
+P:0.4:0:ISR:init.c:130
+P:0.5:0:ISR:init.c:133
+P:0.6:0:ISR:init.c:135
+P:0.7:0:ISR:init.c:136
+P:0.8:0:ISR:init.c:140
+P:0.9:0:ISR:init.c:141
+P:0.10:0:ISR:init.c:147
+P:0.11:0:UI1:init.c:97
+P:0.12:0:UI1:init.c:98
+P:0.13:0:UI1:init.c:102
+P:0.14:0:UI1:init.c:103
+P:0.15:0:ISR:init.c:123
+P:0.16:0:ISR:init.c:124
+P:0.17:0:ISR:init.c:127
+P:0.18:0:ISR:init.c:129
+P:0.19:0:ISR:init.c:130
+P:0.20:0:ISR:init.c:133
+P:0.21:0:ISR:init.c:135
+P:0.22:0:ISR:init.c:136
+P:0.23:0:ISR:init.c:140
+P:0.24:0:ISR:init.c:141
+P:0.25:0:ISR:init.c:147
+P:0.26:0:UI1:init.c:97
+P:0.27:0:UI1:init.c:98
+P:0.28:0:UI1:init.c:102
+P:0.29:0:UI1:init.c:103
+P:0.30:0:ISR:init.c:123
+P:0.31:0:ISR:init.c:124
+P:0.32:0:ISR:init.c:127
+P:0.33:0:ISR:init.c:129
+P:0.34:0:ISR:init.c:130
+P:0.35:0:ISR:init.c:133
+P:0.36:0:ISR:init.c:135
+P:0.37:0:ISR:init.c:136
+P:0.38:0:ISR:init.c:140
+P:0.39:0:ISR:init.c:141
+P:0.40:0:ISR:init.c:147
+P:0.41:0:UI1:init.c:97
+P:0.42:0:UI1:init.c:98
+P:0.43:0:UI1:init.c:102
+P:0.44:0:UI1:init.c:103
+P:0.45:0:ISR:init.c:123
+P:0.46:0:ISR:init.c:124
+P:0.47:0:ISR:init.c:127
+P:0.48:0:ISR:init.c:129
+P:0.49:0:ISR:init.c:130
+P:0.50:0:ISR:init.c:133
+P:0.51:0:ISR:init.c:135
+P:0.52:0:ISR:init.c:136
+P:0.53:0:ISR:init.c:140
+P:0.54:0:ISR:init.c:141
+P:0.55:0:ISR:init.c:147
+P:0.56:0:UI1:init.c:97
+P:0.57:0:UI1:init.c:98
+P:0.58:0:UI1:init.c:102
+P:0.59:0:UI1:init.c:103
+P:0.60:0:ISR:init.c:123
+P:0.61:0:ISR:init.c:124
+P:0.62:0:ISR:init.c:127
+P:0.63:0:ISR:init.c:129
+P:0.64:0:ISR:init.c:130
+P:0.65:0:ISR:init.c:133
+P:0.66:0:ISR:init.c:135
+P:0.67:0:ISR:init.c:136
+P:0.68:0:ISR:init.c:140
+P:0.69:0:ISR:init.c:141
+P:0.70:0:ISR:init.c:147
+P:0.71:0:UI1:init.c:97
+P:0.72:0:UI1:init.c:98
+P:0.73:0:UI1:init.c:102
+P:0.74:0:UI1:init.c:103
+P:0.75:0:ISR:init.c:123
+P:0.76:0:ISR:init.c:124
+P:0.77:0:ISR:init.c:127
+P:0.78:0:ISR:init.c:129
+P:0.79:0:ISR:init.c:130
+P:0.80:0:ISR:init.c:133
+P:0.81:0:ISR:init.c:135
+P:0.82:0:ISR:init.c:136
+P:0.83:0:ISR:init.c:140
+P:0.84:0:ISR:init.c:141
+P:0.85:0:ISR:init.c:147
+P:0.86:0:UI1:init.c:97
+P:0.87:0:UI1:init.c:98
+P:0.88:0:UI1:init.c:102
+P:0.89:0:UI1:init.c:103
+P:0.90:0:ISR:init.c:123
+P:0.91:0:ISR:init.c:124
+P:0.92:0:ISR:init.c:127
+P:0.93:0:ISR:init.c:129
+P:0.94:0:ISR:init.c:130
+P:0.95:0:ISR:init.c:133
+P:0.96:0:ISR:init.c:135
+P:0.97:0:ISR:init.c:136
+P:0.98:0:ISR:init.c:140
+P:0.99:0:ISR:init.c:141
+P:0.100:0:ISR:init.c:144
+P:0.101:0:ISR:init.c:147
+P:0.102:0:UI1:init.c:97
+P:0.103:0:UI1:init.c:98
+P:0.104:0:UI1:init.c:102
+P:0.105:0:UI1:init.c:103
+P:0:0:UI1:init.c:215
+E:Event:N:107:F:0:D:0.069003
+Z:SPINTRCRITICAL 10:C:1:N:107:F:0:D:0.069314
+Y:ReportHash:SHA256:65152ddc18758e567c342a7b6bc3ad173e27e1136adc3ecf875676f99a11e7fc
+
+*** END OF TEST SPINTRCRITICAL 10 ***
+
+cpu 0 in error mode (tt = 0x80)
+  3799550  4000db00:  91d02000   ta  0x0

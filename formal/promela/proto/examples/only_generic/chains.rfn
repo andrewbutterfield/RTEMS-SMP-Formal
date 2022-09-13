@@ -1,0 +1,69 @@
+====
+Node
+----
+item
+====
+unsigned
+----
+item *
+====
+Control
+----
+rtems_chain_control
+====
+INIT
+----
+rtems_chain_initialize_empty(&chain);
+====
+append value index
+----
+memory[`index`].val = `value`;
+rtems_chain_append(&chain,(rtems_chain_node*)&memory[`index`]);
+====
+getNonNull index
+----
+nptr = get_item(&chain);
+T_eq_ptr(nptr,&memory[`index`]);
+====
+nptr index
+----
+T_eq_ptr(nptr,&memory[`index`]);
+====
+nptr_PTR index
+----
+T_eq_ptr(nptr,NULL);
+T_eq_ptr(nptr,&memory[`index`]);
+====
+itm_FSCALAR svar fval
+----
+T_eq_int(`svar`->val,`fval`);
+====
+nxt_FPTR svar fval
+----
+T_eq_ptr(`svar`->node.next,NULL);
+T_eq_ptr(`svar`->node.next,&memory[`fval`]);
+====
+prv_FPTR svar fval
+----
+T_eq_ptr(`svar`->node.previous,NULL);
+T_eq_ptr(`svar`->node.previous,&memory[`fval`]);
+====
+nptr_STRUCT nxt prv itm
+----
+if( `nxt` ) {
+T_eq_ptr(nptr->node.next,&memory[`nxt`]);
+} else {
+T_eq_ptr(nptr->node.next,NULL);
+};
+if (`prv`) {
+T_eq_ptr(nptr->node.previous,&memory[`prv`]);
+} else {
+T_eq_ptr(nptr->node.previous,NULL);
+};
+T_eq_int(nptr->val,`itm`);
+====
+chain_SEQ vals_str
+----
+show_chain(&chain,buffer);
+T_eq_str(buffer,"`vals_str` 0");
+****

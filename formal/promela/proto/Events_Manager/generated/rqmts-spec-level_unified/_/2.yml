@@ -1,0 +1,19 @@
+- export_code:
+  - init.c
+- enclose_file:
+  - ../rqmts-spec-level/model-events-mgr-pre.h
+  - ../rqmts-spec-level/model-events-mgr-post.h
+- refine_generic_file:
+  - ../rqmts-spec-level/model-events-mgr-rfn.yml
+- export_trail_num:
+  - '1'
+- export_trail_num:
+  - '2'
+- export_trail_num:
+  - '3'
+- export_trail_num:
+  - '4'
+- export_input_yaml:
+  - _
+- export_input_only_content: []
+

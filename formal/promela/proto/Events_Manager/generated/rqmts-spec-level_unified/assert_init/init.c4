@@ -1,0 +1,178 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
+/**
+ * @file
+ *
+ * @ingroup RTEMSTestCaseRtemsModelEventsMgr
+ */
+
+/*
+ * Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+ *                    Trinity College Dublin (http://www.tcd.ie)
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ */
+
+/*
+ * This file was automatically generated.  Do not edit it manually.
+ * Please have a look at
+ *
+ * https://docs.rtems.org/branches/master/eng/req/howto.html
+ *
+ * for information how to maintain and re-generate this file.
+ */
+
+#ifndef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include <rtems/score/threadimpl.h>
+
+
+#include "tr-model-events-mgr.h"
+
+
+/* =============================================== */
+
+// @@@ 0 NAME Event_Manager_TestGen
+// @@@ 0 DEF NO_OF_EVENTS 4
+#define NO_OF_EVENTS 4
+// @@@ 0 DEF EVTS_NONE 0
+#define EVTS_NONE 0
+// @@@ 0 DEF EVTS_PENDING 0
+#define EVTS_PENDING 0
+// @@@ 0 DEF EVT_0 1
+#define EVT_0 1
+// @@@ 0 DEF EVT_1 2
+#define EVT_1 2
+// @@@ 0 DEF EVT_2 4
+#define EVT_2 4
+// @@@ 0 DEF EVT_3 8
+#define EVT_3 8
+// @@@ 0 DEF NO_TIMEOUT 0
+#define NO_TIMEOUT 0
+// @@@ 0 DEF TASK_MAX 2
+#define TASK_MAX 2
+// @@@ 0 DEF BAD_ID 2
+#define BAD_ID 2
+// @@@ 0 DEF SEMA_MAX 2
+#define SEMA_MAX 2
+// @@@ 0 DEF RC_OK RTEMS_SUCCESSFUL
+#define RC_OK RTEMS_SUCCESSFUL
+// @@@ 0 DEF RC_InvId RTEMS_INVALID_ID
+#define RC_InvId RTEMS_INVALID_ID
+// @@@ 0 DEF RC_InvAddr RTEMS_INVALID_ADDRESS
+#define RC_InvAddr RTEMS_INVALID_ADDRESS
+// @@@ 0 DEF RC_Unsat RTEMS_UNSATISFIED
+#define RC_Unsat RTEMS_UNSATISFIED
+// @@@ 0 DEF RC_Timeout RTEMS_TIMEOUT
+#define RC_Timeout RTEMS_TIMEOUT
+// @@@ 0 DCLARRAY EvtSet pending TASK_MAX
+static rtems_event_set pending[TASK_MAX];
+// @@@ 0 DECL byte sendrc 0
+static rtems_status_code sendrc = 0;
+// @@@ 0 DECL byte recrc 0
+static rtems_status_code recrc = 0;
+// @@@ 0 DECL byte recout 0
+static rtems_event_set recout = 0;
+// @@@ 0 DCLARRAY Semaphore semaphore SEMA_MAX
+static rtems_id semaphore[SEMA_MAX];
+
+/* ===== TEST CODE SEGMENT 0 =====*/
+
+static void TestSegment0( Context* ctx ) {
+  /* Test Name is defined in the Test Case code (tc-model-events-mgr.c) */
+  
+  T_log(T_NORMAL,"@@@ 0 INIT");
+  initialise_pending( pending, TASK_MAX );
+  initialise_semaphore( ctx, semaphore );
+  
+}
+
+/* ===== TEST CODE SEGMENT 3 =====*/
+
+static void TestSegment3( Context* ctx ) {
+  T_log(T_NORMAL,"@@@ 3 TASK Worker");
+  checkTaskIs( ctx->worker_id );
+  T_log(T_NORMAL,"@@@ 3 WAIT 0");
+  Wait( semaphore[0] );
+  
+  T_log(T_NORMAL,"@@@ 3 CALL event_send 0 1 11 sendrc");
+  T_log( T_NORMAL, "Calling Send(%d,%d)", mapid( ctx, 1), 11 );
+  sendrc = ( *ctx->send )( mapid( ctx, 1 ), 11 );
+  T_log( T_NORMAL, "Returned 0x%x from Send", sendrc );
+  
+  T_log(T_NORMAL,"@@@ 3 SCALAR sendrc 0");
+  T_rsc( sendrc, 0 );
+  T_log(T_NORMAL,"@@@ 3 SIGNAL 1");
+  Wakeup( semaphore[1] );
+  
+  T_log(T_NORMAL,"@@@ 3 STATE 0 Zombie");
+  /* Code to check that Task 0 has terminated */
+}
+
+/* ===== TEST CODE SEGMENT 4 =====*/
+
+static void TestSegment4( Context* ctx ) {
+  T_log(T_NORMAL,"@@@ 4 TASK Runner");
+  checkTaskIs( ctx->runner_id );
+  T_log(T_NORMAL,"@@@ 4 SIGNAL 0");
+  Wakeup( semaphore[0] );
+  
+  T_log(T_NORMAL,"@@@ 4 WAIT 1");
+  Wait( semaphore[1] );
+  
+  T_log(T_NORMAL,"@@@ 4 SCALAR pending 1 11");
+  pending[1] = GetPending( ctx );
+  T_eq_int( pending[1], 11 );
+  
+  T_log(T_NORMAL,"@@@ 4 CALL event_receive 10 1 1 0 recout recrc");
+  T_log( T_NORMAL, "Calling Receive(%d,%d,%d,%d)", 10, mergeopts( 1, 1 ) ,0 ,&recout );
+  recrc = ( *ctx->receive )( 10, mergeopts( 1, 1 ), 0, &recout );
+  T_log( T_NORMAL, "Returned 0x%x from Receive", recrc );
+  
+  T_log(T_NORMAL,"@@@ 4 SCALAR recrc 0");
+  T_rsc( recrc, 0 );
+  T_log(T_NORMAL,"@@@ 4 SCALAR recout 10");
+  T_eq_int( recout, 10 );
+  T_log(T_NORMAL,"@@@ 4 SCALAR pending 1 1");
+  pending[1] = GetPending( ctx );
+  T_eq_int( pending[1], 1 );
+  
+  T_log(T_NORMAL,"@@@ 4 SIGNAL 0");
+  Wakeup( semaphore[0] );
+  
+  T_log(T_NORMAL,"@@@ 4 STATE 1 Zombie");
+  /* Code to check that Task 1 has terminated */
+}
+
+/* =============================================== */
+
+
+
+static void Runner( RtemsModelEventsMgr_Context *ctx )
+{
+  T_log( T_NORMAL, "Runner running" );
+  TestSegment4( ctx );
+  T_log( T_NORMAL, "Runner finished" );
+}
+

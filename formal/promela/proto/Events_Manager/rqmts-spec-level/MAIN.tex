@@ -1,0 +1,50 @@
+\documentclass{report}
+\usepackage[T1]{fontenc}
+\usepackage{underscore}
+\usepackage{amssymb}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{RTEMS,RTEMS-Events}
+\usepackage{hyperref}
+
+
+\parindent=0pt % I hate first line indentation
+\parskip=3pt   % I like a visual white gap between paragraphs
+
+
+\author{Andrew Butterfield}
+\title{
+  Top-Level Models of Event Manager
+\\{\small \copyright 2020}
+}
+\date\today
+
+\begin{document}
+
+% \makeatletter
+% \lst@AddToHook{EveryLine}{\ifx\lst@language\language@yaml\YAMLkeystyle\fi}
+% \makeatother
+
+\maketitle
+
+\tableofcontents
+
+\newpage
+\input{send-receive}
+
+\newpage
+\input{EM-model}
+\newpage
+\input{EM-reqmts}
+\newpage
+\input{EM-scenario-1}
+
+\appendix
+
+\newpage
+\input{EM-doc-summary}
+
+\newpage
+\input{SendReceive}
+
+\end{document}

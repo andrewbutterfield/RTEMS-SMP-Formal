@@ -1,0 +1,34 @@
+
+ SIS - SPARC/RISCV instruction simulator 2.22,  copyright Jiri Gaisler 2019
+ Bug-reports to jiri@gaisler.se
+
+ LEON3 emulation enabled, 1 cpus online, delta 50 clocks
+
+ Loaded build/sparc/leon3/testsuites/sptests/spfreechain01.exe, entry 0x40000000
+
+
+*** BEGIN OF TEST SPFREECHAIN 1 ***
+*** TEST VERSION: 6.0.0.b9c5d08c7ec402e10df45ba7f23d8655a18c9dee
+*** TEST STATE: EXPECTED_PASS
+*** TEST BUILD: RTEMS_SMP
+*** TEST TOOLS: 10.2.1 20200918 (RTEMS 6, RSB 1ea1c9cdc56313e33abf39fce23a2ddf308ff5b3, Newlib 749cbcc)
+A:SPFREECHAIN 1
+S:Platform:RTEMS
+S:Compiler:10.2.1 20200918 (RTEMS 6, RSB 1ea1c9cdc56313e33abf39fce23a2ddf308ff5b3, Newlib 749cbcc)
+S:Version:6.0.0.b9c5d08c7ec402e10df45ba7f23d8655a18c9dee
+S:BSP:leon3
+S:RTEMS_DEBUG:0
+S:RTEMS_MULTIPROCESSING:0
+S:RTEMS_POSIX_API:0
+S:RTEMS_PROFILING:0
+S:RTEMS_SMP:1
+B:Freechain
+P:0:0:UI1:init.c:79
+E:Freechain:N:1:F:0:D:0.000420
+Z:SPFREECHAIN 1:C:1:N:1:F:0:D:0.000660
+Y:ReportHash:SHA256:8815f8828dd30c011e942d76307d41200545340ec220c25cbeabd5ea6dba9e4f
+
+*** END OF TEST SPFREECHAIN 1 ***
+
+cpu 0 in error mode (tt = 0x80)
+   362237  4000c6e0:  91d02000   ta  0x0

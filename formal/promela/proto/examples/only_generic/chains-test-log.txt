@@ -1,0 +1,88 @@
+:- sparc-rtems5-sis -leon3 -r s -m 4 ttest01.exe
+
+ SIS - SPARC/RISCV instruction simulator 2.21,  copyright Jiri Gaisler 2019
+ Bug-reports to jiri@gaisler.se
+
+ LEON3 emulation enabled, 4 cpus online, delta 50 clocks
+
+ Loaded ttest01.exe, entry 0x40000000
+A:Promela-Chains
+S:Platform:RTEMS
+S:Compiler:7.5.0 20191114 (RTEMS 5, RSB 5 (f93fcef87556), Newlib 7947581)
+S:Version:5.0.0.17390ad4aaf55e0fad05118606485d73638565ce
+S:BSP:leon3
+S:RTEMS_DEBUG:0
+S:RTEMS_MULTIPROCESSING:0
+S:RTEMS_POSIX_API:0
+S:RTEMS_PROFILING:0
+S:RTEMS_SMP:1
+B:Chain_AutoGen
+L:@@@INIT
+L:@@@SEQ chain
+L:@@@END chain
+P:0:0:UI1:init.c:109
+L:@@@PTR nptr 0
+P:1:0:UI1:init.c:112
+L:@@@CALL append 23 4
+L:@@@SEQ chain
+L:@@@SCALAR _ 23
+L:@@@END chain
+P:2:0:UI1:init.c:121
+L:@@@CALL getNonNull 4
+P:3:0:UI1:init.c:125
+L:@@@SEQ chain
+L:@@@END chain
+P:4:0:UI1:init.c:130
+L:@@@PTR nptr 4
+P:5:0:UI1:init.c:133
+L:@@@STRUCT nptr
+L:@@@PTR nxt 0
+P:6:0:UI1:init.c:136
+L:@@@PTR prv 0
+P:7:0:UI1:init.c:138
+L:@@@SCALAR itm 23
+P:8:0:UI1:init.c:140
+L:@@@END nptr
+L:@@@CALL append 22 3
+L:@@@SEQ chain
+L:@@@SCALAR _ 22
+L:@@@END chain
+P:9:0:UI1:init.c:150
+L:@@@CALL getNonNull 3
+P:10:0:UI1:init.c:154
+L:@@@SEQ chain
+L:@@@END chain
+P:11:0:UI1:init.c:159
+L:@@@PTR nptr 3
+P:12:0:UI1:init.c:162
+L:@@@STRUCT nptr
+L:@@@PTR nxt 0
+P:13:0:UI1:init.c:165
+L:@@@PTR prv 0
+P:14:0:UI1:init.c:167
+L:@@@SCALAR itm 22
+P:15:0:UI1:init.c:169
+L:@@@END nptr
+L:@@@CALL append 21 6
+L:@@@SEQ chain
+L:@@@SCALAR _ 21
+L:@@@END chain
+P:16:0:UI1:init.c:179
+L:@@@CALL getNonNull 6
+P:17:0:UI1:init.c:183
+L:@@@SEQ chain
+L:@@@END chain
+P:18:0:UI1:init.c:188
+L:@@@PTR nptr 6
+P:19:0:UI1:init.c:191
+L:@@@STRUCT nptr
+L:@@@PTR nxt 0
+P:20:0:UI1:init.c:194
+L:@@@PTR prv 0
+P:21:0:UI1:init.c:196
+L:@@@SCALAR itm 21
+P:22:0:UI1:init.c:198
+L:@@@END nptr
+E:Chain_AutoGen:N:23:F:0:D:0.003487
+cpu 0 in error mode (tt = 0x80)
+   403900  40017c20:  91d02000   ta  0x0

@@ -1,0 +1,107 @@
+
+ SIS - SPARC/RISCV instruction simulator 2.22,  copyright Jiri Gaisler 2019
+ Bug-reports to jiri@gaisler.se
+
+ LEON3 emulation enabled, 4 cpus online, delta 50 clocks
+
+ Loaded build/sparc/leon3/testsuites/sptests/spfreechain01.exe, entry 0x40000000
+A:Promela-Chains
+S:Platform:RTEMS
+S:Compiler:10.2.1 20201026 (RTEMS 6, RSB 5f4fd63a0c2b4b0657b64abdcfa70c47bee21c52-modified, Newlib 17b7dfc)
+S:Version:6.0.0.1fd38c8e1045e4d12de570621a4d0a3f4d9e0061
+S:BSP:leon3
+S:RTEMS_DEBUG:0
+S:RTEMS_MULTIPROCESSING:0
+S:RTEMS_POSIX_API:0
+S:RTEMS_PROFILING:0
+S:RTEMS_SMP:1
+B:Chain_AutoGen
+L:@@@ 0 INIT
+L:@@@ 0 SEQ chain
+L:@@@ 0 END chain
+P:0:0:UI1:init.c:136
+L:@@@ 0 PTR nptr 0
+P:1:0:UI1:init.c:157
+L:@@@ 0 SEQ chain
+L:@@@ 0 END chain
+P:2:0:UI1:init.c:183
+L:@@@ 0 PTR nptr 0
+P:3:0:UI1:init.c:204
+L:@@@ 0 CALL append 21 6
+L:@@@ 0 SEQ chain
+L:@@@ 0 SCALAR _ 21
+L:@@@ 0 END chain
+P:4:0:UI1:init.c:248
+L:@@@ 0 CALL append 22 3
+L:@@@ 0 SEQ chain
+L:@@@ 0 SCALAR _ 21
+L:@@@ 0 SCALAR _ 22
+L:@@@ 0 END chain
+P:5:0:UI1:init.c:308
+L:@@@ 0 CALL append 23 4
+L:@@@ 0 SEQ chain
+L:@@@ 0 SCALAR _ 21
+L:@@@ 0 SCALAR _ 22
+L:@@@ 0 SCALAR _ 23
+L:@@@ 0 END chain
+P:6:0:UI1:init.c:375
+L:@@@ 0 CALL getNonNull 6
+P:7:0:UI1:init.c:394
+L:@@@ 0 SEQ chain
+L:@@@ 0 SCALAR _ 22
+L:@@@ 0 SCALAR _ 23
+L:@@@ 0 END chain
+P:8:0:UI1:init.c:433
+L:@@@ 0 PTR nptr 6
+P:9:0:UI1:init.c:452
+L:@@@ 0 STRUCT nptr
+L:@@@ 0 PTR nxt 3
+P:10:0:UI1:init.c:466
+L:@@@ 0 PTR prv 0
+P:11:0:UI1:init.c:473
+P:12:0:UI1:init.c:474
+P:13:0:UI1:init.c:475
+P:14:0:UI1:init.c:476
+L:@@@ 0 SCALAR itm 21
+P:15:0:UI1:init.c:480
+L:@@@ 0 END nptr
+L:@@@ 0 CALL getNonNull 3
+P:16:0:UI1:init.c:493
+L:@@@ 0 SEQ chain
+L:@@@ 0 SCALAR _ 23
+L:@@@ 0 END chain
+P:17:0:UI1:init.c:525
+L:@@@ 0 PTR nptr 3
+P:18:0:UI1:init.c:544
+L:@@@ 0 STRUCT nptr
+L:@@@ 0 PTR nxt 4
+P:19:0:UI1:init.c:558
+L:@@@ 0 PTR prv 0
+P:20:0:UI1:init.c:565
+P:21:0:UI1:init.c:566
+P:22:0:UI1:init.c:567
+P:23:0:UI1:init.c:568
+L:@@@ 0 SCALAR itm 22
+P:24:0:UI1:init.c:572
+L:@@@ 0 END nptr
+L:@@@ 0 CALL getNonNull 4
+P:25:0:UI1:init.c:585
+L:@@@ 0 SEQ chain
+L:@@@ 0 END chain
+P:26:0:UI1:init.c:610
+L:@@@ 0 PTR nptr 4
+P:27:0:UI1:init.c:629
+L:@@@ 0 STRUCT nptr
+L:@@@ 0 PTR nxt 0
+P:28:0:UI1:init.c:645
+L:@@@ 0 PTR prv 0
+P:29:0:UI1:init.c:650
+P:30:0:UI1:init.c:651
+P:31:0:UI1:init.c:652
+P:32:0:UI1:init.c:653
+L:@@@ 0 SCALAR itm 23
+P:33:0:UI1:init.c:657
+L:@@@ 0 END nptr
+E:Chain_AutoGen:N:34:F:0:D:0.005425
+cpu 0 in error mode (tt = 0x80)
+   479800  40005600:  91d02000   ta  0x0

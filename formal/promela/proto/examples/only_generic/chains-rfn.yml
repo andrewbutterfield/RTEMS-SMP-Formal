@@ -1,0 +1,23 @@
+Node: item
+unsigned: item *
+Control: rtems_chain_control
+INIT: rtems_chain_initialize_empty(&chain);
+append: |
+  memory[{1}].val = {0};
+  rtems_chain_append_unprotected(&chain,(rtems_chain_node*)&memory[{1}]);
+getNonNull: |
+  nptr = get_item(&chain);
+  T_eq_ptr(nptr,&memory[{0}]);
+chain_SEQ: |
+  show_chain(&chain,buffer);
+  T_eq_str(buffer,"{0} 0");
+itm_FSCALAR:  T_eq_int({0}->val,{1});
+nptr_PTR: |
+  T_eq_ptr(nptr,NULL);
+  T_eq_ptr(nptr,&memory[{0}]);
+nxt_FPTR: |
+  T_eq_ptr({0}->node.next,&chain.Tail.Node);
+  T_eq_ptr({0}->node.next,&memory[{1}]);
+prv_FPTR: |
+  T_eq_ptr({0}->node.previous,&chain.Head.Node);
+  T_eq_ptr({0}->node.previous,&memory[{1}]);

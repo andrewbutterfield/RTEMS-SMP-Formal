@@ -1,0 +1,5 @@
+rm -f refine_command.py
+rm -f spin2test.py
+coconut refine_command.coco refine_command.py
+coconut spin2test.coco spin2test.py
+python3 spin2test.py $@

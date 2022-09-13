@@ -1,0 +1,86 @@
+\chapter{Event Manager Requirements}
+
+
+Here we work through the ``send-receive'' requirements,
+stored in a YAML file (\texttt{send-receive.yml}):
+\begin{lstlisting}[language=yaml]
+type: requirement
+requirement-type: functional
+functional-type: action
+\end{lstlisting}
+
+We focus on key top-level entries in that YAML file.
+The first group define pre- and post-conditions
+used to specify behaviour,
+and how they are related
+\begin{lstlisting}[language=yaml]
+post-conditions:
+pre-conditions:
+transition-map:
+skip-reasons:
+\end{lstlisting}
+
+The next group focus on the relevant tests:
+\begin{lstlisting}[language=yaml]
+test-action: \mid
+test-brief: null
+test-cleanup: \mid
+test-context:
+test-context-support: \mid
+test-description: null
+test-header:
+test-includes:
+test-local-includes:
+test-prepare: \mid
+test-setup:
+test-stop: null
+test-support: \mid
+test-target: testsuites/validation/tr-event-send-receive.c
+test-teardown:
+\end{lstlisting}
+
+
+The rest:
+\begin{lstlisting}[language=yaml]
+links: []
+rationale: null
+references: []
+text: ${.:text-template}
+type: requirement
+\end{lstlisting}
+
+\section{Behaviour}
+
+The behavioural descriptions have been extracted and simplified
+and are now in an Appendix.
+
+We can summarise these as follows:
+
+\subsection{Preconditions}
+
+\begin{eqnarray*}
+   \Id &=& \InvId \mid \Task
+\\ \Send &=& \Zero \mid \Unrelated \mid \Any \mid \All \mid \MixedAny \mid \MixedAll
+\\ \ReceiverState &=& \NotWaiting \mid \Poll \mid \Timeout
+   \mid \Lower \mid \Equal \mid \Higher \mid \Other \mid \Intend
+\\ \Satisfy &=& \All \mid \Any
+\end{eqnarray*}
+
+\subsection{Postconditions}
+
+\begin{eqnarray*}
+   \SendStatus &=& \Ok \mid \InvId
+\\ \ReceiveStatus &=& \None \mid \Pending \mid \Timeout \mid \Satisfied \mid \Unsatisfied
+   \mid \Blocked
+\\ \SenderPreemption &=& \No \mid \Yes
+\end{eqnarray*}
+
+Skip Reasons:
+\begin{eqnarray*}
+  \NoOtherScheduler
+\end{eqnarray*}
+
+\subsection{Mappings}
+
+
+\section{Tests}

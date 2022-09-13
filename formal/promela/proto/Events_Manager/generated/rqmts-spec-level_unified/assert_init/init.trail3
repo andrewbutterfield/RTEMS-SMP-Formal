@@ -1,0 +1,316 @@
+//@ add_cmd \<open>0.8444218515250481\<close>
+spin: warning, "pan.pml" is newer than pan.pml3.trail
+Event Manager Model running.
+  1:	proc  0 (:init::1) pan.pml:403 (state 1)	[printf('Event Manager Model running.\\n')]
+Setup...
+  1:	proc  0 (:init::1) pan.pml:404 (state 2)	[printf('Setup...\\n')]
+@@@ 0 NAME Event_Manager_TestGen
+  1:	proc  0 (:init::1) pan.pml:405 (state 3)	[printf('@@@ %d NAME Event_Manager_TestGen\\n',_pid)]
+@@@ 0 DEF NO_OF_EVENTS 4
+  2:	proc  0 (:init::1) pan.pml:2 (state 4)	[printf('@@@ %d DEF NO_OF_EVENTS %d\\n',_pid,4)]
+@@@ 0 DEF EVTS_NONE 0
+  2:	proc  0 (:init::1) pan.pml:3 (state 5)	[printf('@@@ %d DEF EVTS_NONE %d\\n',_pid,0)]
+@@@ 0 DEF EVTS_PENDING 0
+  2:	proc  0 (:init::1) pan.pml:4 (state 6)	[printf('@@@ %d DEF EVTS_PENDING %d\\n',_pid,0)]
+@@@ 0 DEF EVT_0 1
+  2:	proc  0 (:init::1) pan.pml:5 (state 7)	[printf('@@@ %d DEF EVT_0 %d\\n',_pid,1)]
+@@@ 0 DEF EVT_1 2
+  2:	proc  0 (:init::1) pan.pml:6 (state 8)	[printf('@@@ %d DEF EVT_1 %d\\n',_pid,2)]
+@@@ 0 DEF EVT_2 4
+  2:	proc  0 (:init::1) pan.pml:7 (state 9)	[printf('@@@ %d DEF EVT_2 %d\\n',_pid,4)]
+@@@ 0 DEF EVT_3 8
+  2:	proc  0 (:init::1) pan.pml:8 (state 10)	[printf('@@@ %d DEF EVT_3 %d\\n',_pid,8)]
+@@@ 0 DEF NO_TIMEOUT 0
+  2:	proc  0 (:init::1) pan.pml:9 (state 11)	[printf('@@@ %d DEF NO_TIMEOUT %d\\n',_pid,0)]
+@@@ 0 DEF TASK_MAX 2
+  2:	proc  0 (:init::1) pan.pml:10 (state 12)	[printf('@@@ %d DEF TASK_MAX %d\\n',_pid,2)]
+@@@ 0 DEF BAD_ID 2
+  2:	proc  0 (:init::1) pan.pml:11 (state 13)	[printf('@@@ %d DEF BAD_ID %d\\n',_pid,2)]
+@@@ 0 DEF SEMA_MAX 2
+  2:	proc  0 (:init::1) pan.pml:12 (state 14)	[printf('@@@ %d DEF SEMA_MAX %d\\n',_pid,2)]
+@@@ 0 DEF RC_OK RTEMS_SUCCESSFUL
+  2:	proc  0 (:init::1) pan.pml:13 (state 15)	[printf('@@@ %d DEF RC_OK RTEMS_SUCCESSFUL\\n',_pid)]
+@@@ 0 DEF RC_InvId RTEMS_INVALID_ID
+  2:	proc  0 (:init::1) pan.pml:14 (state 16)	[printf('@@@ %d DEF RC_InvId RTEMS_INVALID_ID\\n',_pid)]
+@@@ 0 DEF RC_InvAddr RTEMS_INVALID_ADDRESS
+  2:	proc  0 (:init::1) pan.pml:15 (state 17)	[printf('@@@ %d DEF RC_InvAddr RTEMS_INVALID_ADDRESS\\n',_pid)]
+@@@ 0 DEF RC_Unsat RTEMS_UNSATISFIED
+  2:	proc  0 (:init::1) pan.pml:16 (state 18)	[printf('@@@ %d DEF RC_Unsat RTEMS_UNSATISFIED\\n',_pid)]
+@@@ 0 DEF RC_Timeout RTEMS_TIMEOUT
+  2:	proc  0 (:init::1) pan.pml:17 (state 19)	[printf('@@@ %d DEF RC_Timeout RTEMS_TIMEOUT\\n',_pid)]
+@@@ 0 DCLARRAY EvtSet pending TASK_MAX
+  3:	proc  0 (:init::1) pan.pml:29 (state 21)	[printf('@@@ %d DCLARRAY EvtSet pending TASK_MAX\\n',_pid)]
+@@@ 0 DECL byte sendrc 0
+  3:	proc  0 (:init::1) pan.pml:30 (state 22)	[printf('@@@ %d DECL byte sendrc 0\\n',_pid)]
+@@@ 0 DECL byte recrc 0
+  3:	proc  0 (:init::1) pan.pml:31 (state 23)	[printf('@@@ %d DECL byte recrc 0\\n',_pid)]
+@@@ 0 DECL byte recout 0
+  3:	proc  0 (:init::1) pan.pml:32 (state 24)	[printf('@@@ %d DECL byte recout 0\\n',_pid)]
+@@@ 0 DCLARRAY Semaphore semaphore SEMA_MAX
+  3:	proc  0 (:init::1) pan.pml:33 (state 25)	[printf('@@@ %d DCLARRAY Semaphore semaphore SEMA_MAX\\n',_pid)]
+@@@ 0 INIT
+  3:	proc  0 (:init::1) pan.pml:408 (state 27)	[printf('@@@ %d INIT\\n',_pid)]
+  4:	proc  0 (:init::1) pan.pml:224 (state 28)	[doSend = 1]
+  5:	proc  0 (:init::1) pan.pml:225 (state 29)	[doReceive = 1]
+  6:	proc  0 (:init::1) pan.pml:226 (state 30)	[semaphore[0] = 0]
+  7:	proc  0 (:init::1) pan.pml:227 (state 31)	[semaphore[1] = 0]
+  8:	proc  0 (:init::1) pan.pml:228 (state 32)	[sendPrio = 0]
+  9:	proc  0 (:init::1) pan.pml:229 (state 33)	[sendPreempt = 0]
+ 10:	proc  0 (:init::1) pan.pml:230 (state 34)	[sendTarget = 1]
+ 11:	proc  0 (:init::1) pan.pml:231 (state 35)	[rcvPrio = 0]
+ 12:	proc  0 (:init::1) pan.pml:232 (state 36)	[rcvWait = 1]
+ 13:	proc  0 (:init::1) pan.pml:233 (state 37)	[rcvAll = 1]
+ 14:	proc  0 (:init::1) pan.pml:234 (state 38)	[rcvInterval = 0]
+ 15:	proc  0 (:init::1) pan.pml:235 (state 39)	[tasks[0].state = Ready]
+ 16:	proc  0 (:init::1) pan.pml:236 (state 40)	[tasks[1].state = Ready]
+ 17:	proc  0 (:init::1) pan.pml:237 (state 41)	[sendEvents = 10]
+ 18:	proc  0 (:init::1) pan.pml:238 (state 42)	[rcvEvents = 10]
+ 19:	proc  0 (:init::1) pan.pml:239 (state 43)	[sendSema = 0]
+ 20:	proc  0 (:init::1) pan.pml:240 (state 44)	[rcvSema = 1]
+ 21:	proc  0 (:init::1) pan.pml:241 (state 45)	[startSema = sendSema]
+ 22:	proc  0 (:init::1) pan.pml:245 (state 48)	[scenario = SndRcv]
+@@@ 0 LOG scenario  23:	proc  0 (:init::1) pan.pml:249 (state 51)	[printf('@@@ %d LOG scenario ',_pid)]
+SndRcv 23:	proc  0 (:init::1) pan.pml:250 (state 52)	[printm(scenario, "_unnamed_")]
+
+ 24:	proc  0 (:init::1) pan.pml:76 (state 53)	[printf('\\n')]
+ 25:	proc  0 (:init::1) pan.pml:261 (state 62)	[((scenario==SndRcv))]
+ 26:	proc  0 (:init::1) pan.pml:263 (state 63)	[sendEvents = 14]
+Run...
+ 27:	proc  0 (:init::1) pan.pml:410 (state 71)	[printf('Run...\\n')]
+Starting System with pid 1
+ 28:	proc  0 (:init::1) pan.pml:411 (state 72)	[(run System())]
+@@@ 1 LOG System running...
+ 29:	proc  1 (System:1) pan.pml:325 (state 1)	[printf('@@@ %d LOG System running...\\n',_pid)]
+ 30:	proc  1 (System:1) pan.pml:326 (state 2)	[taskid = 0]
+ 31:	proc  1 (System:1) pan.pml:327 (state 3)	[liveSeen = 0]
+@@@ 1 LOG Loop through tasks...
+ 31:	proc  1 (System:1) pan.pml:328 (state 4)	[printf('@@@ %d LOG Loop through tasks...\\n',_pid)]
+ 32:	proc  1 (System:1) pan.pml:332 (state 7)	[else]
+Starting Clock with pid 2
+ 33:	proc  0 (:init::1) pan.pml:412 (state 73)	[(run Clock())]
+@@@ 2 LOG Clock Started
+ 34:	proc  2 (Clock:1) pan.pml:369 (state 1)	[printf('@@@ %d LOG Clock Started\\n',_pid)]
+Starting Sender with pid 3
+ 35:	proc  0 (:init::1) pan.pml:413 (state 74)	[(run Sender(0,0))]
+Starting Receiver with pid 4
+ 36:	proc  0 (:init::1) pan.pml:414 (state 75)	[(run Receiver(0,1))]
+ 37:	proc  4 (Receiver:1) pan.pml:295 (state 1)	[tasks[taskid].nodeid = nid]
+ 38:	proc  4 (Receiver:1) pan.pml:296 (state 2)	[tasks[taskid].pmlid = _pid]
+ 39:	proc  4 (Receiver:1) pan.pml:297 (state 3)	[tasks[taskid].prio = rcvPrio]
+ 40:	proc  4 (Receiver:1) pan.pml:298 (state 4)	[tasks[taskid].preemptable = 0]
+ 41:	proc  4 (Receiver:1) pan.pml:299 (state 5)	[tasks[taskid].state = Ready]
+@@@ 4 TASK Runner
+ 42:	proc  4 (Receiver:1) pan.pml:300 (state 6)	[printf('@@@ %d TASK Runner\\n',_pid,taskid)]
+@@@ 4 SIGNAL 0
+ 43:	proc  4 (Receiver:1) pan.pml:49 (state 7)	[printf('@@@ %d SIGNAL %d\\n',_pid,startSema)]
+ 43:	proc  4 (Receiver:1) pan.pml:50 (state 8)	[semaphore[startSema] = 1]
+@@@ 4 WAIT 1
+ 44:	proc  4 (Receiver:1) pan.pml:39 (state 11)	[printf('@@@ %d WAIT %d\\n',_pid,rcvSema)]
+ 45:	proc  3 (Sender:1) pan.pml:272 (state 1)	[tasks[taskid].nodeid = nid]
+ 46:	proc  3 (Sender:1) pan.pml:273 (state 2)	[tasks[taskid].pmlid = _pid]
+ 47:	proc  3 (Sender:1) pan.pml:274 (state 3)	[tasks[taskid].prio = sendPrio]
+ 48:	proc  3 (Sender:1) pan.pml:275 (state 4)	[tasks[taskid].preemptable = sendPreempt]
+ 49:	proc  3 (Sender:1) pan.pml:276 (state 5)	[tasks[taskid].state = Ready]
+@@@ 3 TASK Worker
+ 50:	proc  3 (Sender:1) pan.pml:277 (state 6)	[printf('@@@ %d TASK Worker\\n',_pid)]
+@@@ 3 WAIT 0
+ 51:	proc  3 (Sender:1) pan.pml:39 (state 7)	[printf('@@@ %d WAIT %d\\n',_pid,sendSema)]
+ 52:	proc  3 (Sender:1) pan.pml:40 (state 8)	[(semaphore[sendSema])]
+ 52:	proc  3 (Sender:1) pan.pml:41 (state 9)	[semaphore[sendSema] = 0]
+@@@ 3 LOG WAIT 0 Over
+ 52:	proc  3 (Sender:1) pan.pml:42 (state 10)	[printf('@@@ %d LOG WAIT %d Over\\n',_pid,sendSema)]
+ 53:	proc  3 (Sender:1) pan.pml:280 (state 13)	[(doSend)]
+@@@ 3 CALL event_send 0 1 14 sendrc
+ 54:	proc  3 (Sender:1) pan.pml:281 (state 14)	[printf('@@@ %d CALL event_send %d %d %d sendrc\\n',_pid,taskid,sendTarget,sendEvents)]
+ 55:	proc  3 (Sender:1) pan.pml:122 (state 17)	[((sendTarget<2))]
+ 55:	proc  3 (Sender:1) pan.pml:123 (state 18)	[tasks[sendTarget].pending = (tasks[sendTarget].pending|sendEvents)]
+ 55:	proc  3 (Sender:1) pan.pml:125 (state 19)	[got = 0]
+ 55:	proc  3 (Sender:1) pan.pml:126 (state 20)	[sat = 0]
+ 56:	proc  3 (Sender:1) pan.pml:93 (state 21)	[got = (tasks[sendTarget].pending&tasks[sendTarget].wanted)]
+ 57:	proc  3 (Sender:1) pan.pml:99 (state 26)	[else]
+ 58:	proc  3 (Sender:1) pan.pml:100 (state 27)	[sat = 0]
+@@@ 3 LOG satisfied(<pnd:14 wnt:0 all:0>,out:0,SAT:0)
+ 58:	proc  3 (Sender:1) pan.pml:103 (state 30)	[printf('@@@ %d LOG satisfied(<pnd:%d wnt:%d all:%d>,out:%d,SAT:%d)\\n',_pid,tasks[sendTarget].pending,tasks[sendTarget].wanted,tasks[sendTarget].all,got,sat)]
+ 59:	proc  3 (Sender:1) pan.pml:138 (state 56)	[else]
+ 60:	proc  3 (Sender:1) pan.pml:139 (state 57)	[(1)]
+ 60:	proc  3 (Sender:1) pan.pml:141 (state 60)	[sendrc = 0]
+@@@ 3 SCALAR sendrc 0
+ 61:	proc  3 (Sender:1) pan.pml:283 (state 65)	[printf('@@@ %d SCALAR sendrc %d\\n',_pid,sendrc)]
+@@@ 3 SIGNAL 1
+ 62:	proc  3 (Sender:1) pan.pml:49 (state 69)	[printf('@@@ %d SIGNAL %d\\n',_pid,rcvSema)]
+ 62:	proc  3 (Sender:1) pan.pml:50 (state 70)	[semaphore[rcvSema] = 1]
+@@@ 3 LOG Sender 0 finished
+ 62:	proc  3 (Sender:1) pan.pml:288 (state 73)	[printf('@@@ %d LOG Sender %d finished\\n',_pid,taskid)]
+ 63:	proc  4 (Receiver:1) pan.pml:40 (state 12)	[(semaphore[rcvSema])]
+ 63:	proc  4 (Receiver:1) pan.pml:41 (state 13)	[semaphore[rcvSema] = 0]
+@@@ 4 LOG WAIT 1 Over
+ 63:	proc  4 (Receiver:1) pan.pml:42 (state 14)	[printf('@@@ %d LOG WAIT %d Over\\n',_pid,rcvSema)]
+ 64:	proc  4 (Receiver:1) pan.pml:304 (state 17)	[(doReceive)]
+@@@ 4 SCALAR pending 1 14
+ 65:	proc  4 (Receiver:1) pan.pml:305 (state 18)	[printf('@@@ %d SCALAR pending %d %d\\n',_pid,taskid,tasks[taskid].pending)]
+@@@ 4 CALL event_receive 10 1 1 0 recout recrc
+ 66:	proc  4 (Receiver:1) pan.pml:306 (state 19)	[printf('@@@ %d CALL event_receive %d %d %d %d recout recrc\\n',_pid,rcvEvents,rcvWait,rcvAll,0)]
+@@@ 4 LOG pending[1] =  67:	proc  4 (Receiver:1) pan.pml:149 (state 20)	[printf('@@@ %d LOG pending[%d] = ',_pid,taskid)]
+{1,1,1,0} 68:	proc  4 (Receiver:1) pan.pml:61 (state 21)	[printf('{%d,%d,%d,%d}',((tasks[taskid].pending/8)%2),((tasks[taskid].pending/4)%2),((tasks[taskid].pending/2)%2),(tasks[taskid].pending%2))]
+
+ 69:	proc  4 (Receiver:1) pan.pml:76 (state 23)	[printf('\\n')]
+ 69:	proc  4 (Receiver:1) pan.pml:152 (state 25)	[tasks[taskid].wanted = rcvEvents]
+ 69:	proc  4 (Receiver:1) pan.pml:153 (state 26)	[tasks[taskid].all = rcvAll]
+ 70:	proc  4 (Receiver:1) pan.pml:159 (state 31)	[else]
+ 71:	proc  4 (Receiver:1) pan.pml:161 (state 32)	[sat = 0]
+ 72:	proc  4 (Receiver:1) pan.pml:93 (state 33)	[recout = (tasks[taskid].pending&tasks[taskid].wanted)]
+ 73:	proc  4 (Receiver:1) pan.pml:95 (state 34)	[((tasks[taskid].all&&(recout==tasks[taskid].wanted)))]
+ 73:	proc  4 (Receiver:1) pan.pml:96 (state 35)	[sat = 1]
+@@@ 4 LOG satisfied(<pnd:14 wnt:10 all:1>,out:10,SAT:1)
+ 73:	proc  4 (Receiver:1) pan.pml:103 (state 42)	[printf('@@@ %d LOG satisfied(<pnd:%d wnt:%d all:%d>,out:%d,SAT:%d)\\n',_pid,tasks[taskid].pending,tasks[taskid].wanted,tasks[taskid].all,recout,sat)]
+ 74:	proc  4 (Receiver:1) pan.pml:163 (state 44)	[(sat)]
+@@@ 4 LOG Receive Satisfied!
+ 74:	proc  4 (Receiver:1) pan.pml:164 (state 45)	[printf('@@@ %d LOG Receive Satisfied!\\n',_pid)]
+ 75:	proc  4 (Receiver:1) pan.pml:71 (state 46)	[tasks[taskid].pending = (tasks[taskid].pending&(15-recout))]
+@@@ 4 LOG pending'[1] =  75:	proc  4 (Receiver:1) pan.pml:166 (state 48)	[printf('@@@ %d LOG pending'[%d] = ',_pid,taskid)]
+{0,1,0,0} 76:	proc  4 (Receiver:1) pan.pml:61 (state 49)	[printf('{%d,%d,%d,%d}',((tasks[taskid].pending/8)%2),((tasks[taskid].pending/4)%2),((tasks[taskid].pending/2)%2),(tasks[taskid].pending%2))]
+
+ 77:	proc  4 (Receiver:1) pan.pml:76 (state 51)	[printf('\\n')]
+ 77:	proc  4 (Receiver:1) pan.pml:169 (state 53)	[recrc = 0]
+@@@ 4 LOG pending'[1] =  77:	proc  4 (Receiver:1) pan.pml:196 (state 98)	[printf('@@@ %d LOG pending'[%d] = ',_pid,taskid)]
+{0,1,0,0} 78:	proc  4 (Receiver:1) pan.pml:61 (state 99)	[printf('{%d,%d,%d,%d}',((tasks[taskid].pending/8)%2),((tasks[taskid].pending/4)%2),((tasks[taskid].pending/2)%2),(tasks[taskid].pending%2))]
+
+ 79:	proc  4 (Receiver:1) pan.pml:76 (state 101)	[printf('\\n')]
+@@@ 4 SCALAR recrc 0
+ 80:	proc  4 (Receiver:1) pan.pml:308 (state 105)	[printf('@@@ %d SCALAR recrc %d\\n',_pid,recrc)]
+@@@ 4 SCALAR recout 10
+ 81:	proc  4 (Receiver:1) pan.pml:309 (state 106)	[printf('@@@ %d SCALAR recout %d\\n',_pid,recout)]
+@@@ 4 SCALAR pending 1 4
+ 82:	proc  4 (Receiver:1) pan.pml:310 (state 107)	[printf('@@@ %d SCALAR pending %d %d\\n',_pid,taskid,tasks[taskid].pending)]
+@@@ 4 SIGNAL 0
+ 83:	proc  4 (Receiver:1) pan.pml:49 (state 111)	[printf('@@@ %d SIGNAL %d\\n',_pid,sendSema)]
+ 83:	proc  4 (Receiver:1) pan.pml:50 (state 112)	[semaphore[sendSema] = 1]
+@@@ 4 LOG Receiver 1 finished
+ 83:	proc  4 (Receiver:1) pan.pml:315 (state 115)	[printf('@@@ %d LOG Receiver %d finished\\n',_pid,taskid)]
+ 84:	proc  4 (Receiver:1) pan.pml:316 (state 116)	[tasks[taskid].state = Zombie]
+@@@ 4 STATE 1 Zombie
+ 85:	proc  4 (Receiver:1) pan.pml:317 (state 117)	[printf('@@@ %d STATE %d Zombie\\n',_pid,taskid)]
+ 86: proc 4 terminates
+ 87:	proc  3 (Sender:1) pan.pml:289 (state 74)	[tasks[taskid].state = Zombie]
+@@@ 3 STATE 0 Zombie
+ 88:	proc  3 (Sender:1) pan.pml:290 (state 75)	[printf('@@@ %d STATE %d Zombie\\n',_pid,taskid)]
+ 89: proc 3 terminates
+ 90:	proc  2 (Clock:1) pan.pml:373 (state 4)	[(!(stopclock))]
+ (tick) 
+ 91:	proc  2 (Clock:1) pan.pml:374 (state 5)	[printf(' (tick) \\n')]
+ 91:	proc  2 (Clock:1) pan.pml:375 (state 6)	[tid = 0]
+@@@ 1 LOG Task 0 state is  92:	proc  1 (System:1) pan.pml:334 (state 8)	[printf('@@@ %d LOG Task %d state is ',_pid,taskid)]
+Zombie 92:	proc  1 (System:1) pan.pml:335 (state 9)	[printm(tasks[taskid].state, "_unnamed_")]
+
+ 93:	proc  1 (System:1) pan.pml:76 (state 10)	[printf('\\n')]
+ 94:	proc  2 (Clock:1) pan.pml:377 (state 7)	[tid = 2]
+ 95:	proc  2 (Clock:1) pan.pml:373 (state 4)	[(!(stopclock))]
+ 96:	proc  1 (System:1) pan.pml:339 (state 13)	[((tasks[taskid].state==Zombie))]
+ (tick) 
+ 97:	proc  2 (Clock:1) pan.pml:374 (state 5)	[printf(' (tick) \\n')]
+ 97:	proc  2 (Clock:1) pan.pml:375 (state 6)	[tid = 0]
+ 98:	proc  2 (Clock:1) pan.pml:377 (state 7)	[tid = 2]
+ 99:	proc  1 (System:1) pan.pml:340 (state 14)	[taskid = (taskid+1)]
+100:	proc  1 (System:1) pan.pml:332 (state 7)	[else]
+101:	proc  2 (Clock:1) pan.pml:373 (state 4)	[(!(stopclock))]
+ (tick) 
+102:	proc  2 (Clock:1) pan.pml:374 (state 5)	[printf(' (tick) \\n')]
+102:	proc  2 (Clock:1) pan.pml:375 (state 6)	[tid = 0]
+@@@ 1 LOG Task 1 state is 103:	proc  1 (System:1) pan.pml:334 (state 8)	[printf('@@@ %d LOG Task %d state is ',_pid,taskid)]
+Zombie103:	proc  1 (System:1) pan.pml:335 (state 9)	[printm(tasks[taskid].state, "_unnamed_")]
+
+104:	proc  1 (System:1) pan.pml:76 (state 10)	[printf('\\n')]
+105:	proc  2 (Clock:1) pan.pml:377 (state 7)	[tid = 2]
+106:	proc  2 (Clock:1) pan.pml:373 (state 4)	[(!(stopclock))]
+107:	proc  1 (System:1) pan.pml:339 (state 13)	[((tasks[taskid].state==Zombie))]
+ (tick) 
+108:	proc  2 (Clock:1) pan.pml:374 (state 5)	[printf(' (tick) \\n')]
+108:	proc  2 (Clock:1) pan.pml:375 (state 6)	[tid = 0]
+109:	proc  2 (Clock:1) pan.pml:377 (state 7)	[tid = 2]
+110:	proc  1 (System:1) pan.pml:340 (state 14)	[taskid = (taskid+1)]
+111:	proc  1 (System:1) pan.pml:330 (state 5)	[((taskid==2))]
+@@@ 1 LOG ...all visited, live:0
+111:	proc  1 (System:1) pan.pml:354 (state 30)	[printf('@@@ %d LOG ...all visited, live:%d\\n',_pid,liveSeen)]
+112:	proc  1 (System:1) pan.pml:358 (state 33)	[else]
+@@@ 1 LOG All are Zombies, game over.
+113:	proc  1 (System:1) pan.pml:361 (state 36)	[printf('@@@ %d LOG All are Zombies, game over.\\n',_pid)]
+114:	proc  2 (Clock:1) pan.pml:373 (state 4)	[(!(stopclock))]
+ (tick) 
+115:	proc  2 (Clock:1) pan.pml:374 (state 5)	[printf(' (tick) \\n')]
+115:	proc  2 (Clock:1) pan.pml:375 (state 6)	[tid = 0]
+116:	proc  1 (System:1) pan.pml:362 (state 37)	[stopclock = 1]
+117:	proc  2 (Clock:1) pan.pml:377 (state 7)	[tid = 2]
+118:	proc  2 (Clock:1) pan.pml:371 (state 2)	[(stopclock)]
+@@@ 2 LOG Clock Stopped
+119:	proc  2 (Clock:1) pan.pml:397 (state 30)	[printf('@@@ %d LOG Clock Stopped\\n',_pid)]
+120: proc 2 terminates
+121: proc 1 terminates
+122:	proc  0 (:init::1) pan.pml:415 (state 76)	[((_nr_pr==1))]
+spin: pan.pml:416, Error: assertion violated
+spin: text of failed assertion: assert(!(1))
+123:	proc  0 (:init::1) pan.pml:416 (state 77)	[assert(!(1))]
+Event Manager Model finished !
+123:	proc  0 (:init::1) pan.pml:417 (state 78)	[printf('Event Manager Model finished !\\n')]
+spin: trail ends after 123 steps
+#processes: 1
+		tasks[0].nodeid = 0
+		tasks[0].pmlid = 3
+		tasks[0].state = Zombie
+		tasks[0].preemptable = 0
+		tasks[0].prio = 0
+		tasks[0].ticks = 0
+		tasks[0].tout = 0
+		tasks[0].pending = 0
+		tasks[0].wanted = 0
+		tasks[0].all = 0
+		tasks[1].nodeid = 0
+		tasks[1].pmlid = 4
+		tasks[1].state = Zombie
+		tasks[1].preemptable = 0
+		tasks[1].prio = 0
+		tasks[1].ticks = 0
+		tasks[1].tout = 0
+		tasks[1].pending = 4
+		tasks[1].wanted = 10
+		tasks[1].all = 1
+		sendrc = 0
+		recrc = 0
+		recout = 10
+		semaphore[0] = 1
+		semaphore[1] = 0
+		send_in[0].target_id = 0
+		send_in[0].send_evts = 0
+		send_in[1].target_id = 0
+		send_in[1].send_evts = 0
+		send_in[2].target_id = 0
+		send_in[2].send_evts = 0
+		receive_in[0].receive_evts = 0
+		receive_in[0].will_wait = 0
+		receive_in[0].everything = 0
+		receive_in[0].wait_length = 0
+		receive_in[1].receive_evts = 0
+		receive_in[1].will_wait = 0
+		receive_in[1].everything = 0
+		receive_in[1].wait_length = 0
+		receive_in[2].receive_evts = 0
+		receive_in[2].will_wait = 0
+		receive_in[2].everything = 0
+		receive_in[2].wait_length = 0
+		doSend = 1
+		sendPrio = 0
+		sendPreempt = 0
+		sendTarget = 1
+		sendEvents = 14
+		doReceive = 1
+		rcvEvents = 10
+		rcvWait = 1
+		rcvAll = 1
+		rcvInterval = 0
+		rcvPrio = 0
+		sendSema = 0
+		rcvSema = 1
+		startSema = 0
+		scenario = SndRcv
+		stopclock = 1
+123:	proc  0 (:init::1) pan.pml:418 (state 79) <valid end state>
+5 processes created

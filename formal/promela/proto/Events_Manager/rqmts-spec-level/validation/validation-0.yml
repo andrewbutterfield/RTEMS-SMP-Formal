@@ -1,0 +1,43 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+build-type: test-program
+cflags: []
+copyrights:
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+cppflags: []
+cxxflags: []
+enabled-by: true
+features: c cprogram
+includes: []
+ldflags: []
+links: []
+source:
+- testsuites/validation/tc-attr.c
+- testsuites/validation/tc-barrier-ident.c
+- testsuites/validation/tc-events.c
+- testsuites/validation/tc-event-send-receive.c
+- testsuites/validation/tc-message-construct-errors.c
+- testsuites/validation/tc-message-ident.c
+- testsuites/validation/tc-modes.c
+- testsuites/validation/tc-options.c
+- testsuites/validation/tc-part.c
+- testsuites/validation/tc-part-create.c
+- testsuites/validation/tc-part-delete.c
+- testsuites/validation/tc-part-get.c
+- testsuites/validation/tc-part-ident.c
+- testsuites/validation/tc-part-return.c
+- testsuites/validation/tc-ratemon-ident.c
+- testsuites/validation/tc-sem-ident.c
+- testsuites/validation/tc-task-construct-errors.c
+- testsuites/validation/tc-task-ident.c
+- testsuites/validation/tc-timer-ident.c
+- testsuites/validation/tc-userext-ident.c
+- testsuites/validation/tr-event-constant.c
+- testsuites/validation/tr-event-send-receive.c
+- testsuites/validation/tr-object-ident.c
+- testsuites/validation/tr-object-ident-local.c
+- testsuites/validation/ts-validation-0.c
+stlib: []
+target: testsuites/validation/ts-validation-0.exe
+type: build
+use-after: []
+use-before: []

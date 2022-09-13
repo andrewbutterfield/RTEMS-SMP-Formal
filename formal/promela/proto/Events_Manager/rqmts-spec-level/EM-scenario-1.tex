@@ -1,0 +1,69 @@
+\chapter{Event Manager Scenario 1}
+
+We have an initial scenario, generated from a correct model,
+with a \texttt{assert(false)} statement added at the end.
+
+The current logged output is in file \texttt{evtmrg001.log}.
+
+We can summarise the scenario as follows:
+\begin{enumerate}
+  \item
+    We have task 0, low priority, pre-emptable,
+    doing two sends to task 1, high priority.
+    In addition we have clock and ``system'' tasks
+    that implement various concurrent behaviours.
+  \item
+    Task 1 calls \texttt{receive_event} looking for all of $\{4,8\}$ (\texttt{1100})
+    and blocks, waiting on these events.
+  \item
+    Task 0 calls \texttt{send_event} with event set $\{2,8\}$ (\texttt{1010}),
+    which does not satisfy task 1, so the call returns
+    immediately signalling success.
+  \item
+    Task 0 calls \texttt{send_event} with event set $\{4\}$ (\texttt{0100}),
+    which now results in task 2 being satisfied.
+    Task 1 is unblocked,
+    and returns Success, with output events set to $\{4,8\}$,
+    and its pending events now being $\{2\}$.
+
+    Task 0, being lower priority is pre-empted.
+  \item
+    The ``system'' task wakes up  Task 0,
+    abstracting future system behaviour that would lead to this outcome.
+\end{enumerate}
+
+In terms of the pre- and post-conditions, and transitions,
+of the Event Manager requirements in \texttt{send-receive.yml},
+we note the following:
+\begin{itemize}
+  \item
+    The conditions are defined in a context of both a single
+    \texttt{send_event} and \texttt{receive_event}.
+    We have to manage two sends.
+  \item
+    In the above scenario, matters are simplified because the receiver runs
+    first and so is blocked for both sends.
+  \item
+    Pre-condition \textbf{Id} has value \texttt{Task} throughout.
+  \item
+    Pre-condition \textbf{Sent} has value \texttt{MixedAny} for the first call,
+    and \texttt{Any} for the second call.
+  \item
+    Pre-condition \textbf{ReceiverState} has value \texttt{NotWaiting},
+    that becomes(?) \texttt{Intend} as it prepares to run.
+    Once it runs, its value becomes \texttt{Higher}
+    for the rest of the scenario.
+  \item
+    Pre-condition \textbf{Satisfy} has value \texttt{All} throughout.
+  \item
+    Post-condition \textbf{SendStatus} has value \texttt{Ok} throughout.
+  \item
+    Post-condition \textbf{ReceiveStatus} has value \texttt{Blocked}
+    after it is called, and after the first send.
+    It changes to \texttt{Satisfied} after the second send.
+  \item
+    Post-condition \textbf{SenderPreemption} has value \texttt{No}
+    after the first send, and becomes \texttt{Yes} after the second.
+\end{itemize}
+
+We can now determine that the following transitions apply:

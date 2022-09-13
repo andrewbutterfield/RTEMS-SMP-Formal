@@ -1,0 +1,1079 @@
++ set -e
++ PS4='+ $EPOCHREALTIME $(df -B 1 --output=used ~ | tail -n 1) ($LINENO) '
++ 1595597967.895649 1405673472 (13) sudo apt install -y git
+
+WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
+
+Reading package lists...
+Building dependency tree...
+Reading state information...
+The following additional packages will be installed:
+  ca-certificates git-man libcurl3-gnutls liberror-perl libnghttp2-14
+  libpcre2-8-0 libpsl5 librtmp1 libssh2-1 openssl publicsuffix
+Suggested packages:
+  git-daemon-run | git-daemon-sysvinit git-doc git-el git-email git-gui gitk
+  gitweb git-cvs git-mediawiki git-svn
+The following NEW packages will be installed:
+  ca-certificates git git-man libcurl3-gnutls liberror-perl libnghttp2-14
+  libpcre2-8-0 libpsl5 librtmp1 libssh2-1 openssl publicsuffix
+0 upgraded, 12 newly installed, 0 to remove and 0 not upgraded.
+Need to get 9,284 kB of archives.
+After this operation, 42.3 MB of additional disk space will be used.
+Get:1 http://deb.debian.org/debian buster/main amd64 openssl amd64 1.1.1d-0+deb10u3 [844 kB]
+Get:2 http://deb.debian.org/debian buster-updates/main amd64 ca-certificates all 20200601~deb10u1 [158 kB]
+Get:3 http://deb.debian.org/debian buster/main amd64 libnghttp2-14 amd64 1.36.0-2+deb10u1 [85.0 kB]
+Get:4 http://deb.debian.org/debian buster/main amd64 libpsl5 amd64 0.20.2-2 [53.7 kB]
+Get:5 http://deb.debian.org/debian buster/main amd64 librtmp1 amd64 2.4+20151223.gitfa8646d.1-2 [60.5 kB]
+Get:6 http://deb.debian.org/debian buster/main amd64 libssh2-1 amd64 1.8.0-2.1 [140 kB]
+Get:7 http://deb.debian.org/debian buster/main amd64 libcurl3-gnutls amd64 7.64.0-4+deb10u1 [330 kB]
+Get:8 http://deb.debian.org/debian buster/main amd64 libpcre2-8-0 amd64 10.32-5 [213 kB]
+Get:9 http://deb.debian.org/debian buster/main amd64 liberror-perl all 0.17027-2 [30.9 kB]
+Get:10 http://deb.debian.org/debian buster/main amd64 git-man all 1:2.20.1-2+deb10u3 [1,620 kB]
+Get:11 http://deb.debian.org/debian buster/main amd64 git amd64 1:2.20.1-2+deb10u3 [5,633 kB]
+Get:12 http://deb.debian.org/debian buster/main amd64 publicsuffix all 20190415.1030-1 [116 kB]
+Preconfiguring packages ...
+Fetched 9,284 kB in 3s (2,939 kB/s)
+Selecting previously unselected package openssl.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 48855 files and directories currently installed.)
+Preparing to unpack .../00-openssl_1.1.1d-0+deb10u3_amd64.deb ...
+Unpacking openssl (1.1.1d-0+deb10u3) ...
+Selecting previously unselected package ca-certificates.
+Preparing to unpack .../01-ca-certificates_20200601~deb10u1_all.deb ...
+Unpacking ca-certificates (20200601~deb10u1) ...
+Selecting previously unselected package libnghttp2-14:amd64.
+Preparing to unpack .../02-libnghttp2-14_1.36.0-2+deb10u1_amd64.deb ...
+Unpacking libnghttp2-14:amd64 (1.36.0-2+deb10u1) ...
+Selecting previously unselected package libpsl5:amd64.
+Preparing to unpack .../03-libpsl5_0.20.2-2_amd64.deb ...
+Unpacking libpsl5:amd64 (0.20.2-2) ...
+Selecting previously unselected package librtmp1:amd64.
+Preparing to unpack .../04-librtmp1_2.4+20151223.gitfa8646d.1-2_amd64.deb ...
+Unpacking librtmp1:amd64 (2.4+20151223.gitfa8646d.1-2) ...
+Selecting previously unselected package libssh2-1:amd64.
+Preparing to unpack .../05-libssh2-1_1.8.0-2.1_amd64.deb ...
+Unpacking libssh2-1:amd64 (1.8.0-2.1) ...
+Selecting previously unselected package libcurl3-gnutls:amd64.
+Preparing to unpack .../06-libcurl3-gnutls_7.64.0-4+deb10u1_amd64.deb ...
+Unpacking libcurl3-gnutls:amd64 (7.64.0-4+deb10u1) ...
+Selecting previously unselected package libpcre2-8-0:amd64.
+Preparing to unpack .../07-libpcre2-8-0_10.32-5_amd64.deb ...
+Unpacking libpcre2-8-0:amd64 (10.32-5) ...
+Selecting previously unselected package liberror-perl.
+Preparing to unpack .../08-liberror-perl_0.17027-2_all.deb ...
+Unpacking liberror-perl (0.17027-2) ...
+Selecting previously unselected package git-man.
+Preparing to unpack .../09-git-man_1%3a2.20.1-2+deb10u3_all.deb ...
+Unpacking git-man (1:2.20.1-2+deb10u3) ...
+Selecting previously unselected package git.
+Preparing to unpack .../10-git_1%3a2.20.1-2+deb10u3_amd64.deb ...
+Unpacking git (1:2.20.1-2+deb10u3) ...
+Selecting previously unselected package publicsuffix.
+Preparing to unpack .../11-publicsuffix_20190415.1030-1_all.deb ...
+Unpacking publicsuffix (20190415.1030-1) ...
+Setting up libpsl5:amd64 (0.20.2-2) ...
+Setting up libnghttp2-14:amd64 (1.36.0-2+deb10u1) ...
+Setting up liberror-perl (0.17027-2) ...
+Setting up librtmp1:amd64 (2.4+20151223.gitfa8646d.1-2) ...
+Setting up libpcre2-8-0:amd64 (10.32-5) ...
+Setting up git-man (1:2.20.1-2+deb10u3) ...
+Setting up libssh2-1:amd64 (1.8.0-2.1) ...
+Setting up openssl (1.1.1d-0+deb10u3) ...
+Setting up publicsuffix (20190415.1030-1) ...
+Setting up libcurl3-gnutls:amd64 (7.64.0-4+deb10u1) ...
+Setting up ca-certificates (20200601~deb10u1) ...
+Updating certificates in /etc/ssl/certs...
+126 added, 0 removed; done.
+Setting up git (1:2.20.1-2+deb10u3) ...
+Processing triggers for libc-bin (2.28-10) ...
+Processing triggers for ca-certificates (20200601~deb10u1) ...
+Updating certificates in /etc/ssl/certs...
+0 added, 0 removed; done.
+Running hooks in /etc/ca-certificates/update.d...
+done.
++ 1595597980.059812 1450868736 (16) git clone https://git.rtems.org/rtems-source-builder rsb
+Cloning into 'rsb'...
++ 1595598020.333061 1461280768 (17) cd /home/f/rsb
++ 1595598020.335264 1461280768 (18) git checkout 190b39e9139980a594bbeeb552dcab67aed1b949
+Note: checking out '190b39e9139980a594bbeeb552dcab67aed1b949'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by performing another checkout.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -b with the checkout command again. Example:
+
+  git checkout -b <new-branch-name>
+
+HEAD is now at 190b39e source-builder: Add capstone
++ 1595598020.353080 1461178368 (19) cd
++ 1595598020.355563 1461178368 (20) git clone https://git.rtems.org/sebh/rtems.git -b build
+Cloning into 'rtems'...
++ 1595598317.584696 1729007616 (21) cd /home/f/rtems
++ 1595598317.587169 1729007616 (22) git checkout 79654a4444781bb546d4477a061579f02b772d64
+Note: checking out '79654a4444781bb546d4477a061579f02b772d64'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by performing another checkout.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -b with the checkout command again. Example:
+
+  git checkout -b <new-branch-name>
+
+HEAD is now at 79654a4444 Merge remote-tracking branch 'origin/master' into build
++ 1595598318.121667 1686888448 (23) cd
++ 1595598318.125169 1686888448 (26) sudo apt install -y bison flex texinfo unzip python libpython-dev
+
+WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
+
+Reading package lists...
+Building dependency tree...
+Reading state information...
+The following additional packages will be installed:
+  libauthen-sasl-perl libbison-dev libdata-dump-perl libencode-locale-perl
+  libexpat1-dev libfile-listing-perl libfl-dev libfl2 libfont-afm-perl
+  libhtml-form-perl libhtml-format-perl libhtml-parser-perl
+  libhtml-tagset-perl libhtml-tree-perl libhttp-cookies-perl
+  libhttp-daemon-perl libhttp-date-perl libhttp-message-perl
+  libhttp-negotiate-perl libio-html-perl libio-socket-ssl-perl
+  liblwp-mediatypes-perl liblwp-protocol-https-perl libmailtools-perl
+  libnet-http-perl libnet-smtp-ssl-perl libnet-ssleay-perl libpython-stdlib
+  libpython2-dev libpython2-stdlib libpython2.7 libpython2.7-dev
+  libpython2.7-minimal libpython2.7-stdlib libsigsegv2 libtext-unidecode-perl
+  libtimedate-perl libtry-tiny-perl liburi-perl libwww-perl
+  libwww-robotrules-perl libxml-libxml-perl libxml-namespacesupport-perl
+  libxml-parser-perl libxml-sax-base-perl libxml-sax-expat-perl
+  libxml-sax-perl m4 perl-openssl-defaults python-minimal python2
+  python2-minimal python2.7 python2.7-minimal tex-common
+Suggested packages:
+  bison-doc flex-doc libdigest-hmac-perl libgssapi-perl libcrypt-ssleay-perl
+  libauthen-ntlm-perl libxml-sax-expatxs-perl m4-doc python-doc python-tk
+  python2-doc python2.7-doc binfmt-support debhelper texlive-base
+  texlive-latex-base texlive-generic-recommended texinfo-doc-nonfree
+  texlive-fonts-recommended zip
+The following NEW packages will be installed:
+  bison flex libauthen-sasl-perl libbison-dev libdata-dump-perl
+  libencode-locale-perl libexpat1-dev libfile-listing-perl libfl-dev libfl2
+  libfont-afm-perl libhtml-form-perl libhtml-format-perl libhtml-parser-perl
+  libhtml-tagset-perl libhtml-tree-perl libhttp-cookies-perl
+  libhttp-daemon-perl libhttp-date-perl libhttp-message-perl
+  libhttp-negotiate-perl libio-html-perl libio-socket-ssl-perl
+  liblwp-mediatypes-perl liblwp-protocol-https-perl libmailtools-perl
+  libnet-http-perl libnet-smtp-ssl-perl libnet-ssleay-perl libpython-dev
+  libpython-stdlib libpython2-dev libpython2-stdlib libpython2.7
+  libpython2.7-dev libpython2.7-minimal libpython2.7-stdlib libsigsegv2
+  libtext-unidecode-perl libtimedate-perl libtry-tiny-perl liburi-perl
+  libwww-perl libwww-robotrules-perl libxml-libxml-perl
+  libxml-namespacesupport-perl libxml-parser-perl libxml-sax-base-perl
+  libxml-sax-expat-perl libxml-sax-perl m4 perl-openssl-defaults python
+  python-minimal python2 python2-minimal python2.7 python2.7-minimal
+  tex-common texinfo unzip
+0 upgraded, 61 newly installed, 0 to remove and 0 not upgraded.
+Need to get 43.3 MB of archives.
+After this operation, 99.1 MB of additional disk space will be used.
+Get:1 http://deb.debian.org/debian buster/main amd64 libpython2.7-minimal amd64 2.7.16-2+deb10u1 [395 kB]
+Get:2 http://deb.debian.org/debian buster/main amd64 python2.7-minimal amd64 2.7.16-2+deb10u1 [1,369 kB]
+Get:3 http://deb.debian.org/debian buster/main amd64 python2-minimal amd64 2.7.16-1 [41.4 kB]
+Get:4 http://deb.debian.org/debian buster/main amd64 python-minimal amd64 2.7.16-1 [21.0 kB]
+Get:5 http://deb.debian.org/debian buster/main amd64 libpython2.7-stdlib amd64 2.7.16-2+deb10u1 [1,912 kB]
+Get:6 http://deb.debian.org/debian buster/main amd64 python2.7 amd64 2.7.16-2+deb10u1 [305 kB]
+Get:7 http://deb.debian.org/debian buster/main amd64 libpython2-stdlib amd64 2.7.16-1 [20.8 kB]
+Get:8 http://deb.debian.org/debian buster/main amd64 libpython-stdlib amd64 2.7.16-1 [20.8 kB]
+Get:9 http://deb.debian.org/debian buster/main amd64 python2 amd64 2.7.16-1 [41.6 kB]
+Get:10 http://deb.debian.org/debian buster/main amd64 python amd64 2.7.16-1 [22.8 kB]
+Get:11 http://deb.debian.org/debian buster/main amd64 libsigsegv2 amd64 2.12-2 [32.8 kB]
+Get:12 http://deb.debian.org/debian buster/main amd64 m4 amd64 1.4.18-2 [203 kB]
+Get:13 http://deb.debian.org/debian buster/main amd64 flex amd64 2.6.4-6.2 [456 kB]
+Get:14 http://deb.debian.org/debian buster/main amd64 tex-common all 6.11 [53.1 kB]
+Get:15 http://deb.debian.org/debian buster/main amd64 libbison-dev amd64 2:3.3.2.dfsg-1 [500 kB]
+Get:16 http://deb.debian.org/debian buster/main amd64 bison amd64 2:3.3.2.dfsg-1 [871 kB]
+Get:17 http://deb.debian.org/debian buster/main amd64 libauthen-sasl-perl all 2.1600-1 [50.8 kB]
+Get:18 http://deb.debian.org/debian buster/main amd64 libdata-dump-perl all 1.23-1 [29.5 kB]
+Get:19 http://deb.debian.org/debian buster/main amd64 libencode-locale-perl all 1.05-1 [13.7 kB]
+Get:20 http://deb.debian.org/debian buster/main amd64 libexpat1-dev amd64 2.2.6-2+deb10u1 [153 kB]
+Get:21 http://deb.debian.org/debian buster/main amd64 libtimedate-perl all 2.3000-2+deb10u1 [38.1 kB]
+Get:22 http://deb.debian.org/debian buster/main amd64 libhttp-date-perl all 6.02-1 [10.7 kB]
+Get:23 http://deb.debian.org/debian buster/main amd64 libfile-listing-perl all 6.04-1 [10.3 kB]
+Get:24 http://deb.debian.org/debian buster/main amd64 libfl2 amd64 2.6.4-6.2 [103 kB]
+Get:25 http://deb.debian.org/debian buster/main amd64 libfl-dev amd64 2.6.4-6.2 [104 kB]
+Get:26 http://deb.debian.org/debian buster/main amd64 libfont-afm-perl all 1.20-2 [13.6 kB]
+Get:27 http://deb.debian.org/debian buster/main amd64 libhtml-tagset-perl all 3.20-3 [12.7 kB]
+Get:28 http://deb.debian.org/debian buster/main amd64 liburi-perl all 1.76-1 [89.9 kB]
+Get:29 http://deb.debian.org/debian buster/main amd64 libhtml-parser-perl amd64 3.72-3+b3 [105 kB]
+Get:30 http://deb.debian.org/debian buster/main amd64 libio-html-perl all 1.001-1 [17.6 kB]
+Get:31 http://deb.debian.org/debian buster/main amd64 liblwp-mediatypes-perl all 6.02-1 [22.1 kB]
+Get:32 http://deb.debian.org/debian buster/main amd64 libhttp-message-perl all 6.18-1 [77.8 kB]
+Get:33 http://deb.debian.org/debian buster/main amd64 libhtml-form-perl all 6.03-1 [23.9 kB]
+Get:34 http://deb.debian.org/debian buster/main amd64 libhtml-tree-perl all 5.07-2 [213 kB]
+Get:35 http://deb.debian.org/debian buster/main amd64 libhtml-format-perl all 2.12-1 [43.5 kB]
+Get:36 http://deb.debian.org/debian buster/main amd64 libhttp-cookies-perl all 6.04-1 [17.8 kB]
+Get:37 http://deb.debian.org/debian buster/main amd64 libhttp-daemon-perl all 6.01-3 [16.6 kB]
+Get:38 http://deb.debian.org/debian buster/main amd64 libhttp-negotiate-perl all 6.01-1 [12.8 kB]
+Get:39 http://deb.debian.org/debian buster/main amd64 perl-openssl-defaults amd64 3 [6,782 B]
+Get:40 http://deb.debian.org/debian buster/main amd64 libnet-ssleay-perl amd64 1.85-2+b1 [308 kB]
+Get:41 http://deb.debian.org/debian buster/main amd64 libio-socket-ssl-perl all 2.060-3 [207 kB]
+Get:42 http://deb.debian.org/debian buster/main amd64 libnet-http-perl all 6.18-1 [24.5 kB]
+Get:43 http://deb.debian.org/debian buster/main amd64 libtry-tiny-perl all 0.30-1 [23.3 kB]
+Get:44 http://deb.debian.org/debian buster/main amd64 libwww-robotrules-perl all 6.02-1 [12.9 kB]
+Get:45 http://deb.debian.org/debian buster/main amd64 libwww-perl all 6.36-2 [188 kB]
+Get:46 http://deb.debian.org/debian buster/main amd64 liblwp-protocol-https-perl all 6.07-2 [9,242 B]
+Get:47 http://deb.debian.org/debian buster/main amd64 libnet-smtp-ssl-perl all 1.04-1 [6,184 B]
+Get:48 http://deb.debian.org/debian buster/main amd64 libmailtools-perl all 2.18-1 [88.5 kB]
+Get:49 http://deb.debian.org/debian buster/main amd64 libpython2.7 amd64 2.7.16-2+deb10u1 [1,036 kB]
+Get:50 http://deb.debian.org/debian buster/main amd64 libpython2.7-dev amd64 2.7.16-2+deb10u1 [31.6 MB]
+Get:51 http://deb.debian.org/debian buster/main amd64 libpython2-dev amd64 2.7.16-1 [20.9 kB]
+Get:52 http://deb.debian.org/debian buster/main amd64 libpython-dev amd64 2.7.16-1 [20.9 kB]
+Get:53 http://deb.debian.org/debian buster/main amd64 libtext-unidecode-perl all 1.30-1 [103 kB]
+Get:54 http://deb.debian.org/debian buster/main amd64 libxml-namespacesupport-perl all 1.12-1 [14.8 kB]
+Get:55 http://deb.debian.org/debian buster/main amd64 libxml-sax-base-perl all 1.09-1 [20.4 kB]
+Get:56 http://deb.debian.org/debian buster/main amd64 libxml-sax-perl all 1.00+dfsg-1 [58.6 kB]
+Get:57 http://deb.debian.org/debian buster/main amd64 libxml-libxml-perl amd64 2.0134+dfsg-1 [344 kB]
+Get:58 http://deb.debian.org/debian buster/main amd64 libxml-parser-perl amd64 2.44-4 [213 kB]
+Get:59 http://deb.debian.org/debian buster/main amd64 libxml-sax-expat-perl all 0.51-1 [12.0 kB]
+Get:60 http://deb.debian.org/debian buster/main amd64 texinfo amd64 6.5.0.dfsg.1-4+b1 [1,431 kB]
+Get:61 http://deb.debian.org/debian buster/main amd64 unzip amd64 6.0-23+deb10u1 [172 kB]
+Fetched 43.3 MB in 12s (3,613 kB/s)
+Selecting previously unselected package libpython2.7-minimal:amd64.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 50156 files and directories currently installed.)
+Preparing to unpack .../0-libpython2.7-minimal_2.7.16-2+deb10u1_amd64.deb ...
+Unpacking libpython2.7-minimal:amd64 (2.7.16-2+deb10u1) ...
+Selecting previously unselected package python2.7-minimal.
+Preparing to unpack .../1-python2.7-minimal_2.7.16-2+deb10u1_amd64.deb ...
+Unpacking python2.7-minimal (2.7.16-2+deb10u1) ...
+Selecting previously unselected package python2-minimal.
+Preparing to unpack .../2-python2-minimal_2.7.16-1_amd64.deb ...
+Unpacking python2-minimal (2.7.16-1) ...
+Selecting previously unselected package python-minimal.
+Preparing to unpack .../3-python-minimal_2.7.16-1_amd64.deb ...
+Unpacking python-minimal (2.7.16-1) ...
+Selecting previously unselected package libpython2.7-stdlib:amd64.
+Preparing to unpack .../4-libpython2.7-stdlib_2.7.16-2+deb10u1_amd64.deb ...
+Unpacking libpython2.7-stdlib:amd64 (2.7.16-2+deb10u1) ...
+Selecting previously unselected package python2.7.
+Preparing to unpack .../5-python2.7_2.7.16-2+deb10u1_amd64.deb ...
+Unpacking python2.7 (2.7.16-2+deb10u1) ...
+Selecting previously unselected package libpython2-stdlib:amd64.
+Preparing to unpack .../6-libpython2-stdlib_2.7.16-1_amd64.deb ...
+Unpacking libpython2-stdlib:amd64 (2.7.16-1) ...
+Selecting previously unselected package libpython-stdlib:amd64.
+Preparing to unpack .../7-libpython-stdlib_2.7.16-1_amd64.deb ...
+Unpacking libpython-stdlib:amd64 (2.7.16-1) ...
+Setting up libpython2.7-minimal:amd64 (2.7.16-2+deb10u1) ...
+Setting up python2.7-minimal (2.7.16-2+deb10u1) ...
+Linking and byte-compiling packages for runtime python2.7...
+Setting up python2-minimal (2.7.16-1) ...
+Selecting previously unselected package python2.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 50913 files and directories currently installed.)
+Preparing to unpack .../python2_2.7.16-1_amd64.deb ...
+Unpacking python2 (2.7.16-1) ...
+Setting up python-minimal (2.7.16-1) ...
+Selecting previously unselected package python.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 50941 files and directories currently installed.)
+Preparing to unpack .../00-python_2.7.16-1_amd64.deb ...
+Unpacking python (2.7.16-1) ...
+Selecting previously unselected package libsigsegv2:amd64.
+Preparing to unpack .../01-libsigsegv2_2.12-2_amd64.deb ...
+Unpacking libsigsegv2:amd64 (2.12-2) ...
+Selecting previously unselected package m4.
+Preparing to unpack .../02-m4_1.4.18-2_amd64.deb ...
+Unpacking m4 (1.4.18-2) ...
+Selecting previously unselected package flex.
+Preparing to unpack .../03-flex_2.6.4-6.2_amd64.deb ...
+Unpacking flex (2.6.4-6.2) ...
+Selecting previously unselected package tex-common.
+Preparing to unpack .../04-tex-common_6.11_all.deb ...
+Unpacking tex-common (6.11) ...
+Selecting previously unselected package libbison-dev:amd64.
+Preparing to unpack .../05-libbison-dev_2%3a3.3.2.dfsg-1_amd64.deb ...
+Unpacking libbison-dev:amd64 (2:3.3.2.dfsg-1) ...
+Selecting previously unselected package bison.
+Preparing to unpack .../06-bison_2%3a3.3.2.dfsg-1_amd64.deb ...
+Unpacking bison (2:3.3.2.dfsg-1) ...
+Selecting previously unselected package libauthen-sasl-perl.
+Preparing to unpack .../07-libauthen-sasl-perl_2.1600-1_all.deb ...
+Unpacking libauthen-sasl-perl (2.1600-1) ...
+Selecting previously unselected package libdata-dump-perl.
+Preparing to unpack .../08-libdata-dump-perl_1.23-1_all.deb ...
+Unpacking libdata-dump-perl (1.23-1) ...
+Selecting previously unselected package libencode-locale-perl.
+Preparing to unpack .../09-libencode-locale-perl_1.05-1_all.deb ...
+Unpacking libencode-locale-perl (1.05-1) ...
+Selecting previously unselected package libexpat1-dev:amd64.
+Preparing to unpack .../10-libexpat1-dev_2.2.6-2+deb10u1_amd64.deb ...
+Unpacking libexpat1-dev:amd64 (2.2.6-2+deb10u1) ...
+Selecting previously unselected package libtimedate-perl.
+Preparing to unpack .../11-libtimedate-perl_2.3000-2+deb10u1_all.deb ...
+Unpacking libtimedate-perl (2.3000-2+deb10u1) ...
+Selecting previously unselected package libhttp-date-perl.
+Preparing to unpack .../12-libhttp-date-perl_6.02-1_all.deb ...
+Unpacking libhttp-date-perl (6.02-1) ...
+Selecting previously unselected package libfile-listing-perl.
+Preparing to unpack .../13-libfile-listing-perl_6.04-1_all.deb ...
+Unpacking libfile-listing-perl (6.04-1) ...
+Selecting previously unselected package libfl2:amd64.
+Preparing to unpack .../14-libfl2_2.6.4-6.2_amd64.deb ...
+Unpacking libfl2:amd64 (2.6.4-6.2) ...
+Selecting previously unselected package libfl-dev:amd64.
+Preparing to unpack .../15-libfl-dev_2.6.4-6.2_amd64.deb ...
+Unpacking libfl-dev:amd64 (2.6.4-6.2) ...
+Selecting previously unselected package libfont-afm-perl.
+Preparing to unpack .../16-libfont-afm-perl_1.20-2_all.deb ...
+Unpacking libfont-afm-perl (1.20-2) ...
+Selecting previously unselected package libhtml-tagset-perl.
+Preparing to unpack .../17-libhtml-tagset-perl_3.20-3_all.deb ...
+Unpacking libhtml-tagset-perl (3.20-3) ...
+Selecting previously unselected package liburi-perl.
+Preparing to unpack .../18-liburi-perl_1.76-1_all.deb ...
+Unpacking liburi-perl (1.76-1) ...
+Selecting previously unselected package libhtml-parser-perl.
+Preparing to unpack .../19-libhtml-parser-perl_3.72-3+b3_amd64.deb ...
+Unpacking libhtml-parser-perl (3.72-3+b3) ...
+Selecting previously unselected package libio-html-perl.
+Preparing to unpack .../20-libio-html-perl_1.001-1_all.deb ...
+Unpacking libio-html-perl (1.001-1) ...
+Selecting previously unselected package liblwp-mediatypes-perl.
+Preparing to unpack .../21-liblwp-mediatypes-perl_6.02-1_all.deb ...
+Unpacking liblwp-mediatypes-perl (6.02-1) ...
+Selecting previously unselected package libhttp-message-perl.
+Preparing to unpack .../22-libhttp-message-perl_6.18-1_all.deb ...
+Unpacking libhttp-message-perl (6.18-1) ...
+Selecting previously unselected package libhtml-form-perl.
+Preparing to unpack .../23-libhtml-form-perl_6.03-1_all.deb ...
+Unpacking libhtml-form-perl (6.03-1) ...
+Selecting previously unselected package libhtml-tree-perl.
+Preparing to unpack .../24-libhtml-tree-perl_5.07-2_all.deb ...
+Unpacking libhtml-tree-perl (5.07-2) ...
+Selecting previously unselected package libhtml-format-perl.
+Preparing to unpack .../25-libhtml-format-perl_2.12-1_all.deb ...
+Unpacking libhtml-format-perl (2.12-1) ...
+Selecting previously unselected package libhttp-cookies-perl.
+Preparing to unpack .../26-libhttp-cookies-perl_6.04-1_all.deb ...
+Unpacking libhttp-cookies-perl (6.04-1) ...
+Selecting previously unselected package libhttp-daemon-perl.
+Preparing to unpack .../27-libhttp-daemon-perl_6.01-3_all.deb ...
+Unpacking libhttp-daemon-perl (6.01-3) ...
+Selecting previously unselected package libhttp-negotiate-perl.
+Preparing to unpack .../28-libhttp-negotiate-perl_6.01-1_all.deb ...
+Unpacking libhttp-negotiate-perl (6.01-1) ...
+Selecting previously unselected package perl-openssl-defaults:amd64.
+Preparing to unpack .../29-perl-openssl-defaults_3_amd64.deb ...
+Unpacking perl-openssl-defaults:amd64 (3) ...
+Selecting previously unselected package libnet-ssleay-perl.
+Preparing to unpack .../30-libnet-ssleay-perl_1.85-2+b1_amd64.deb ...
+Unpacking libnet-ssleay-perl (1.85-2+b1) ...
+Selecting previously unselected package libio-socket-ssl-perl.
+Preparing to unpack .../31-libio-socket-ssl-perl_2.060-3_all.deb ...
+Unpacking libio-socket-ssl-perl (2.060-3) ...
+Selecting previously unselected package libnet-http-perl.
+Preparing to unpack .../32-libnet-http-perl_6.18-1_all.deb ...
+Unpacking libnet-http-perl (6.18-1) ...
+Selecting previously unselected package libtry-tiny-perl.
+Preparing to unpack .../33-libtry-tiny-perl_0.30-1_all.deb ...
+Unpacking libtry-tiny-perl (0.30-1) ...
+Selecting previously unselected package libwww-robotrules-perl.
+Preparing to unpack .../34-libwww-robotrules-perl_6.02-1_all.deb ...
+Unpacking libwww-robotrules-perl (6.02-1) ...
+Selecting previously unselected package libwww-perl.
+Preparing to unpack .../35-libwww-perl_6.36-2_all.deb ...
+Unpacking libwww-perl (6.36-2) ...
+Selecting previously unselected package liblwp-protocol-https-perl.
+Preparing to unpack .../36-liblwp-protocol-https-perl_6.07-2_all.deb ...
+Unpacking liblwp-protocol-https-perl (6.07-2) ...
+Selecting previously unselected package libnet-smtp-ssl-perl.
+Preparing to unpack .../37-libnet-smtp-ssl-perl_1.04-1_all.deb ...
+Unpacking libnet-smtp-ssl-perl (1.04-1) ...
+Selecting previously unselected package libmailtools-perl.
+Preparing to unpack .../38-libmailtools-perl_2.18-1_all.deb ...
+Unpacking libmailtools-perl (2.18-1) ...
+Selecting previously unselected package libpython2.7:amd64.
+Preparing to unpack .../39-libpython2.7_2.7.16-2+deb10u1_amd64.deb ...
+Unpacking libpython2.7:amd64 (2.7.16-2+deb10u1) ...
+Selecting previously unselected package libpython2.7-dev:amd64.
+Preparing to unpack .../40-libpython2.7-dev_2.7.16-2+deb10u1_amd64.deb ...
+Unpacking libpython2.7-dev:amd64 (2.7.16-2+deb10u1) ...
+Selecting previously unselected package libpython2-dev:amd64.
+Preparing to unpack .../41-libpython2-dev_2.7.16-1_amd64.deb ...
+Unpacking libpython2-dev:amd64 (2.7.16-1) ...
+Selecting previously unselected package libpython-dev:amd64.
+Preparing to unpack .../42-libpython-dev_2.7.16-1_amd64.deb ...
+Unpacking libpython-dev:amd64 (2.7.16-1) ...
+Selecting previously unselected package libtext-unidecode-perl.
+Preparing to unpack .../43-libtext-unidecode-perl_1.30-1_all.deb ...
+Unpacking libtext-unidecode-perl (1.30-1) ...
+Selecting previously unselected package libxml-namespacesupport-perl.
+Preparing to unpack .../44-libxml-namespacesupport-perl_1.12-1_all.deb ...
+Unpacking libxml-namespacesupport-perl (1.12-1) ...
+Selecting previously unselected package libxml-sax-base-perl.
+Preparing to unpack .../45-libxml-sax-base-perl_1.09-1_all.deb ...
+Unpacking libxml-sax-base-perl (1.09-1) ...
+Selecting previously unselected package libxml-sax-perl.
+Preparing to unpack .../46-libxml-sax-perl_1.00+dfsg-1_all.deb ...
+Unpacking libxml-sax-perl (1.00+dfsg-1) ...
+Selecting previously unselected package libxml-libxml-perl.
+Preparing to unpack .../47-libxml-libxml-perl_2.0134+dfsg-1_amd64.deb ...
+Unpacking libxml-libxml-perl (2.0134+dfsg-1) ...
+Selecting previously unselected package libxml-parser-perl.
+Preparing to unpack .../48-libxml-parser-perl_2.44-4_amd64.deb ...
+Unpacking libxml-parser-perl (2.44-4) ...
+Selecting previously unselected package libxml-sax-expat-perl.
+Preparing to unpack .../49-libxml-sax-expat-perl_0.51-1_all.deb ...
+Unpacking libxml-sax-expat-perl (0.51-1) ...
+Selecting previously unselected package texinfo.
+Preparing to unpack .../50-texinfo_6.5.0.dfsg.1-4+b1_amd64.deb ...
+Unpacking texinfo (6.5.0.dfsg.1-4+b1) ...
+Selecting previously unselected package unzip.
+Preparing to unpack .../51-unzip_6.0-23+deb10u1_amd64.deb ...
+Unpacking unzip (6.0-23+deb10u1) ...
+Setting up libbison-dev:amd64 (2:3.3.2.dfsg-1) ...
+Setting up libfont-afm-perl (1.20-2) ...
+Setting up libhtml-tagset-perl (3.20-3) ...
+Setting up libauthen-sasl-perl (2.1600-1) ...
+Setting up unzip (6.0-23+deb10u1) ...
+Setting up liblwp-mediatypes-perl (6.02-1) ...
+Setting up libtry-tiny-perl (0.30-1) ...
+Setting up perl-openssl-defaults:amd64 (3) ...
+Setting up libxml-namespacesupport-perl (1.12-1) ...
+Setting up libencode-locale-perl (1.05-1) ...
+Setting up libpython2.7-stdlib:amd64 (2.7.16-2+deb10u1) ...
+Setting up tex-common (6.11) ...
+update-language: texlive-base not installed and configured, doing nothing!
+Setting up libxml-sax-base-perl (1.09-1) ...
+Setting up libexpat1-dev:amd64 (2.2.6-2+deb10u1) ...
+Setting up libdata-dump-perl (1.23-1) ...
+Setting up libsigsegv2:amd64 (2.12-2) ...
+Setting up libio-html-perl (1.001-1) ...
+Setting up libfl2:amd64 (2.6.4-6.2) ...
+Setting up libtimedate-perl (2.3000-2+deb10u1) ...
+Setting up libtext-unidecode-perl (1.30-1) ...
+Setting up liburi-perl (1.76-1) ...
+Setting up libnet-ssleay-perl (1.85-2+b1) ...
+Setting up libhttp-date-perl (6.02-1) ...
+Setting up libpython2.7:amd64 (2.7.16-2+deb10u1) ...
+Setting up libpython2.7-dev:amd64 (2.7.16-2+deb10u1) ...
+Setting up libfile-listing-perl (6.04-1) ...
+Setting up python2.7 (2.7.16-2+deb10u1) ...
+Setting up libpython2-stdlib:amd64 (2.7.16-1) ...
+Setting up libnet-http-perl (6.18-1) ...
+Setting up m4 (1.4.18-2) ...
+Setting up libxml-sax-perl (1.00+dfsg-1) ...
+update-perl-sax-parsers: Registering Perl SAX parser XML::SAX::PurePerl with priority 10...
+update-perl-sax-parsers: Updating overall Perl SAX parser modules info file...
+
+Creating config file /etc/perl/XML/SAX/ParserDetails.ini with new version
+Setting up python2 (2.7.16-1) ...
+Setting up libpython-stdlib:amd64 (2.7.16-1) ...
+Setting up libxml-libxml-perl (2.0134+dfsg-1) ...
+update-perl-sax-parsers: Registering Perl SAX parser XML::LibXML::SAX::Parser with priority 50...
+update-perl-sax-parsers: Registering Perl SAX parser XML::LibXML::SAX with priority 50...
+update-perl-sax-parsers: Updating overall Perl SAX parser modules info file...
+Replacing config file /etc/perl/XML/SAX/ParserDetails.ini with new version
+Setting up libwww-robotrules-perl (6.02-1) ...
+Setting up libhtml-parser-perl (3.72-3+b3) ...
+Setting up bison (2:3.3.2.dfsg-1) ...
+update-alternatives: using /usr/bin/bison.yacc to provide /usr/bin/yacc (yacc) in auto mode
+Setting up libpython2-dev:amd64 (2.7.16-1) ...
+Setting up python (2.7.16-1) ...
+Setting up libio-socket-ssl-perl (2.060-3) ...
+Setting up libhttp-message-perl (6.18-1) ...
+Setting up libhtml-form-perl (6.03-1) ...
+Setting up libhttp-negotiate-perl (6.01-1) ...
+Setting up flex (2.6.4-6.2) ...
+Setting up libhttp-cookies-perl (6.04-1) ...
+Setting up libhtml-tree-perl (5.07-2) ...
+Setting up libhtml-format-perl (2.12-1) ...
+Setting up libfl-dev:amd64 (2.6.4-6.2) ...
+Setting up libpython-dev:amd64 (2.7.16-1) ...
+Setting up libnet-smtp-ssl-perl (1.04-1) ...
+Setting up libmailtools-perl (2.18-1) ...
+Setting up texinfo (6.5.0.dfsg.1-4+b1) ...
+Setting up libhttp-daemon-perl (6.01-3) ...
+Setting up liblwp-protocol-https-perl (6.07-2) ...
+Setting up libwww-perl (6.36-2) ...
+Setting up libxml-parser-perl (2.44-4) ...
+Setting up libxml-sax-expat-perl (0.51-1) ...
+update-perl-sax-parsers: Registering Perl SAX parser XML::SAX::Expat with priority 50...
+update-perl-sax-parsers: Updating overall Perl SAX parser modules info file...
+Replacing config file /etc/perl/XML/SAX/ParserDetails.ini with new version
+Processing triggers for mime-support (3.62) ...
+Processing triggers for libc-bin (2.28-10) ...
++ 1595598357.160209 1799929856 (27) cd /home/f/rsb/rtems
++ 1595598357.162132 1799929856 (28) ../source-builder/sb-set-builder --source-only-download 5/rtems-sparc
+RTEMS Source Builder - Set Builder, 5 (190b39e91399 modified)
+Build Set: 5/rtems-sparc
+Build Set: 5/rtems-autotools.bset
+Build Set: 5/rtems-autotools-internal.bset
+config: tools/rtems-autoconf-2.69-1.cfg
+package: autoconf-2.69-x86_64-linux-gnu-1
+Creating source directory: sources
+download: https://ftp.gnu.org/gnu/autoconf/autoconf-2.69.tar.gz -> sources/autoconf-2.69.tar.gz
+downloading: sources/autoconf-2.69.tar.gz - 0.0 bytes of 1.8MB (0%) downloading: sources/autoconf-2.69.tar.gz - 256.0kB of 1.8MB (14%)  downloading: sources/autoconf-2.69.tar.gz - 512.0kB of 1.8MB (27%) downloading: sources/autoconf-2.69.tar.gz - 768.0kB of 1.8MB (41%) downloading: sources/autoconf-2.69.tar.gz - 1.0MB of 1.8MB (54%)   downloading: sources/autoconf-2.69.tar.gz - 1.2MB of 1.8MB (68%) downloading: sources/autoconf-2.69.tar.gz - 1.5MB of 1.8MB (82%) downloading: sources/autoconf-2.69.tar.gz - 1.8MB of 1.8MB (95%) downloading: sources/autoconf-2.69.tar.gz - 1.8MB of 1.8MB (100%) 
+config: tools/rtems-automake-1.12.6-1.cfg
+package: automake-1.12.6-x86_64-linux-gnu-1
+download: https://ftp.gnu.org/gnu/automake/automake-1.12.6.tar.gz -> sources/automake-1.12.6.tar.gz
+downloading: sources/automake-1.12.6.tar.gz - 0.0 bytes of 2.0MB (0%) downloading: sources/automake-1.12.6.tar.gz - 256.0kB of 2.0MB (12%)  downloading: sources/automake-1.12.6.tar.gz - 512.0kB of 2.0MB (25%) downloading: sources/automake-1.12.6.tar.gz - 768.0kB of 2.0MB (37%) downloading: sources/automake-1.12.6.tar.gz - 1.0MB of 2.0MB (50%)   downloading: sources/automake-1.12.6.tar.gz - 1.2MB of 2.0MB (62%) downloading: sources/automake-1.12.6.tar.gz - 1.5MB of 2.0MB (75%) downloading: sources/automake-1.12.6.tar.gz - 1.8MB of 2.0MB (87%) downloading: sources/automake-1.12.6.tar.gz - 2.0MB of 2.0MB (100%) 
+Creating source directory: patches
+download: https://devel.rtems.org/raw-attachment/ticket/2616/automake-1.12.6-bugzilla.redhat.com-1239379.diff -> patches/automake-1.12.6-bugzilla.redhat.com-1239379.diff
+downloading: patches/automake-1.12.6-bugzilla.redhat.com-1239379.diff - 0.0 bytes of 408.0 bytes (0%) downloading: patches/automake-1.12.6-bugzilla.redhat.com-1239379.diff - 408.0 bytes of 408.0 bytes (100%) 
+cleaning: autoconf-2.69-x86_64-linux-gnu-1
+cleaning: automake-1.12.6-x86_64-linux-gnu-1
+Build Sizes: usage: 0.000B total: 3.867MB (sources: 3.848MB, patches: 19.412KB, installed 0.000B)
+Build Set: Time 0:00:06.690297
+Build Set: 5/rtems-autotools-base.bset
+config: tools/rtems-autoconf-2.69-1.cfg
+package: autoconf-2.69-x86_64-linux-gnu-1
+reporting: tools/rtems-autoconf-2.69-1.cfg -> autoconf-2.69-x86_64-linux-gnu-1.txt
+reporting: tools/rtems-autoconf-2.69-1.cfg -> autoconf-2.69-x86_64-linux-gnu-1.xml
+config: tools/rtems-automake-1.12.6-1.cfg
+package: automake-1.12.6-x86_64-linux-gnu-1
+reporting: tools/rtems-automake-1.12.6-1.cfg -> automake-1.12.6-x86_64-linux-gnu-1.txt
+reporting: tools/rtems-automake-1.12.6-1.cfg -> automake-1.12.6-x86_64-linux-gnu-1.xml
+staging: autoconf-2.69-x86_64-linux-gnu-1 -> /home/f/rsb/rtems/build/tmp/sb-1000-staging
+staging: automake-1.12.6-x86_64-linux-gnu-1 -> /home/f/rsb/rtems/build/tmp/sb-1000-staging
+cleaning: autoconf-2.69-x86_64-linux-gnu-1
+cleaning: automake-1.12.6-x86_64-linux-gnu-1
+Build Sizes: usage: 0.000B total: 3.867MB (sources: 3.848MB, patches: 19.412KB, installed 0.000B)
+Build Set: Time 0:00:01.476273
+Build Set: Time 0:00:08.169066
+config: devel/expat-2.1.0-1.cfg
+package: expat-2.1.0-x86_64-linux-gnu-1
+download: https://github.com/libexpat/libexpat/releases/download/R_2_1_0/expat-2.1.0.tar.gz -> sources/expat-2.1.0.tar.gz
+ redirect: https://github-production-release-asset-2e65be.s3.amazonaws.com/80314213/0186bc60-b675...<see log>
+downloading: sources/expat-2.1.0.tar.gz - 0.0 bytes of 549.4kB (0%) downloading: sources/expat-2.1.0.tar.gz - 256.0kB of 549.4kB (47%)  downloading: sources/expat-2.1.0.tar.gz - 512.0kB of 549.4kB (93%) downloading: sources/expat-2.1.0.tar.gz - 549.4kB of 549.4kB (100%) 
+reporting: devel/expat-2.1.0-1.cfg -> expat-2.1.0-x86_64-linux-gnu-1.txt
+reporting: devel/expat-2.1.0-1.cfg -> expat-2.1.0-x86_64-linux-gnu-1.xml
+config: tools/rtems-gdb-9.1-1.cfg
+package: sparc-rtems5-gdb-9.1-x86_64-linux-gnu-1
+download: http://ftp.gnu.org/gnu/gdb/gdb-9.1.tar.xz -> sources/gdb-9.1.tar.xz
+downloading: sources/gdb-9.1.tar.xz - 0.0 bytes of 20.0MB (0%) downloading: sources/gdb-9.1.tar.xz - 256.0kB of 20.0MB (1%)   downloading: sources/gdb-9.1.tar.xz - 512.0kB of 20.0MB (2%) downloading: sources/gdb-9.1.tar.xz - 768.0kB of 20.0MB (4%) downloading: sources/gdb-9.1.tar.xz - 1.0MB of 20.0MB (5%)   downloading: sources/gdb-9.1.tar.xz - 1.2MB of 20.0MB (6%) downloading: sources/gdb-9.1.tar.xz - 1.5MB of 20.0MB (8%) downloading: sources/gdb-9.1.tar.xz - 1.8MB of 20.0MB (9%) downloading: sources/gdb-9.1.tar.xz - 2.0MB of 20.0MB (10%) downloading: sources/gdb-9.1.tar.xz - 2.2MB of 20.0MB (11%) downloading: sources/gdb-9.1.tar.xz - 2.5MB of 20.0MB (12%) downloading: sources/gdb-9.1.tar.xz - 2.8MB of 20.0MB (14%) downloading: sources/gdb-9.1.tar.xz - 3.0MB of 20.0MB (15%) downloading: sources/gdb-9.1.tar.xz - 3.2MB of 20.0MB (16%) downloading: sources/gdb-9.1.tar.xz - 3.5MB of 20.0MB (17%) downloading: sources/gdb-9.1.tar.xz - 3.8MB of 20.0MB (19%) downloading: sources/gdb-9.1.tar.xz - 4.0MB of 20.0MB (20%) downloading: sources/gdb-9.1.tar.xz - 4.2MB of 20.0MB (21%) downloading: sources/gdb-9.1.tar.xz - 4.5MB of 20.0MB (22%) downloading: sources/gdb-9.1.tar.xz - 4.8MB of 20.0MB (24%) downloading: sources/gdb-9.1.tar.xz - 5.0MB of 20.0MB (25%) downloading: sources/gdb-9.1.tar.xz - 5.2MB of 20.0MB (26%) downloading: sources/gdb-9.1.tar.xz - 5.5MB of 20.0MB (27%) downloading: sources/gdb-9.1.tar.xz - 5.8MB of 20.0MB (29%) downloading: sources/gdb-9.1.tar.xz - 6.0MB of 20.0MB (30%) downloading: sources/gdb-9.1.tar.xz - 6.2MB of 20.0MB (31%) downloading: sources/gdb-9.1.tar.xz - 6.5MB of 20.0MB (32%) downloading: sources/gdb-9.1.tar.xz - 6.8MB of 20.0MB (34%) downloading: sources/gdb-9.1.tar.xz - 7.0MB of 20.0MB (35%) downloading: sources/gdb-9.1.tar.xz - 7.2MB of 20.0MB (36%) downloading: sources/gdb-9.1.tar.xz - 7.5MB of 20.0MB (37%) downloading: sources/gdb-9.1.tar.xz - 7.8MB of 20.0MB (39%) downloading: sources/gdb-9.1.tar.xz - 8.0MB of 20.0MB (40%) downloading: sources/gdb-9.1.tar.xz - 8.2MB of 20.0MB (41%) downloading: sources/gdb-9.1.tar.xz - 8.5MB of 20.0MB (42%) downloading: sources/gdb-9.1.tar.xz - 8.8MB of 20.0MB (44%) downloading: sources/gdb-9.1.tar.xz - 9.0MB of 20.0MB (45%) downloading: sources/gdb-9.1.tar.xz - 9.2MB of 20.0MB (46%) downloading: sources/gdb-9.1.tar.xz - 9.5MB of 20.0MB (47%) downloading: sources/gdb-9.1.tar.xz - 9.8MB of 20.0MB (49%) downloading: sources/gdb-9.1.tar.xz - 10.0MB of 20.0MB (50%) downloading: sources/gdb-9.1.tar.xz - 10.2MB of 20.0MB (51%) downloading: sources/gdb-9.1.tar.xz - 10.5MB of 20.0MB (52%) downloading: sources/gdb-9.1.tar.xz - 10.8MB of 20.0MB (54%) downloading: sources/gdb-9.1.tar.xz - 11.0MB of 20.0MB (55%) downloading: sources/gdb-9.1.tar.xz - 11.2MB of 20.0MB (56%) downloading: sources/gdb-9.1.tar.xz - 11.5MB of 20.0MB (57%) downloading: sources/gdb-9.1.tar.xz - 11.8MB of 20.0MB (59%) downloading: sources/gdb-9.1.tar.xz - 12.0MB of 20.0MB (60%) downloading: sources/gdb-9.1.tar.xz - 12.2MB of 20.0MB (61%) downloading: sources/gdb-9.1.tar.xz - 12.5MB of 20.0MB (62%) downloading: sources/gdb-9.1.tar.xz - 12.8MB of 20.0MB (64%) downloading: sources/gdb-9.1.tar.xz - 13.0MB of 20.0MB (65%) downloading: sources/gdb-9.1.tar.xz - 13.2MB of 20.0MB (66%) downloading: sources/gdb-9.1.tar.xz - 13.5MB of 20.0MB (67%) downloading: sources/gdb-9.1.tar.xz - 13.8MB of 20.0MB (69%) downloading: sources/gdb-9.1.tar.xz - 14.0MB of 20.0MB (70%) downloading: sources/gdb-9.1.tar.xz - 14.2MB of 20.0MB (71%) downloading: sources/gdb-9.1.tar.xz - 14.5MB of 20.0MB (72%) downloading: sources/gdb-9.1.tar.xz - 14.8MB of 20.0MB (74%) downloading: sources/gdb-9.1.tar.xz - 15.0MB of 20.0MB (75%) downloading: sources/gdb-9.1.tar.xz - 15.2MB of 20.0MB (76%) downloading: sources/gdb-9.1.tar.xz - 15.5MB of 20.0MB (77%) downloading: sources/gdb-9.1.tar.xz - 15.8MB of 20.0MB (79%) downloading: sources/gdb-9.1.tar.xz - 16.0MB of 20.0MB (80%) downloading: sources/gdb-9.1.tar.xz - 16.2MB of 20.0MB (81%) downloading: sources/gdb-9.1.tar.xz - 16.5MB of 20.0MB (82%) downloading: sources/gdb-9.1.tar.xz - 16.8MB of 20.0MB (84%) downloading: sources/gdb-9.1.tar.xz - 17.0MB of 20.0MB (85%) downloading: sources/gdb-9.1.tar.xz - 17.2MB of 20.0MB (86%) downloading: sources/gdb-9.1.tar.xz - 17.5MB of 20.0MB (87%) downloading: sources/gdb-9.1.tar.xz - 17.8MB of 20.0MB (89%) downloading: sources/gdb-9.1.tar.xz - 18.0MB of 20.0MB (90%) downloading: sources/gdb-9.1.tar.xz - 18.2MB of 20.0MB (91%) downloading: sources/gdb-9.1.tar.xz - 18.5MB of 20.0MB (92%) downloading: sources/gdb-9.1.tar.xz - 18.8MB of 20.0MB (94%) downloading: sources/gdb-9.1.tar.xz - 19.0MB of 20.0MB (95%) downloading: sources/gdb-9.1.tar.xz - 19.2MB of 20.0MB (96%) downloading: sources/gdb-9.1.tar.xz - 19.5MB of 20.0MB (97%) downloading: sources/gdb-9.1.tar.xz - 19.8MB of 20.0MB (99%) downloading: sources/gdb-9.1.tar.xz - 20.0MB of 20.0MB (100%) 
+reporting: tools/rtems-gdb-9.1-1.cfg -> sparc-rtems5-gdb-9.1-x86_64-linux-gnu-1.txt
+reporting: tools/rtems-gdb-9.1-1.cfg -> sparc-rtems5-gdb-9.1-x86_64-linux-gnu-1.xml
+config: tools/rtems-binutils-2.34.cfg
+package: sparc-rtems5-binutils-2.34-x86_64-linux-gnu-1
+download: https://ftp.gnu.org/gnu/binutils/binutils-2.34.tar.bz2 -> sources/binutils-2.34.tar.bz2
+downloading: sources/binutils-2.34.tar.bz2 - 0.0 bytes of 30.9MB (0%) downloading: sources/binutils-2.34.tar.bz2 - 256.0kB of 30.9MB (1%)   downloading: sources/binutils-2.34.tar.bz2 - 512.0kB of 30.9MB (2%) downloading: sources/binutils-2.34.tar.bz2 - 768.0kB of 30.9MB (2%) downloading: sources/binutils-2.34.tar.bz2 - 1.0MB of 30.9MB (3%)   downloading: sources/binutils-2.34.tar.bz2 - 1.2MB of 30.9MB (4%) downloading: sources/binutils-2.34.tar.bz2 - 1.5MB of 30.9MB (5%) downloading: sources/binutils-2.34.tar.bz2 - 1.8MB of 30.9MB (6%) downloading: sources/binutils-2.34.tar.bz2 - 2.0MB of 30.9MB (6%) downloading: sources/binutils-2.34.tar.bz2 - 2.2MB of 30.9MB (7%) downloading: sources/binutils-2.34.tar.bz2 - 2.5MB of 30.9MB (8%) downloading: sources/binutils-2.34.tar.bz2 - 2.8MB of 30.9MB (9%) downloading: sources/binutils-2.34.tar.bz2 - 3.0MB of 30.9MB (10%) downloading: sources/binutils-2.34.tar.bz2 - 3.2MB of 30.9MB (11%) downloading: sources/binutils-2.34.tar.bz2 - 3.5MB of 30.9MB (11%) downloading: sources/binutils-2.34.tar.bz2 - 3.8MB of 30.9MB (12%) downloading: sources/binutils-2.34.tar.bz2 - 4.0MB of 30.9MB (13%) downloading: sources/binutils-2.34.tar.bz2 - 4.2MB of 30.9MB (14%) downloading: sources/binutils-2.34.tar.bz2 - 4.5MB of 30.9MB (15%) downloading: sources/binutils-2.34.tar.bz2 - 4.8MB of 30.9MB (15%) downloading: sources/binutils-2.34.tar.bz2 - 5.0MB of 30.9MB (16%) downloading: sources/binutils-2.34.tar.bz2 - 5.2MB of 30.9MB (17%) downloading: sources/binutils-2.34.tar.bz2 - 5.5MB of 30.9MB (18%) downloading: sources/binutils-2.34.tar.bz2 - 5.8MB of 30.9MB (19%) downloading: sources/binutils-2.34.tar.bz2 - 6.0MB of 30.9MB (19%) downloading: sources/binutils-2.34.tar.bz2 - 6.2MB of 30.9MB (20%) downloading: sources/binutils-2.34.tar.bz2 - 6.5MB of 30.9MB (21%) downloading: sources/binutils-2.34.tar.bz2 - 6.8MB of 30.9MB (22%) downloading: sources/binutils-2.34.tar.bz2 - 7.0MB of 30.9MB (23%) downloading: sources/binutils-2.34.tar.bz2 - 7.2MB of 30.9MB (23%) downloading: sources/binutils-2.34.tar.bz2 - 7.5MB of 30.9MB (24%) downloading: sources/binutils-2.34.tar.bz2 - 7.8MB of 30.9MB (25%) downloading: sources/binutils-2.34.tar.bz2 - 8.0MB of 30.9MB (26%) downloading: sources/binutils-2.34.tar.bz2 - 8.2MB of 30.9MB (27%) downloading: sources/binutils-2.34.tar.bz2 - 8.5MB of 30.9MB (27%) downloading: sources/binutils-2.34.tar.bz2 - 8.8MB of 30.9MB (28%) downloading: sources/binutils-2.34.tar.bz2 - 9.0MB of 30.9MB (29%) downloading: sources/binutils-2.34.tar.bz2 - 9.2MB of 30.9MB (30%) downloading: sources/binutils-2.34.tar.bz2 - 9.5MB of 30.9MB (31%) downloading: sources/binutils-2.34.tar.bz2 - 9.8MB of 30.9MB (32%) downloading: sources/binutils-2.34.tar.bz2 - 10.0MB of 30.9MB (32%) downloading: sources/binutils-2.34.tar.bz2 - 10.2MB of 30.9MB (33%) downloading: sources/binutils-2.34.tar.bz2 - 10.5MB of 30.9MB (34%) downloading: sources/binutils-2.34.tar.bz2 - 10.8MB of 30.9MB (35%) downloading: sources/binutils-2.34.tar.bz2 - 11.0MB of 30.9MB (36%) downloading: sources/binutils-2.34.tar.bz2 - 11.2MB of 30.9MB (36%) downloading: sources/binutils-2.34.tar.bz2 - 11.5MB of 30.9MB (37%) downloading: sources/binutils-2.34.tar.bz2 - 11.8MB of 30.9MB (38%) downloading: sources/binutils-2.34.tar.bz2 - 12.0MB of 30.9MB (39%) downloading: sources/binutils-2.34.tar.bz2 - 12.2MB of 30.9MB (40%) downloading: sources/binutils-2.34.tar.bz2 - 12.5MB of 30.9MB (40%) downloading: sources/binutils-2.34.tar.bz2 - 12.8MB of 30.9MB (41%) downloading: sources/binutils-2.34.tar.bz2 - 13.0MB of 30.9MB (42%) downloading: sources/binutils-2.34.tar.bz2 - 13.2MB of 30.9MB (43%) downloading: sources/binutils-2.34.tar.bz2 - 13.5MB of 30.9MB (44%) downloading: sources/binutils-2.34.tar.bz2 - 13.8MB of 30.9MB (44%) downloading: sources/binutils-2.34.tar.bz2 - 14.0MB of 30.9MB (45%) downloading: sources/binutils-2.34.tar.bz2 - 14.2MB of 30.9MB (46%) downloading: sources/binutils-2.34.tar.bz2 - 14.5MB of 30.9MB (47%) downloading: sources/binutils-2.34.tar.bz2 - 14.8MB of 30.9MB (48%) downloading: sources/binutils-2.34.tar.bz2 - 15.0MB of 30.9MB (48%) downloading: sources/binutils-2.34.tar.bz2 - 15.2MB of 30.9MB (49%) downloading: sources/binutils-2.34.tar.bz2 - 15.5MB of 30.9MB (50%) downloading: sources/binutils-2.34.tar.bz2 - 15.8MB of 30.9MB (51%) downloading: sources/binutils-2.34.tar.bz2 - 16.0MB of 30.9MB (52%) downloading: sources/binutils-2.34.tar.bz2 - 16.2MB of 30.9MB (53%) downloading: sources/binutils-2.34.tar.bz2 - 16.5MB of 30.9MB (53%) downloading: sources/binutils-2.34.tar.bz2 - 16.8MB of 30.9MB (54%) downloading: sources/binutils-2.34.tar.bz2 - 17.0MB of 30.9MB (55%) downloading: sources/binutils-2.34.tar.bz2 - 17.2MB of 30.9MB (56%) downloading: sources/binutils-2.34.tar.bz2 - 17.5MB of 30.9MB (57%) downloading: sources/binutils-2.34.tar.bz2 - 17.8MB of 30.9MB (57%) downloading: sources/binutils-2.34.tar.bz2 - 18.0MB of 30.9MB (58%) downloading: sources/binutils-2.34.tar.bz2 - 18.2MB of 30.9MB (59%) downloading: sources/binutils-2.34.tar.bz2 - 18.5MB of 30.9MB (60%) downloading: sources/binutils-2.34.tar.bz2 - 18.8MB of 30.9MB (61%) downloading: sources/binutils-2.34.tar.bz2 - 19.0MB of 30.9MB (61%) downloading: sources/binutils-2.34.tar.bz2 - 19.2MB of 30.9MB (62%) downloading: sources/binutils-2.34.tar.bz2 - 19.5MB of 30.9MB (63%) downloading: sources/binutils-2.34.tar.bz2 - 19.8MB of 30.9MB (64%) downloading: sources/binutils-2.34.tar.bz2 - 20.0MB of 30.9MB (65%) downloading: sources/binutils-2.34.tar.bz2 - 20.2MB of 30.9MB (65%) downloading: sources/binutils-2.34.tar.bz2 - 20.5MB of 30.9MB (66%) downloading: sources/binutils-2.34.tar.bz2 - 20.8MB of 30.9MB (67%) downloading: sources/binutils-2.34.tar.bz2 - 21.0MB of 30.9MB (68%) downloading: sources/binutils-2.34.tar.bz2 - 21.2MB of 30.9MB (69%) downloading: sources/binutils-2.34.tar.bz2 - 21.5MB of 30.9MB (70%) downloading: sources/binutils-2.34.tar.bz2 - 21.8MB of 30.9MB (70%) downloading: sources/binutils-2.34.tar.bz2 - 22.0MB of 30.9MB (71%) downloading: sources/binutils-2.34.tar.bz2 - 22.2MB of 30.9MB (72%) downloading: sources/binutils-2.34.tar.bz2 - 22.5MB of 30.9MB (73%) downloading: sources/binutils-2.34.tar.bz2 - 22.8MB of 30.9MB (74%) downloading: sources/binutils-2.34.tar.bz2 - 23.0MB of 30.9MB (74%) downloading: sources/binutils-2.34.tar.bz2 - 23.2MB of 30.9MB (75%) downloading: sources/binutils-2.34.tar.bz2 - 23.5MB of 30.9MB (76%) downloading: sources/binutils-2.34.tar.bz2 - 23.8MB of 30.9MB (77%) downloading: sources/binutils-2.34.tar.bz2 - 24.0MB of 30.9MB (78%) downloading: sources/binutils-2.34.tar.bz2 - 24.2MB of 30.9MB (78%) downloading: sources/binutils-2.34.tar.bz2 - 24.5MB of 30.9MB (79%) downloading: sources/binutils-2.34.tar.bz2 - 24.8MB of 30.9MB (80%) downloading: sources/binutils-2.34.tar.bz2 - 25.0MB of 30.9MB (81%) downloading: sources/binutils-2.34.tar.bz2 - 25.2MB of 30.9MB (82%) downloading: sources/binutils-2.34.tar.bz2 - 25.5MB of 30.9MB (82%) downloading: sources/binutils-2.34.tar.bz2 - 25.8MB of 30.9MB (83%) downloading: sources/binutils-2.34.tar.bz2 - 26.0MB of 30.9MB (84%) downloading: sources/binutils-2.34.tar.bz2 - 26.2MB of 30.9MB (85%) downloading: sources/binutils-2.34.tar.bz2 - 26.5MB of 30.9MB (86%) downloading: sources/binutils-2.34.tar.bz2 - 26.8MB of 30.9MB (86%) downloading: sources/binutils-2.34.tar.bz2 - 27.0MB of 30.9MB (87%) downloading: sources/binutils-2.34.tar.bz2 - 27.2MB of 30.9MB (88%) downloading: sources/binutils-2.34.tar.bz2 - 27.5MB of 30.9MB (89%) downloading: sources/binutils-2.34.tar.bz2 - 27.8MB of 30.9MB (90%) downloading: sources/binutils-2.34.tar.bz2 - 28.0MB of 30.9MB (91%) downloading: sources/binutils-2.34.tar.bz2 - 28.2MB of 30.9MB (91%) downloading: sources/binutils-2.34.tar.bz2 - 28.5MB of 30.9MB (92%) downloading: sources/binutils-2.34.tar.bz2 - 28.8MB of 30.9MB (93%) downloading: sources/binutils-2.34.tar.bz2 - 29.0MB of 30.9MB (94%) downloading: sources/binutils-2.34.tar.bz2 - 29.2MB of 30.9MB (95%) downloading: sources/binutils-2.34.tar.bz2 - 29.5MB of 30.9MB (95%) downloading: sources/binutils-2.34.tar.bz2 - 29.8MB of 30.9MB (96%) downloading: sources/binutils-2.34.tar.bz2 - 30.0MB of 30.9MB (97%) downloading: sources/binutils-2.34.tar.bz2 - 30.2MB of 30.9MB (98%) downloading: sources/binutils-2.34.tar.bz2 - 30.5MB of 30.9MB (99%) downloading: sources/binutils-2.34.tar.bz2 - 30.8MB of 30.9MB (99%) downloading: sources/binutils-2.34.tar.bz2 - 30.9MB of 30.9MB (100%) 
+reporting: tools/rtems-binutils-2.34.cfg -> sparc-rtems5-binutils-2.34-x86_64-linux-gnu-1.txt
+reporting: tools/rtems-binutils-2.34.cfg -> sparc-rtems5-binutils-2.34-x86_64-linux-gnu-1.xml
+config: tools/rtems-gcc-7.5.0-newlib-7947581.cfg
+package: sparc-rtems5-gcc-7.5.0-newlib-7947581-x86_64-linux-gnu-1
+download: https://ftp.gnu.org/gnu/gcc/gcc-7.5.0/gcc-7.5.0.tar.xz -> sources/gcc-7.5.0.tar.xz
+downloading: sources/gcc-7.5.0.tar.xz - 0.0 bytes of 59.9MB (0%) downloading: sources/gcc-7.5.0.tar.xz - 256.0kB of 59.9MB (0%)   downloading: sources/gcc-7.5.0.tar.xz - 512.0kB of 59.9MB (1%) downloading: sources/gcc-7.5.0.tar.xz - 768.0kB of 59.9MB (1%) downloading: sources/gcc-7.5.0.tar.xz - 1.0MB of 59.9MB (2%)   downloading: sources/gcc-7.5.0.tar.xz - 1.2MB of 59.9MB (2%) downloading: sources/gcc-7.5.0.tar.xz - 1.5MB of 59.9MB (3%) downloading: sources/gcc-7.5.0.tar.xz - 1.8MB of 59.9MB (3%) downloading: sources/gcc-7.5.0.tar.xz - 2.0MB of 59.9MB (3%) downloading: sources/gcc-7.5.0.tar.xz - 2.2MB of 59.9MB (4%) downloading: sources/gcc-7.5.0.tar.xz - 2.5MB of 59.9MB (4%) downloading: sources/gcc-7.5.0.tar.xz - 2.8MB of 59.9MB (5%) downloading: sources/gcc-7.5.0.tar.xz - 3.0MB of 59.9MB (5%) downloading: sources/gcc-7.5.0.tar.xz - 3.2MB of 59.9MB (5%) downloading: sources/gcc-7.5.0.tar.xz - 3.5MB of 59.9MB (6%) downloading: sources/gcc-7.5.0.tar.xz - 3.8MB of 59.9MB (6%) downloading: sources/gcc-7.5.0.tar.xz - 4.0MB of 59.9MB (7%) downloading: sources/gcc-7.5.0.tar.xz - 4.2MB of 59.9MB (7%) downloading: sources/gcc-7.5.0.tar.xz - 4.5MB of 59.9MB (8%) downloading: sources/gcc-7.5.0.tar.xz - 4.8MB of 59.9MB (8%) downloading: sources/gcc-7.5.0.tar.xz - 5.0MB of 59.9MB (8%) downloading: sources/gcc-7.5.0.tar.xz - 5.2MB of 59.9MB (9%) downloading: sources/gcc-7.5.0.tar.xz - 5.5MB of 59.9MB (9%) downloading: sources/gcc-7.5.0.tar.xz - 5.8MB of 59.9MB (10%) downloading: sources/gcc-7.5.0.tar.xz - 6.0MB of 59.9MB (10%) downloading: sources/gcc-7.5.0.tar.xz - 6.2MB of 59.9MB (10%) downloading: sources/gcc-7.5.0.tar.xz - 6.5MB of 59.9MB (11%) downloading: sources/gcc-7.5.0.tar.xz - 6.8MB of 59.9MB (11%) downloading: sources/gcc-7.5.0.tar.xz - 7.0MB of 59.9MB (12%) downloading: sources/gcc-7.5.0.tar.xz - 7.2MB of 59.9MB (12%) downloading: sources/gcc-7.5.0.tar.xz - 7.5MB of 59.9MB (13%) downloading: sources/gcc-7.5.0.tar.xz - 7.8MB of 59.9MB (13%) downloading: sources/gcc-7.5.0.tar.xz - 8.0MB of 59.9MB (13%) downloading: sources/gcc-7.5.0.tar.xz - 8.2MB of 59.9MB (14%) downloading: sources/gcc-7.5.0.tar.xz - 8.5MB of 59.9MB (14%) downloading: sources/gcc-7.5.0.tar.xz - 8.8MB of 59.9MB (15%) downloading: sources/gcc-7.5.0.tar.xz - 9.0MB of 59.9MB (15%) downloading: sources/gcc-7.5.0.tar.xz - 9.2MB of 59.9MB (15%) downloading: sources/gcc-7.5.0.tar.xz - 9.5MB of 59.9MB (16%) downloading: sources/gcc-7.5.0.tar.xz - 9.8MB of 59.9MB (16%) downloading: sources/gcc-7.5.0.tar.xz - 10.0MB of 59.9MB (17%) downloading: sources/gcc-7.5.0.tar.xz - 10.2MB of 59.9MB (17%) downloading: sources/gcc-7.5.0.tar.xz - 10.5MB of 59.9MB (18%) downloading: sources/gcc-7.5.0.tar.xz - 10.8MB of 59.9MB (18%) downloading: sources/gcc-7.5.0.tar.xz - 11.0MB of 59.9MB (18%) downloading: sources/gcc-7.5.0.tar.xz - 11.2MB of 59.9MB (19%) downloading: sources/gcc-7.5.0.tar.xz - 11.5MB of 59.9MB (19%) downloading: sources/gcc-7.5.0.tar.xz - 11.8MB of 59.9MB (20%) downloading: sources/gcc-7.5.0.tar.xz - 12.0MB of 59.9MB (20%) downloading: sources/gcc-7.5.0.tar.xz - 12.2MB of 59.9MB (20%) downloading: sources/gcc-7.5.0.tar.xz - 12.5MB of 59.9MB (21%) downloading: sources/gcc-7.5.0.tar.xz - 12.8MB of 59.9MB (21%) downloading: sources/gcc-7.5.0.tar.xz - 13.0MB of 59.9MB (22%) downloading: sources/gcc-7.5.0.tar.xz - 13.2MB of 59.9MB (22%) downloading: sources/gcc-7.5.0.tar.xz - 13.5MB of 59.9MB (23%) downloading: sources/gcc-7.5.0.tar.xz - 13.8MB of 59.9MB (23%) downloading: sources/gcc-7.5.0.tar.xz - 14.0MB of 59.9MB (23%) downloading: sources/gcc-7.5.0.tar.xz - 14.2MB of 59.9MB (24%) downloading: sources/gcc-7.5.0.tar.xz - 14.5MB of 59.9MB (24%) downloading: sources/gcc-7.5.0.tar.xz - 14.8MB of 59.9MB (25%) downloading: sources/gcc-7.5.0.tar.xz - 15.0MB of 59.9MB (25%) downloading: sources/gcc-7.5.0.tar.xz - 15.2MB of 59.9MB (25%) downloading: sources/gcc-7.5.0.tar.xz - 15.5MB of 59.9MB (26%) downloading: sources/gcc-7.5.0.tar.xz - 15.8MB of 59.9MB (26%) downloading: sources/gcc-7.5.0.tar.xz - 16.0MB of 59.9MB (27%) downloading: sources/gcc-7.5.0.tar.xz - 16.2MB of 59.9MB (27%) downloading: sources/gcc-7.5.0.tar.xz - 16.5MB of 59.9MB (28%) downloading: sources/gcc-7.5.0.tar.xz - 16.8MB of 59.9MB (28%) downloading: sources/gcc-7.5.0.tar.xz - 17.0MB of 59.9MB (28%) downloading: sources/gcc-7.5.0.tar.xz - 17.2MB of 59.9MB (29%) downloading: sources/gcc-7.5.0.tar.xz - 17.5MB of 59.9MB (29%) downloading: sources/gcc-7.5.0.tar.xz - 17.8MB of 59.9MB (30%) downloading: sources/gcc-7.5.0.tar.xz - 18.0MB of 59.9MB (30%) downloading: sources/gcc-7.5.0.tar.xz - 18.2MB of 59.9MB (30%) downloading: sources/gcc-7.5.0.tar.xz - 18.5MB of 59.9MB (31%) downloading: sources/gcc-7.5.0.tar.xz - 18.8MB of 59.9MB (31%) downloading: sources/gcc-7.5.0.tar.xz - 19.0MB of 59.9MB (32%) downloading: sources/gcc-7.5.0.tar.xz - 19.2MB of 59.9MB (32%) downloading: sources/gcc-7.5.0.tar.xz - 19.5MB of 59.9MB (33%) downloading: sources/gcc-7.5.0.tar.xz - 19.8MB of 59.9MB (33%) downloading: sources/gcc-7.5.0.tar.xz - 20.0MB of 59.9MB (33%) downloading: sources/gcc-7.5.0.tar.xz - 20.2MB of 59.9MB (34%) downloading: sources/gcc-7.5.0.tar.xz - 20.5MB of 59.9MB (34%) downloading: sources/gcc-7.5.0.tar.xz - 20.8MB of 59.9MB (35%) downloading: sources/gcc-7.5.0.tar.xz - 21.0MB of 59.9MB (35%) downloading: sources/gcc-7.5.0.tar.xz - 21.2MB of 59.9MB (35%) downloading: sources/gcc-7.5.0.tar.xz - 21.5MB of 59.9MB (36%) downloading: sources/gcc-7.5.0.tar.xz - 21.8MB of 59.9MB (36%) downloading: sources/gcc-7.5.0.tar.xz - 22.0MB of 59.9MB (37%) downloading: sources/gcc-7.5.0.tar.xz - 22.2MB of 59.9MB (37%) downloading: sources/gcc-7.5.0.tar.xz - 22.5MB of 59.9MB (38%) downloading: sources/gcc-7.5.0.tar.xz - 22.8MB of 59.9MB (38%) downloading: sources/gcc-7.5.0.tar.xz - 23.0MB of 59.9MB (38%) downloading: sources/gcc-7.5.0.tar.xz - 23.2MB of 59.9MB (39%) downloading: sources/gcc-7.5.0.tar.xz - 23.5MB of 59.9MB (39%) downloading: sources/gcc-7.5.0.tar.xz - 23.8MB of 59.9MB (40%) downloading: sources/gcc-7.5.0.tar.xz - 24.0MB of 59.9MB (40%) downloading: sources/gcc-7.5.0.tar.xz - 24.2MB of 59.9MB (40%) downloading: sources/gcc-7.5.0.tar.xz - 24.5MB of 59.9MB (41%) downloading: sources/gcc-7.5.0.tar.xz - 24.8MB of 59.9MB (41%) downloading: sources/gcc-7.5.0.tar.xz - 25.0MB of 59.9MB (42%) downloading: sources/gcc-7.5.0.tar.xz - 25.2MB of 59.9MB (42%) downloading: sources/gcc-7.5.0.tar.xz - 25.5MB of 59.9MB (43%) downloading: sources/gcc-7.5.0.tar.xz - 25.8MB of 59.9MB (43%) downloading: sources/gcc-7.5.0.tar.xz - 26.0MB of 59.9MB (43%) downloading: sources/gcc-7.5.0.tar.xz - 26.2MB of 59.9MB (44%) downloading: sources/gcc-7.5.0.tar.xz - 26.5MB of 59.9MB (44%) downloading: sources/gcc-7.5.0.tar.xz - 26.8MB of 59.9MB (45%) downloading: sources/gcc-7.5.0.tar.xz - 27.0MB of 59.9MB (45%) downloading: sources/gcc-7.5.0.tar.xz - 27.2MB of 59.9MB (46%) downloading: sources/gcc-7.5.0.tar.xz - 27.5MB of 59.9MB (46%) downloading: sources/gcc-7.5.0.tar.xz - 27.8MB of 59.9MB (46%) downloading: sources/gcc-7.5.0.tar.xz - 28.0MB of 59.9MB (47%) downloading: sources/gcc-7.5.0.tar.xz - 28.2MB of 59.9MB (47%) downloading: sources/gcc-7.5.0.tar.xz - 28.5MB of 59.9MB (48%) downloading: sources/gcc-7.5.0.tar.xz - 28.8MB of 59.9MB (48%) downloading: sources/gcc-7.5.0.tar.xz - 29.0MB of 59.9MB (48%) downloading: sources/gcc-7.5.0.tar.xz - 29.2MB of 59.9MB (49%) downloading: sources/gcc-7.5.0.tar.xz - 29.5MB of 59.9MB (49%) downloading: sources/gcc-7.5.0.tar.xz - 29.8MB of 59.9MB (50%) downloading: sources/gcc-7.5.0.tar.xz - 30.0MB of 59.9MB (50%) downloading: sources/gcc-7.5.0.tar.xz - 30.2MB of 59.9MB (51%) downloading: sources/gcc-7.5.0.tar.xz - 30.5MB of 59.9MB (51%) downloading: sources/gcc-7.5.0.tar.xz - 30.8MB of 59.9MB (51%) downloading: sources/gcc-7.5.0.tar.xz - 31.0MB of 59.9MB (52%) downloading: sources/gcc-7.5.0.tar.xz - 31.2MB of 59.9MB (52%) downloading: sources/gcc-7.5.0.tar.xz - 31.5MB of 59.9MB (53%) downloading: sources/gcc-7.5.0.tar.xz - 31.8MB of 59.9MB (53%) downloading: sources/gcc-7.5.0.tar.xz - 32.0MB of 59.9MB (53%) downloading: sources/gcc-7.5.0.tar.xz - 32.2MB of 59.9MB (54%) downloading: sources/gcc-7.5.0.tar.xz - 32.5MB of 59.9MB (54%) downloading: sources/gcc-7.5.0.tar.xz - 32.8MB of 59.9MB (55%) downloading: sources/gcc-7.5.0.tar.xz - 33.0MB of 59.9MB (55%) downloading: sources/gcc-7.5.0.tar.xz - 33.2MB of 59.9MB (56%) downloading: sources/gcc-7.5.0.tar.xz - 33.5MB of 59.9MB (56%) downloading: sources/gcc-7.5.0.tar.xz - 33.8MB of 59.9MB (56%) downloading: sources/gcc-7.5.0.tar.xz - 34.0MB of 59.9MB (57%) downloading: sources/gcc-7.5.0.tar.xz - 34.2MB of 59.9MB (57%) downloading: sources/gcc-7.5.0.tar.xz - 34.5MB of 59.9MB (58%) downloading: sources/gcc-7.5.0.tar.xz - 34.8MB of 59.9MB (58%) downloading: sources/gcc-7.5.0.tar.xz - 35.0MB of 59.9MB (58%) downloading: sources/gcc-7.5.0.tar.xz - 35.2MB of 59.9MB (59%) downloading: sources/gcc-7.5.0.tar.xz - 35.5MB of 59.9MB (59%) downloading: sources/gcc-7.5.0.tar.xz - 35.8MB of 59.9MB (60%) downloading: sources/gcc-7.5.0.tar.xz - 36.0MB of 59.9MB (60%) downloading: sources/gcc-7.5.0.tar.xz - 36.2MB of 59.9MB (61%) downloading: sources/gcc-7.5.0.tar.xz - 36.5MB of 59.9MB (61%) downloading: sources/gcc-7.5.0.tar.xz - 36.8MB of 59.9MB (61%) downloading: sources/gcc-7.5.0.tar.xz - 37.0MB of 59.9MB (62%) downloading: sources/gcc-7.5.0.tar.xz - 37.2MB of 59.9MB (62%) downloading: sources/gcc-7.5.0.tar.xz - 37.5MB of 59.9MB (63%) downloading: sources/gcc-7.5.0.tar.xz - 37.8MB of 59.9MB (63%) downloading: sources/gcc-7.5.0.tar.xz - 38.0MB of 59.9MB (63%) downloading: sources/gcc-7.5.0.tar.xz - 38.2MB of 59.9MB (64%) downloading: sources/gcc-7.5.0.tar.xz - 38.5MB of 59.9MB (64%) downloading: sources/gcc-7.5.0.tar.xz - 38.8MB of 59.9MB (65%) downloading: sources/gcc-7.5.0.tar.xz - 39.0MB of 59.9MB (65%) downloading: sources/gcc-7.5.0.tar.xz - 39.2MB of 59.9MB (66%) downloading: sources/gcc-7.5.0.tar.xz - 39.5MB of 59.9MB (66%) downloading: sources/gcc-7.5.0.tar.xz - 39.8MB of 59.9MB (66%) downloading: sources/gcc-7.5.0.tar.xz - 40.0MB of 59.9MB (67%) downloading: sources/gcc-7.5.0.tar.xz - 40.2MB of 59.9MB (67%) downloading: sources/gcc-7.5.0.tar.xz - 40.5MB of 59.9MB (68%) downloading: sources/gcc-7.5.0.tar.xz - 40.8MB of 59.9MB (68%) downloading: sources/gcc-7.5.0.tar.xz - 41.0MB of 59.9MB (68%) downloading: sources/gcc-7.5.0.tar.xz - 41.2MB of 59.9MB (69%) downloading: sources/gcc-7.5.0.tar.xz - 41.5MB of 59.9MB (69%) downloading: sources/gcc-7.5.0.tar.xz - 41.8MB of 59.9MB (70%) downloading: sources/gcc-7.5.0.tar.xz - 42.0MB of 59.9MB (70%) downloading: sources/gcc-7.5.0.tar.xz - 42.2MB of 59.9MB (71%) downloading: sources/gcc-7.5.0.tar.xz - 42.5MB of 59.9MB (71%) downloading: sources/gcc-7.5.0.tar.xz - 42.8MB of 59.9MB (71%) downloading: sources/gcc-7.5.0.tar.xz - 43.0MB of 59.9MB (72%) downloading: sources/gcc-7.5.0.tar.xz - 43.2MB of 59.9MB (72%) downloading: sources/gcc-7.5.0.tar.xz - 43.5MB of 59.9MB (73%) downloading: sources/gcc-7.5.0.tar.xz - 43.8MB of 59.9MB (73%) downloading: sources/gcc-7.5.0.tar.xz - 44.0MB of 59.9MB (73%) downloading: sources/gcc-7.5.0.tar.xz - 44.2MB of 59.9MB (74%) downloading: sources/gcc-7.5.0.tar.xz - 44.5MB of 59.9MB (74%) downloading: sources/gcc-7.5.0.tar.xz - 44.8MB of 59.9MB (75%) downloading: sources/gcc-7.5.0.tar.xz - 45.0MB of 59.9MB (75%) downloading: sources/gcc-7.5.0.tar.xz - 45.2MB of 59.9MB (76%) downloading: sources/gcc-7.5.0.tar.xz - 45.5MB of 59.9MB (76%) downloading: sources/gcc-7.5.0.tar.xz - 45.8MB of 59.9MB (76%) downloading: sources/gcc-7.5.0.tar.xz - 46.0MB of 59.9MB (77%) downloading: sources/gcc-7.5.0.tar.xz - 46.2MB of 59.9MB (77%) downloading: sources/gcc-7.5.0.tar.xz - 46.5MB of 59.9MB (78%) downloading: sources/gcc-7.5.0.tar.xz - 46.8MB of 59.9MB (78%) downloading: sources/gcc-7.5.0.tar.xz - 47.0MB of 59.9MB (78%) downloading: sources/gcc-7.5.0.tar.xz - 47.2MB of 59.9MB (79%) downloading: sources/gcc-7.5.0.tar.xz - 47.5MB of 59.9MB (79%) downloading: sources/gcc-7.5.0.tar.xz - 47.8MB of 59.9MB (80%) downloading: sources/gcc-7.5.0.tar.xz - 48.0MB of 59.9MB (80%) downloading: sources/gcc-7.5.0.tar.xz - 48.2MB of 59.9MB (81%) downloading: sources/gcc-7.5.0.tar.xz - 48.5MB of 59.9MB (81%) downloading: sources/gcc-7.5.0.tar.xz - 48.8MB of 59.9MB (81%) downloading: sources/gcc-7.5.0.tar.xz - 49.0MB of 59.9MB (82%) downloading: sources/gcc-7.5.0.tar.xz - 49.2MB of 59.9MB (82%) downloading: sources/gcc-7.5.0.tar.xz - 49.5MB of 59.9MB (83%) downloading: sources/gcc-7.5.0.tar.xz - 49.8MB of 59.9MB (83%) downloading: sources/gcc-7.5.0.tar.xz - 50.0MB of 59.9MB (84%) downloading: sources/gcc-7.5.0.tar.xz - 50.2MB of 59.9MB (84%) downloading: sources/gcc-7.5.0.tar.xz - 50.5MB of 59.9MB (84%) downloading: sources/gcc-7.5.0.tar.xz - 50.8MB of 59.9MB (85%) downloading: sources/gcc-7.5.0.tar.xz - 51.0MB of 59.9MB (85%) downloading: sources/gcc-7.5.0.tar.xz - 51.2MB of 59.9MB (86%) downloading: sources/gcc-7.5.0.tar.xz - 51.5MB of 59.9MB (86%) downloading: sources/gcc-7.5.0.tar.xz - 51.8MB of 59.9MB (86%) downloading: sources/gcc-7.5.0.tar.xz - 52.0MB of 59.9MB (87%) downloading: sources/gcc-7.5.0.tar.xz - 52.2MB of 59.9MB (87%) downloading: sources/gcc-7.5.0.tar.xz - 52.5MB of 59.9MB (88%) downloading: sources/gcc-7.5.0.tar.xz - 52.8MB of 59.9MB (88%) downloading: sources/gcc-7.5.0.tar.xz - 53.0MB of 59.9MB (89%) downloading: sources/gcc-7.5.0.tar.xz - 53.2MB of 59.9MB (89%) downloading: sources/gcc-7.5.0.tar.xz - 53.5MB of 59.9MB (89%) downloading: sources/gcc-7.5.0.tar.xz - 53.8MB of 59.9MB (90%) downloading: sources/gcc-7.5.0.tar.xz - 54.0MB of 59.9MB (90%) downloading: sources/gcc-7.5.0.tar.xz - 54.2MB of 59.9MB (91%) downloading: sources/gcc-7.5.0.tar.xz - 54.5MB of 59.9MB (91%) downloading: sources/gcc-7.5.0.tar.xz - 54.8MB of 59.9MB (91%) downloading: sources/gcc-7.5.0.tar.xz - 55.0MB of 59.9MB (92%) downloading: sources/gcc-7.5.0.tar.xz - 55.2MB of 59.9MB (92%) downloading: sources/gcc-7.5.0.tar.xz - 55.5MB of 59.9MB (93%) downloading: sources/gcc-7.5.0.tar.xz - 55.8MB of 59.9MB (93%) downloading: sources/gcc-7.5.0.tar.xz - 56.0MB of 59.9MB (94%) downloading: sources/gcc-7.5.0.tar.xz - 56.2MB of 59.9MB (94%) downloading: sources/gcc-7.5.0.tar.xz - 56.5MB of 59.9MB (94%) downloading: sources/gcc-7.5.0.tar.xz - 56.8MB of 59.9MB (95%) downloading: sources/gcc-7.5.0.tar.xz - 57.0MB of 59.9MB (95%) downloading: sources/gcc-7.5.0.tar.xz - 57.2MB of 59.9MB (96%) downloading: sources/gcc-7.5.0.tar.xz - 57.5MB of 59.9MB (96%) downloading: sources/gcc-7.5.0.tar.xz - 57.8MB of 59.9MB (96%) downloading: sources/gcc-7.5.0.tar.xz - 58.0MB of 59.9MB (97%) downloading: sources/gcc-7.5.0.tar.xz - 58.2MB of 59.9MB (97%) downloading: sources/gcc-7.5.0.tar.xz - 58.5MB of 59.9MB (98%) downloading: sources/gcc-7.5.0.tar.xz - 58.8MB of 59.9MB (98%) downloading: sources/gcc-7.5.0.tar.xz - 59.0MB of 59.9MB (99%) downloading: sources/gcc-7.5.0.tar.xz - 59.2MB of 59.9MB (99%) downloading: sources/gcc-7.5.0.tar.xz - 59.5MB of 59.9MB (99%) downloading: sources/gcc-7.5.0.tar.xz - 59.8MB of 59.9MB (100%) downloading: sources/gcc-7.5.0.tar.xz - 59.9MB of 59.9MB (100%) 
+download: https://codeload.github.com/RTEMS/sourceware-mirror-newlib-cygwin/tar.gz/7947581 -> sources/newlib-7947581.tar.gz
+downloading: sources/newlib-7947581.tar.gz - 0.0 bytes downloading: sources/newlib-7947581.tar.gz - 256.0kB   downloading: sources/newlib-7947581.tar.gz - 512.0kB downloading: sources/newlib-7947581.tar.gz - 768.0kB downloading: sources/newlib-7947581.tar.gz - 1.0MB   downloading: sources/newlib-7947581.tar.gz - 1.2MB downloading: sources/newlib-7947581.tar.gz - 1.5MB downloading: sources/newlib-7947581.tar.gz - 1.8MB downloading: sources/newlib-7947581.tar.gz - 2.0MB downloading: sources/newlib-7947581.tar.gz - 2.2MB downloading: sources/newlib-7947581.tar.gz - 2.5MB downloading: sources/newlib-7947581.tar.gz - 2.8MB downloading: sources/newlib-7947581.tar.gz - 3.0MB downloading: sources/newlib-7947581.tar.gz - 3.2MB downloading: sources/newlib-7947581.tar.gz - 3.5MB downloading: sources/newlib-7947581.tar.gz - 3.8MB downloading: sources/newlib-7947581.tar.gz - 4.0MB downloading: sources/newlib-7947581.tar.gz - 4.2MB downloading: sources/newlib-7947581.tar.gz - 4.5MB downloading: sources/newlib-7947581.tar.gz - 4.8MB downloading: sources/newlib-7947581.tar.gz - 5.0MB downloading: sources/newlib-7947581.tar.gz - 5.2MB downloading: sources/newlib-7947581.tar.gz - 5.5MB downloading: sources/newlib-7947581.tar.gz - 5.8MB downloading: sources/newlib-7947581.tar.gz - 6.0MB downloading: sources/newlib-7947581.tar.gz - 6.2MB downloading: sources/newlib-7947581.tar.gz - 6.5MB downloading: sources/newlib-7947581.tar.gz - 6.8MB downloading: sources/newlib-7947581.tar.gz - 7.0MB downloading: sources/newlib-7947581.tar.gz - 7.2MB downloading: sources/newlib-7947581.tar.gz - 7.5MB downloading: sources/newlib-7947581.tar.gz - 7.8MB downloading: sources/newlib-7947581.tar.gz - 8.0MB downloading: sources/newlib-7947581.tar.gz - 8.2MB downloading: sources/newlib-7947581.tar.gz - 8.5MB downloading: sources/newlib-7947581.tar.gz - 8.8MB downloading: sources/newlib-7947581.tar.gz - 9.0MB downloading: sources/newlib-7947581.tar.gz - 9.2MB downloading: sources/newlib-7947581.tar.gz - 9.5MB downloading: sources/newlib-7947581.tar.gz - 9.8MB downloading: sources/newlib-7947581.tar.gz - 10.0MB downloading: sources/newlib-7947581.tar.gz - 10.2MB downloading: sources/newlib-7947581.tar.gz - 10.5MB downloading: sources/newlib-7947581.tar.gz - 10.8MB downloading: sources/newlib-7947581.tar.gz - 11.0MB downloading: sources/newlib-7947581.tar.gz - 11.2MB downloading: sources/newlib-7947581.tar.gz - 11.5MB downloading: sources/newlib-7947581.tar.gz - 11.8MB downloading: sources/newlib-7947581.tar.gz - 12.0MB downloading: sources/newlib-7947581.tar.gz - 12.2MB downloading: sources/newlib-7947581.tar.gz - 12.5MB downloading: sources/newlib-7947581.tar.gz - 12.8MB downloading: sources/newlib-7947581.tar.gz - 13.0MB downloading: sources/newlib-7947581.tar.gz - 13.2MB downloading: sources/newlib-7947581.tar.gz - 13.5MB downloading: sources/newlib-7947581.tar.gz - 13.8MB downloading: sources/newlib-7947581.tar.gz - 14.0MB downloading: sources/newlib-7947581.tar.gz - 14.2MB downloading: sources/newlib-7947581.tar.gz - 14.5MB downloading: sources/newlib-7947581.tar.gz - 14.8MB downloading: sources/newlib-7947581.tar.gz - 15.0MB downloading: sources/newlib-7947581.tar.gz - 15.2MB downloading: sources/newlib-7947581.tar.gz - 15.5MB downloading: sources/newlib-7947581.tar.gz - 15.8MB downloading: sources/newlib-7947581.tar.gz - 16.0MB downloading: sources/newlib-7947581.tar.gz - 16.2MB downloading: sources/newlib-7947581.tar.gz - 16.5MB downloading: sources/newlib-7947581.tar.gz - 16.8MB downloading: sources/newlib-7947581.tar.gz - 17.0MB downloading: sources/newlib-7947581.tar.gz - 17.2MB downloading: sources/newlib-7947581.tar.gz - 17.5MB downloading: sources/newlib-7947581.tar.gz - 17.8MB downloading: sources/newlib-7947581.tar.gz - 18.0MB downloading: sources/newlib-7947581.tar.gz - 18.2MB downloading: sources/newlib-7947581.tar.gz - 18.5MB downloading: sources/newlib-7947581.tar.gz - 18.8MB downloading: sources/newlib-7947581.tar.gz - 19.0MB downloading: sources/newlib-7947581.tar.gz - 19.2MB downloading: sources/newlib-7947581.tar.gz - 19.5MB downloading: sources/newlib-7947581.tar.gz - 19.8MB downloading: sources/newlib-7947581.tar.gz - 20.0MB downloading: sources/newlib-7947581.tar.gz - 20.2MB downloading: sources/newlib-7947581.tar.gz - 20.5MB downloading: sources/newlib-7947581.tar.gz - 20.7MB 
+download: https://gcc.gnu.org/pub/gcc/infrastructure/isl-0.16.1.tar.bz2 -> sources/isl-0.16.1.tar.bz2
+downloading: sources/isl-0.16.1.tar.bz2 - 0.0 bytes of 1.6MB (0%) downloading: sources/isl-0.16.1.tar.bz2 - 256.0kB of 1.6MB (16%)  downloading: sources/isl-0.16.1.tar.bz2 - 512.0kB of 1.6MB (32%) downloading: sources/isl-0.16.1.tar.bz2 - 768.0kB of 1.6MB (48%) downloading: sources/isl-0.16.1.tar.bz2 - 1.0MB of 1.6MB (64%)   downloading: sources/isl-0.16.1.tar.bz2 - 1.2MB of 1.6MB (81%) downloading: sources/isl-0.16.1.tar.bz2 - 1.5MB of 1.6MB (97%) downloading: sources/isl-0.16.1.tar.bz2 - 1.6MB of 1.6MB (100%) 
+download: https://ftp.gnu.org/gnu/mpfr/mpfr-3.1.4.tar.bz2 -> sources/mpfr-3.1.4.tar.bz2
+downloading: sources/mpfr-3.1.4.tar.bz2 - 0.0 bytes of 1.2MB (0%) downloading: sources/mpfr-3.1.4.tar.bz2 - 256.0kB of 1.2MB (20%)  downloading: sources/mpfr-3.1.4.tar.bz2 - 512.0kB of 1.2MB (41%) downloading: sources/mpfr-3.1.4.tar.bz2 - 768.0kB of 1.2MB (61%) downloading: sources/mpfr-3.1.4.tar.bz2 - 1.0MB of 1.2MB (82%)   downloading: sources/mpfr-3.1.4.tar.bz2 - 1.2MB of 1.2MB (100%) 
+download: https://ftp.gnu.org/gnu/mpc/mpc-1.0.3.tar.gz -> sources/mpc-1.0.3.tar.gz
+downloading: sources/mpc-1.0.3.tar.gz - 0.0 bytes of 654.2kB (0%) downloading: sources/mpc-1.0.3.tar.gz - 256.0kB of 654.2kB (39%)  downloading: sources/mpc-1.0.3.tar.gz - 512.0kB of 654.2kB (78%) downloading: sources/mpc-1.0.3.tar.gz - 654.2kB of 654.2kB (100%) 
+download: https://ftp.gnu.org/gnu/gmp/gmp-6.1.0.tar.bz2 -> sources/gmp-6.1.0.tar.bz2
+downloading: sources/gmp-6.1.0.tar.bz2 - 0.0 bytes of 2.3MB (0%) downloading: sources/gmp-6.1.0.tar.bz2 - 256.0kB of 2.3MB (11%)  downloading: sources/gmp-6.1.0.tar.bz2 - 512.0kB of 2.3MB (22%) downloading: sources/gmp-6.1.0.tar.bz2 - 768.0kB of 2.3MB (33%) downloading: sources/gmp-6.1.0.tar.bz2 - 1.0MB of 2.3MB (44%)   downloading: sources/gmp-6.1.0.tar.bz2 - 1.2MB of 2.3MB (55%) downloading: sources/gmp-6.1.0.tar.bz2 - 1.5MB of 2.3MB (66%) downloading: sources/gmp-6.1.0.tar.bz2 - 1.8MB of 2.3MB (77%) downloading: sources/gmp-6.1.0.tar.bz2 - 2.0MB of 2.3MB (88%) downloading: sources/gmp-6.1.0.tar.bz2 - 2.2MB of 2.3MB (99%) downloading: sources/gmp-6.1.0.tar.bz2 - 2.3MB of 2.3MB (100%) 
+reporting: tools/rtems-gcc-7.5.0-newlib-7947581.cfg -> sparc-rtems5-gcc-7.5.0-newlib-7947581-x86_64-linux-gnu-1.txt
+reporting: tools/rtems-gcc-7.5.0-newlib-7947581.cfg -> sparc-rtems5-gcc-7.5.0-newlib-7947581-x86_64-linux-gnu-1.xml
+config: tools/rtems-tools-5-1.cfg
+package: rtems-tools-ca7b290f94a19238ed068aad229854cf67dee9b5-1
+download: https://git.rtems.org/rtems-tools/snapshot/rtems-tools-ca7b290f94a19238ed068aad229854c...<see log> -> sources/rtems-tools-ca7b290f94a19238ed068aad229854cf67dee9b5.tar.bz2
+downloading: sources/rtems-tools-ca7b290f94a19238ed068aad229854cf67dee9b5.tar.bz2 - 0.0 bytes downloading: sources/rtems-tools-ca7b290f94a19238ed068aad229854cf67dee9b5.tar.bz2 - 256.0kB   downloading: sources/rtems-tools-ca7b290f94a19238ed068aad229854cf67dee9b5.tar.bz2 - 512.0kB downloading: sources/rtems-tools-ca7b290f94a19238ed068aad229854cf67dee9b5.tar.bz2 - 768.0kB downloading: sources/rtems-tools-ca7b290f94a19238ed068aad229854cf67dee9b5.tar.bz2 - 1.0MB   downloading: sources/rtems-tools-ca7b290f94a19238ed068aad229854cf67dee9b5.tar.bz2 - 1.2MB downloading: sources/rtems-tools-ca7b290f94a19238ed068aad229854cf67dee9b5.tar.bz2 - 1.5MB downloading: sources/rtems-tools-ca7b290f94a19238ed068aad229854cf67dee9b5.tar.bz2 - 1.8MB downloading: sources/rtems-tools-ca7b290f94a19238ed068aad229854cf67dee9b5.tar.bz2 - 2.0MB downloading: sources/rtems-tools-ca7b290f94a19238ed068aad229854cf67dee9b5.tar.bz2 - 2.2MB downloading: sources/rtems-tools-ca7b290f94a19238ed068aad229854cf67dee9b5.tar.bz2 - 2.5MB downloading: sources/rtems-tools-ca7b290f94a19238ed068aad229854cf67dee9b5.tar.bz2 - 2.8MB downloading: sources/rtems-tools-ca7b290f94a19238ed068aad229854cf67dee9b5.tar.bz2 - 2.9MB 
+reporting: tools/rtems-tools-5-1.cfg -> rtems-tools-ca7b290f94a19238ed068aad229854cf67dee9b5-1.txt
+reporting: tools/rtems-tools-5-1.cfg -> rtems-tools-ca7b290f94a19238ed068aad229854cf67dee9b5-1.xml
+config: devel/sis-2-1.cfg
+package: sis-2.21-x86_64-linux-gnu-1
+download: https://git.rtems.org/sis/snapshot/sis-2.21.tar.bz2 -> sources/sis-2.21.tar.bz2
+downloading: sources/sis-2.21.tar.bz2 - 0.0 bytes downloading: sources/sis-2.21.tar.bz2 - 256.0kB   downloading: sources/sis-2.21.tar.bz2 - 289.3kB 
+reporting: devel/sis-2-1.cfg -> sis-2.21-x86_64-linux-gnu-1.txt
+reporting: devel/sis-2-1.cfg -> sis-2.21-x86_64-linux-gnu-1.xml
+installing: expat-2.1.0-x86_64-linux-gnu-1 -> /opt/rtems/5
+installing: sparc-rtems5-gdb-9.1-x86_64-linux-gnu-1 -> /opt/rtems/5
+installing: sparc-rtems5-binutils-2.34-x86_64-linux-gnu-1 -> /opt/rtems/5
+installing: sparc-rtems5-gcc-7.5.0-newlib-7947581-x86_64-linux-gnu-1 -> /opt/rtems/5
+installing: rtems-tools-ca7b290f94a19238ed068aad229854cf67dee9b5-1 -> /opt/rtems/5
+installing: sis-2.21-x86_64-linux-gnu-1 -> /opt/rtems/5
+cleaning: expat-2.1.0-x86_64-linux-gnu-1
+cleaning: sparc-rtems5-gdb-9.1-x86_64-linux-gnu-1
+cleaning: sparc-rtems5-binutils-2.34-x86_64-linux-gnu-1
+cleaning: sparc-rtems5-gcc-7.5.0-newlib-7947581-x86_64-linux-gnu-1
+cleaning: rtems-tools-ca7b290f94a19238ed068aad229854cf67dee9b5-1
+cleaning: sis-2.21-x86_64-linux-gnu-1
+Build Sizes: usage: 0.000B total: 144.777MB (sources: 144.758MB, patches: 19.412KB, installed 0.000B)
+Build Set: Time 0:01:46.660489
++ 1595598463.939717 1952141312 (29) ../source-builder/sb-set-builder --prefix=/home/f/5 5/rtems-sparc
+RTEMS Source Builder - Set Builder, 5 (190b39e91399 modified)
+Build Set: 5/rtems-sparc
+Build Set: 5/rtems-autotools.bset
+Build Set: 5/rtems-autotools-internal.bset
+config: tools/rtems-autoconf-2.69-1.cfg
+package: autoconf-2.69-x86_64-linux-gnu-1
+building: autoconf-2.69-x86_64-linux-gnu-1
+sizes: autoconf-2.69-x86_64-linux-gnu-1: 7.487MB (installed: 0.000B)
+cleaning: autoconf-2.69-x86_64-linux-gnu-1
+config: tools/rtems-automake-1.12.6-1.cfg
+package: automake-1.12.6-x86_64-linux-gnu-1
+building: automake-1.12.6-x86_64-linux-gnu-1
+sizes: automake-1.12.6-x86_64-linux-gnu-1: 8.081MB (installed: 0.000B)
+cleaning: automake-1.12.6-x86_64-linux-gnu-1
+cleaning: autoconf-2.69-x86_64-linux-gnu-1
+cleaning: automake-1.12.6-x86_64-linux-gnu-1
+Build Sizes: usage: 8.081MB total: 144.777MB (sources: 144.758MB, patches: 19.412KB, installed 0.000B)
+Build Set: Time 0:00:04.842506
+Build Set: 5/rtems-autotools-base.bset
+config: tools/rtems-autoconf-2.69-1.cfg
+package: autoconf-2.69-x86_64-linux-gnu-1
+building: autoconf-2.69-x86_64-linux-gnu-1
+sizes: autoconf-2.69-x86_64-linux-gnu-1: 10.504MB (installed: 3.019MB)
+cleaning: autoconf-2.69-x86_64-linux-gnu-1
+reporting: tools/rtems-autoconf-2.69-1.cfg -> autoconf-2.69-x86_64-linux-gnu-1.txt
+reporting: tools/rtems-autoconf-2.69-1.cfg -> autoconf-2.69-x86_64-linux-gnu-1.xml
+config: tools/rtems-automake-1.12.6-1.cfg
+package: automake-1.12.6-x86_64-linux-gnu-1
+building: automake-1.12.6-x86_64-linux-gnu-1
+sizes: automake-1.12.6-x86_64-linux-gnu-1: 10.344MB (installed: 2.263MB)
+cleaning: automake-1.12.6-x86_64-linux-gnu-1
+reporting: tools/rtems-automake-1.12.6-1.cfg -> automake-1.12.6-x86_64-linux-gnu-1.txt
+reporting: tools/rtems-automake-1.12.6-1.cfg -> automake-1.12.6-x86_64-linux-gnu-1.xml
+staging: autoconf-2.69-x86_64-linux-gnu-1 -> /home/f/rsb/rtems/build/tmp/sb-1000-staging
+staging: automake-1.12.6-x86_64-linux-gnu-1 -> /home/f/rsb/rtems/build/tmp/sb-1000-staging
+cleaning: autoconf-2.69-x86_64-linux-gnu-1
+cleaning: automake-1.12.6-x86_64-linux-gnu-1
+Build Sizes: usage: 15.786MB total: 150.059MB (sources: 144.758MB, patches: 19.412KB, installed 5.282MB)
+Build Set: Time 0:00:05.579738
+Build Set: Time 0:00:10.427163
+config: devel/expat-2.1.0-1.cfg
+package: expat-2.1.0-x86_64-linux-gnu-1
+building: expat-2.1.0-x86_64-linux-gnu-1
+sizes: expat-2.1.0-x86_64-linux-gnu-1: 9.493MB (installed: 2.026MB)
+cleaning: expat-2.1.0-x86_64-linux-gnu-1
+reporting: devel/expat-2.1.0-1.cfg -> expat-2.1.0-x86_64-linux-gnu-1.txt
+reporting: devel/expat-2.1.0-1.cfg -> expat-2.1.0-x86_64-linux-gnu-1.xml
+config: tools/rtems-gdb-9.1-1.cfg
+package: sparc-rtems5-gdb-9.1-x86_64-linux-gnu-1
+building: sparc-rtems5-gdb-9.1-x86_64-linux-gnu-1
+sizes: sparc-rtems5-gdb-9.1-x86_64-linux-gnu-1: 793.596MB (installed: 107.598MB)
+cleaning: sparc-rtems5-gdb-9.1-x86_64-linux-gnu-1
+reporting: tools/rtems-gdb-9.1-1.cfg -> sparc-rtems5-gdb-9.1-x86_64-linux-gnu-1.txt
+reporting: tools/rtems-gdb-9.1-1.cfg -> sparc-rtems5-gdb-9.1-x86_64-linux-gnu-1.xml
+config: tools/rtems-binutils-2.34.cfg
+package: sparc-rtems5-binutils-2.34-x86_64-linux-gnu-1
+building: sparc-rtems5-binutils-2.34-x86_64-linux-gnu-1
+sizes: sparc-rtems5-binutils-2.34-x86_64-linux-gnu-1: 575.344MB (installed: 147.872MB)
+cleaning: sparc-rtems5-binutils-2.34-x86_64-linux-gnu-1
+reporting: tools/rtems-binutils-2.34.cfg -> sparc-rtems5-binutils-2.34-x86_64-linux-gnu-1.txt
+reporting: tools/rtems-binutils-2.34.cfg -> sparc-rtems5-binutils-2.34-x86_64-linux-gnu-1.xml
+config: tools/rtems-gcc-7.5.0-newlib-7947581.cfg
+package: sparc-rtems5-gcc-7.5.0-newlib-7947581-x86_64-linux-gnu-1
+building: sparc-rtems5-gcc-7.5.0-newlib-7947581-x86_64-linux-gnu-1
+sizes: sparc-rtems5-gcc-7.5.0-newlib-7947581-x86_64-linux-gnu-1: 5.923GB (installed: 1.190GB)
+cleaning: sparc-rtems5-gcc-7.5.0-newlib-7947581-x86_64-linux-gnu-1
+reporting: tools/rtems-gcc-7.5.0-newlib-7947581.cfg -> sparc-rtems5-gcc-7.5.0-newlib-7947581-x86_64-linux-gnu-1.txt
+reporting: tools/rtems-gcc-7.5.0-newlib-7947581.cfg -> sparc-rtems5-gcc-7.5.0-newlib-7947581-x86_64-linux-gnu-1.xml
+config: tools/rtems-tools-5-1.cfg
+package: rtems-tools-ca7b290f94a19238ed068aad229854cf67dee9b5-1
+building: rtems-tools-ca7b290f94a19238ed068aad229854cf67dee9b5-1
+sizes: rtems-tools-ca7b290f94a19238ed068aad229854cf67dee9b5-1: 375.348MB (installed: 104.201MB)
+cleaning: rtems-tools-ca7b290f94a19238ed068aad229854cf67dee9b5-1
+reporting: tools/rtems-tools-5-1.cfg -> rtems-tools-ca7b290f94a19238ed068aad229854cf67dee9b5-1.txt
+reporting: tools/rtems-tools-5-1.cfg -> rtems-tools-ca7b290f94a19238ed068aad229854cf67dee9b5-1.xml
+config: devel/sis-2-1.cfg
+package: sis-2.21-x86_64-linux-gnu-1
+building: sis-2.21-x86_64-linux-gnu-1
+sizes: sis-2.21-x86_64-linux-gnu-1: 3.642MB (installed: 628.816KB)
+cleaning: sis-2.21-x86_64-linux-gnu-1
+reporting: devel/sis-2-1.cfg -> sis-2.21-x86_64-linux-gnu-1.txt
+reporting: devel/sis-2-1.cfg -> sis-2.21-x86_64-linux-gnu-1.xml
+installing: expat-2.1.0-x86_64-linux-gnu-1 -> /home/f/5
+installing: sparc-rtems5-gdb-9.1-x86_64-linux-gnu-1 -> /home/f/5
+installing: sparc-rtems5-binutils-2.34-x86_64-linux-gnu-1 -> /home/f/5
+installing: sparc-rtems5-gcc-7.5.0-newlib-7947581-x86_64-linux-gnu-1 -> /home/f/5
+installing: rtems-tools-ca7b290f94a19238ed068aad229854cf67dee9b5-1 -> /home/f/5
+installing: sis-2.21-x86_64-linux-gnu-1 -> /home/f/5
+cleaning: expat-2.1.0-x86_64-linux-gnu-1
+cleaning: sparc-rtems5-gdb-9.1-x86_64-linux-gnu-1
+cleaning: sparc-rtems5-binutils-2.34-x86_64-linux-gnu-1
+cleaning: sparc-rtems5-gcc-7.5.0-newlib-7947581-x86_64-linux-gnu-1
+cleaning: rtems-tools-ca7b290f94a19238ed068aad229854cf67dee9b5-1
+cleaning: sis-2.21-x86_64-linux-gnu-1
+Build Sizes: usage: 7.466GB total: 1.685GB (sources: 144.758MB, patches: 19.412KB, installed 1.544GB)
+installing: 5/rtems-sparc -> /home/f/5
+clean staging: 5/rtems-sparc
+Staging Size: 5.290MB
+Build Set: Time 0:54:38.502429
++ 1595601742.518659 3705540608 (32) sudo apt install -y pax
+
+WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
+
+Reading package lists...
+Building dependency tree...
+Reading state information...
+The following NEW packages will be installed:
+  pax
+0 upgraded, 1 newly installed, 0 to remove and 0 not upgraded.
+Need to get 82.0 kB of archives.
+After this operation, 168 kB of additional disk space will be used.
+Get:1 http://deb.debian.org/debian buster/main amd64 pax amd64 1:20190224-1 [82.0 kB]
+Fetched 82.0 kB in 0s (273 kB/s)
+Selecting previously unselected package pax.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 53021 files and directories currently installed.)
+Preparing to unpack .../pax_1%3a20190224-1_amd64.deb ...
+Unpacking pax (1:20190224-1) ...
+Setting up pax (1:20190224-1) ...
++ 1595601744.064776 3705720832 (34) cd /home/f/rtems
++ 1595601744.066849 3705720832 (35) cat
++ 1595601744.069475 3705724928 (41) export PATH=/home/f/5/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games
++ 1595601744.070830 3705724928 (41) PATH=/home/f/5/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games
++ 1595601744.073875 3705724928 (43) ./waf configure
+Setting top to                           : /home/f/rtems 
+Setting out to                           : /home/f/rtems/build 
+Regenerate build specification cache (needs a couple of seconds)...
+Configure board support package (BSP)    : sparc/leon3 
+Checking for program 'sparc-rtems5-gcc'  : /home/f/5/bin/sparc-rtems5-gcc 
+Checking for program 'sparc-rtems5-g++'  : /home/f/5/bin/sparc-rtems5-g++ 
+Checking for program 'sparc-rtems5-ar'   : /home/f/5/bin/sparc-rtems5-ar 
+Checking for program 'sparc-rtems5-ld'   : /home/f/5/bin/sparc-rtems5-ld 
+Checking for program 'ar'                : /home/f/5/bin/sparc-rtems5-ar 
+Checking for program 'g++, c++'          : /home/f/5/bin/sparc-rtems5-g++ 
+Checking for program 'ar'                : /home/f/5/bin/sparc-rtems5-ar 
+Checking for program 'gas, gcc'          : /home/f/5/bin/sparc-rtems5-gcc 
+Checking for program 'ar'                : /home/f/5/bin/sparc-rtems5-ar 
+Checking for program 'gcc, cc'           : /home/f/5/bin/sparc-rtems5-gcc 
+Checking for program 'ar'                : /home/f/5/bin/sparc-rtems5-ar 
+Checking for c flags '-MMD'              : yes 
+Checking for cxx flags '-MMD'            : yes 
+Checking for program 'rtems-bin2c'       : /home/f/5/bin/rtems-bin2c 
+Checking for program 'gzip'              : /usr/bin/gzip 
+Checking for program 'pax'               : /usr/bin/pax 
+Checking for program 'rtems-ld'          : /home/f/5/bin/rtems-ld 
+Checking for program 'rtems-syms'        : /home/f/5/bin/rtems-syms 
+Checking for program 'xz'                : /usr/bin/xz 
+'configure' finished successfully (4.854s)
++ 1595601749.045959 3709513728 (44) ./waf -v
+../../../bsps/shared/dev/serial/mc68681.c: In function 'mc68681_set_attributes':
+../../../bsps/shared/dev/serial/mc68681.c:171:3: warning: implicit declaration of function 'rtems_interrupt_disable'; did you mean 'rtems_interrupt_cause'? [-Wimplicit-function-declaration]
+   rtems_interrupt_disable(Irql);
+   ^~~~~~~~~~~~~~~~~~~~~~~
+   rtems_interrupt_cause
+../../../bsps/shared/dev/serial/mc68681.c:171:3: warning: nested extern declaration of 'rtems_interrupt_disable' [-Wnested-externs]
+../../../bsps/shared/dev/serial/mc68681.c:181:3: warning: implicit declaration of function 'rtems_interrupt_enable'; did you mean 'rtems_interrupt_cause'? [-Wimplicit-function-declaration]
+   rtems_interrupt_enable(Irql);
+   ^~~~~~~~~~~~~~~~~~~~~~
+   rtems_interrupt_cause
+../../../bsps/shared/dev/serial/mc68681.c:181:3: warning: nested extern declaration of 'rtems_interrupt_enable' [-Wnested-externs]
+../../../bsps/shared/dev/serial/mc68681.c:171:3: warning: 'Irql' may be used uninitialized in this function [-Wmaybe-uninitialized]
+   rtems_interrupt_disable(Irql);
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../../../bsps/shared/dev/serial/mc68681.c: In function 'mc68681_open':
+../../../bsps/shared/dev/serial/mc68681.c:299:3: warning: 'Irql' may be used uninitialized in this function [-Wmaybe-uninitialized]
+   rtems_interrupt_disable(Irql);
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../../../bsps/shared/dev/serial/mc68681.c: In function 'mc68681_write_support_int':
+../../../bsps/shared/dev/serial/mc68681.c:471:3: warning: 'Irql' may be used uninitialized in this function [-Wmaybe-uninitialized]
+   rtems_interrupt_disable(Irql);
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+../../../bsps/shared/dev/flash/am29lv160.c: In function 'rtems_am29lv160_write_data_8':
+../../../bsps/shared/dev/flash/am29lv160.c:240:5: warning: implicit declaration of function 'rtems_interrupt_disable'; did you mean 'rtems_interrupt_cause'? [-Wimplicit-function-declaration]
+     rtems_interrupt_disable (level);
+     ^~~~~~~~~~~~~~~~~~~~~~~
+     rtems_interrupt_cause
+../../../bsps/shared/dev/flash/am29lv160.c:240:5: warning: nested extern declaration of 'rtems_interrupt_disable' [-Wnested-externs]
+../../../bsps/shared/dev/flash/am29lv160.c:245:5: warning: implicit declaration of function 'rtems_interrupt_enable'; did you mean 'rtems_interrupt_cause'? [-Wimplicit-function-declaration]
+     rtems_interrupt_enable (level);
+     ^~~~~~~~~~~~~~~~~~~~~~
+     rtems_interrupt_cause
+../../../bsps/shared/dev/flash/am29lv160.c:245:5: warning: nested extern declaration of 'rtems_interrupt_enable' [-Wnested-externs]
+../../../bsps/shared/dev/flash/am29lv160.c: In function 'rtems_am29lv160_erase':
+../../../bsps/shared/dev/flash/am29lv160.c:381:7: warning: 'level' may be used uninitialized in this function [-Wmaybe-uninitialized]
+       rtems_interrupt_disable (level);
+       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../../../bsps/shared/dev/flash/am29lv160.c: In function 'rtems_am29lv160_write':
+../../../bsps/shared/dev/flash/am29lv160.c:240:5: warning: 'level' may be used uninitialized in this function [-Wmaybe-uninitialized]
+     rtems_interrupt_disable (level);
+     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../../../bsps/shared/dev/flash/am29lv160.c:231:25: note: 'level' was declared here
+   rtems_interrupt_level level;
+                         ^~~~~
+../../../bsps/shared/dev/flash/am29lv160.c:277:5: warning: 'level' may be used uninitialized in this function [-Wmaybe-uninitialized]
+     rtems_interrupt_disable (level);
+     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../../../bsps/shared/dev/flash/am29lv160.c:266:25: note: 'level' was declared here
+   rtems_interrupt_level level;
+                         ^~~~~
+
+../../../bsps/shared/dev/rtc/mc146818a.c: In function 'mc146818a_get_time':
+../../../bsps/shared/dev/rtc/mc146818a.c:102:3: warning: implicit declaration of function 'rtems_interrupt_disable'; did you mean 'rtems_interrupt_cause'? [-Wimplicit-function-declaration]
+   rtems_interrupt_disable( level );
+   ^~~~~~~~~~~~~~~~~~~~~~~
+   rtems_interrupt_cause
+../../../bsps/shared/dev/rtc/mc146818a.c:102:3: warning: nested extern declaration of 'rtems_interrupt_disable' [-Wnested-externs]
+../../../bsps/shared/dev/rtc/mc146818a.c:104:7: warning: implicit declaration of function 'rtems_interrupt_flash'; did you mean 'rtems_interrupt_catch'? [-Wimplicit-function-declaration]
+       rtems_interrupt_flash( level );
+       ^~~~~~~~~~~~~~~~~~~~~
+       rtems_interrupt_catch
+../../../bsps/shared/dev/rtc/mc146818a.c:104:7: warning: nested extern declaration of 'rtems_interrupt_flash' [-Wnested-externs]
+../../../bsps/shared/dev/rtc/mc146818a.c:130:3: warning: implicit declaration of function 'rtems_interrupt_enable'; did you mean 'rtems_interrupt_cause'? [-Wimplicit-function-declaration]
+   rtems_interrupt_enable( level );
+   ^~~~~~~~~~~~~~~~~~~~~~
+   rtems_interrupt_cause
+../../../bsps/shared/dev/rtc/mc146818a.c:130:3: warning: nested extern declaration of 'rtems_interrupt_enable' [-Wnested-externs]
+../../../bsps/shared/dev/rtc/mc146818a.c:102:3: warning: 'level' may be used uninitialized in this function [-Wmaybe-uninitialized]
+   rtems_interrupt_disable( level );
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+../../../bsps/shared/dev/serial/z85c30_reg.c: In function 'z85c30_get_register':
+../../../bsps/shared/dev/serial/z85c30_reg.c:40:3: warning: implicit declaration of function 'rtems_interrupt_disable'; did you mean 'rtems_interrupt_cause'? [-Wimplicit-function-declaration]
+   rtems_interrupt_disable(level);
+   ^~~~~~~~~~~~~~~~~~~~~~~
+   rtems_interrupt_cause
+../../../bsps/shared/dev/serial/z85c30_reg.c:40:3: warning: nested extern declaration of 'rtems_interrupt_disable' [-Wnested-externs]
+../../../bsps/shared/dev/serial/z85c30_reg.c:46:3: warning: implicit declaration of function 'rtems_interrupt_enable'; did you mean 'rtems_interrupt_cause'? [-Wimplicit-function-declaration]
+   rtems_interrupt_enable(level);
+   ^~~~~~~~~~~~~~~~~~~~~~
+   rtems_interrupt_cause
+../../../bsps/shared/dev/serial/z85c30_reg.c:46:3: warning: nested extern declaration of 'rtems_interrupt_enable' [-Wnested-externs]
+../../../bsps/shared/dev/serial/z85c30_reg.c:40:3: warning: 'level' is used uninitialized in this function [-Wuninitialized]
+   rtems_interrupt_disable(level);
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../../../bsps/shared/dev/serial/z85c30_reg.c: In function 'z85c30_set_register':
+../../../bsps/shared/dev/serial/z85c30_reg.c:66:3: warning: 'level' is used uninitialized in this function [-Wuninitialized]
+   rtems_interrupt_disable(level);
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+../../../bsps/shared/dev/serial/z85c30.c: In function 'z85c30_assert_RTS':
+../../../bsps/shared/dev/serial/z85c30.c:318:3: warning: implicit declaration of function 'rtems_interrupt_disable'; did you mean 'rtems_interrupt_cause'? [-Wimplicit-function-declaration]
+   rtems_interrupt_disable(Irql);
+   ^~~~~~~~~~~~~~~~~~~~~~~
+   rtems_interrupt_cause
+../../../bsps/shared/dev/serial/z85c30.c:318:3: warning: nested extern declaration of 'rtems_interrupt_disable' [-Wnested-externs]
+../../../bsps/shared/dev/serial/z85c30.c:325:3: warning: implicit declaration of function 'rtems_interrupt_enable'; did you mean 'rtems_interrupt_cause'? [-Wimplicit-function-declaration]
+   rtems_interrupt_enable(Irql);
+   ^~~~~~~~~~~~~~~~~~~~~~
+   rtems_interrupt_cause
+../../../bsps/shared/dev/serial/z85c30.c:325:3: warning: nested extern declaration of 'rtems_interrupt_enable' [-Wnested-externs]
+../../../bsps/shared/dev/serial/z85c30.c:318:3: warning: 'Irql' is used uninitialized in this function [-Wuninitialized]
+   rtems_interrupt_disable(Irql);
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../../../bsps/shared/dev/serial/z85c30.c: In function 'z85c30_negate_RTS':
+../../../bsps/shared/dev/serial/z85c30.c:347:3: warning: 'Irql' is used uninitialized in this function [-Wuninitialized]
+   rtems_interrupt_disable(Irql);
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../../../bsps/shared/dev/serial/z85c30.c: In function 'z85c30_assert_DTR':
+../../../bsps/shared/dev/serial/z85c30.c:381:3: warning: 'Irql' is used uninitialized in this function [-Wuninitialized]
+   rtems_interrupt_disable(Irql);
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../../../bsps/shared/dev/serial/z85c30.c: In function 'z85c30_negate_DTR':
+../../../bsps/shared/dev/serial/z85c30.c:410:3: warning: 'Irql' is used uninitialized in this function [-Wuninitialized]
+   rtems_interrupt_disable(Irql);
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../../../bsps/shared/dev/serial/z85c30.c: In function 'z85c30_write_support_int':
+../../../bsps/shared/dev/serial/z85c30.c:788:3: warning: 'Irql' may be used uninitialized in this function [-Wmaybe-uninitialized]
+   rtems_interrupt_disable(Irql);
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../../../bsps/shared/dev/serial/z85c30.c: In function 'z85c30_set_attributes':
+../../../bsps/shared/dev/serial/z85c30.c:517:3: warning: 'Irql' may be used uninitialized in this function [-Wmaybe-uninitialized]
+   rtems_interrupt_disable(Irql);
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+../../../bsps/sparc/leon3/start/setvec.c: In function 'set_vector':
+../../../bsps/sparc/leon3/start/setvec.c:51:43: warning: passing argument 2 of '_CPU_ISR_install_raw_handler' from incompatible pointer type [-Wincompatible-pointer-types]
+     _CPU_ISR_install_raw_handler( vector, handler, (void *)&previous_isr );
+                                           ^~~~~~~
+In file included from ../../../cpukit/include/rtems/system.h:23:0,
+                 from ../../../cpukit/include/rtems.h:29,
+                 from ../../../bsps/include/bsp/default-initial-extension.h:26,
+                 from ../../../bsps/sparc/leon3/include/bsp.h:32,
+                 from ../../../bsps/sparc/leon3/start/setvec.c:36:
+../../../cpukit/score/cpu/sparc/include/rtems/score/cpu.h:955:6: note: expected 'CPU_ISR_raw_handler {aka void (*)(void)}' but argument is of type 'rtems_isr_entry {aka void (*)(unsigned int)}'
+ void _CPU_ISR_install_raw_handler(
+      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+/home/f/rtems/testsuites/libtests/dl10/dl10-o6.c:14:5: warning: no previous prototype for 'rtems_main_o5' [-Wmissing-prototypes]
+ int rtems_main_o5 (void)
+     ^~~~~~~~~~~~~
+
+/home/f/rtems/testsuites/libtests/dl10/dl-load.c:109:12: warning: 'dl_call' defined but not used [-Wunused-function]
+ static int dl_call (void* handle, const char* func)
+            ^~~~~~~
+/home/f/rtems/testsuites/libtests/dl10/dl-load.c:99:13: warning: 'dl_close' defined but not used [-Wunused-function]
+ static void dl_close (void* handle)
+             ^~~~~~~~
+
+../../../testsuites/psxtests/psxhdrs/ctype/isupper_l.c: In function 'test':
+../../../testsuites/psxtests/psxhdrs/ctype/isupper_l.c:44:12: warning: unused variable 'locale' [-Wunused-variable]
+   locale_t locale;
+            ^~~~~~
+
+../../../testsuites/psxtests/psxhdrs/ctype/islower_l.c: In function 'test':
+../../../testsuites/psxtests/psxhdrs/ctype/islower_l.c:44:12: warning: unused variable 'locale' [-Wunused-variable]
+   locale_t locale;
+            ^~~~~~
+
+../../../testsuites/psxtests/psxhdrs/ctype/isprint_l.c: In function 'test':
+../../../testsuites/psxtests/psxhdrs/ctype/isprint_l.c:44:12: warning: unused variable 'locale' [-Wunused-variable]
+   locale_t locale;
+            ^~~~~~
+
+../../../testsuites/psxtests/psxhdrs/ctype/isdigit_l.c: In function 'test':
+../../../testsuites/psxtests/psxhdrs/ctype/isdigit_l.c:44:12: warning: unused variable 'locale' [-Wunused-variable]
+   locale_t locale;
+            ^~~~~~
+
+../../../testsuites/psxtests/psxhdrs/ctype/isalpha_l.c: In function 'test':
+../../../testsuites/psxtests/psxhdrs/ctype/isalpha_l.c:44:12: warning: unused variable 'locale' [-Wunused-variable]
+   locale_t locale;
+            ^~~~~~
+
+../../../testsuites/psxtests/psxhdrs/ctype/isxdigit_l.c: In function 'test':
+../../../testsuites/psxtests/psxhdrs/ctype/isxdigit_l.c:44:12: warning: unused variable 'locale' [-Wunused-variable]
+   locale_t locale;
+            ^~~~~~
+
+../../../testsuites/psxtests/psxhdrs/ctype/isspace_l.c: In function 'test':
+../../../testsuites/psxtests/psxhdrs/ctype/isspace_l.c:44:12: warning: unused variable 'locale' [-Wunused-variable]
+   locale_t locale;
+            ^~~~~~
+
+../../../testsuites/psxtests/psxhdrs/ctype/ispunct_l.c: In function 'test':
+../../../testsuites/psxtests/psxhdrs/ctype/ispunct_l.c:44:12: warning: unused variable 'locale' [-Wunused-variable]
+   locale_t locale;
+            ^~~~~~
+
+../../../testsuites/psxtests/psxhdrs/ctype/iscntrl_l.c: In function 'test':
+../../../testsuites/psxtests/psxhdrs/ctype/iscntrl_l.c:44:12: warning: unused variable 'locale' [-Wunused-variable]
+   locale_t locale;
+            ^~~~~~
+
+../../../testsuites/psxtests/psxhdrs/ctype/isalnum_l.c: In function 'test':
+../../../testsuites/psxtests/psxhdrs/ctype/isalnum_l.c:44:12: warning: unused variable 'locale' [-Wunused-variable]
+   locale_t locale;
+            ^~~~~~
+
+../../../testsuites/psxtests/psxhdrs/ctype/isgraph_l.c: In function 'test':
+../../../testsuites/psxtests/psxhdrs/ctype/isgraph_l.c:44:12: warning: unused variable 'locale' [-Wunused-variable]
+   locale_t locale;
+            ^~~~~~
+
+../../../testsuites/psxtests/psxhdrs/ctype/isblank_l.c: In function 'test':
+../../../testsuites/psxtests/psxhdrs/ctype/isblank_l.c:44:12: warning: unused variable 'locale' [-Wunused-variable]
+   locale_t locale;
+            ^~~~~~
+
+../../../testsuites/smptests/smppsxaffinity01/init.c: In function 'Validate_attrgetaffinity_errors':
+../../../testsuites/smptests/smppsxaffinity01/init.c:44:8: warning: implicit declaration of function 'pthread_attr_getaffinity_np'; did you mean 'pthread_attr_getstack'? [-Wimplicit-function-declaration]
+   sc = pthread_attr_getaffinity_np( NULL, sizeof( cpuset ), &cpuset );
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+        pthread_attr_getstack
+../../../testsuites/smptests/smppsxaffinity01/init.c:44:8: warning: nested extern declaration of 'pthread_attr_getaffinity_np' [-Wnested-externs]
+../../../testsuites/smptests/smppsxaffinity01/init.c: In function 'Validate_attrsetaffinity_errors':
+../../../testsuites/smptests/smppsxaffinity01/init.c:76:8: warning: implicit declaration of function 'pthread_attr_setaffinity_np'; did you mean 'pthread_attr_setstack'? [-Wimplicit-function-declaration]
+   sc = pthread_attr_setaffinity_np( NULL, sizeof( cpuset ), &cpuset );
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+        pthread_attr_setstack
+../../../testsuites/smptests/smppsxaffinity01/init.c:76:8: warning: nested extern declaration of 'pthread_attr_setaffinity_np' [-Wnested-externs]
+../../../testsuites/smptests/smppsxaffinity01/init.c: In function 'Validate_attr':
+../../../testsuites/smptests/smppsxaffinity01/init.c:107:8: warning: implicit declaration of function 'pthread_getattr_np'; did you mean 'pthread_attr_init'? [-Wimplicit-function-declaration]
+   sc = pthread_getattr_np( Init_id, &attr );
+        ^~~~~~~~~~~~~~~~~~
+        pthread_attr_init
+../../../testsuites/smptests/smppsxaffinity01/init.c:107:8: warning: nested extern declaration of 'pthread_getattr_np' [-Wnested-externs]
+
+../../../testsuites/smptests/smppsxaffinity02/init.c: In function 'Validate_setaffinity_errors':
+../../../testsuites/smptests/smppsxaffinity02/init.c:49:8: warning: implicit declaration of function 'pthread_setaffinity_np'; did you mean 'pthread_spin_init'? [-Wimplicit-function-declaration]
+   sc = pthread_setaffinity_np( Init_id, sizeof(cpu_set_t), &cpuset );
+        ^~~~~~~~~~~~~~~~~~~~~~
+        pthread_spin_init
+../../../testsuites/smptests/smppsxaffinity02/init.c:49:8: warning: nested extern declaration of 'pthread_setaffinity_np' [-Wnested-externs]
+../../../testsuites/smptests/smppsxaffinity02/init.c: In function 'Validate_getaffinity_errors':
+../../../testsuites/smptests/smppsxaffinity02/init.c:85:8: warning: implicit declaration of function 'pthread_getaffinity_np'; did you mean 'pthread_attr_init'? [-Wimplicit-function-declaration]
+   sc = pthread_getaffinity_np( 999, sizeof(cpu_set_t), &cpuset );
+        ^~~~~~~~~~~~~~~~~~~~~~
+        pthread_attr_init
+../../../testsuites/smptests/smppsxaffinity02/init.c:85:8: warning: nested extern declaration of 'pthread_getaffinity_np' [-Wnested-externs]
+../../../testsuites/smptests/smppsxaffinity02/init.c: In function 'Validate_affinity':
+../../../testsuites/smptests/smppsxaffinity02/init.c:112:8: warning: implicit declaration of function 'pthread_getattr_np'; did you mean 'pthread_attr_init'? [-Wimplicit-function-declaration]
+   sc = pthread_getattr_np( Init_id, &attr );
+        ^~~~~~~~~~~~~~~~~~
+        pthread_attr_init
+../../../testsuites/smptests/smppsxaffinity02/init.c:112:8: warning: nested extern declaration of 'pthread_getattr_np' [-Wnested-externs]
+../../../testsuites/smptests/smppsxaffinity02/init.c:153:10: warning: implicit declaration of function 'pthread_attr_setaffinity_np'; did you mean 'pthread_attr_setstack'? [-Wimplicit-function-declaration]
+     sc = pthread_attr_setaffinity_np( &attr, sizeof(cpu_set_t), &cpuset1 );
+          ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+          pthread_attr_setstack
+../../../testsuites/smptests/smppsxaffinity02/init.c:153:10: warning: nested extern declaration of 'pthread_attr_setaffinity_np' [-Wnested-externs]
+
+../../../testsuites/sptests/sp21/init.c: In function 'do_test_io_lookup_name':
+../../../testsuites/sptests/sp21/init.c:202:3: warning: 'rtems_io_lookup_name' is deprecated [-Wdeprecated-declarations]
+   sc = rtems_io_lookup_name( "", &info );
+   ^~
+In file included from ../../../cpukit/include/rtems.h:52:0,
+                 from ../../../bsps/include/bsp/default-initial-extension.h:26,
+                 from ../../../bsps/sparc/leon3/include/bsp.h:32,
+                 from ../../../testsuites/support/include/tmacros.h:22,
+                 from ../../../testsuites/sptests/sp21/init.c:14:
+../../../cpukit/include/rtems/io.h:244:19: note: declared here
+ rtems_status_code rtems_io_lookup_name(
+                   ^~~~~~~~~~~~~~~~~~~~
+../../../testsuites/sptests/sp21/init.c:206:3: warning: 'rtems_io_lookup_name' is deprecated [-Wdeprecated-declarations]
+   sc = rtems_io_lookup_name( "/dev", &info );
+   ^~
+In file included from ../../../cpukit/include/rtems.h:52:0,
+                 from ../../../bsps/include/bsp/default-initial-extension.h:26,
+                 from ../../../bsps/sparc/leon3/include/bsp.h:32,
+                 from ../../../testsuites/support/include/tmacros.h:22,
+                 from ../../../testsuites/sptests/sp21/init.c:14:
+../../../cpukit/include/rtems/io.h:244:19: note: declared here
+ rtems_status_code rtems_io_lookup_name(
+                   ^~~~~~~~~~~~~~~~~~~~
+../../../testsuites/sptests/sp21/init.c:210:3: warning: 'rtems_io_lookup_name' is deprecated [-Wdeprecated-declarations]
+   sc = rtems_io_lookup_name( "/dev/null", &info );
+   ^~
+In file included from ../../../cpukit/include/rtems.h:52:0,
+                 from ../../../bsps/include/bsp/default-initial-extension.h:26,
+                 from ../../../bsps/sparc/leon3/include/bsp.h:32,
+                 from ../../../testsuites/support/include/tmacros.h:22,
+                 from ../../../testsuites/sptests/sp21/init.c:14:
+../../../cpukit/include/rtems/io.h:244:19: note: declared here
+ rtems_status_code rtems_io_lookup_name(
+                   ^~~~~~~~~~~~~~~~~~~~
+
+++ 1595601958.725987 6272917504 (47) cut -d '[' -f 2-
+++ 1595601958.726133 6272917504 (47) grep '\-c'
+++ 1595601958.726263 6272917504 (47) grep smpmrsp01 log
++ 1595601958.755155 6272917504 (47) list='['\''/home/f/5/bin/sparc-rtems5-gcc'\'', '\''-MMD'\'', '\''-Wall'\'', '\''-Wmissing-prototypes'\'', '\''-Wimplicit-function-declaration'\'', '\''-Wstrict-prototypes'\'', '\''-Wnested-externs'\'', '\''-O2'\'', '\''-g'\'', '\''-fdata-sections'\'', '\''-ffunction-sections'\'', '\''-mcpu=leon3'\'', '\''-Icpukit/include'\'', '\''-I../../../cpukit/include'\'', '\''-Icpukit/score/cpu/sparc/include'\'', '\''-I../../../cpukit/score/cpu/sparc/include'\'', '\''-Ibsps/include'\'', '\''-I../../../bsps/include'\'', '\''-Ibsps/sparc/include'\'', '\''-I../../../bsps/sparc/include'\'', '\''-Ibsps/sparc/leon3/include'\'', '\''-I../../../bsps/sparc/leon3/include'\'', '\''-Itestsuites/support/include'\'', '\''-I../../../testsuites/support/include'\'', '\''../../../testsuites/smptests/smpmrsp01/init.c'\'', '\''-c'\'', '\''-o/home/f/rtems/build/sparc/leon3/testsuites/smptests/smpmrsp01/init.c.565.o'\'', '\''-DHAVE_CONFIG_H=1'\'']'
++++ 1595601958.763114 6272917504 (48) python3 /dev/stdin
++++ 1595601958.763310 6272917504 (48) echo -e 'for x in ['\''/home/f/5/bin/sparc-rtems5-gcc'\'', '\''-MMD'\'', '\''-Wall'\'', '\''-Wmissing-prototypes'\'', '\''-Wimplicit-function-declaration'\'', '\''-Wstrict-prototypes'\'', '\''-Wnested-externs'\'', '\''-O2'\'', '\''-g'\'', '\''-fdata-sections'\'', '\''-ffunction-sections'\'', '\''-mcpu=leon3'\'', '\''-Icpukit/include'\'', '\''-I../../../cpukit/include'\'', '\''-Icpukit/score/cpu/sparc/include'\'', '\''-I../../../cpukit/score/cpu/sparc/include'\'', '\''-Ibsps/include'\'', '\''-I../../../bsps/include'\'', '\''-Ibsps/sparc/include'\'', '\''-I../../../bsps/sparc/include'\'', '\''-Ibsps/sparc/leon3/include'\'', '\''-I../../../bsps/sparc/leon3/include'\'', '\''-Itestsuites/support/include'\'', '\''-I../../../testsuites/support/include'\'', '\''../../../testsuites/smptests/smpmrsp01/init.c'\'', '\''-c'\'', '\''-o/home/f/rtems/build/sparc/leon3/testsuites/smptests/smpmrsp01/init.c.565.o'\'', '\''-DHAVE_CONFIG_H=1'\'']:\n  print(x)'
+++ 1595601958.837128 6272921600 (48) echo /home/f/5/bin/sparc-rtems5-gcc -MMD -Wall -Wmissing-prototypes -Wimplicit-function-declaration -Wstrict-prototypes -Wnested-externs -O2 -g -fdata-sections -ffunction-sections -mcpu=leon3 -Icpukit/include -I../../../cpukit/include -Icpukit/score/cpu/sparc/include -I../../../cpukit/score/cpu/sparc/include -Ibsps/include -I../../../bsps/include -Ibsps/sparc/include -I../../../bsps/sparc/include -Ibsps/sparc/leon3/include -I../../../bsps/sparc/leon3/include -Itestsuites/support/include -I../../../testsuites/support/include ../../../testsuites/smptests/smpmrsp01/init.c -c -o/home/f/rtems/build/sparc/leon3/testsuites/smptests/smpmrsp01/init.c.565.o -DHAVE_CONFIG_H=1
++ 1595601958.840776 6272921600 (48) cmd='/home/f/5/bin/sparc-rtems5-gcc -MMD -Wall -Wmissing-prototypes -Wimplicit-function-declaration -Wstrict-prototypes -Wnested-externs -O2 -g -fdata-sections -ffunction-sections -mcpu=leon3 -Icpukit/include -I../../../cpukit/include -Icpukit/score/cpu/sparc/include -I../../../cpukit/score/cpu/sparc/include -Ibsps/include -I../../../bsps/include -Ibsps/sparc/include -I../../../bsps/sparc/include -Ibsps/sparc/leon3/include -I../../../bsps/sparc/leon3/include -Itestsuites/support/include -I../../../testsuites/support/include ../../../testsuites/smptests/smpmrsp01/init.c -c -o/home/f/rtems/build/sparc/leon3/testsuites/smptests/smpmrsp01/init.c.565.o -DHAVE_CONFIG_H=1'
++ 1595601958.848330 6272921600 (51) cd /home/f/rtems/build/sparc/leon3
+++ 1595601958.850810 6272921600 (52) sed 's/ -o[^[:space:]]*/ -E/'
+++ 1595601958.850973 6272921600 (52) echo '/home/f/5/bin/sparc-rtems5-gcc -MMD -Wall -Wmissing-prototypes -Wimplicit-function-declaration -Wstrict-prototypes -Wnested-externs -O2 -g -fdata-sections -ffunction-sections -mcpu=leon3 -Icpukit/include -I../../../cpukit/include -Icpukit/score/cpu/sparc/include -I../../../cpukit/score/cpu/sparc/include -Ibsps/include -I../../../bsps/include -Ibsps/sparc/include -I../../../bsps/sparc/include -Ibsps/sparc/leon3/include -I../../../bsps/sparc/leon3/include -Itestsuites/support/include -I../../../testsuites/support/include ../../../testsuites/smptests/smpmrsp01/init.c -c -o/home/f/rtems/build/sparc/leon3/testsuites/smptests/smpmrsp01/init.c.565.o -DHAVE_CONFIG_H=1'
++ 1595601958.856950 6272921600 (52) eval /home/f/5/bin/sparc-rtems5-gcc -MMD -Wall -Wmissing-prototypes -Wimplicit-function-declaration -Wstrict-prototypes -Wnested-externs -O2 -g -fdata-sections -ffunction-sections -mcpu=leon3 -Icpukit/include -I../../../cpukit/include -Icpukit/score/cpu/sparc/include -I../../../cpukit/score/cpu/sparc/include -Ibsps/include -I../../../bsps/include -Ibsps/sparc/include -I../../../bsps/sparc/include -Ibsps/sparc/leon3/include -I../../../bsps/sparc/leon3/include -Itestsuites/support/include -I../../../testsuites/support/include ../../../testsuites/smptests/smpmrsp01/init.c -c -E -DHAVE_CONFIG_H=1
+++ 1595601958.861283 6272921600 (52) /home/f/5/bin/sparc-rtems5-gcc -MMD -Wall -Wmissing-prototypes -Wimplicit-function-declaration -Wstrict-prototypes -Wnested-externs -O2 -g -fdata-sections -ffunction-sections -mcpu=leon3 -Icpukit/include -I../../../cpukit/include -Icpukit/score/cpu/sparc/include -I../../../cpukit/score/cpu/sparc/include -Ibsps/include -I../../../bsps/include -Ibsps/sparc/include -I../../../bsps/sparc/include -Ibsps/sparc/leon3/include -I../../../bsps/sparc/leon3/include -Itestsuites/support/include -I../../../testsuites/support/include ../../../testsuites/smptests/smpmrsp01/init.c -c -E -DHAVE_CONFIG_H=1
+++ 1595601958.901567 6273699840 (53) sed 's/ -o[^[:space:]]*/ -E -CC/'
+++ 1595601958.901745 6273699840 (53) echo '/home/f/5/bin/sparc-rtems5-gcc -MMD -Wall -Wmissing-prototypes -Wimplicit-function-declaration -Wstrict-prototypes -Wnested-externs -O2 -g -fdata-sections -ffunction-sections -mcpu=leon3 -Icpukit/include -I../../../cpukit/include -Icpukit/score/cpu/sparc/include -I../../../cpukit/score/cpu/sparc/include -Ibsps/include -I../../../bsps/include -Ibsps/sparc/include -I../../../bsps/sparc/include -Ibsps/sparc/leon3/include -I../../../bsps/sparc/leon3/include -Itestsuites/support/include -I../../../testsuites/support/include ../../../testsuites/smptests/smpmrsp01/init.c -c -o/home/f/rtems/build/sparc/leon3/testsuites/smptests/smpmrsp01/init.c.565.o -DHAVE_CONFIG_H=1'
++ 1595601958.909024 6273699840 (53) eval /home/f/5/bin/sparc-rtems5-gcc -MMD -Wall -Wmissing-prototypes -Wimplicit-function-declaration -Wstrict-prototypes -Wnested-externs -O2 -g -fdata-sections -ffunction-sections -mcpu=leon3 -Icpukit/include -I../../../cpukit/include -Icpukit/score/cpu/sparc/include -I../../../cpukit/score/cpu/sparc/include -Ibsps/include -I../../../bsps/include -Ibsps/sparc/include -I../../../bsps/sparc/include -Ibsps/sparc/leon3/include -I../../../bsps/sparc/leon3/include -Itestsuites/support/include -I../../../testsuites/support/include ../../../testsuites/smptests/smpmrsp01/init.c -c -E -CC -DHAVE_CONFIG_H=1
+++ 1595601958.912593 6273699840 (53) /home/f/5/bin/sparc-rtems5-gcc -MMD -Wall -Wmissing-prototypes -Wimplicit-function-declaration -Wstrict-prototypes -Wnested-externs -O2 -g -fdata-sections -ffunction-sections -mcpu=leon3 -Icpukit/include -I../../../cpukit/include -Icpukit/score/cpu/sparc/include -I../../../cpukit/score/cpu/sparc/include -Ibsps/include -I../../../bsps/include -Ibsps/sparc/include -I../../../bsps/sparc/include -Ibsps/sparc/leon3/include -I../../../bsps/sparc/leon3/include -Itestsuites/support/include -I../../../testsuites/support/include ../../../testsuites/smptests/smpmrsp01/init.c -c -E -CC -DHAVE_CONFIG_H=1
++ 1595601958.986852 6275698688 (56) ls /home/f/init.c_pp /home/f/init.c_pp_CC
+/home/f/init.c_pp
+/home/f/init.c_pp_CC
+	Command being timed: "/media/sf_VirtualBox_shared/gcc.sh"
+	User time (seconds): 2679.25
+	System time (seconds): 334.69
+	Percent of CPU this job got: 75%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 1:06:31
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 501852
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 864
+	Minor (reclaiming a frame) page faults: 310861191
+	Voluntary context switches: 3894110
+	Involuntary context switches: 1936662
+	Swaps: 0
+	File system inputs: 971704
+	File system outputs: 36544976
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

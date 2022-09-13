@@ -1,0 +1,59 @@
+System
+P:0.0:0:UI1:196 in CreateWakeupSema
+P:0.1:0:UI1:196 in CreateWakeupSema
+P:0.2:0:UI1:528 in RtemsModelEventsMgr_Setup (get_scheduler)
+P:0.3:0:UI1:532 in RtemsModelEventsMgr_Setup (ident_by_processor)
+P:0.4:0:UI1:533 in RtemsModelEventsMgr_Setup (runner.ne.other)
+P:0.5:0:UI1:538 in RtemsModelEventsMgr_Setup (set_priority)
+P:0.6:0:UI1:539 in RtemsModelEventsMgr_Setup (prio was HIGH)
+P:0.7:0:UI1:543 in RtemsModelEventsMgr_Setup (task_construct)
+P:0.8:0:UI1:547 in RtemsModelEventsMgr_Setup (task_start)
+
+P:0.9:0:UI1:679 in RtemsModelEventsMgr_Run (pending ?= 0)
+
+P:0.10:0:UI1:323 in checkTaskIs (own_id = exp_id)
+P:0.11:0:WORK:323 in checkTaskIs (own_id = exp_id)
+P:0.12:0:WORK:409 in TestSegment3 (sendrc OK)
+
+F:0.13:0:UI1:430:0 == 14 in TestSegment4 (pending ?= 14)
+
+P:0.14:0:UI1:438 in TestSegment4 (recrc OK)
+P:0.15:0:UI1:440 in TestSegment4 (recout ?= 10)
+
+F:0.16:0:UI1:443:0 == 4 in TestSegment4 (pending ?= 4)
+
+P:0.17:0:UI1:570 in RtemsModelEventsMgr_Teardown (set_priority)
+P:0.18:0:UI1:571 in RtemsModelEventsMgr_Teardown (prio was NORMAL)
+P:0.19:0:UI1:575 in RtemsModelEventsMgr_Teardown (task_delete)
+P:0.20:0:UI1:207 in DeleteWakeupSema
+P:0.21:0:UI1:207 in DeleteWakeupSema
+
+
+Regular
+P:0.0:0:UI1:196
+P:0.1:0:UI1:196
+P:0.2:0:UI1:528
+P:0.3:0:UI1:532
+P:0.4:0:UI1:533
+P:0.5:0:UI1:538
+P:0.6:0:UI1:539
+P:0.7:0:UI1:543
+P:0.8:0:UI1:547
+
+F:0.9:0:UI1:679:4 == 0 in RtemsModelEventsMgr_Run (pending ?= 0)
+
+P:0.10:0:UI1:323
+P:0.11:0:WORK:323
+P:0.12:0:WORK:409
+
+P:0.13:0:UI1:430  in TestSegment4 (pending ?= 14)
+P:0.14:0:UI1:438
+P:0.15:0:UI1:440
+
+P:0.16:0:UI1:443 in TestSegment4 (pending ?= 4 OK)
+
+P:0.17:0:UI1:570
+P:0.18:0:UI1:571
+P:0.19:0:UI1:575
+P:0.20:0:UI1:207
+P:0.21:0:UI1:207

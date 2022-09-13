@@ -1,0 +1,92 @@
+================================================================================
+Includes from earlier setup that worked:
+--------------------------------------------------------------------------------
+ts-model-0.c
+
+?#include "config.h"
+#include <rtems/test-info.h>
+#include <rtems/test.h>
+const char rtems_test_name[] - "Model0";
+#include "ts-default.h"
+--------------------------------------------------------------------------------
+tr-model-events-mrg.h
+
+#include <rtems.h>
+#include <rtems/score/thread.h>
+void RtemsModelEventsMgr<N>_Run(
+  rtems_status_code ( *send )( rtems_id, rtems_event_set ),
+  rtems_status_code ( *receive )( rtems_event_set, rtems_option, rtems_interval, rtems_event_set * ),
+  rtems_event_set (   *get_pending_events )( Thread_Control * ),
+  unsigned int         wait_class,
+  int                  waiting_for_event
+);
+--------------------------------------------------------------------------------
+tc-model-events-mgr.c
+
+?#include "config.h"
+#include <rtems/rtems/eventimpl.h>
+#include <rtems/rtems/tasksdata.h>
+#include <rtems/score/statesimpl.h>
+#include <rtems/score/threadimpl.h>
+#include "tr-model-events-mgr.h"
+#include <rtems/test.h>
+
+T_TEST_CASE( RtemsModelEventsMgr<N> )
+{
+  RtemsModelEventsMgr<N>_Run(
+    EventSend,
+    EventReceive,
+    GetPendingEvents,
+    THREAD_WAIT_CLASS_EVENT,
+    STATES_WAITING_FOR_EVENT
+  );
+}
+--------------------------------------------------------------------------------
+tr-model-events-mgr[-<N>].c
+
+?#include "config.h"
+#include <rtems/score/threadimpl.h>
+#include "tr-model-events-mgr.h"
+#include <rtems/test.h>
+
+RtemsModelEventsMgr<N>_Run(...){
+ ...
+}
+
+================================================================================
+Includes from current broken setup:
+--------------------------------------------------------------------------------
+tr-model-events-mrg.h
+
+#include <rtems.h>
+#include <rtems/score/thread.h>
+#include <rtems/test.h>
+
+typedef struct RtemsModelEventsMgr_Context;
+static RtemsModelEventsMgr_Context RtemsModelEventsMgr_Instance;
+static void RtemsModelEventsMgr_Setup_Wrap( void *arg ) ;
+static void RtemsModelEventsMgr_Teardown_Wrap( void *arg ) ;
+void RtemsModelEventsMgr0_Run()
+void RtemsModelEventsMgr1_Run()
+...
+--------------------------------------------------------------------------------
+tr-model-events-mrg.c
+
+?#include "config.h"
+#include <rtems/score/threadimpl.h>
+#include "tr-model-events-mgr.h"
+static void RtemsModelEventsMgr_Setup()
+...
+--------------------------------------------------------------------------------
+tr-model-events-mrg-0.c
+
+?#include "config.h"
+#include <rtems/score/threadimpl.h>
+#include "tr-model-events-mgr.h"
+typedef enum Priorities;
+...
+
+--------------------------------------------------------------------------------
+tr-model-events-mrg-run{}.c
+
+void RtemsModelEventsMgr_Run{0}()

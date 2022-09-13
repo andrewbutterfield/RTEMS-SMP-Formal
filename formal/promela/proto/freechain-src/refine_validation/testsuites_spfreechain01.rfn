@@ -1,0 +1,17 @@
+/*@
+export_code \<open>tr-model-chains-api.c\<close>
+
+enclose_file \<open>enclose_1_head.c\<close>
+             \<open>enclose_2_foot.c\<close>
+
+refine_generic_file \<open>../../../events/rqmts-spec-level/model-chains-api-rfn.yml\<close>
+
+export_trail_num \<open>1\<close>
+export_trail_num \<open>2\<close>
+export_trail_num \<open>3\<close>
+
+export_input_yaml \<open>_\<close>
+export_input_only_content
+
+disable_negation_at \<open>doGet\<close>
+*/

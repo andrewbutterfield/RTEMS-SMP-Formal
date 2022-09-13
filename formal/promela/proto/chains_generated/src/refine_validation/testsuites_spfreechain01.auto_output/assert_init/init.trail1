@@ -1,0 +1,361 @@
+//@ add_cmd \<open>0.8444218515250481\<close>
+
+
+ Chain Model running.
+  1:	proc  0 (:init::1) pan.pml:175 (state 1)	[printf('\\n\\n Chain Model running.\\n')]
+@@@ 0 NAME Chain_AutoGen
+  1:	proc  0 (:init::1) pan.pml:176 (state 2)	[printf('@@@ 0 NAME Chain_AutoGen\\n')]
+@@@ 0 DEF MAX_SIZE 8
+  1:	proc  0 (:init::1) pan.pml:177 (state 3)	[printf('@@@ 0 DEF MAX_SIZE 8\\n')]
+@@@ 0 DCLARRAY Node memory MAX_SIZE
+  1:	proc  0 (:init::1) pan.pml:178 (state 4)	[printf('@@@ 0 DCLARRAY Node memory MAX_SIZE\\n')]
+@@@ 0 DECL unsigned nptr NULL
+  1:	proc  0 (:init::1) pan.pml:179 (state 5)	[printf('@@@ 0 DECL unsigned nptr NULL\\n')]
+@@@ 0 DECL Control chain
+  1:	proc  0 (:init::1) pan.pml:180 (state 6)	[printf('@@@ 0 DECL Control chain\\n')]
+
+Initialising...
+  1:	proc  0 (:init::1) pan.pml:181 (state 7)	[printf('\\nInitialising...\\n')]
+@@@ 0 INIT
+  1:	proc  0 (:init::1) pan.pml:182 (state 8)	[printf('@@@ 0 INIT\\n')]
+  1:	proc  0 (:init::1) pan.pml:183 (state 9)	[chain.head = 0]
+  1:	proc  0 (:init::1) pan.pml:184 (state 10)	[chain.tail = 0]
+  1:	proc  0 (:init::1) pan.pml:185 (state 11)	[chain.size = 0]
+  2:	proc  0 (:init::1) pan.pml:59 (state 12)	[cnp = 0]
+  2:	proc  0 (:init::1) pan.pml:60 (state 13)	[cnp0 = 0]
+  3:	proc  0 (:init::1) pan.pml:61 (state 14)	[cnp = chain.head]
+  3:	proc  0 (:init::1) pan.pml:62 (state 15)	[cnp0 = 0]
+@@@ 0 SEQ chain
+  4:	proc  0 (:init::1) pan.pml:43 (state 16)	[printf('@@@ 0 SEQ chain\\n')]
+  5:	proc  0 (:init::1) pan.pml:65 (state 18)	[((cnp==0))]
+@@@ 0 END chain
+  6:	proc  0 (:init::1) pan.pml:53 (state 30)	[printf('@@@ 0 END chain\\n')]
+@@@ 0 PTR nptr 0
+  7:	proc  0 (:init::1) pan.pml:15 (state 34)	[printf('@@@ 0 PTR nptr %d\\n',nptr)]
+  8:	proc  0 (:init::1) pan.pml:35 (state 44)	[else]
+  9:	proc  0 (:init::1) pan.pml:36 (state 45)	[(1)]
+ 10:	proc  0 (:init::1) pan.pml:190 (state 51)	[nr = _nr_pr]
+Starting doGet with pid 1
+ 11:	proc  0 (:init::1) pan.pml:191 (state 52)	[(run doGet())]
+ 12:	proc  1 (doGet:1) pan.pml:118 (state 1)	[nptr = chain.head]
+ 13:	proc  1 (doGet:1) pan.pml:120 (state 2)	[((chain.size==0))]
+ 13:	proc  1 (doGet:1) pan.pml:121 (state 3)	[assert((chain.head==0))]
+ 13:	proc  1 (doGet:1) pan.pml:122 (state 4)	[assert((chain.tail==0))]
+@@@ 0 CALL get 0
+ 14:	proc  1 (doGet:1) pan.pml:141 (state 21)	[printf('@@@ 0 CALL get %d\\n',nptr)]
+ 15:	proc  1 (doGet:1) pan.pml:59 (state 23)	[cnp = 0]
+ 15:	proc  1 (doGet:1) pan.pml:60 (state 24)	[cnp0 = 0]
+ 16:	proc  1 (doGet:1) pan.pml:61 (state 25)	[cnp = chain.head]
+ 16:	proc  1 (doGet:1) pan.pml:62 (state 26)	[cnp0 = 0]
+@@@ 0 SEQ chain
+ 17:	proc  1 (doGet:1) pan.pml:43 (state 27)	[printf('@@@ 0 SEQ chain\\n')]
+ 18:	proc  1 (doGet:1) pan.pml:65 (state 29)	[((cnp==0))]
+@@@ 0 END chain
+ 19:	proc  1 (doGet:1) pan.pml:53 (state 41)	[printf('@@@ 0 END chain\\n')]
+@@@ 0 PTR nptr 0
+ 20:	proc  1 (doGet:1) pan.pml:15 (state 45)	[printf('@@@ 0 PTR nptr %d\\n',nptr)]
+ 21:	proc  1 (doGet:1) pan.pml:35 (state 55)	[else]
+ 22:	proc  1 (doGet:1) pan.pml:36 (state 56)	[(1)]
+ 23: proc 1 terminates
+ 24:	proc  0 (:init::1) pan.pml:192 (state 53)	[((nr==_nr_pr))]
+Starting doAppend with pid 1
+ 25:	proc  0 (:init::1) pan.pml:193 (state 54)	[(run doAppend(6,21))]
+ 26:	proc  1 (doAppend:1) pan.pml:109 (state 1)	[memory[addr].itm = val]
+ 27:	proc  1 (doAppend:1) pan.pml:80 (state 2)	[assert((addr!=0))]
+ 27:	proc  1 (doAppend:1) pan.pml:81 (state 3)	[assert((addr!=chain.head))]
+ 27:	proc  1 (doAppend:1) pan.pml:82 (state 4)	[assert((addr!=chain.tail))]
+ 27:	proc  1 (doAppend:1) pan.pml:83 (state 5)	[assert((memory[addr].nxt==0))]
+ 27:	proc  1 (doAppend:1) pan.pml:84 (state 6)	[assert((chain.size<8))]
+ 28:	proc  1 (doAppend:1) pan.pml:86 (state 7)	[((chain.size==0))]
+ 28:	proc  1 (doAppend:1) pan.pml:87 (state 8)	[assert((chain.head==0))]
+ 28:	proc  1 (doAppend:1) pan.pml:88 (state 9)	[assert((chain.tail==0))]
+ 28:	proc  1 (doAppend:1) pan.pml:89 (state 10)	[chain.head = addr]
+ 28:	proc  1 (doAppend:1) pan.pml:96 (state 17)	[memory[addr].prv = chain.tail]
+ 28:	proc  1 (doAppend:1) pan.pml:97 (state 18)	[chain.tail = addr]
+ 28:	proc  1 (doAppend:1) pan.pml:98 (state 19)	[chain.size = (chain.size+1)]
+@@@ 0 CALL append 21 6
+ 29:	proc  1 (doAppend:1) pan.pml:103 (state 21)	[printf('@@@ 0 CALL append %d %d\\n',val,addr)]
+ 30:	proc  1 (doAppend:1) pan.pml:59 (state 23)	[cnp = 0]
+ 30:	proc  1 (doAppend:1) pan.pml:60 (state 24)	[cnp0 = 0]
+ 31:	proc  1 (doAppend:1) pan.pml:61 (state 25)	[cnp = chain.head]
+ 31:	proc  1 (doAppend:1) pan.pml:62 (state 26)	[cnp0 = 0]
+@@@ 0 SEQ chain
+ 32:	proc  1 (doAppend:1) pan.pml:43 (state 27)	[printf('@@@ 0 SEQ chain\\n')]
+ 33:	proc  1 (doAppend:1) pan.pml:67 (state 31)	[((cnp!=0))]
+ 33:	proc  1 (doAppend:1) pan.pml:69 (state 32)	[itm = memory[cnp].itm]
+ 33:	proc  1 (doAppend:1) pan.pml:69 (state 33)	[cnp = memory[cnp].nxt]
+ 33:	proc  1 (doAppend:1) pan.pml:70 (state 34)	[memory0[cnp0] = itm]
+ 33:	proc  1 (doAppend:1) pan.pml:71 (state 35)	[cnp0 = (cnp0+1)]
+@@@ 0 SCALAR _ 21
+ 34:	proc  1 (doAppend:1) pan.pml:48 (state 36)	[printf('@@@ 0 SCALAR _ %d\\n',itm)]
+ 35:	proc  1 (doAppend:1) pan.pml:65 (state 29)	[((cnp==0))]
+@@@ 0 END chain
+ 36:	proc  1 (doAppend:1) pan.pml:53 (state 41)	[printf('@@@ 0 END chain\\n')]
+ 37: proc 1 terminates
+Starting doAppend with pid 1
+ 38:	proc  0 (:init::1) pan.pml:194 (state 55)	[(run doAppend(3,22))]
+ 39:	proc  1 (doAppend:1) pan.pml:109 (state 1)	[memory[addr].itm = val]
+ 40:	proc  1 (doAppend:1) pan.pml:80 (state 2)	[assert((addr!=0))]
+ 40:	proc  1 (doAppend:1) pan.pml:81 (state 3)	[assert((addr!=chain.head))]
+ 40:	proc  1 (doAppend:1) pan.pml:82 (state 4)	[assert((addr!=chain.tail))]
+ 40:	proc  1 (doAppend:1) pan.pml:83 (state 5)	[assert((memory[addr].nxt==0))]
+ 40:	proc  1 (doAppend:1) pan.pml:84 (state 6)	[assert((chain.size<8))]
+ 41:	proc  1 (doAppend:1) pan.pml:90 (state 11)	[else]
+ 42:	proc  1 (doAppend:1) pan.pml:91 (state 12)	[assert((chain.head!=0))]
+ 42:	proc  1 (doAppend:1) pan.pml:92 (state 13)	[assert((chain.tail!=0))]
+ 42:	proc  1 (doAppend:1) pan.pml:93 (state 14)	[memory[chain.tail].nxt = addr]
+ 42:	proc  1 (doAppend:1) pan.pml:96 (state 17)	[memory[addr].prv = chain.tail]
+ 42:	proc  1 (doAppend:1) pan.pml:97 (state 18)	[chain.tail = addr]
+ 42:	proc  1 (doAppend:1) pan.pml:98 (state 19)	[chain.size = (chain.size+1)]
+@@@ 0 CALL append 22 3
+ 43:	proc  1 (doAppend:1) pan.pml:103 (state 21)	[printf('@@@ 0 CALL append %d %d\\n',val,addr)]
+ 44:	proc  1 (doAppend:1) pan.pml:59 (state 23)	[cnp = 0]
+ 44:	proc  1 (doAppend:1) pan.pml:60 (state 24)	[cnp0 = 0]
+ 45:	proc  1 (doAppend:1) pan.pml:61 (state 25)	[cnp = chain.head]
+ 45:	proc  1 (doAppend:1) pan.pml:62 (state 26)	[cnp0 = 0]
+@@@ 0 SEQ chain
+ 46:	proc  1 (doAppend:1) pan.pml:43 (state 27)	[printf('@@@ 0 SEQ chain\\n')]
+ 47:	proc  1 (doAppend:1) pan.pml:67 (state 31)	[((cnp!=0))]
+ 47:	proc  1 (doAppend:1) pan.pml:69 (state 32)	[itm = memory[cnp].itm]
+ 47:	proc  1 (doAppend:1) pan.pml:69 (state 33)	[cnp = memory[cnp].nxt]
+ 47:	proc  1 (doAppend:1) pan.pml:70 (state 34)	[memory0[cnp0] = itm]
+ 47:	proc  1 (doAppend:1) pan.pml:71 (state 35)	[cnp0 = (cnp0+1)]
+@@@ 0 SCALAR _ 21
+ 48:	proc  1 (doAppend:1) pan.pml:48 (state 36)	[printf('@@@ 0 SCALAR _ %d\\n',itm)]
+ 49:	proc  1 (doAppend:1) pan.pml:67 (state 31)	[((cnp!=0))]
+ 49:	proc  1 (doAppend:1) pan.pml:69 (state 32)	[itm = memory[cnp].itm]
+ 49:	proc  1 (doAppend:1) pan.pml:69 (state 33)	[cnp = memory[cnp].nxt]
+ 49:	proc  1 (doAppend:1) pan.pml:70 (state 34)	[memory0[cnp0] = itm]
+ 49:	proc  1 (doAppend:1) pan.pml:71 (state 35)	[cnp0 = (cnp0+1)]
+@@@ 0 SCALAR _ 22
+ 50:	proc  1 (doAppend:1) pan.pml:48 (state 36)	[printf('@@@ 0 SCALAR _ %d\\n',itm)]
+ 51:	proc  1 (doAppend:1) pan.pml:65 (state 29)	[((cnp==0))]
+@@@ 0 END chain
+ 52:	proc  1 (doAppend:1) pan.pml:53 (state 41)	[printf('@@@ 0 END chain\\n')]
+ 53: proc 1 terminates
+Starting doAppend with pid 1
+ 54:	proc  0 (:init::1) pan.pml:195 (state 56)	[(run doAppend(4,23))]
+ 55:	proc  1 (doAppend:1) pan.pml:109 (state 1)	[memory[addr].itm = val]
+ 56:	proc  1 (doAppend:1) pan.pml:80 (state 2)	[assert((addr!=0))]
+ 56:	proc  1 (doAppend:1) pan.pml:81 (state 3)	[assert((addr!=chain.head))]
+ 56:	proc  1 (doAppend:1) pan.pml:82 (state 4)	[assert((addr!=chain.tail))]
+ 56:	proc  1 (doAppend:1) pan.pml:83 (state 5)	[assert((memory[addr].nxt==0))]
+ 56:	proc  1 (doAppend:1) pan.pml:84 (state 6)	[assert((chain.size<8))]
+ 57:	proc  1 (doAppend:1) pan.pml:90 (state 11)	[else]
+ 58:	proc  1 (doAppend:1) pan.pml:91 (state 12)	[assert((chain.head!=0))]
+ 58:	proc  1 (doAppend:1) pan.pml:92 (state 13)	[assert((chain.tail!=0))]
+ 58:	proc  1 (doAppend:1) pan.pml:93 (state 14)	[memory[chain.tail].nxt = addr]
+ 58:	proc  1 (doAppend:1) pan.pml:96 (state 17)	[memory[addr].prv = chain.tail]
+ 58:	proc  1 (doAppend:1) pan.pml:97 (state 18)	[chain.tail = addr]
+ 58:	proc  1 (doAppend:1) pan.pml:98 (state 19)	[chain.size = (chain.size+1)]
+@@@ 0 CALL append 23 4
+ 59:	proc  1 (doAppend:1) pan.pml:103 (state 21)	[printf('@@@ 0 CALL append %d %d\\n',val,addr)]
+ 60:	proc  1 (doAppend:1) pan.pml:59 (state 23)	[cnp = 0]
+ 60:	proc  1 (doAppend:1) pan.pml:60 (state 24)	[cnp0 = 0]
+ 61:	proc  1 (doAppend:1) pan.pml:61 (state 25)	[cnp = chain.head]
+ 61:	proc  1 (doAppend:1) pan.pml:62 (state 26)	[cnp0 = 0]
+@@@ 0 SEQ chain
+ 62:	proc  1 (doAppend:1) pan.pml:43 (state 27)	[printf('@@@ 0 SEQ chain\\n')]
+ 63:	proc  1 (doAppend:1) pan.pml:67 (state 31)	[((cnp!=0))]
+ 63:	proc  1 (doAppend:1) pan.pml:69 (state 32)	[itm = memory[cnp].itm]
+ 63:	proc  1 (doAppend:1) pan.pml:69 (state 33)	[cnp = memory[cnp].nxt]
+ 63:	proc  1 (doAppend:1) pan.pml:70 (state 34)	[memory0[cnp0] = itm]
+ 63:	proc  1 (doAppend:1) pan.pml:71 (state 35)	[cnp0 = (cnp0+1)]
+@@@ 0 SCALAR _ 21
+ 64:	proc  1 (doAppend:1) pan.pml:48 (state 36)	[printf('@@@ 0 SCALAR _ %d\\n',itm)]
+ 65:	proc  1 (doAppend:1) pan.pml:67 (state 31)	[((cnp!=0))]
+ 65:	proc  1 (doAppend:1) pan.pml:69 (state 32)	[itm = memory[cnp].itm]
+ 65:	proc  1 (doAppend:1) pan.pml:69 (state 33)	[cnp = memory[cnp].nxt]
+ 65:	proc  1 (doAppend:1) pan.pml:70 (state 34)	[memory0[cnp0] = itm]
+ 65:	proc  1 (doAppend:1) pan.pml:71 (state 35)	[cnp0 = (cnp0+1)]
+@@@ 0 SCALAR _ 22
+ 66:	proc  1 (doAppend:1) pan.pml:48 (state 36)	[printf('@@@ 0 SCALAR _ %d\\n',itm)]
+ 67:	proc  1 (doAppend:1) pan.pml:67 (state 31)	[((cnp!=0))]
+ 67:	proc  1 (doAppend:1) pan.pml:69 (state 32)	[itm = memory[cnp].itm]
+ 67:	proc  1 (doAppend:1) pan.pml:69 (state 33)	[cnp = memory[cnp].nxt]
+ 67:	proc  1 (doAppend:1) pan.pml:70 (state 34)	[memory0[cnp0] = itm]
+ 67:	proc  1 (doAppend:1) pan.pml:71 (state 35)	[cnp0 = (cnp0+1)]
+@@@ 0 SCALAR _ 23
+ 68:	proc  1 (doAppend:1) pan.pml:48 (state 36)	[printf('@@@ 0 SCALAR _ %d\\n',itm)]
+ 69:	proc  1 (doAppend:1) pan.pml:65 (state 29)	[((cnp==0))]
+@@@ 0 END chain
+ 70:	proc  1 (doAppend:1) pan.pml:53 (state 41)	[printf('@@@ 0 END chain\\n')]
+ 71: proc 1 terminates
+Starting doNonNullGet with pid 1
+ 72:	proc  0 (:init::1) pan.pml:196 (state 57)	[(run doNonNullGet())]
+ 73:	proc  1 (doNonNullGet:1) pan.pml:162 (state 1)	[((chain.head!=0))]
+ 74:	proc  1 (doNonNullGet:1) pan.pml:118 (state 2)	[nptr = chain.head]
+ 75:	proc  1 (doNonNullGet:1) pan.pml:123 (state 6)	[else]
+ 76:	proc  1 (doNonNullGet:1) pan.pml:124 (state 7)	[assert((chain.head!=0))]
+ 76:	proc  1 (doNonNullGet:1) pan.pml:125 (state 8)	[assert((chain.tail!=0))]
+ 76:	proc  1 (doNonNullGet:1) pan.pml:126 (state 9)	[assert((memory[chain.head].prv==0))]
+ 76:	proc  1 (doNonNullGet:1) pan.pml:127 (state 10)	[chain.head = memory[nptr].nxt]
+ 77:	proc  1 (doNonNullGet:1) pan.pml:131 (state 13)	[else]
+ 78:	proc  1 (doNonNullGet:1) pan.pml:132 (state 14)	[memory[nptr].nxt = 0]
+ 78:	proc  1 (doNonNullGet:1) pan.pml:133 (state 15)	[memory[chain.head].prv = 0]
+ 78:	proc  1 (doNonNullGet:1) pan.pml:135 (state 18)	[chain.size = (chain.size-1)]
+ 78:	proc  1 (doNonNullGet:1) pan.pml:164 (state 22)	[assert((nptr!=0))]
+@@@ 0 CALL getNonNull 6
+ 79:	proc  1 (doNonNullGet:1) pan.pml:156 (state 23)	[printf('@@@ 0 CALL getNonNull %d\\n',nptr)]
+ 80:	proc  1 (doNonNullGet:1) pan.pml:59 (state 25)	[cnp = 0]
+ 80:	proc  1 (doNonNullGet:1) pan.pml:60 (state 26)	[cnp0 = 0]
+ 81:	proc  1 (doNonNullGet:1) pan.pml:61 (state 27)	[cnp = chain.head]
+ 81:	proc  1 (doNonNullGet:1) pan.pml:62 (state 28)	[cnp0 = 0]
+@@@ 0 SEQ chain
+ 82:	proc  1 (doNonNullGet:1) pan.pml:43 (state 29)	[printf('@@@ 0 SEQ chain\\n')]
+ 83:	proc  1 (doNonNullGet:1) pan.pml:67 (state 33)	[((cnp!=0))]
+ 83:	proc  1 (doNonNullGet:1) pan.pml:69 (state 34)	[itm = memory[cnp].itm]
+ 83:	proc  1 (doNonNullGet:1) pan.pml:69 (state 35)	[cnp = memory[cnp].nxt]
+ 83:	proc  1 (doNonNullGet:1) pan.pml:70 (state 36)	[memory0[cnp0] = itm]
+ 83:	proc  1 (doNonNullGet:1) pan.pml:71 (state 37)	[cnp0 = (cnp0+1)]
+@@@ 0 SCALAR _ 22
+ 84:	proc  1 (doNonNullGet:1) pan.pml:48 (state 38)	[printf('@@@ 0 SCALAR _ %d\\n',itm)]
+ 85:	proc  1 (doNonNullGet:1) pan.pml:67 (state 33)	[((cnp!=0))]
+ 85:	proc  1 (doNonNullGet:1) pan.pml:69 (state 34)	[itm = memory[cnp].itm]
+ 85:	proc  1 (doNonNullGet:1) pan.pml:69 (state 35)	[cnp = memory[cnp].nxt]
+ 85:	proc  1 (doNonNullGet:1) pan.pml:70 (state 36)	[memory0[cnp0] = itm]
+ 85:	proc  1 (doNonNullGet:1) pan.pml:71 (state 37)	[cnp0 = (cnp0+1)]
+@@@ 0 SCALAR _ 23
+ 86:	proc  1 (doNonNullGet:1) pan.pml:48 (state 38)	[printf('@@@ 0 SCALAR _ %d\\n',itm)]
+ 87:	proc  1 (doNonNullGet:1) pan.pml:65 (state 31)	[((cnp==0))]
+@@@ 0 END chain
+ 88:	proc  1 (doNonNullGet:1) pan.pml:53 (state 43)	[printf('@@@ 0 END chain\\n')]
+@@@ 0 PTR nptr 6
+ 89:	proc  1 (doNonNullGet:1) pan.pml:15 (state 47)	[printf('@@@ 0 PTR nptr %d\\n',nptr)]
+ 90:	proc  1 (doNonNullGet:1) pan.pml:30 (state 49)	[(nptr)]
+ 90:	proc  1 (doNonNullGet:1) pan.pml:32 (state 50)	[nxt = chain.head]
+ 90:	proc  1 (doNonNullGet:1) pan.pml:33 (state 51)	[prv = memory[nptr].prv]
+ 90:	proc  1 (doNonNullGet:1) pan.pml:34 (state 52)	[itm = memory[nptr].itm]
+@@@ 0 STRUCT nptr
+ 91:	proc  1 (doNonNullGet:1) pan.pml:20 (state 53)	[printf('@@@ 0 STRUCT nptr\\n')]
+@@@ 0 SCALAR itm 21
+ 91:	proc  1 (doNonNullGet:1) pan.pml:21 (state 54)	[printf('@@@ 0 SCALAR itm %d\\n',itm)]
+@@@ 0 END nptr
+ 91:	proc  1 (doNonNullGet:1) pan.pml:22 (state 55)	[printf('@@@ 0 END nptr\\n')]
+ 92: proc 1 terminates
+Starting doNonNullGet with pid 1
+ 93:	proc  0 (:init::1) pan.pml:197 (state 58)	[(run doNonNullGet())]
+ 94:	proc  1 (doNonNullGet:1) pan.pml:162 (state 1)	[((chain.head!=0))]
+ 95:	proc  1 (doNonNullGet:1) pan.pml:118 (state 2)	[nptr = chain.head]
+ 96:	proc  1 (doNonNullGet:1) pan.pml:123 (state 6)	[else]
+ 97:	proc  1 (doNonNullGet:1) pan.pml:124 (state 7)	[assert((chain.head!=0))]
+ 97:	proc  1 (doNonNullGet:1) pan.pml:125 (state 8)	[assert((chain.tail!=0))]
+ 97:	proc  1 (doNonNullGet:1) pan.pml:126 (state 9)	[assert((memory[chain.head].prv==0))]
+ 97:	proc  1 (doNonNullGet:1) pan.pml:127 (state 10)	[chain.head = memory[nptr].nxt]
+ 98:	proc  1 (doNonNullGet:1) pan.pml:131 (state 13)	[else]
+ 99:	proc  1 (doNonNullGet:1) pan.pml:132 (state 14)	[memory[nptr].nxt = 0]
+ 99:	proc  1 (doNonNullGet:1) pan.pml:133 (state 15)	[memory[chain.head].prv = 0]
+ 99:	proc  1 (doNonNullGet:1) pan.pml:135 (state 18)	[chain.size = (chain.size-1)]
+ 99:	proc  1 (doNonNullGet:1) pan.pml:164 (state 22)	[assert((nptr!=0))]
+@@@ 0 CALL getNonNull 3
+100:	proc  1 (doNonNullGet:1) pan.pml:156 (state 23)	[printf('@@@ 0 CALL getNonNull %d\\n',nptr)]
+101:	proc  1 (doNonNullGet:1) pan.pml:59 (state 25)	[cnp = 0]
+101:	proc  1 (doNonNullGet:1) pan.pml:60 (state 26)	[cnp0 = 0]
+102:	proc  1 (doNonNullGet:1) pan.pml:61 (state 27)	[cnp = chain.head]
+102:	proc  1 (doNonNullGet:1) pan.pml:62 (state 28)	[cnp0 = 0]
+@@@ 0 SEQ chain
+103:	proc  1 (doNonNullGet:1) pan.pml:43 (state 29)	[printf('@@@ 0 SEQ chain\\n')]
+104:	proc  1 (doNonNullGet:1) pan.pml:67 (state 33)	[((cnp!=0))]
+104:	proc  1 (doNonNullGet:1) pan.pml:69 (state 34)	[itm = memory[cnp].itm]
+104:	proc  1 (doNonNullGet:1) pan.pml:69 (state 35)	[cnp = memory[cnp].nxt]
+104:	proc  1 (doNonNullGet:1) pan.pml:70 (state 36)	[memory0[cnp0] = itm]
+104:	proc  1 (doNonNullGet:1) pan.pml:71 (state 37)	[cnp0 = (cnp0+1)]
+@@@ 0 SCALAR _ 23
+105:	proc  1 (doNonNullGet:1) pan.pml:48 (state 38)	[printf('@@@ 0 SCALAR _ %d\\n',itm)]
+106:	proc  1 (doNonNullGet:1) pan.pml:65 (state 31)	[((cnp==0))]
+@@@ 0 END chain
+107:	proc  1 (doNonNullGet:1) pan.pml:53 (state 43)	[printf('@@@ 0 END chain\\n')]
+@@@ 0 PTR nptr 3
+108:	proc  1 (doNonNullGet:1) pan.pml:15 (state 47)	[printf('@@@ 0 PTR nptr %d\\n',nptr)]
+109:	proc  1 (doNonNullGet:1) pan.pml:30 (state 49)	[(nptr)]
+109:	proc  1 (doNonNullGet:1) pan.pml:32 (state 50)	[nxt = chain.head]
+109:	proc  1 (doNonNullGet:1) pan.pml:33 (state 51)	[prv = memory[nptr].prv]
+109:	proc  1 (doNonNullGet:1) pan.pml:34 (state 52)	[itm = memory[nptr].itm]
+@@@ 0 STRUCT nptr
+110:	proc  1 (doNonNullGet:1) pan.pml:20 (state 53)	[printf('@@@ 0 STRUCT nptr\\n')]
+@@@ 0 SCALAR itm 22
+110:	proc  1 (doNonNullGet:1) pan.pml:21 (state 54)	[printf('@@@ 0 SCALAR itm %d\\n',itm)]
+@@@ 0 END nptr
+110:	proc  1 (doNonNullGet:1) pan.pml:22 (state 55)	[printf('@@@ 0 END nptr\\n')]
+111: proc 1 terminates
+Starting doNonNullGet with pid 1
+112:	proc  0 (:init::1) pan.pml:198 (state 59)	[(run doNonNullGet())]
+113:	proc  1 (doNonNullGet:1) pan.pml:162 (state 1)	[((chain.head!=0))]
+114:	proc  1 (doNonNullGet:1) pan.pml:118 (state 2)	[nptr = chain.head]
+115:	proc  1 (doNonNullGet:1) pan.pml:123 (state 6)	[else]
+116:	proc  1 (doNonNullGet:1) pan.pml:124 (state 7)	[assert((chain.head!=0))]
+116:	proc  1 (doNonNullGet:1) pan.pml:125 (state 8)	[assert((chain.tail!=0))]
+116:	proc  1 (doNonNullGet:1) pan.pml:126 (state 9)	[assert((memory[chain.head].prv==0))]
+116:	proc  1 (doNonNullGet:1) pan.pml:127 (state 10)	[chain.head = memory[nptr].nxt]
+117:	proc  1 (doNonNullGet:1) pan.pml:129 (state 11)	[((chain.head==0))]
+117:	proc  1 (doNonNullGet:1) pan.pml:130 (state 12)	[chain.tail = 0]
+117:	proc  1 (doNonNullGet:1) pan.pml:135 (state 18)	[chain.size = (chain.size-1)]
+117:	proc  1 (doNonNullGet:1) pan.pml:164 (state 22)	[assert((nptr!=0))]
+@@@ 0 CALL getNonNull 4
+118:	proc  1 (doNonNullGet:1) pan.pml:156 (state 23)	[printf('@@@ 0 CALL getNonNull %d\\n',nptr)]
+119:	proc  1 (doNonNullGet:1) pan.pml:59 (state 25)	[cnp = 0]
+119:	proc  1 (doNonNullGet:1) pan.pml:60 (state 26)	[cnp0 = 0]
+120:	proc  1 (doNonNullGet:1) pan.pml:61 (state 27)	[cnp = chain.head]
+120:	proc  1 (doNonNullGet:1) pan.pml:62 (state 28)	[cnp0 = 0]
+@@@ 0 SEQ chain
+121:	proc  1 (doNonNullGet:1) pan.pml:43 (state 29)	[printf('@@@ 0 SEQ chain\\n')]
+122:	proc  1 (doNonNullGet:1) pan.pml:65 (state 31)	[((cnp==0))]
+@@@ 0 END chain
+123:	proc  1 (doNonNullGet:1) pan.pml:53 (state 43)	[printf('@@@ 0 END chain\\n')]
+@@@ 0 PTR nptr 4
+124:	proc  1 (doNonNullGet:1) pan.pml:15 (state 47)	[printf('@@@ 0 PTR nptr %d\\n',nptr)]
+125:	proc  1 (doNonNullGet:1) pan.pml:30 (state 49)	[(nptr)]
+125:	proc  1 (doNonNullGet:1) pan.pml:32 (state 50)	[nxt = chain.head]
+125:	proc  1 (doNonNullGet:1) pan.pml:33 (state 51)	[prv = memory[nptr].prv]
+125:	proc  1 (doNonNullGet:1) pan.pml:34 (state 52)	[itm = memory[nptr].itm]
+@@@ 0 STRUCT nptr
+126:	proc  1 (doNonNullGet:1) pan.pml:20 (state 53)	[printf('@@@ 0 STRUCT nptr\\n')]
+@@@ 0 SCALAR itm 23
+126:	proc  1 (doNonNullGet:1) pan.pml:21 (state 54)	[printf('@@@ 0 SCALAR itm %d\\n',itm)]
+@@@ 0 END nptr
+126:	proc  1 (doNonNullGet:1) pan.pml:22 (state 55)	[printf('@@@ 0 END nptr\\n')]
+127: proc 1 terminates
+128:	proc  0 (:init::1) pan.pml:199 (state 60)	[((nr==_nr_pr))]
+spin: pan.pml:200, Error: assertion violated
+spin: text of failed assertion: assert(!((chain.size==0)))
+129:	proc  0 (:init::1) pan.pml:200 (state 61)	[assert(!((chain.size==0)))]
+spin: trail ends after 129 steps
+#processes: 1
+		memory[0].nxt = 0
+		memory[0].prv = 0
+		memory[0].itm = 0
+		memory[1].nxt = 0
+		memory[1].prv = 0
+		memory[1].itm = 0
+		memory[2].nxt = 0
+		memory[2].prv = 0
+		memory[2].itm = 0
+		memory[3].nxt = 0
+		memory[3].prv = 0
+		memory[3].itm = 22
+		memory[4].nxt = 0
+		memory[4].prv = 0
+		memory[4].itm = 23
+		memory[5].nxt = 0
+		memory[5].prv = 0
+		memory[5].itm = 0
+		memory[6].nxt = 0
+		memory[6].prv = 0
+		memory[6].itm = 21
+		memory[7].nxt = 0
+		memory[7].prv = 0
+		memory[7].itm = 0
+		memory0[0] = 23
+		memory0[1] = 23
+		memory0[2] = 23
+		memory0[3] = 0
+		memory0[4] = 0
+		memory0[5] = 0
+		memory0[6] = 0
+		memory0[7] = 0
+		nptr = 4
+		chain.head = 0
+		chain.tail = 0
+		chain.size = 0
+129:	proc  0 (:init::1) pan.pml:201 (state 62)
+8 processes created

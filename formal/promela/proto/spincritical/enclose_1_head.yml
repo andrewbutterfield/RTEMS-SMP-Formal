@@ -1,0 +1,57 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2019-2021 Trinity College Dublin (www.tcd.ie)
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+enabled-by: true
+functional-type: action
+links: []
+rationale: null
+references: []
+requirement-type: functional
+skip-reasons:
+  NoOtherScheduler: |
+    In non-SMP configurations, there exists exactly one scheduler instance.
+test-brief: null
+test-description: null
+test-header:
+  code: null
+  includes:
+  - rtems.h
+  - rtems/score/thread.h
+  local-includes: []
+  run-params:
+  - description: |
+      is the event send handler.
+    dir: null
+    name: send
+    specifier: rtems_status_code ( *${.:name} )( rtems_id, rtems_event_set )
+  - description: |
+      is the event receive handler.
+    dir: null
+    name: receive
+    specifier: |
+      rtems_status_code ( *${.:name} )( rtems_event_set, rtems_option, rtems_interval, rtems_event_set * )
+  - description: |
+      is the get pending events handler.
+    dir: null
+    name: get_pending_events
+    specifier: rtems_event_set ( *${.:name} )( Thread_Control * )
+  - description: |
+      is the thread wait class.
+    dir: null
+    name: wait_class
+    specifier: unsigned int ${.:name}
+  - description: |
+      is the thread waiting for event state.
+    dir: null
+    name: waiting_for_event
+    specifier: int ${.:name}
+  target: testsuites/validation/tr-event-send-receive.h
+test-includes:
+- rtems/score/threadimpl.h
+test-local-includes:
+- tr-event-send-receive.h
+test-stop: null
+test-target: testsuites/validation/tr-event-send-receive.c
+text: ${.:text-template}
+type: requirement

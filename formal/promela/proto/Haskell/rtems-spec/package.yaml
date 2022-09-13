@@ -1,0 +1,48 @@
+name:                rtems-spec
+version:             0.1.0.0
+github:              "andrewbutterfield/rtems-spec"
+license:             BSD3
+author:              "Andrew Butterfield"
+maintainer:          "Andrew.Butterfield@scss.tcd.ie"
+copyright:           "(c) 2020 Andrew Butterfield"
+
+extra-source-files:
+- README.md
+- ChangeLog.md
+
+# Metadata used when publishing your package
+# synopsis:            Doing RTEMS SE Specification modelling
+# category:            Unclassified
+
+# To avoid duplicated efforts in documentation and dealing with the
+# complications of embedding Haddock markup inside cabal files, it is
+# common to point users to the README.md file.
+description:         Part of the RTEMS-SMP pre-Qualification activity
+
+dependencies:
+- base >= 4.7 && < 5
+
+library:
+  source-dirs: src
+
+executables:
+  rtemspec:
+    main:                Main.lhs
+    source-dirs:         app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - rtems-spec
+
+tests:
+  rtems-spec-test:
+    main:                Spec.lhs
+    source-dirs:         test
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - rtems-spec

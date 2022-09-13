@@ -1,0 +1,134 @@
+Execution result logged at Wed Mar 25 11:04:45 2020
+
+  GRMON LEON debug monitor v3.1.2 64-bit pro version
+
+  Copyright (C) 2019 Cobham Gaisler - All rights reserved.
+  For latest updates, go to http://www.gaisler.com/
+  Comments or bug-reports to support@gaisler.com
+
+JTAG chain (1): GR712RC
+  Device ID:           0x712
+  GRLIB build version: 3696
+  Detected system:     GR712RC
+  Detected frequency:  80.0 MHz
+
+  Component                            Vendor
+  LEON3FT SPARC V8 Processor           Cobham Gaisler
+  LEON3FT SPARC V8 Processor           Cobham Gaisler
+  JTAG Debug Link                      Cobham Gaisler
+  GR Ethernet MAC                      Cobham Gaisler
+  SatCAN controller                    Cobham Gaisler
+  GRSPW2 SpaceWire Serial Link         Cobham Gaisler
+  GRSPW2 SpaceWire Serial Link         Cobham Gaisler
+  GRSPW2 SpaceWire Serial Link         Cobham Gaisler
+  GRSPW2 SpaceWire Serial Link         Cobham Gaisler
+  GRSPW2 SpaceWire Serial Link         Cobham Gaisler
+  GRSPW2 SpaceWire Serial Link         Cobham Gaisler
+  AMBA Wrapper for Core1553BRM         Cobham Gaisler
+  CCSDS Telecommand Decoder            Cobham Gaisler
+  CCSDS Telemetry Encoder              Cobham Gaisler
+  SLINK Master                         Cobham Gaisler
+  Memory controller with EDAC          Cobham Gaisler
+  AHB/APB Bridge                       Cobham Gaisler
+  LEON3 Debug Support Unit             Cobham Gaisler
+  AHB/APB Bridge                       Cobham Gaisler
+  OC CAN AHB interface                 Cobham Gaisler
+  Generic FT AHB SRAM module           Cobham Gaisler
+  Generic UART                         Cobham Gaisler
+  Multi-processor Interrupt Ctrl.      Cobham Gaisler
+  Modular Timer Unit                   Cobham Gaisler
+  SPI Controller                       Cobham Gaisler
+  CAN Bus multiplexer                  Cobham Gaisler
+  General Purpose Register             Cobham Gaisler
+  ASCS Master                          Cobham Gaisler
+  General Purpose I/O port             Cobham Gaisler
+  General Purpose I/O port             Cobham Gaisler
+  AMBA Wrapper for OC I2C-master       Cobham Gaisler
+  Clock gating unit                    Cobham Gaisler
+  AHB Status Register                  Cobham Gaisler
+  Generic UART                         Cobham Gaisler
+  Generic UART                         Cobham Gaisler
+  Generic UART                         Cobham Gaisler
+  Generic UART                         Cobham Gaisler
+  Generic UART                         Cobham Gaisler
+  Timer Unit with Latches              Cobham Gaisler
+
+  Use command 'info sys' to print a detailed report of attached cores
+
+grmon3> reset
+reset
+
+grmon3> load chains_gr712rc.exe
+load chains_gr712rc.exe
+  40000000 .text                        0B              [>               ]   0%  40000000 .text                     16.0kB / 240.5kB   [>               ]   6%  40000000 .text                     32.0kB / 240.5kB   [=>              ]  13%  40000000 .text                     48.0kB / 240.5kB   [==>             ]  19%  40000000 .text                     64.0kB / 240.5kB   [===>            ]  26%  40000000 .text                     80.0kB / 240.5kB   [====>           ]  33%  40000000 .text                     96.0kB / 240.5kB   [=====>          ]  39%  40000000 .text                    112.0kB / 240.5kB   [======>         ]  46%  40000000 .text                    128.0kB / 240.5kB   [=======>        ]  53%  40000000 .text                    144.0kB / 240.5kB   [========>       ]  59%  40000000 .text                    160.0kB / 240.5kB   [=========>      ]  66%  40000000 .text                    176.0kB / 240.5kB   [==========>     ]  73%  40000000 .text                    192.0kB / 240.5kB   [===========>    ]  79%  40000000 .text                    208.0kB / 240.5kB   [============>   ]  86%  40000000 .text                    224.0kB / 240.5kB   [=============>  ]  93%  40000000 .text                    240.0kB / 240.5kB   [==============> ]  99%  40000000 .text                    240.5kB / 240.5kB   [===============>] 100%
+  4003C200 .rtemsroset                  0B              [>               ]   0%  4003C200 .rtemsroset                2.8kB /   2.8kB   [===============>] 100%
+  4003ED40 .data                        0B              [>               ]   0%  4003ED40 .data                      7.1kB /   7.1kB   [===============>] 100%
+  Total size: 250.38kB (778.40kbit/s)
+  Entry point 0x40000000
+  Image /home/ttsiod/work/BoardRemoteTestExecutor/repo/chains_gr712rc.exe loaded
+
+grmon3> run
+run
+Starting Chain_AutoGen
+
+A:Promela-Chains
+S:Platform:RTEMS
+S:Compiler:7.5.0 20191114 (RTEMS 5, RSB 5 (f93fcef87556), Newlib 7947581)
+S:Version:5.0.0.17390ad4aaf55e0fad05118606485d73638565ce
+S:BSP:gr712rc
+S:RTEMS_DEBUG:0
+S:RTEMS_MULTIPROCESSING:0
+S:RTEMS_POSIX_API:0
+S:RTEMS_PROFILING:0
+S:RTEMS_SMP:1
+B:Chain_AutoGen
+L:@@@INIT
+L:@@@SEQ chain
+F:0:0:UI1:init.c:115:" 1073878456" == " 0"
+L:@@@PTR nptr 0
+P:1:0:UI1:init.c:118
+L:@@@CALL append 23 4
+L:@@@SEQ chain
+F:2:0:UI1:init.c:127:" 23 1073878456" == " 23 0"
+L:@@@CALL getNonNull 4
+P:3:0:UI1:init.c:131
+L:@@@SEQ chain
+F:4:0:UI1:init.c:136:" 1073878456" == " 0"
+L:@@@PTR nptr 4
+P:5:0:UI1:init.c:139
+L:@@@STRUCT nptr
+F:6:0:UI1:init.c:143:nptr->node.next == NULL
+F:7:0:UI1:init.c:145:nptr->node.previous == NULL
+P:8:0:UI1:init.c:147
+L:@@@CALL append 22 3
+L:@@@SEQ chain
+F:9:0:UI1:init.c:156:" 22 1073878456" == " 22 0"
+L:@@@CALL getNonNull 3
+P:10:0:UI1:init.c:160
+L:@@@SEQ chain
+F:11:0:UI1:init.c:165:" 1073878456" == " 0"
+L:@@@PTR nptr 3
+P:12:0:UI1:init.c:168
+L:@@@STRUCT nptr
+F:13:0:UI1:init.c:172:nptr->node.next == NULL
+F:14:0:UI1:init.c:174:nptr->node.previous == NULL
+P:15:0:UI1:init.c:176
+L:@@@CALL append 21 6
+L:@@@SEQ chain
+F:16:0:UI1:init.c:185:" 21 1073878456" == " 21 0"
+L:@@@CALL getNonNull 6
+P:17:0:UI1:init.c:189
+L:@@@SEQ chain
+F:18:0:UI1:init.c:194:" 1073878456" == " 0"
+L:@@@PTR nptr 6
+P:19:0:UI1:init.c:197
+L:@@@STRUCT nptr
+F:20:0:UI1:init.c:201:nptr->node.next == NULL
+F:21:0:UI1:init.c:203:nptr->node.previous == NULL
+P:22:0:UI1:init.c:205
+E:Chain_AutoGen:N:23:F:13:D:1.448977
+
+Chain_AutoGen finished.
+
+  CPU 0:  Program exited normally.
+  CPU 1:  Power down mode

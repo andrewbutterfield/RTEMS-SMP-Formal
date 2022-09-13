@@ -1,0 +1,574 @@
++ set -e
++ PS4='+ $EPOCHREALTIME $(df -B 1 --output=used ~ | tail -n 1) ($LINENO) '
++ 1595603496.716433 1405673472 (13) sudo apt install -y wget unzip
+
+WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
+
+Reading package lists...
+Building dependency tree...
+Reading state information...
+The following additional packages will be installed:
+  ca-certificates libpcre2-8-0 libpsl5 openssl publicsuffix
+Suggested packages:
+  zip
+The following NEW packages will be installed:
+  ca-certificates libpcre2-8-0 libpsl5 openssl publicsuffix unzip wget
+0 upgraded, 7 newly installed, 0 to remove and 0 not upgraded.
+Need to get 2,459 kB of archives.
+After this operation, 6,793 kB of additional disk space will be used.
+Get:1 http://deb.debian.org/debian buster/main amd64 libpcre2-8-0 amd64 10.32-5 [213 kB]
+Get:2 http://deb.debian.org/debian buster/main amd64 libpsl5 amd64 0.20.2-2 [53.7 kB]
+Get:3 http://deb.debian.org/debian buster/main amd64 wget amd64 1.20.1-1.1 [902 kB]
+Get:4 http://deb.debian.org/debian buster/main amd64 openssl amd64 1.1.1d-0+deb10u3 [844 kB]
+Get:5 http://deb.debian.org/debian buster-updates/main amd64 ca-certificates all 20200601~deb10u1 [158 kB]
+Get:6 http://deb.debian.org/debian buster/main amd64 publicsuffix all 20190415.1030-1 [116 kB]
+Get:7 http://deb.debian.org/debian buster/main amd64 unzip amd64 6.0-23+deb10u1 [172 kB]
+Preconfiguring packages ...
+Fetched 2,459 kB in 6s (416 kB/s)
+Selecting previously unselected package libpcre2-8-0:amd64.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 48855 files and directories currently installed.)
+Preparing to unpack .../0-libpcre2-8-0_10.32-5_amd64.deb ...
+Unpacking libpcre2-8-0:amd64 (10.32-5) ...
+Selecting previously unselected package libpsl5:amd64.
+Preparing to unpack .../1-libpsl5_0.20.2-2_amd64.deb ...
+Unpacking libpsl5:amd64 (0.20.2-2) ...
+Selecting previously unselected package wget.
+Preparing to unpack .../2-wget_1.20.1-1.1_amd64.deb ...
+Unpacking wget (1.20.1-1.1) ...
+Selecting previously unselected package openssl.
+Preparing to unpack .../3-openssl_1.1.1d-0+deb10u3_amd64.deb ...
+Unpacking openssl (1.1.1d-0+deb10u3) ...
+Selecting previously unselected package ca-certificates.
+Preparing to unpack .../4-ca-certificates_20200601~deb10u1_all.deb ...
+Unpacking ca-certificates (20200601~deb10u1) ...
+Selecting previously unselected package publicsuffix.
+Preparing to unpack .../5-publicsuffix_20190415.1030-1_all.deb ...
+Unpacking publicsuffix (20190415.1030-1) ...
+Selecting previously unselected package unzip.
+Preparing to unpack .../6-unzip_6.0-23+deb10u1_amd64.deb ...
+Unpacking unzip (6.0-23+deb10u1) ...
+Setting up libpsl5:amd64 (0.20.2-2) ...
+Setting up unzip (6.0-23+deb10u1) ...
+Setting up libpcre2-8-0:amd64 (10.32-5) ...
+Setting up openssl (1.1.1d-0+deb10u3) ...
+Setting up publicsuffix (20190415.1030-1) ...
+Setting up wget (1.20.1-1.1) ...
+Setting up ca-certificates (20200601~deb10u1) ...
+Updating certificates in /etc/ssl/certs...
+126 added, 0 removed; done.
+Processing triggers for libc-bin (2.28-10) ...
+Processing triggers for mime-support (3.62) ...
+Processing triggers for ca-certificates (20200601~deb10u1) ...
+Updating certificates in /etc/ssl/certs...
+0 added, 0 removed; done.
+Running hooks in /etc/ca-certificates/update.d...
+done.
++ 1595603507.619505 1413517312 (16) wget https://github.com/nimble-code/Modex/archive/master.zip
+--2020-07-24 16:11:47--  https://github.com/nimble-code/Modex/archive/master.zip
+Resolving github.com (github.com)... 140.82.118.4
+Connecting to github.com (github.com)|140.82.118.4|:443... connected.
+HTTP request sent, awaiting response... 302 Found
+Location: https://codeload.github.com/nimble-code/Modex/zip/master [following]
+--2020-07-24 16:11:48--  https://codeload.github.com/nimble-code/Modex/zip/master
+Resolving codeload.github.com (codeload.github.com)... 140.82.114.9
+Connecting to codeload.github.com (codeload.github.com)|140.82.114.9|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: unspecified [application/zip]
+Saving to: ‘master.zip’
+
+     0K .......... .......... .......... .......... ..........  211K
+    50K .......... .......... .......... .......... ..........  413K
+   100K .......... .......... .......... .......... .......... 7.10M
+   150K .                                                      25.9M=0.4s
+
+2020-07-24 16:11:51 (416 KB/s) - ‘master.zip’ saved [155310]
+
++ 1595603511.761216 1413681152 (17) unzip master.zip
+Archive:  master.zip
+b2eef65cec3f35ed9b4a0f1ad78e2f05719bac99
+   creating: Modex-master/
+   creating: Modex-master/Examples/
+  inflating: Modex-master/Examples/1_bounds.c  
+  inflating: Modex-master/Examples/2_pointers.c  
+  inflating: Modex-master/Examples/3_threads.c  
+  inflating: Modex-master/Examples/4_mutex.c  
+ extracting: Modex-master/Examples/4_mutex.prx  
+  inflating: Modex-master/Examples/5_incdec.c  
+  inflating: Modex-master/Examples/5_incdec.prx  
+  inflating: Modex-master/Examples/6_suspend.c  
+  inflating: Modex-master/Examples/6_suspend.prx  
+  inflating: Modex-master/Examples/7_q_update.c  
+  inflating: Modex-master/Examples/7_q_update.prx  
+  inflating: Modex-master/Examples/_modex_.run  
+   creating: Modex-master/Manual/
+  inflating: Modex-master/Manual/MANUAL.html  
+  inflating: Modex-master/Manual/abp.c  
+  inflating: Modex-master/Manual/abp.prx  
+  inflating: Modex-master/Manual/abp2.c  
+  inflating: Modex-master/Manual/abp2.prx  
+ extracting: Modex-master/Manual/hello.c  
+  inflating: Modex-master/Manual/hello.prx  
+  inflating: Modex-master/Manual/mutex.c  
+  inflating: Modex-master/Manual/mutex.prx  
+  inflating: Modex-master/Manual/threads.c  
+ extracting: Modex-master/Manual/threads.prx  
+  inflating: Modex-master/README.md  
+   creating: Modex-master/Scripts/
+  inflating: Modex-master/Scripts/verify  
+   creating: Modex-master/Src/
+  inflating: Modex-master/Src/bison.hairy  
+  inflating: Modex-master/Src/bison.simple  
+  inflating: Modex-master/Src/defaults.lut  
+  inflating: Modex-master/Src/dflow.c  
+  inflating: Modex-master/Src/dflow.h  
+  inflating: Modex-master/Src/globals.h  
+  inflating: Modex-master/Src/gram.y  
+  inflating: Modex-master/Src/heap.c  
+  inflating: Modex-master/Src/heap.h  
+  inflating: Modex-master/Src/lexer.h  
+  inflating: Modex-master/Src/lexer.l  
+  inflating: Modex-master/Src/make_pc  
+  inflating: Modex-master/Src/makefile  
+  inflating: Modex-master/Src/modex.c  
+  inflating: Modex-master/Src/modex_cpp.h  
+  inflating: Modex-master/Src/modex_pp.c  
+  inflating: Modex-master/Src/nmetab.c  
+  inflating: Modex-master/Src/nmetab.h  
+  inflating: Modex-master/Src/prnttree.c  
+  inflating: Modex-master/Src/prnttree.h  
+  inflating: Modex-master/Src/ps_graph.c  
+  inflating: Modex-master/Src/symtab.c  
+  inflating: Modex-master/Src/symtab.h  
+  inflating: Modex-master/Src/token.c  
+  inflating: Modex-master/Src/tree.c  
+  inflating: Modex-master/Src/tree.h  
+  inflating: Modex-master/Src/treestk.c  
+  inflating: Modex-master/Src/treestk.h  
+  inflating: Modex-master/Src/utype.h  
+ extracting: Modex-master/Src/version.h  
+  inflating: Modex-master/Src/xtract.c  
+  inflating: Modex-master/makefile   
++ 1595603511.790522 1414377472 (20) sudo apt install -y bison flex
+
+WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
+
+Reading package lists...
+Building dependency tree...
+Reading state information...
+The following additional packages will be installed:
+  libbison-dev libfl-dev libfl2 libsigsegv2 m4
+Suggested packages:
+  bison-doc flex-doc m4-doc
+The following NEW packages will be installed:
+  bison flex libbison-dev libfl-dev libfl2 libsigsegv2 m4
+0 upgraded, 7 newly installed, 0 to remove and 0 not upgraded.
+Need to get 2,270 kB of archives.
+After this operation, 4,793 kB of additional disk space will be used.
+Get:1 http://deb.debian.org/debian buster/main amd64 libsigsegv2 amd64 2.12-2 [32.8 kB]
+Get:2 http://deb.debian.org/debian buster/main amd64 m4 amd64 1.4.18-2 [203 kB]
+Get:3 http://deb.debian.org/debian buster/main amd64 flex amd64 2.6.4-6.2 [456 kB]
+Get:4 http://deb.debian.org/debian buster/main amd64 libbison-dev amd64 2:3.3.2.dfsg-1 [500 kB]
+Get:5 http://deb.debian.org/debian buster/main amd64 bison amd64 2:3.3.2.dfsg-1 [871 kB]
+Get:6 http://deb.debian.org/debian buster/main amd64 libfl2 amd64 2.6.4-6.2 [103 kB]
+Get:7 http://deb.debian.org/debian buster/main amd64 libfl-dev amd64 2.6.4-6.2 [104 kB]
+Fetched 2,270 kB in 1s (2,974 kB/s)
+Selecting previously unselected package libsigsegv2:amd64.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 49253 files and directories currently installed.)
+Preparing to unpack .../0-libsigsegv2_2.12-2_amd64.deb ...
+Unpacking libsigsegv2:amd64 (2.12-2) ...
+Selecting previously unselected package m4.
+Preparing to unpack .../1-m4_1.4.18-2_amd64.deb ...
+Unpacking m4 (1.4.18-2) ...
+Selecting previously unselected package flex.
+Preparing to unpack .../2-flex_2.6.4-6.2_amd64.deb ...
+Unpacking flex (2.6.4-6.2) ...
+Selecting previously unselected package libbison-dev:amd64.
+Preparing to unpack .../3-libbison-dev_2%3a3.3.2.dfsg-1_amd64.deb ...
+Unpacking libbison-dev:amd64 (2:3.3.2.dfsg-1) ...
+Selecting previously unselected package bison.
+Preparing to unpack .../4-bison_2%3a3.3.2.dfsg-1_amd64.deb ...
+Unpacking bison (2:3.3.2.dfsg-1) ...
+Selecting previously unselected package libfl2:amd64.
+Preparing to unpack .../5-libfl2_2.6.4-6.2_amd64.deb ...
+Unpacking libfl2:amd64 (2.6.4-6.2) ...
+Selecting previously unselected package libfl-dev:amd64.
+Preparing to unpack .../6-libfl-dev_2.6.4-6.2_amd64.deb ...
+Unpacking libfl-dev:amd64 (2.6.4-6.2) ...
+Setting up libbison-dev:amd64 (2:3.3.2.dfsg-1) ...
+Setting up libsigsegv2:amd64 (2.12-2) ...
+Setting up libfl2:amd64 (2.6.4-6.2) ...
+Setting up m4 (1.4.18-2) ...
+Setting up bison (2:3.3.2.dfsg-1) ...
+update-alternatives: using /usr/bin/bison.yacc to provide /usr/bin/yacc (yacc) in auto mode
+Setting up flex (2.6.4-6.2) ...
+Setting up libfl-dev:amd64 (2.6.4-6.2) ...
+Processing triggers for libc-bin (2.28-10) ...
++ 1595603515.910721 1419767808 (21) cd Modex-master
++ 1595603515.912807 1419767808 (22) make
+cd Src; make
+make[1]: Entering directory '/home/f/Modex-master/Src'
+bison -v -d gram.y
+gram.y: warning: 48 shift/reduce conflicts [-Wconflicts-sr]
+gram.y: warning: 23 reduce/reduce conflicts [-Wconflicts-rr]
+mv gram.tab.c gram.c
+mv gram.tab.h gram.h
+gcc  -g   -c -o heap.o heap.c
+gcc  -g   -c -o nmetab.o nmetab.c
+gcc  -g   -c -o symtab.o symtab.c
+gcc  -g   -c -o modex.o modex.c
+gcc  -g   -c -o xtract.o xtract.c
+gcc  -g   -c -o token.o token.c
+gcc  -g   -c -o tree.o tree.c
+gcc  -g   -c -o treestk.o treestk.c
+flex lexer.l
+mv lex.yy.c lexer.c
+gcc  -g   -c -o lexer.o lexer.c
+gcc  -g   -c -o gram.o gram.c
+gcc  -g   -c -o dflow.o dflow.c
+gcc  -g   -c -o prnttree.o prnttree.c
+gcc  -g   -c -o modex_pp.o modex_pp.c
+gcc  -g   -c -o ps_graph.o ps_graph.c
+gcc  -o modex heap.o nmetab.o symtab.o modex.o xtract.o token.o tree.o treestk.o lexer.o gram.o dflow.o prnttree.o modex_pp.o ps_graph.o -lm
+make[1]: Leaving directory '/home/f/Modex-master/Src'
++ 1595603516.962029 1421848576 (25) cd -
+/home/f
++ 1595603516.964411 1421848576 (26) wget https://www.scss.tcd.ie/frederic.tuong/init_out.c0
+--2020-07-24 16:11:56--  https://www.scss.tcd.ie/frederic.tuong/init_out.c0
+Resolving www.scss.tcd.ie (www.scss.tcd.ie)... 134.226.52.35
+Connecting to www.scss.tcd.ie (www.scss.tcd.ie)|134.226.52.35|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 1079193 (1.0M)
+Saving to: ‘init_out.c0’
+
+     0K .......... .......... .......... .......... ..........  4%  662K 2s
+    50K .......... .......... .......... .......... ..........  9% 1.20M 1s
+   100K .......... .......... .......... .......... .......... 14% 6.17M 1s
+   150K .......... .......... .......... .......... .......... 18% 1.13M 1s
+   200K .......... .......... .......... .......... .......... 23% 5.17M 1s
+   250K .......... .......... .......... .......... .......... 28% 32.2M 0s
+   300K .......... .......... .......... .......... .......... 33%  480K 1s
+   350K .......... .......... .......... .......... .......... 37% 59.6M 0s
+   400K .......... .......... .......... .......... .......... 42% 6.05M 0s
+   450K .......... .......... .......... .......... .......... 47% 13.9M 0s
+   500K .......... .......... .......... .......... .......... 52% 1.27M 0s
+   550K .......... .......... .......... .......... .......... 56% 4.29M 0s
+   600K .......... .......... .......... .......... .......... 61% 1.40M 0s
+   650K .......... .......... .......... .......... .......... 66% 7.82M 0s
+   700K .......... .......... .......... .......... .......... 71% 1.64M 0s
+   750K .......... .......... .......... .......... .......... 75% 4.43M 0s
+   800K .......... .......... .......... .......... .......... 80% 1.79M 0s
+   850K .......... .......... .......... .......... .......... 85% 2.98M 0s
+   900K .......... .......... .......... .......... .......... 90% 2.05M 0s
+   950K .......... .......... .......... .......... .......... 94% 2.85M 0s
+  1000K .......... .......... .......... .......... .......... 99% 3.90M 0s
+  1050K ...                                                   100% 7438G=0.5s
+
+2020-07-24 16:11:58 (1.96 MB/s) - ‘init_out.c0’ saved [1079193/1079193]
+
++ 1595603518.090142 1422934016 (29) /home/f/Modex-master/Src/modex -Y init_out.c0
+modex: no prx file 'init_out.prx', default rules apply
+init_out.c0:7708: Error (syntax error, unexpected IDENT, expecting SEMICOLON) before 'Identifier'
+  _bt->frac = (unsigned long long)_ts->tv_nsec * (unsigned long long)18446744073LL;
+                                                                                 ^
+init_out.c0:7729: Error (syntax error, unexpected IDENT, expecting SEMICOLON) before 'Identifier'
+  _bt->frac = (unsigned long long)_tv->tv_usec * (unsigned long long)18446744073709LL;
+                                                                                    ^
+2 errors
+modex: recur: line 3635 unexpected node TN_EMPTY
+modex: recur: line 3640 unexpected node TN_EMPTY
+modex: recur: line 3635 unexpected node TN_EMPTY
+modex: recur: line 3640 unexpected node TN_EMPTY
+modex: recur: line 3651 unexpected node TN_EMPTY
+modex: recur: line 3656 unexpected node TN_EMPTY
+modex: recur: line 3651 unexpected node TN_EMPTY
+modex: recur: line 3656 unexpected node TN_EMPTY
+modex: recur: line 3762 unexpected node TN_EMPTY
+modex: recur: line 3767 unexpected node TN_EMPTY
+modex: recur: line 3762 unexpected node TN_EMPTY
+modex: recur: line 3767 unexpected node TN_EMPTY
+modex: recur: line 3779 unexpected node TN_EMPTY
+modex: recur: line 3784 unexpected node TN_EMPTY
+modex: recur: line 3779 unexpected node TN_EMPTY
+modex: recur: line 3784 unexpected node TN_EMPTY
+modex: init_out.c0:4052: warning: variable in array bound 'User_extensions_Switch_control _User_extensions_Initial_switch_controls[(sizeof( _User_extensions_Initial_extensions ]'
+modex: init_out.c0:4678: error, cannot use instrumented function call _CPU_atomic_Load_uint() inside a declaration
+modex: init_out.c0:5389: error, cannot use instrumented function call _Chain_Is_empty() inside a declaration
+modex: init_out.c0:5399: error, cannot use instrumented function call _Chain_Is_empty() inside a declaration
+modex: init_out.c0:5410: error, cannot use instrumented function call _Chain_Head() inside a declaration
+modex: init_out.c0:5411: error, cannot use instrumented function call _Chain_Tail() inside a declaration
+modex: init_out.c0:5435: error, cannot use instrumented function call _Chain_Immutable_tail() inside a declaration
+modex: init_out.c0:5436: error, cannot use instrumented function call _Chain_First() inside a declaration
+modex: init_out.c0:7099: warning: variable in array bound 'const  ** _Objects_Information_table[( OBJECTS_POSIX_API ]'
+modex: init_out.c0:8492: error, cannot use instrumented function call _RBTree_Right() inside a declaration
+modex: init_out.c0:9868: error, cannot use instrumented function call _Thread_Scheduler_get_home() inside a declaration
+modex: init_out.c0:9882: error, cannot use instrumented function call _Thread_Scheduler_get_home() inside a declaration
+modex: init_out.c0:9893: error, cannot use instrumented function call _Scheduler_Get_by_CPU() inside a declaration
+modex: init_out.c0:9980: error, cannot use instrumented function call _Scheduler_Get_context() inside a declaration
+modex: init_out.c0:10001: error, cannot use instrumented function call _Scheduler_Build_id() inside a declaration
+modex: init_out.c0:10116: error, cannot use instrumented function call _Scheduler_Node_get_idle() inside a declaration
+modex: init_out.c0:10119: error, cannot use instrumented function call _Scheduler_Node_get_owner() inside a declaration
+modex: init_out.c0:10422: error, cannot use instrumented function call _Scheduler_simple_Get_context() inside a declaration
+modex: init_out.c0:10424: error, cannot use instrumented function call _Chain_First() inside a declaration
+modex: init_out.c0:10563: error, cannot use instrumented function call _Scheduler_SMP_Get_self() inside a declaration
+modex: init_out.c0:10564: error, cannot use instrumented function call _Chain_Get_first_unprotected() inside a declaration
+modex: init_out.c0:10573: error, cannot use instrumented function call _Scheduler_SMP_Get_self() inside a declaration
+modex: init_out.c0:10596: error, cannot use instrumented function call _Scheduler_Node_get_user() inside a declaration
+modex: init_out.c0:10598: error, cannot use instrumented function call _Scheduler_Node_get_user() inside a declaration
+modex: init_out.c0:10600: error, cannot use instrumented function call _Thread_Get_CPU() inside a declaration
+modex: init_out.c0:10601: error, cannot use instrumented function call _Per_CPU_Get() inside a declaration
+modex: init_out.c0:10629: error, cannot use instrumented function call _Scheduler_Node_get_user() inside a declaration
+modex: init_out.c0:10630: error, cannot use instrumented function call _Per_CPU_Get() inside a declaration
+modex: init_out.c0:10694: error, cannot use instrumented function call _Scheduler_SMP_Get_self() inside a declaration
+modex: init_out.c0:10697: error, cannot use instrumented function call _Chain_Last() inside a declaration
+modex: recur: line 12280 unexpected node TN_EMPTY
+modex: recur: line 12281 unexpected node TN_EMPTY
+modex: recur: line 12282 unexpected node TN_EMPTY
+modex: recur: line 12283 unexpected node TN_EMPTY
+modex: recur: line 12284 unexpected node TN_EMPTY
+modex: recur: line 12285 unexpected node TN_EMPTY
+modex: recur: line 12286 unexpected node TN_EMPTY
+modex: recur: line 12318 unexpected node TN_EMPTY
+modex: recur: line 12350 unexpected node TN_EMPTY
+modex: recur: line 12414 unexpected node TN_EMPTY
+modex: recur: line 12478 unexpected node TN_EMPTY
+modex: recur: line 16702 unexpected node TN_EMPTY
+modex: recur: line 16734 unexpected node TN_EMPTY
+modex: recur: line 16735 unexpected node TN_EMPTY
+modex: recur: line 16736 unexpected node TN_EMPTY
+modex: recur: line 16737 unexpected node TN_EMPTY
+modex: recur: line 16738 unexpected node TN_EMPTY
+modex: recur: line 16898 unexpected node TN_EMPTY
+modex: recur: line 16899 unexpected node TN_EMPTY
+modex: init_out.c0:16904: error, cannot use instrumented function call rtems_clock_tick_later() inside a declaration
+modex: init_out.c0:17067: error, cannot use instrumented function call _Scheduler_SMP_Thread_get_node() inside a declaration
+modex: init_out.c0:17120: error, cannot use instrumented function call get_switch_events() inside a declaration
+modex: recur: line 21867 unexpected node TN_EMPTY
+modex: recur: line 21867 unexpected node TN_EMPTY
+modex: recur: line 21867 unexpected node TN_EMPTY
+modex: recur: line 21867 unexpected node TN_EMPTY
+modex: recur: line 21965 unexpected node TN_EMPTY
+modex: recur: line 21965 unexpected node TN_EMPTY
+modex: recur: line 21965 unexpected node TN_EMPTY
+modex: recur: line 21965 unexpected node TN_EMPTY
+modex: recur: line 23330 unexpected node TN_EMPTY
+modex: recur: line 23331 unexpected node TN_EMPTY
+modex: recur: line 23332 unexpected node TN_EMPTY
+modex: recur: line 23333 unexpected node TN_EMPTY
+modex: recur: line 23334 unexpected node TN_EMPTY
+modex: recur: line 23335 unexpected node TN_EMPTY
+modex: recur: line 23336 unexpected node TN_EMPTY
+modex: recur: line 23337 unexpected node TN_EMPTY
+modex: recur: line 23338 unexpected node TN_EMPTY
+modex: recur: line 23339 unexpected node TN_EMPTY
+modex: recur: line 23340 unexpected node TN_EMPTY
+modex: recur: line 23341 unexpected node TN_EMPTY
+modex: recur: line 23342 unexpected node TN_EMPTY
+modex: recur: line 23343 unexpected node TN_EMPTY
+modex: recur: line 23344 unexpected node TN_EMPTY
+modex: recur: line 23345 unexpected node TN_EMPTY
+modex: recur: line 23346 unexpected node TN_EMPTY
+modex: recur: line 23347 unexpected node TN_EMPTY
+modex: recur: line 23348 unexpected node TN_EMPTY
+modex: recur: line 23352 unexpected node TN_EMPTY
+modex: recur: line 23353 unexpected node TN_EMPTY
+modex: recur: line 23354 unexpected node TN_EMPTY
+modex: recur: line 23355 unexpected node TN_EMPTY
+modex: recur: line 23359 unexpected node TN_EMPTY
+modex: recur: line 23360 unexpected node TN_EMPTY
+modex: recur: line 23361 unexpected node TN_EMPTY
+modex: error: local * generic  is initialized in declaration in instrumented IMFS_generic_get_context_by_node()
+modex: error: local * dir  is initialized in declaration in instrumented IMFS_add_to_directory()
+modex: error: local * node  is initialized in declaration in instrumented IMFS_Set_handlers()
+modex: error: local Len  is initialized in declaration in instrumented rtems_libio_iovec_eval()
+modex: error: local flags  is initialized in declaration in instrumented rtems_filesystem_eval_path_clear_and_set_flags()
+modex: error: local tokenlen  is initialized in declaration in instrumented rtems_filesystem_eval_path_put_back_token()
+modex: error: local * mt_entry  is initialized in declaration in instrumented rtems_filesystem_location_is_instance_root()
+modex: error: local ready  is initialized in declaration in instrumented rtems_filesystem_is_ready_for_unmount()
+modex: error: local * global_loc  is initialized in declaration in instrumented rtems_filesystem_global_location_obtain_null()
+modex: error: local * mt_entry  is initialized in declaration in instrumented rtems_filesystem_instance_unlock()
+modex: error: local * mt_entry  is initialized in declaration in instrumented rtems_filesystem_instance_lock()
+modex: error: local temp  is initialized in declaration in instrumented rtems_filesystem_make_dev_t_from_pointer()
+modex: error: local ctx  is initialized in declaration in instrumented _User_extensions_Fatal()
+modex: error: local ctx  is initialized in declaration in instrumented _User_extensions_Thread_create()
+modex: error: local cpu_count  is initialized in declaration in instrumented Init()
+modex: error: local * ctx  is initialized in declaration in instrumented Init()
+modex: error: local b  is initialized in declaration in instrumented test_mrsp_load()
+modex: error: local a  is initialized in declaration in instrumented test_mrsp_load()
+modex: error: local cpu_count  is initialized in declaration in instrumented test_mrsp_load()
+modex: error: local cpu_index  is initialized in declaration in instrumented migration_task()
+modex: error: local v  is initialized in declaration in instrumented migration_task()
+modex: error: local cpu_count  is initialized in declaration in instrumented migration_task()
+modex: error: local * ctx  is initialized in declaration in instrumented migration_task()
+modex: error: local k_0  is initialized in declaration in instrumented load_worker()
+modex: error: local k  is initialized in declaration in instrumented load_worker()
+modex: error: local n  is initialized in declaration in instrumented load_worker()
+modex: error: local i  is initialized in declaration in instrumented load_worker()
+modex: error: local v  is initialized in declaration in instrumented load_worker()
+modex: error: local * ctx  is initialized in declaration in instrumented load_worker()
+modex: error: local run  is initialized in declaration in instrumented test_mrsp_obtain_and_release_with_help()
+modex: error: local * ctx  is initialized in declaration in instrumented help_task()
+modex: error: local run  is initialized in declaration in instrumented test_mrsp_obtain_and_sleep_and_release()
+modex: error: local barrier_state  is initialized in declaration in instrumented various_block_unblock()
+modex: error: local * ctx  is initialized in declaration in instrumented unblock_owner_after_rival_timer()
+modex: error: local * ctx  is initialized in declaration in instrumented unblock_owner_before_rival_timer()
+modex: error: local * ctx  is initialized in declaration in instrumented unblock_ready_timer()
+modex: error: local barrier_state  is initialized in declaration in instrumented ready_unlock_worker()
+modex: error: local * ctx  is initialized in declaration in instrumented ready_unlock_worker()
+modex: error: local prio  is initialized in declaration in instrumented test_mrsp_deadlock_error()
+modex: error: local * ctx  is initialized in declaration in instrumented deadlock_worker()
+modex: error: local * ctx  is initialized in declaration in instrumented deadlock_timer()
+modex: error: local barrier_state  is initialized in declaration in instrumented obtain_after_migration_high()
+modex: error: local * ctx  is initialized in declaration in instrumented obtain_after_migration_high()
+modex: error: local barrier_state  is initialized in declaration in instrumented obtain_after_migration_worker()
+modex: error: local * ctx  is initialized in declaration in instrumented obtain_after_migration_worker()
+modex: error: local barrier_state  is initialized in declaration in instrumented test_mrsp_obtain_and_release()
+modex: error: local barrier_state  is initialized in declaration in instrumented obtain_and_release_worker()
+modex: error: local * ctx  is initialized in declaration in instrumented obtain_and_release_worker()
+modex: error: local * run  is initialized in declaration in instrumented run_task()
+modex: error: local cpu_count  is initialized in declaration in instrumented create_mrsp_sema()
+modex: error: local n  is initialized in declaration in instrumented print_switch_events()
+modex: error: local * node  is initialized in declaration in instrumented switch_extension()
+modex: error: local * ctx  is initialized in declaration in instrumented switch_extension()
+modex: error: local later  is initialized in declaration in instrumented busy_wait()
+modex: error: local mpstat  is initialized in declaration in instrumented leon3_get_cpu_count()
+modex: error: local * highest_ready  is initialized in declaration in instrumented _Scheduler_SMP_Preempt_and_schedule_highest_ready()
+modex: error: local * highest_ready  is initialized in declaration in instrumented _Scheduler_SMP_Schedule_highest_ready()
+modex: error: local * lowest_scheduled  is initialized in declaration in instrumented _Scheduler_SMP_Get_lowest_scheduled()
+modex: error: local * scheduled  is initialized in declaration in instrumented _Scheduler_SMP_Get_lowest_scheduled()
+modex: error: local * self  is initialized in declaration in instrumented _Scheduler_SMP_Get_lowest_scheduled()
+modex: error: local * cpu_self  is initialized in declaration in instrumented _Scheduler_SMP_Allocate_processor_exact()
+modex: error: local * scheduled_thread  is initialized in declaration in instrumented _Scheduler_SMP_Allocate_processor_exact()
+modex: error: local * cpu_self  is initialized in declaration in instrumented _Scheduler_SMP_Allocate_processor_lazy()
+modex: error: local * scheduled_cpu  is initialized in declaration in instrumented _Scheduler_SMP_Allocate_processor_lazy()
+modex: error: local * victim_thread  is initialized in declaration in instrumented _Scheduler_SMP_Allocate_processor_lazy()
+modex: error: local * scheduled_thread  is initialized in declaration in instrumented _Scheduler_SMP_Allocate_processor_lazy()
+modex: error: local * self  is initialized in declaration in instrumented _Scheduler_SMP_Release_idle_thread()
+modex: error: local * idle  is initialized in declaration in instrumented _Scheduler_SMP_Get_idle_thread()
+modex: error: local * self  is initialized in declaration in instrumented _Scheduler_SMP_Get_idle_thread()
+modex: error: local * heir  is initialized in declaration in instrumented _Scheduler_simple_Schedule_body()
+modex: error: local * context  is initialized in declaration in instrumented _Scheduler_simple_Schedule_body()
+modex: error: local * heir  is initialized in declaration in instrumented _Scheduler_Update_heir()
+modex: error: local * owner  is initialized in declaration in instrumented _Scheduler_Release_idle_thread()
+modex: error: local * idle  is initialized in declaration in instrumented _Scheduler_Release_idle_thread()
+modex: error: local * idle  is initialized in declaration in instrumented _Scheduler_Use_idle_thread()
+modex: error: local minimum_id  is initialized in declaration in instrumented _Scheduler_Get_index_by_id()
+modex: error: local * context  is initialized in declaration in instrumented _Scheduler_Get_processor_count()
+modex: error: local * executing  is initialized in declaration in instrumented _Scheduler_Tick()
+modex: error: local * scheduler  is initialized in declaration in instrumented _Scheduler_Tick()
+modex: error: local * scheduler  is initialized in declaration in instrumented _Scheduler_Cancel_job()
+modex: error: local * scheduler  is initialized in declaration in instrumented _Scheduler_Release_job()
+modex: error: local maximum_internal_threads  is initialized in declaration in instrumented _Thread_Get_maximum_internal_threads()
+modex: error: local ticks  is initialized in declaration in instrumented _Watchdog_Ticks_from_sbintime()
+modex: error: local ticks  is initialized in declaration in instrumented _Watchdog_Ticks_from_seconds()
+modex: error: local * node  is initialized in declaration in instrumented _Watchdog_Next_first()
+modex: error: local * heads  is initialized in declaration in instrumented _Thread_queue_First_locked()
+modex: error: local sb  is initialized in declaration in instrumented mstosbt()
+modex: error: local sb  is initialized in declaration in instrumented ustosbt()
+modex: error: local sb  is initialized in declaration in instrumented nstosbt()
+modex: error: local * per_cpu_envelope  is initialized in declaration in instrumented _Per_CPU_Get_index()
+modex: error: local * cpu_self  is initialized in declaration in instrumented _Per_CPU_Get()
+modex: error: local * next  is initialized in declaration in instrumented _Chain_Insert_ordered_unprotected()
+modex: error: local * tail  is initialized in declaration in instrumented _Chain_Insert_ordered_unprotected()
+modex: error: local * new_first  is initialized in declaration in instrumented _Chain_Get_with_empty_check_unprotected()
+modex: error: local * old_first  is initialized in declaration in instrumented _Chain_Get_with_empty_check_unprotected()
+modex: error: local * tail  is initialized in declaration in instrumented _Chain_Get_with_empty_check_unprotected()
+modex: error: local * head  is initialized in declaration in instrumented _Chain_Get_with_empty_check_unprotected()
+modex: error: local is_empty_now  is initialized in declaration in instrumented _Chain_Get_with_empty_check_unprotected()
+modex: error: local was_empty  is initialized in declaration in instrumented _Chain_Prepend_with_empty_check_unprotected()
+modex: error: local was_empty  is initialized in declaration in instrumented _Chain_Append_with_empty_check_unprotected()
+modex: error: local remainder  is initialized in declaration in instrumented _Heap_Align_up()
+modex: error: local us_per_tick  is initialized in declaration in instrumented rtems_clock_tick_later_usec()
+modex: error: local next_ticket  is initialized in declaration in instrumented _SMP_ticket_lock_Do_release()
+modex: error: local current_ticket  is initialized in declaration in instrumented _SMP_ticket_lock_Do_release()
+modex: error: local __atomic_compare_exchange_tmp  is initialized in declaration in instrumented _CPU_atomic_Compare_exchange_uintptr()
+modex: error: local * __atomic_compare_exchange_ptr  is initialized in declaration in instrumented _CPU_atomic_Compare_exchange_uintptr()
+modex: error: local __atomic_compare_exchange_tmp  is initialized in declaration in instrumented _CPU_atomic_Compare_exchange_ulong()
+modex: error: local * __atomic_compare_exchange_ptr  is initialized in declaration in instrumented _CPU_atomic_Compare_exchange_ulong()
+modex: error: local __atomic_compare_exchange_tmp  is initialized in declaration in instrumented _CPU_atomic_Compare_exchange_uint()
+modex: error: local * __atomic_compare_exchange_ptr  is initialized in declaration in instrumented _CPU_atomic_Compare_exchange_uint()
+modex: error: local __atomic_exchange_val  is initialized in declaration in instrumented _CPU_atomic_Exchange_uintptr()
+modex: error: local * __atomic_exchange_ptr  is initialized in declaration in instrumented _CPU_atomic_Exchange_uintptr()
+modex: error: local __atomic_exchange_val  is initialized in declaration in instrumented _CPU_atomic_Exchange_ulong()
+modex: error: local * __atomic_exchange_ptr  is initialized in declaration in instrumented _CPU_atomic_Exchange_ulong()
+modex: error: local __atomic_exchange_val  is initialized in declaration in instrumented _CPU_atomic_Exchange_uint()
+modex: error: local * __atomic_exchange_ptr  is initialized in declaration in instrumented _CPU_atomic_Exchange_uint()
+modex: error: local __atomic_store_tmp  is initialized in declaration in instrumented _CPU_atomic_Store_uintptr()
+modex: error: local * __atomic_store_ptr  is initialized in declaration in instrumented _CPU_atomic_Store_uintptr()
+modex: error: local __atomic_store_tmp  is initialized in declaration in instrumented _CPU_atomic_Store_ulong()
+modex: error: local * __atomic_store_ptr  is initialized in declaration in instrumented _CPU_atomic_Store_ulong()
+modex: error: local __atomic_store_tmp  is initialized in declaration in instrumented _CPU_atomic_Store_uint()
+modex: error: local * __atomic_store_ptr  is initialized in declaration in instrumented _CPU_atomic_Store_uint()
+modex: error: local * __atomic_load_ptr  is initialized in declaration in instrumented _CPU_atomic_Load_uintptr()
+modex: error: local * __atomic_load_ptr  is initialized in declaration in instrumented _CPU_atomic_Load_ulong()
+modex: error: local * __atomic_load_ptr  is initialized in declaration in instrumented _CPU_atomic_Load_uint()
+modex: error: local __atomic_store_tmp  is initialized in declaration in instrumented _CPU_atomic_Init_uintptr()
+modex: error: local * __atomic_store_ptr  is initialized in declaration in instrumented _CPU_atomic_Init_uintptr()
+modex: error: local __atomic_store_tmp  is initialized in declaration in instrumented _CPU_atomic_Init_ulong()
+modex: error: local * __atomic_store_ptr  is initialized in declaration in instrumented _CPU_atomic_Init_ulong()
+modex: error: local __atomic_store_tmp  is initialized in declaration in instrumented _CPU_atomic_Init_uint()
+modex: error: local * __atomic_store_ptr  is initialized in declaration in instrumented _CPU_atomic_Init_uint()
+modex: error: local _init  is initialized in declaration in instrumented _Futex_Initialize_named()
+modex: error: local _init  is initialized in declaration in instrumented _Futex_Initialize()
+modex: error: local _init  is initialized in declaration in instrumented _Semaphore_Initialize_named()
+modex: error: local _init  is initialized in declaration in instrumented _Semaphore_Initialize()
+modex: error: local _init  is initialized in declaration in instrumented _Condition_Initialize_named()
+modex: error: local _init  is initialized in declaration in instrumented _Condition_Initialize()
+modex: error: local _init  is initialized in declaration in instrumented _Mutex_recursive_Initialize_named()
+modex: error: local _init  is initialized in declaration in instrumented _Mutex_recursive_Initialize()
+modex: error: local _init  is initialized in declaration in instrumented _Mutex_Initialize_named()
+modex: error: local _init  is initialized in declaration in instrumented _Mutex_Initialize()
+modex: error: local _psr  is initialized in declaration in instrumented sparc_enable_interrupts()
+./_modex_.run pprep
+-- setting file_name to init_out.c0
+MODEX Version 2.11 - 3 November 2017
+add arg -m 
+	[1] -> <-m>
+add arg _modex_ 
+	[2] -> <_modex_>
+add arg -L 
+	[3] -> <-L>
+add arg _modex_ .lut
+	[4] -> <_modex_.lut>
+add arg -xe 
+	[5] -> <-xe>
+add arg init_out.c0 
+	[6] -> <init_out.c0>
+New cmd <m> <_modex_> <called from: 2> (nrprocs 1)
+New cmd <L> <_modex_.lut> <called from: 2> (nrprocs 1)
+New cmd <x> <-xe> <called from: 1> (nrprocs 1)
+-- setting file_name to init_out.c0
+modex: process_input init_out.c0 (phase 0)
+Act cmd -m _modex_
+Act cmd -L _modex_.lut
+Act cmd -x -xe
+ -- Modex Reset
+want all, wanttype active proctype, lut none.lut
+Act cmd : no more commands
+-- do globals [0 1 1 (null)]
++ 1595603520.430297 1438281728 (30) gcc -E -x c _modex_all.pml
++ 1595603520.474607 1439698944 (31) sed -i 's|active proctype p_\(.*\)(|/*@ modex "\1" */\n&|' _modex_all.pml0
++ 1595603520.486521 1439731712 (34) ls _modex_all.pml0
+_modex_all.pml0
+	Command being timed: "/media/sf_VirtualBox_shared/modex.sh"
+	User time (seconds): 5.82
+	System time (seconds): 1.24
+	Percent of CPU this job got: 29%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:23.78
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 84696
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 348
+	Minor (reclaiming a frame) page faults: 395545
+	Voluntary context switches: 14975
+	Involuntary context switches: 7783
+	Swaps: 0
+	File system inputs: 229744
+	File system outputs: 229280
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

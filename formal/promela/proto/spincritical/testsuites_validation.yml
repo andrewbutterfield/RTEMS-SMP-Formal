@@ -1,0 +1,112 @@
+SPDX-License-Identifier: CC-BY-SA-4.0 OR BSD-2-Clause
+copyrights:
+- Copyright (C) 2019-2021 Trinity College Dublin (www.tcd.ie)
+- Copyright (C) 2020 embedded brains GmbH (http://www.embedded-brains.de)
+post-conditions:
+- name: surrender_send_status
+  states:
+  - name: surrender_send_successful
+    test-code: |
+      T_rsc_success( ctx->send_status );
+    text: |
+      The send event status shall be RTEMS_SUCCESSFUL.
+  test-epilogue: null
+  test-prologue: null
+- name: seize_receive_status
+  states:
+  - name: seize_receive_successful
+    test-code: |
+      T_rsc( ctx->receive_status, RTEMS_SUCCESSFUL );
+
+      if ( ctx->receive_type != RECEIVE_NORMAL ) {
+        T_eq_int( ctx->receive_condition_state, RECEIVE_COND_SATSIFIED );
+      }
+
+      T_eq_u32( ctx->received_events, ctx->events_to_send & INPUT_EVENTS );
+      T_eq_u32( GetPendingEvents( ctx ), ctx->events_to_send & ~INPUT_EVENTS );
+    text: |
+      The receive event status shall be RTEMS_SUCCESSFUL.  The received events
+      shall be equal to the input events sent.  The pending events shall be
+      equal to the events sent which are not included in the input events.
+  test-epilogue: null
+  test-prologue: null
+- name: sender_preemption
+  states:
+  - name: 'No'
+    test-code: |
+      /*
+       * There may be a thread switch to the runner thread if the sender thread
+       * was on another scheduler instance.
+       */
+
+      T_le_sz( log->recorded, 1 );
+
+      for ( i = 0; i < log->recorded; ++i ) {
+        T_ne_u32( log->events[ i ].executing, ctx->worker_id );
+        T_eq_u32( log->events[ i ].heir, ctx->runner_id );
+      }
+    text: |
+      There shall be no sender preemption.
+  test-epilogue: null
+  test-prologue: |
+    T_thread_switch_log *log;
+    size_t               i;
+
+    log = &ctx->thread_switch_log.log;
+pre-conditions:
+- name: surrender_send_target
+  states:
+  - name: Task
+    test-code: |
+      ctx->receiver_id = ctx->runner_id;
+    text: |
+      The id parameter of the send directive shall be a valid task object
+      identifier.
+  test-epilogue: null
+  test-prologue: null
+- name: surrender_send_event_in
+  states:
+  - name: MixedAny
+    test-code: |
+      ctx->events_to_send = RTEMS_EVENT_5 | RTEMS_EVENT_7;
+    text: |
+      The event set sent shall be contain at least one but not all events of
+      the event receive condition and at least one unrelated event.
+  test-epilogue: null
+  test-prologue: null
+- name: seize_receive_option_set_ticks
+  states:
+  - name: Equal
+    test-code: |
+      ctx->sender_type = SENDER_WORKER;
+      ctx->sender_prio = PRIO_NORMAL;
+      ctx->receive_type = RECEIVE_NORMAL;
+    text: |
+      The receiver task shall be blocked waiting for events and the receiver
+      task shall have a priority equal to the sender task.
+  test-epilogue: null
+  test-prologue: null
+- name: seize_receive_option_set
+  states:
+  - name: Any
+    test-code: |
+      ctx->receive_option_set |= RTEMS_EVENT_ANY;
+    text: |
+      The receiver task shall be interested in any input event.
+  test-epilogue: null
+  test-prologue: null
+transition-map:
+- enabled-by: true
+  post-conditions:
+    surrender_send_status: surrender_send_successful
+    seize_receive_status: seize_receive_successful
+    sender_preemption: 'No'
+  pre-conditions:
+    surrender_send_target:
+    - Task
+    surrender_send_event_in:
+    - MixedAny
+    seize_receive_option_set:
+    - Any
+    seize_receive_option_set_ticks:
+    - Equal

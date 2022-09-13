@@ -1,0 +1,125 @@
+
+%
+% (c) Andrew Butterfield, 2017
+%
+\def\reasonEq{\textsf{reasonEq}}
+
+% basic types
+\def\Bool{\mathbb{B}}
+\def\True{True}
+\def\False{False}
+\def\Int{\mathbb{Z}}
+\def\Nat{\mathbb{N}}
+
+\def\Seq#1{{#1}^*}
+\def\seqof#1{\langle{#1}\rangle}
+\def\nil{\seqof{}}
+\def\Set#1{\mathop{\mathbb P}{#1}}
+\def\setof#1{\{{#1}\}}
+\def\cat{\frown}
+\def\disj{{\mathrel{\,\not\!\cap\;}}}
+
+% function types
+\def\fun{\rightarrow}
+\def\pfun{\dashrightarrow}
+\def\power{\mathop{\mathbb{P}}}
+\def\finset{\mathop{\mathbb{F}}}
+\def\dom{\mathop{\mathrm{dom}}}
+\def\rng{\mathop{\mathrm{rng}}}
+\def\maplet#1#2{{#1}\mapsto{#2}}
+\def\override{\oplus}
+
+% lifted operators
+\def\lift#1{\mathrel{\widehat{#1}}}
+
+% symbolic names
+\def\Name#1{\ensuremath{\mathbf{#1}}}
+\def\Value#1{\ensuremath{\mathtt{#1}}}
+% Quantifiers
+
+\def\have{\bullet}
+\def\st{\bullet}
+
+%% UTP syntax
+
+\def\lst#1{#1{\scriptstyle{\mathsf{\$}}}}
+\def\cond#1{\mathbin{\lhd{#1}\rhd}}
+\def\defs{\mathrel{~\widehat{=\!\!\!\!=}}~}
+\def\less#1{{}\!\setminus\!{}_{#1}}
+\def\Skip{\mathit{I\!I}}
+\def\then{\rightarrow}
+
+% semantics
+
+\def\seml{[\![}
+\def\semr{]\!]}
+\def\sem#1{\seml{#1}\semr}
+
+%% General inferencing
+
+\def\when{\mathop{\textbf{when}}}
+\def\where{\mathop{\textbf{where}}}
+\def\discharges{\hookrightarrow}
+
+%% Code-like constructs
+
+\def\IF{\mathop{\textbf{if}}}
+\def\THEN{\mathop{\textbf{then}}}
+\def\ELIF{\mathop{\textbf{elif}}}
+\def\ELSE{\mathop{\textbf{else}}}
+
+%% Matching
+\def\mvX{{\scriptscriptstyle\times}}
+\def\mvlsym{:\!{\scriptscriptstyle l}\!:}
+\def\mvl{\mathop{\;\tilde{\mvlsym}\;}}
+\def\mvlx{\mathop{\;\mvlsym_\mvX\;}}
+\def\mvlxx{\mathop{\;{}_\mvX\!\!\mvlsym_\mvX\;}}
+
+\def\mvssym{:\!{\scriptscriptstyle s}\!:}
+\def\mvs{\mathop{\;\tilde{\mvssym}\;}}
+\def\mvsx{\mathop{\;\mvssym_\mvX\;}}
+\def\mvsxx{\mathop{\;{}_\mvX\!\!\mvssym_\mvX\;}}
+
+%% Proofs
+
+\def\try{\textbf{try}}
+\def\splitand{split\!\land\!}
+
+\def\EQ#1{\\&=& \text{#1}}
+
+% because it does...
+\def\adobesucks{
+ \newpage
+ Because Adobe Reader 2-page display sucks!
+}
+
+
+% derived from tex.stackexchange.com
+% https://tex.stackexchange.com/questions/152829/how-can-i-highlight-yaml-code-in-a-pretty-way-with-listings
+% thanks to users `str` and `jub0bs`
+
+\newcommand\YAMLcolonstyle{\color{red}\small\ttfamily}
+\newcommand\YAMLkeystyle{\color{black}\small\ttfamily}
+\newcommand\YAMLvaluestyle{\color{blue}\small\ttfamily}
+\newcommand\ProcessThreeDashes{\llap{\color{cyan}\mdseries-{-}-}}
+
+
+\lstdefinelanguage{yaml}{
+  keywords={true,false,null,y,n},
+  keywordstyle=\color{darkgray}\ttfamily,
+  basicstyle=\YAMLkeystyle,                                 % assuming a key comes first
+  sensitive=false,
+  comment=[l]{\#},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{purple}\ttfamily,
+  stringstyle=\YAMLvaluestyle\ttfamily,
+  % moredelim=[l][\color{orange}]{\&},
+  % moredelim=[l][\color{magenta}]{*},
+  moredelim=**[il][\YAMLcolonstyle{:}\YAMLvaluestyle]{:},   % switch to value style at :
+  morestring=[b]',
+  morestring=[b]",
+  literate =    {---}{{\ProcessThreeDashes}}3
+                % {>}{{\textcolor{red}\textgreater}}1
+                {|}{{\textcolor{red}\textbar}}1
+                {\ -\ }{{\mdseries\ -\ }}3,
+}

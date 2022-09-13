@@ -1,0 +1,28 @@
+\documentclass[fleqn,10pt]{article}
+\usepackage[a4paper, margin=1.0in]{geometry}
+\usepackage{listings}
+\usepackage{lstlhs}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\def\includepicture#1{\includegraphics{#1.eps}}
+\usepackage{hyperref}
+\usepackage{rtemspec}
+
+\parindent=0pt % I hate first line indentation
+\parskip=3pt   % I like a visual white gap between paragraphs
+
+
+\title{RTEMS Specification Items}
+\author{Andrew Butterfield}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+
+\input{src/RTEMSpec.lhs}
+\input{app/Main.lhs}
+\input{test/Spec.lhs}
+
+\end{document}

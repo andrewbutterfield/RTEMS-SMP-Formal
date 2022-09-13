@@ -1,0 +1,232 @@
+\chapter{Event Manager Documentation Summary}
+
+From
+\url{https://docs.rtems.org/branches/master/c-user/event/index.html}
+
+\section{Introduction}
+
+Two directives:
+\begin{description}
+  \item [EVENT\_SEND] Send event set to a task.
+  \item [EVENT\_RECEIVE] Receive event condition.
+\end{description}
+
+\section{Background}
+
+\subsection{Event Sets}
+
+Event lifetime:
+\begin{description}
+  \item [Posted] Directed to a task.
+  \item [Pending] Posted, but not yet received.
+  \item [Condition] Set by receiving task,
+     defining set of events it wishes to receive.
+  \item [Received] Event was singled out for reception by target task,
+    from its set of pending events.
+\end{description}
+A receiver can either accept an event,
+in its condition set,
+ once at least one is pending (\texttt{RTEMS\_EVENT\_ANY}),
+or wait for all to be pending (\texttt{RTEMS\_EVENT\_ALL}),
+before selecting one.
+
+
+Event flag used by tasks or ISR to inform task of situations.
+There are 32 flags, and we have sets (\texttt{rtems\_event\_set}) of these.
+
+Events are:
+simple synchronisers;
+aimed at tasks;
+independent of each other;
+do not have data;
+are not queued.
+
+Tasks can wait on a set of events.
+
+\subsection{Building an Event Set or Condition}
+
+A 32-bit word is used to represent an event set,
+built from events (using bitwise-OR)
+$$\{\texttt{RTEMS\_EVENT\_0},\dots,\texttt{RTEMS\_EVENT\_31}\}$$.
+
+\subsection{Building an \texttt{EVENT\_RECEIVE} Option Set}
+
+Valid options, are as follows:
+\begin{description}
+  \item [\texttt{RTEMS\_WAIT}] Wait for event (default).
+  \item [\texttt{RTEMS\_NO\_WAIT}] Do not wait for event.
+  \item [\texttt{RTEMS\_EVENT\_ALL}] Return after all events (default).
+  \item [\texttt{RTEMS\_EVENT\_ANY}] Return after any events.
+\end{description}
+First two above are mutually exclusive, as are second two.
+Can use bitwise-OR and addition operators to build these.
+We can specify all defaults above using \texttt{RTEMS\_DEFAULT\_OPTIONS}.
+
+\newpage
+\section{Operations}
+
+\subsection{Sending an Event Set}
+
+Directive \texttt{rtems\_event\_send}
+directs an event set to a target task.
+
+The event set is posted and left pending,
+except if the target task is blocked on events and its input event condition
+is satisfied.
+In this case that task is made ready for execution.
+
+\textbf{Comment:}
+\textsf{
+  Surely the event set also needs to be posted so the unblocked target
+  task can return the relevant satisfying event set?
+}
+
+\subsection{Receiving an Event Set}
+
+Directive \texttt{rtems\_event\_receive}
+is used to accept an input event condition,
+and specify when its request is satisfied.
+If satisfied, then a success code and event set are returned.
+If not, then the directive, based on what was specified,
+either:
+waits forever;
+waits for a designated time before giving a timeout error;
+or returns immediately with an error.
+
+\subsection{Determining the Pending Event Set}
+
+A receive call with input condition \texttt{RTEMS\_PENDING\_EVENTS}
+will return the pending event set without altering it.
+
+\subsection{Receiving all Pending Events}
+
+A receive call with \texttt{RTEMS\_ALL\_EVENTS} for input condition
+and option set $\{\texttt{RTEMS\_NO\_WAIT},\texttt{RTEMS\_EVENT\_ANY}\}$,
+will return, and clear, all pending events.
+If no such events, then status code \texttt{RTEMS\_UNSATISFIED} is returned.
+
+\newpage
+\section{Directives}
+
+\subsection{\texttt{EVENT\_SEND} --- Send event set to a task}
+
+\begin{verbatim}
+rtems_status_code rtems_event_send (
+    rtems_id         id,
+    rtems_event_set  event_in
+);
+\end{verbatim}
+
+Status codes:
+\begin{description}
+  \item [\texttt{RTEMS\_SUCCESSFUL}] send succesfull
+  \item [\texttt{RTEMS\_INVALID\_ID}]  invalid task id.
+\end{description}
+
+Description:
+\begin{quote}
+``
+This directive sends an event set, \texttt{event\_in}, to the task specified by id.
+If a blocked task’s input event condition is satisfied by this directive,
+then it will be made ready.
+If its input event condition is not satisfied,
+then the events satisfied are updated
+and the events not satisfied are left pending.
+If the task specified by id is not blocked waiting for events,
+then the events sent are left pending.
+``
+\end{quote}
+\textbf{Comment:}
+\textsf{
+The nesting of the ``if``s above is not clear.
+In particular, are the events satisfied always updated?
+}
+
+Notes:
+\begin{quote}
+``
+Specifying \texttt{RTEMS\_SELF} for id results in the event set being sent
+to the calling task.
+\par
+Identical events sent to a task are not queued.
+In other words, the second, and subsequent,
+posting of an event to a task
+before it can perform an \texttt{rtems\_event\_receive} has no effect.
+\par
+The calling task will be preempted if it has preemption enabled
+and a higher priority task is unblocked as the result of this directive.
+\par
+Sending an event set to a global task
+which does not reside on the local node
+will generate a request
+telling the remote node to send the event set to the appropriate task.
+``
+\end{quote}
+
+\newpage
+\subsection{\texttt{EVENT\_RECEIVE} --- Receive event condition}
+
+\begin{verbatim}
+rtems_status_code rtems_event_receive (
+    rtems_event_set  event_in,
+    rtems_option     option_set,
+    rtems_interval   ticks,
+    rtems_event_set *event_out
+);
+\end{verbatim}
+
+Status codes:
+\begin{description}
+  \item [\texttt{RTEMS\_SUCCESSFUL}] receive succesfull
+  \item [\texttt{RTEMS\_UNSATISFIED}]
+     input event not satisfied
+     (\texttt{RTEMS\_NO\_WAIT})
+  \item [\texttt{RTEMS\_INVALID\_ADDRESS}] \texttt{event\_out} is null
+    \item [\texttt{RTEMS\_TIMEOUT}] timed out.
+\end{description}
+
+Description:
+\begin{quote}
+This directive attempts to receive the event condition specified in event\_in.
+If event\_in is set to RTEMS\_PENDING\_EVENTS,
+then the current pending events are returned in event\_out and left pending.
+The RTEMS\_WAIT and RTEMS\_NO\_WAIT options in the option\_set parameter
+are used to specify whether or not the task is willing
+to wait for the event condition to be satisfied.
+RTEMS\_EVENT\_ANY and RTEMS\_EVENT\_ALL are used in the option\_set parameter
+are used to specify whether a single event
+or the complete event set is necessary to satisfy the event condition.
+The event\_out parameter is returned to the calling task
+with the value that corresponds to the events in event\_in that were satisfied.
+\par
+If pending events satisfy the event condition,
+then event\_out is set to the satisfied events
+and the pending events in the event condition are cleared.
+If the event condition is not satisfied and RTEMS\_NO\_WAIT is specified,
+then event\_out is set to the currently satisfied events.
+If the calling task chooses to wait,
+then it will block waiting for the event condition.
+\par
+If the calling task must wait for the event condition to be satisfied,
+then the timeout parameter is used to specify the maximum interval to wait.
+If it is set to RTEMS\_NO\_TIMEOUT, then the calling task will wait forever.
+``
+\end{quote}
+
+Notes:
+\begin{quote}
+``
+This directive only affects the events specified in event\_in.
+Any pending events that do not correspond to
+any of the events specified in event\_in will be left pending.
+``
+\end{quote}
+
+Receive option constants:
+\begin{description}
+  \item [\texttt{RTEMS\_WAIT}] wait for event (default)
+  \item [\texttt{RTEMS\_NO\_WAIT}] return immediately
+  \item [\texttt{RTEMS\_EVENT\_ALL}] return after all events (default)
+  \item [\texttt{RTEMS\_EVENT\_ANY}] return after any events
+\end{description}
+Clock tick is required.

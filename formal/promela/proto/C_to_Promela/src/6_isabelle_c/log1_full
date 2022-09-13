@@ -1,0 +1,622 @@
++ set -e
++ PS4='+ $EPOCHREALTIME $(df -B 1 --output=used ~ | tail -n 1) ($LINENO) '
++ 1595603613.508797 1405673472 (13) sudo apt install -y wget default-jre-headless
+
+WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
+
+Reading package lists...
+Building dependency tree...
+Reading state information...
+The following additional packages will be installed:
+  ca-certificates ca-certificates-java fontconfig-config fonts-dejavu-core
+  java-common libavahi-client3 libavahi-common-data libavahi-common3 libcups2
+  libfontconfig1 libjpeg62-turbo liblcms2-2 libnspr4 libnss3 libpcre2-8-0
+  libpsl5 libxi6 libxrender1 libxtst6 openjdk-11-jre-headless openssl
+  publicsuffix x11-common
+Suggested packages:
+  default-jre cups-common liblcms2-utils libnss-mdns fonts-dejavu-extra
+  fonts-ipafont-gothic fonts-ipafont-mincho fonts-wqy-microhei
+  | fonts-wqy-zenhei fonts-indic
+The following NEW packages will be installed:
+  ca-certificates ca-certificates-java default-jre-headless fontconfig-config
+  fonts-dejavu-core java-common libavahi-client3 libavahi-common-data
+  libavahi-common3 libcups2 libfontconfig1 libjpeg62-turbo liblcms2-2 libnspr4
+  libnss3 libpcre2-8-0 libpsl5 libxi6 libxrender1 libxtst6
+  openjdk-11-jre-headless openssl publicsuffix wget x11-common
+0 upgraded, 25 newly installed, 0 to remove and 0 not upgraded.
+Need to get 43.9 MB of archives.
+After this operation, 188 MB of additional disk space will be used.
+Get:1 http://deb.debian.org/debian buster/main amd64 libpcre2-8-0 amd64 10.32-5 [213 kB]
+Get:2 http://security.debian.org/debian-security buster/updates/main amd64 libnss3 amd64 2:3.42.1-1+deb10u3 [1,159 kB]
+Get:3 http://deb.debian.org/debian buster/main amd64 libpsl5 amd64 0.20.2-2 [53.7 kB]
+Get:4 http://deb.debian.org/debian buster/main amd64 wget amd64 1.20.1-1.1 [902 kB]
+Get:5 http://security.debian.org/debian-security buster/updates/main amd64 openjdk-11-jre-headless amd64 11.0.7+10-3~deb10u1 [37.3 MB]
+Get:6 http://deb.debian.org/debian buster/main amd64 openssl amd64 1.1.1d-0+deb10u3 [844 kB]
+Get:7 http://deb.debian.org/debian buster-updates/main amd64 ca-certificates all 20200601~deb10u1 [158 kB]
+Get:8 http://deb.debian.org/debian buster/main amd64 java-common all 0.71 [14.4 kB]
+Get:9 http://deb.debian.org/debian buster/main amd64 libavahi-common-data amd64 0.7-4+b1 [122 kB]
+Get:10 http://deb.debian.org/debian buster/main amd64 libavahi-common3 amd64 0.7-4+b1 [54.6 kB]
+Get:11 http://deb.debian.org/debian buster/main amd64 libavahi-client3 amd64 0.7-4+b1 [58.1 kB]
+Get:12 http://deb.debian.org/debian buster/main amd64 libcups2 amd64 2.2.10-6+deb10u3 [324 kB]
+Get:13 http://deb.debian.org/debian buster/main amd64 liblcms2-2 amd64 2.9-3 [145 kB]
+Get:14 http://deb.debian.org/debian buster/main amd64 libjpeg62-turbo amd64 1:1.5.2-2+b1 [134 kB]
+Get:15 http://deb.debian.org/debian buster/main amd64 fonts-dejavu-core all 2.37-1 [1,068 kB]
+Get:16 http://deb.debian.org/debian buster/main amd64 fontconfig-config all 2.13.1-2 [280 kB]
+Get:17 http://deb.debian.org/debian buster/main amd64 libfontconfig1 amd64 2.13.1-2 [346 kB]
+Get:18 http://deb.debian.org/debian buster/main amd64 libnspr4 amd64 2:4.20-1 [112 kB]
+Get:19 http://deb.debian.org/debian buster/main amd64 libxi6 amd64 2:1.7.9-1 [82.6 kB]
+Get:20 http://deb.debian.org/debian buster/main amd64 libxrender1 amd64 1:0.9.10-1 [33.0 kB]
+Get:21 http://deb.debian.org/debian buster/main amd64 x11-common all 1:7.7+19 [251 kB]
+Get:22 http://deb.debian.org/debian buster/main amd64 libxtst6 amd64 2:1.2.3-1 [27.8 kB]
+Get:23 http://deb.debian.org/debian buster/main amd64 default-jre-headless amd64 2:1.11-71 [10.9 kB]
+Get:24 http://deb.debian.org/debian buster/main amd64 ca-certificates-java all 20190405 [15.7 kB]
+Get:25 http://deb.debian.org/debian buster/main amd64 publicsuffix all 20190415.1030-1 [116 kB]
+Preconfiguring packages ...
+Fetched 43.9 MB in 22s (1,977 kB/s)
+Selecting previously unselected package libpcre2-8-0:amd64.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 48855 files and directories currently installed.)
+Preparing to unpack .../00-libpcre2-8-0_10.32-5_amd64.deb ...
+Unpacking libpcre2-8-0:amd64 (10.32-5) ...
+Selecting previously unselected package libpsl5:amd64.
+Preparing to unpack .../01-libpsl5_0.20.2-2_amd64.deb ...
+Unpacking libpsl5:amd64 (0.20.2-2) ...
+Selecting previously unselected package wget.
+Preparing to unpack .../02-wget_1.20.1-1.1_amd64.deb ...
+Unpacking wget (1.20.1-1.1) ...
+Selecting previously unselected package openssl.
+Preparing to unpack .../03-openssl_1.1.1d-0+deb10u3_amd64.deb ...
+Unpacking openssl (1.1.1d-0+deb10u3) ...
+Selecting previously unselected package ca-certificates.
+Preparing to unpack .../04-ca-certificates_20200601~deb10u1_all.deb ...
+Unpacking ca-certificates (20200601~deb10u1) ...
+Selecting previously unselected package java-common.
+Preparing to unpack .../05-java-common_0.71_all.deb ...
+Unpacking java-common (0.71) ...
+Selecting previously unselected package libavahi-common-data:amd64.
+Preparing to unpack .../06-libavahi-common-data_0.7-4+b1_amd64.deb ...
+Unpacking libavahi-common-data:amd64 (0.7-4+b1) ...
+Selecting previously unselected package libavahi-common3:amd64.
+Preparing to unpack .../07-libavahi-common3_0.7-4+b1_amd64.deb ...
+Unpacking libavahi-common3:amd64 (0.7-4+b1) ...
+Selecting previously unselected package libavahi-client3:amd64.
+Preparing to unpack .../08-libavahi-client3_0.7-4+b1_amd64.deb ...
+Unpacking libavahi-client3:amd64 (0.7-4+b1) ...
+Selecting previously unselected package libcups2:amd64.
+Preparing to unpack .../09-libcups2_2.2.10-6+deb10u3_amd64.deb ...
+Unpacking libcups2:amd64 (2.2.10-6+deb10u3) ...
+Selecting previously unselected package liblcms2-2:amd64.
+Preparing to unpack .../10-liblcms2-2_2.9-3_amd64.deb ...
+Unpacking liblcms2-2:amd64 (2.9-3) ...
+Selecting previously unselected package libjpeg62-turbo:amd64.
+Preparing to unpack .../11-libjpeg62-turbo_1%3a1.5.2-2+b1_amd64.deb ...
+Unpacking libjpeg62-turbo:amd64 (1:1.5.2-2+b1) ...
+Selecting previously unselected package fonts-dejavu-core.
+Preparing to unpack .../12-fonts-dejavu-core_2.37-1_all.deb ...
+Unpacking fonts-dejavu-core (2.37-1) ...
+Selecting previously unselected package fontconfig-config.
+Preparing to unpack .../13-fontconfig-config_2.13.1-2_all.deb ...
+Unpacking fontconfig-config (2.13.1-2) ...
+Selecting previously unselected package libfontconfig1:amd64.
+Preparing to unpack .../14-libfontconfig1_2.13.1-2_amd64.deb ...
+Unpacking libfontconfig1:amd64 (2.13.1-2) ...
+Selecting previously unselected package libnspr4:amd64.
+Preparing to unpack .../15-libnspr4_2%3a4.20-1_amd64.deb ...
+Unpacking libnspr4:amd64 (2:4.20-1) ...
+Selecting previously unselected package libnss3:amd64.
+Preparing to unpack .../16-libnss3_2%3a3.42.1-1+deb10u3_amd64.deb ...
+Unpacking libnss3:amd64 (2:3.42.1-1+deb10u3) ...
+Selecting previously unselected package libxi6:amd64.
+Preparing to unpack .../17-libxi6_2%3a1.7.9-1_amd64.deb ...
+Unpacking libxi6:amd64 (2:1.7.9-1) ...
+Selecting previously unselected package libxrender1:amd64.
+Preparing to unpack .../18-libxrender1_1%3a0.9.10-1_amd64.deb ...
+Unpacking libxrender1:amd64 (1:0.9.10-1) ...
+Selecting previously unselected package x11-common.
+Preparing to unpack .../19-x11-common_1%3a7.7+19_all.deb ...
+Unpacking x11-common (1:7.7+19) ...
+Selecting previously unselected package libxtst6:amd64.
+Preparing to unpack .../20-libxtst6_2%3a1.2.3-1_amd64.deb ...
+Unpacking libxtst6:amd64 (2:1.2.3-1) ...
+Selecting previously unselected package openjdk-11-jre-headless:amd64.
+Preparing to unpack .../21-openjdk-11-jre-headless_11.0.7+10-3~deb10u1_amd64.deb ...
+Unpacking openjdk-11-jre-headless:amd64 (11.0.7+10-3~deb10u1) ...
+Selecting previously unselected package default-jre-headless.
+Preparing to unpack .../22-default-jre-headless_2%3a1.11-71_amd64.deb ...
+Unpacking default-jre-headless (2:1.11-71) ...
+Selecting previously unselected package ca-certificates-java.
+Preparing to unpack .../23-ca-certificates-java_20190405_all.deb ...
+Unpacking ca-certificates-java (20190405) ...
+Selecting previously unselected package publicsuffix.
+Preparing to unpack .../24-publicsuffix_20190415.1030-1_all.deb ...
+Unpacking publicsuffix (20190415.1030-1) ...
+Setting up liblcms2-2:amd64 (2.9-3) ...
+Setting up libpsl5:amd64 (0.20.2-2) ...
+Setting up libxi6:amd64 (2:1.7.9-1) ...
+Setting up java-common (0.71) ...
+Setting up libxrender1:amd64 (1:0.9.10-1) ...
+Setting up x11-common (1:7.7+19) ...
+update-rc.d: warning: start and stop actions are no longer supported; falling back to defaults
+Setting up libjpeg62-turbo:amd64 (1:1.5.2-2+b1) ...
+Setting up libnspr4:amd64 (2:4.20-1) ...
+Setting up libavahi-common-data:amd64 (0.7-4+b1) ...
+Setting up fonts-dejavu-core (2.37-1) ...
+Setting up libpcre2-8-0:amd64 (10.32-5) ...
+Setting up openssl (1.1.1d-0+deb10u3) ...
+Setting up publicsuffix (20190415.1030-1) ...
+Setting up wget (1.20.1-1.1) ...
+Setting up fontconfig-config (2.13.1-2) ...
+Setting up libxtst6:amd64 (2:1.2.3-1) ...
+Setting up libavahi-common3:amd64 (0.7-4+b1) ...
+Setting up libnss3:amd64 (2:3.42.1-1+deb10u3) ...
+Setting up ca-certificates (20200601~deb10u1) ...
+Updating certificates in /etc/ssl/certs...
+126 added, 0 removed; done.
+Setting up libfontconfig1:amd64 (2.13.1-2) ...
+Setting up libavahi-client3:amd64 (0.7-4+b1) ...
+Setting up libcups2:amd64 (2.2.10-6+deb10u3) ...
+Setting up default-jre-headless (2:1.11-71) ...
+Setting up openjdk-11-jre-headless:amd64 (11.0.7+10-3~deb10u1) ...
+update-alternatives: using /usr/lib/jvm/java-11-openjdk-amd64/bin/rmid to provide /usr/bin/rmid (rmid) in auto mode
+update-alternatives: using /usr/lib/jvm/java-11-openjdk-amd64/bin/java to provide /usr/bin/java (java) in auto mode
+update-alternatives: using /usr/lib/jvm/java-11-openjdk-amd64/bin/keytool to provide /usr/bin/keytool (keytool) in auto mode
+update-alternatives: using /usr/lib/jvm/java-11-openjdk-amd64/bin/jjs to provide /usr/bin/jjs (jjs) in auto mode
+update-alternatives: using /usr/lib/jvm/java-11-openjdk-amd64/bin/pack200 to provide /usr/bin/pack200 (pack200) in auto mode
+update-alternatives: using /usr/lib/jvm/java-11-openjdk-amd64/bin/rmiregistry to provide /usr/bin/rmiregistry (rmiregistry) in auto mode
+update-alternatives: using /usr/lib/jvm/java-11-openjdk-amd64/bin/unpack200 to provide /usr/bin/unpack200 (unpack200) in auto mode
+update-alternatives: using /usr/lib/jvm/java-11-openjdk-amd64/bin/jfr to provide /usr/bin/jfr (jfr) in auto mode
+update-alternatives: using /usr/lib/jvm/java-11-openjdk-amd64/lib/jexec to provide /usr/bin/jexec (jexec) in auto mode
+Setting up ca-certificates-java (20190405) ...
+head: cannot open '/etc/ssl/certs/java/cacerts' for reading: No such file or directory
+Adding debian:certSIGN_ROOT_CA.pem
+Adding debian:EC-ACC.pem
+Adding debian:Hellenic_Academic_and_Research_Institutions_ECC_RootCA_2015.pem
+Adding debian:QuoVadis_Root_CA.pem
+Adding debian:Global_Chambersign_Root_-_2008.pem
+Adding debian:Entrust_Root_Certification_Authority_-_G2.pem
+Adding debian:AffirmTrust_Commercial.pem
+Adding debian:Sonera_Class_2_Root_CA.pem
+Adding debian:T-TeleSec_GlobalRoot_Class_3.pem
+Adding debian:emSign_Root_CA_-_C1.pem
+Adding debian:TWCA_Root_Certification_Authority.pem
+Adding debian:Entrust_Root_Certification_Authority_-_G4.pem
+Adding debian:DigiCert_Global_Root_G2.pem
+Adding debian:Izenpe.com.pem
+Adding debian:Certum_Trusted_Network_CA_2.pem
+Adding debian:QuoVadis_Root_CA_2.pem
+Adding debian:GTS_Root_R3.pem
+Adding debian:Comodo_AAA_Services_root.pem
+Adding debian:USERTrust_ECC_Certification_Authority.pem
+Adding debian:Entrust.net_Premium_2048_Secure_Server_CA.pem
+Adding debian:DigiCert_High_Assurance_EV_Root_CA.pem
+Adding debian:T-TeleSec_GlobalRoot_Class_2.pem
+Adding debian:DST_Root_CA_X3.pem
+Adding debian:Starfield_Services_Root_Certificate_Authority_-_G2.pem
+Adding debian:ePKI_Root_Certification_Authority.pem
+Adding debian:GlobalSign_Root_CA.pem
+Adding debian:EE_Certification_Centre_Root_CA.pem
+Adding debian:GlobalSign_Root_CA_-_R3.pem
+Adding debian:GlobalSign_ECC_Root_CA_-_R5.pem
+Adding debian:SecureSign_RootCA11.pem
+Adding debian:DigiCert_Assured_ID_Root_G3.pem
+Adding debian:Starfield_Class_2_CA.pem
+Adding debian:IdenTrust_Public_Sector_Root_CA_1.pem
+Adding debian:Chambers_of_Commerce_Root_-_2008.pem
+Adding debian:COMODO_RSA_Certification_Authority.pem
+Adding debian:Secure_Global_CA.pem
+Adding debian:Amazon_Root_CA_2.pem
+Adding debian:Atos_TrustedRoot_2011.pem
+Adding debian:Go_Daddy_Root_Certificate_Authority_-_G2.pem
+Adding debian:AffirmTrust_Premium_ECC.pem
+Adding debian:ISRG_Root_X1.pem
+Adding debian:Trustis_FPS_Root_CA.pem
+Adding debian:Actalis_Authentication_Root_CA.pem
+Adding debian:GTS_Root_R4.pem
+Adding debian:QuoVadis_Root_CA_2_G3.pem
+Adding debian:LuxTrust_Global_Root_2.pem
+Adding debian:Staat_der_Nederlanden_Root_CA_-_G3.pem
+Adding debian:TrustCor_RootCert_CA-1.pem
+Adding debian:SSL.com_Root_Certification_Authority_ECC.pem
+Adding debian:CA_Disig_Root_R2.pem
+Adding debian:ACCVRAIZ1.pem
+Adding debian:SSL.com_EV_Root_Certification_Authority_ECC.pem
+Adding debian:USERTrust_RSA_Certification_Authority.pem
+Adding debian:NetLock_Arany_=Class_Gold=_Főtanúsítvány.pem
+Adding debian:TrustCor_ECA-1.pem
+Adding debian:SSL.com_EV_Root_Certification_Authority_RSA_R2.pem
+Adding debian:Amazon_Root_CA_4.pem
+Adding debian:Entrust_Root_Certification_Authority_-_EC1.pem
+Adding debian:Certigna.pem
+Adding debian:Security_Communication_RootCA2.pem
+Adding debian:Hongkong_Post_Root_CA_1.pem
+Adding debian:D-TRUST_Root_Class_3_CA_2_2009.pem
+Adding debian:GTS_Root_R1.pem
+Adding debian:Hongkong_Post_Root_CA_3.pem
+Adding debian:Buypass_Class_2_Root_CA.pem
+Adding debian:Hellenic_Academic_and_Research_Institutions_RootCA_2015.pem
+Adding debian:Certum_Trusted_Network_CA.pem
+Adding debian:GlobalSign_Root_CA_-_R2.pem
+Adding debian:DigiCert_Global_Root_G3.pem
+Adding debian:QuoVadis_Root_CA_3_G3.pem
+Adding debian:GeoTrust_Universal_CA_2.pem
+Adding debian:QuoVadis_Root_CA_3.pem
+Adding debian:GlobalSign_ECC_Root_CA_-_R4.pem
+Adding debian:IdenTrust_Commercial_Root_CA_1.pem
+Adding debian:DigiCert_Assured_ID_Root_CA.pem
+Adding debian:E-Tugra_Certification_Authority.pem
+Adding debian:UCA_Global_G2_Root.pem
+Adding debian:GlobalSign_Root_CA_-_R6.pem
+Adding debian:OISTE_WISeKey_Global_Root_GA_CA.pem
+Adding debian:Entrust_Root_Certification_Authority.pem
+Adding debian:emSign_ECC_Root_CA_-_G3.pem
+Adding debian:TeliaSonera_Root_CA_v1.pem
+Adding debian:Cybertrust_Global_Root.pem
+Adding debian:SecureTrust_CA.pem
+Adding debian:AC_RAIZ_FNMT-RCM.pem
+Adding debian:TWCA_Global_Root_CA.pem
+Adding debian:COMODO_ECC_Certification_Authority.pem
+Adding debian:OISTE_WISeKey_Global_Root_GB_CA.pem
+Adding debian:Amazon_Root_CA_3.pem
+Adding debian:Buypass_Class_3_Root_CA.pem
+Adding debian:Autoridad_de_Certificacion_Firmaprofesional_CIF_A62634068.pem
+Adding debian:COMODO_Certification_Authority.pem
+Adding debian:SwissSign_Silver_CA_-_G2.pem
+Adding debian:DigiCert_Global_Root_CA.pem
+Adding debian:SZAFIR_ROOT_CA2.pem
+Adding debian:Amazon_Root_CA_1.pem
+Adding debian:emSign_ECC_Root_CA_-_C3.pem
+Adding debian:OISTE_WISeKey_Global_Root_GC_CA.pem
+Adding debian:Starfield_Root_Certificate_Authority_-_G2.pem
+Adding debian:Baltimore_CyberTrust_Root.pem
+Adding debian:TrustCor_RootCert_CA-2.pem
+Adding debian:CFCA_EV_ROOT.pem
+Adding debian:QuoVadis_Root_CA_1_G3.pem
+Adding debian:XRamp_Global_CA_Root.pem
+Adding debian:Hellenic_Academic_and_Research_Institutions_RootCA_2011.pem
+Adding debian:TUBITAK_Kamu_SM_SSL_Kok_Sertifikasi_-_Surum_1.pem
+Adding debian:GTS_Root_R2.pem
+Adding debian:Go_Daddy_Class_2_CA.pem
+Adding debian:emSign_Root_CA_-_G1.pem
+Adding debian:SwissSign_Gold_CA_-_G2.pem
+Adding debian:Network_Solutions_Certificate_Authority.pem
+Adding debian:Verisign_Class_3_Public_Primary_Certification_Authority_-_G3.pem
+Adding debian:D-TRUST_Root_Class_3_CA_2_EV_2009.pem
+Adding debian:Certigna_Root_CA.pem
+Adding debian:Staat_der_Nederlanden_Root_CA_-_G2.pem
+Adding debian:Staat_der_Nederlanden_EV_Root_CA.pem
+Adding debian:SSL.com_Root_Certification_Authority_RSA.pem
+Adding debian:DigiCert_Trusted_Root_G4.pem
+Adding debian:Microsec_e-Szigno_Root_CA_2009.pem
+Adding debian:Security_Communication_Root_CA.pem
+Adding debian:AffirmTrust_Networking.pem
+Adding debian:Taiwan_GRCA.pem
+Adding debian:UCA_Extended_Validation_Root.pem
+Adding debian:AffirmTrust_Premium.pem
+Adding debian:GDCA_TrustAUTH_R5_ROOT.pem
+Adding debian:DigiCert_Assured_ID_Root_G2.pem
+done.
+Processing triggers for libc-bin (2.28-10) ...
+Processing triggers for systemd (241-7~deb10u4) ...
+Processing triggers for ca-certificates (20200601~deb10u1) ...
+Updating certificates in /etc/ssl/certs...
+0 added, 0 removed; done.
+Running hooks in /etc/ca-certificates/update.d...
+
+done.
+done.
++ 1595603652.095106 1613430784 (16) wget -nv https://isabelle.in.tum.de/website-Isabelle2019/dist/Isabelle2019_linux.tar.gz
+2020-07-24 16:16:50 URL:https://isabelle.in.tum.de/website-Isabelle2019/dist/Isabelle2019_linux.tar.gz [413153283/413153283] -> "Isabelle2019_linux.tar.gz" [1]
++ 1595603810.734804 2026586112 (17) tar xzf Isabelle2019_linux.tar.gz
++ 1595603816.331270 3004506112 (20) wget https://www.scss.tcd.ie/frederic.tuong/rtems_split.tar.gz
+--2020-07-24 16:16:56--  https://www.scss.tcd.ie/frederic.tuong/rtems_split.tar.gz
+Resolving www.scss.tcd.ie (www.scss.tcd.ie)... 134.226.52.35
+Connecting to www.scss.tcd.ie (www.scss.tcd.ie)|134.226.52.35|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 557637 (545K) [application/x-gzip]
+Saving to: ‘rtems_split.tar.gz’
+
+     0K .......... .......... .......... .......... ..........  9%  655K 1s
+    50K .......... .......... .......... .......... .......... 18% 1.13M 1s
+   100K .......... .......... .......... .......... .......... 27% 8.77M 0s
+   150K .......... .......... .......... .......... .......... 36% 1.41M 0s
+   200K .......... .......... .......... .......... .......... 45% 5.38M 0s
+   250K .......... .......... .......... .......... .......... 55% 80.8K 1s
+   300K .......... .......... .......... .......... .......... 64% 8.29M 0s
+   350K .......... .......... .......... .......... .......... 73% 1.14M 0s
+   400K .......... .......... .......... .......... .......... 82% 6.87M 0s
+   450K .......... .......... .......... .......... .......... 91% 1.20M 0s
+   500K .......... .......... .......... .......... ....      100% 8.62M=0.9s
+
+2020-07-24 16:16:57 (613 KB/s) - ‘rtems_split.tar.gz’ saved [557637/557637]
+
++ 1595603817.456820 3005067264 (21) tar xzf rtems_split.tar.gz
++ 1595603817.501175 3008229376 (24) mkdir /home/f/smpmrsp01
++ 1595603817.504346 3008233472 (25) cd /home/f/smpmrsp01
++ 1595603817.506529 3008233472 (26) wget https://www.scss.tcd.ie/frederic.tuong/init_out.c0
+--2020-07-24 16:16:57--  https://www.scss.tcd.ie/frederic.tuong/init_out.c0
+Resolving www.scss.tcd.ie (www.scss.tcd.ie)... 134.226.52.35
+Connecting to www.scss.tcd.ie (www.scss.tcd.ie)|134.226.52.35|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 1079193 (1.0M)
+Saving to: ‘init_out.c0’
+
+     0K .......... .......... .......... .......... ..........  4%  683K 1s
+    50K .......... .......... .......... .......... ..........  9% 1.28M 1s
+   100K .......... .......... .......... .......... .......... 14% 8.62M 1s
+   150K .......... .......... .......... .......... .......... 18% 1.58M 1s
+   200K .......... .......... .......... .......... .......... 23% 5.95M 1s
+   250K .......... .......... .......... .......... .......... 28% 8.56M 0s
+   300K .......... .......... .......... .......... .......... 33% 1.97M 0s
+   350K .......... .......... .......... .......... .......... 37% 4.88M 0s
+   400K .......... .......... .......... .......... .......... 42% 2.17M 0s
+   450K .......... .......... .......... .......... .......... 47% 6.36M 0s
+   500K .......... .......... .......... .......... .......... 52% 6.10M 0s
+   550K .......... .......... .......... .......... .......... 56% 2.28M 0s
+   600K .......... .......... .......... .......... .......... 61% 7.31M 0s
+   650K .......... .......... .......... .......... .......... 66% 5.67M 0s
+   700K .......... .......... .......... .......... .......... 71% 7.60M 0s
+   750K .......... .......... .......... .......... .......... 75% 2.16M 0s
+   800K .......... .......... .......... .......... .......... 80% 6.99M 0s
+   850K .......... .......... .......... .......... .......... 85% 5.61M 0s
+   900K .......... .......... .......... .......... .......... 90% 2.13M 0s
+   950K .......... .......... .......... .......... .......... 94% 6.31M 0s
+  1000K .......... .......... .......... .......... .......... 99% 7.53M 0s
+  1050K ...                                                   100% 7438G=0.4s
+
+2020-07-24 16:16:58 (2.91 MB/s) - ‘init_out.c0’ saved [1079193/1079193]
+
++ 1595603818.087374 3009318912 (27) wget https://www.scss.tcd.ie/frederic.tuong/model
+--2020-07-24 16:16:58--  https://www.scss.tcd.ie/frederic.tuong/model
+Resolving www.scss.tcd.ie (www.scss.tcd.ie)... 134.226.52.35
+Connecting to www.scss.tcd.ie (www.scss.tcd.ie)|134.226.52.35|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 8661484 (8.3M)
+Saving to: ‘model’
+
+     0K .......... .......... .......... .......... ..........  0%  668K 13s
+    50K .......... .......... .......... .......... ..........  1% 1.16M 10s
+   100K .......... .......... .......... .......... ..........  1% 6.24M 7s
+   150K .......... .......... .......... .......... ..........  2% 1.41M 7s
+   200K .......... .......... .......... .......... ..........  2% 5.25M 6s
+   250K .......... .......... .......... .......... ..........  3% 29.7M 5s
+   300K .......... .......... .......... .......... ..........  4%  884K 5s
+   350K .......... .......... .......... .......... ..........  4% 20.6M 5s
+   400K .......... .......... .......... .......... ..........  5% 34.9M 4s
+   450K .......... .......... .......... .......... ..........  5% 1.23M 4s
+   500K .......... .......... .......... .......... ..........  6% 6.65M 4s
+   550K .......... .......... .......... .......... ..........  7% 1.13M 4s
+   600K .......... .......... .......... .......... ..........  7% 6.15M 4s
+   650K .......... .......... .......... .......... ..........  8% 1.33M 4s
+   700K .......... .......... .......... .......... ..........  8% 9.55M 4s
+   750K .......... .......... .......... .......... ..........  9% 1.90M 4s
+   800K .......... .......... .......... .......... .......... 10% 68.6K 10s
+   850K .......... .......... .......... .......... .......... 10% 1.18M 10s
+   900K .......... .......... .......... .......... .......... 11% 10.1M 9s
+   950K .......... .......... .......... .......... .......... 11% 1.25M 9s
+  1000K .......... .......... .......... .......... .......... 12% 7.26M 9s
+  1050K .......... .......... .......... .......... .......... 13%  218K 10s
+  1100K .......... .......... .......... .......... .......... 13% 9.41M 9s
+  1150K .......... .......... .......... .......... .......... 14% 1.67M 9s
+  1200K .......... .......... .......... .......... .......... 14% 3.22M 9s
+  1250K .......... .......... .......... .......... .......... 15% 2.33M 8s
+  1300K .......... .......... .......... .......... .......... 15% 2.66M 8s
+  1350K .......... .......... .......... .......... .......... 16% 7.69M 8s
+  1400K .......... .......... .......... .......... .......... 17% 2.27M 8s
+  1450K .......... .......... .......... .......... .......... 17% 2.41M 7s
+  1500K .......... .......... .......... .......... .......... 18% 3.94M 7s
+  1550K .......... .......... .......... .......... .......... 18% 1.91M 7s
+  1600K .......... .......... .......... .......... .......... 19% 4.79M 7s
+  1650K .......... .......... .......... .......... .......... 20% 1.61M 7s
+  1700K .......... .......... .......... .......... .......... 20% 6.06M 6s
+  1750K .......... .......... .......... .......... .......... 21% 3.56M 6s
+  1800K .......... .......... .......... .......... .......... 21% 64.6K 9s
+  1850K .......... .......... .......... .......... .......... 22% 11.1M 9s
+  1900K .......... .......... .......... .......... .......... 23% 1.17M 8s
+  1950K .......... .......... .......... .......... .......... 23% 8.02M 8s
+  2000K .......... .......... .......... .......... .......... 24% 1.32M 8s
+  2050K .......... .......... .......... .......... .......... 24% 7.95M 8s
+  2100K .......... .......... .......... .......... .......... 25% 1.83M 8s
+  2150K .......... .......... .......... .......... .......... 26% 3.61M 7s
+  2200K .......... .......... .......... .......... .......... 26% 2.19M 7s
+  2250K .......... .......... .......... .......... .......... 27% 3.58M 7s
+  2300K .......... .......... .......... .......... .......... 27% 4.72M 7s
+  2350K .......... .......... .......... .......... .......... 28% 2.35M 7s
+  2400K .......... .......... .......... .......... .......... 28% 2.43M 7s
+  2450K .......... .......... .......... .......... .......... 29% 3.06M 6s
+  2500K .......... .......... .......... .......... .......... 30% 1.99M 6s
+  2550K .......... .......... .......... .......... .......... 30% 7.78M 6s
+  2600K .......... .......... .......... .......... .......... 31% 3.46M 6s
+  2650K .......... .......... .......... .......... .......... 31% 1.83M 6s
+  2700K .......... .......... .......... .......... .......... 32% 6.01M 6s
+  2750K .......... .......... .......... .......... .......... 33% 2.51M 6s
+  2800K .......... .......... .......... .......... .......... 33% 2.03M 6s
+  2850K .......... .......... .......... .......... .......... 34% 7.65M 5s
+  2900K .......... .......... .......... .......... .......... 34% 1.36M 5s
+  2950K .......... .......... .......... .......... .......... 35% 5.91M 5s
+  3000K .......... .......... .......... .......... .......... 36% 3.75M 5s
+  3050K .......... .......... .......... .......... .......... 36% 1.54M 5s
+  3100K .......... .......... .......... .......... .......... 37% 6.15M 5s
+  3150K .......... .......... .......... .......... .......... 37% 8.12M 5s
+  3200K .......... .......... .......... .......... .......... 38% 1.81M 5s
+  3250K .......... .......... .......... .......... .......... 39% 4.35M 5s
+  3300K .......... .......... .......... .......... .......... 39% 1.94M 5s
+  3350K .......... .......... .......... .......... .......... 40% 3.05M 4s
+  3400K .......... .......... .......... .......... .......... 40% 6.10M 4s
+  3450K .......... .......... .......... .......... .......... 41% 2.98M 4s
+  3500K .......... .......... .......... .......... .......... 41% 2.60M 4s
+  3550K .......... .......... .......... .......... .......... 42% 5.31M 4s
+  3600K .......... .......... .......... .......... .......... 43% 2.12M 4s
+  3650K .......... .......... .......... .......... .......... 43% 5.99M 4s
+  3700K .......... .......... .......... .......... .......... 44% 2.99M 4s
+  3750K .......... .......... .......... .......... .......... 44% 3.18M 4s
+  3800K .......... .......... .......... .......... .......... 45% 5.30M 4s
+  3850K .......... .......... .......... .......... .......... 46% 2.52M 4s
+  3900K .......... .......... .......... .......... .......... 46% 3.95M 4s
+  3950K .......... .......... .......... .......... .......... 47% 3.31M 4s
+  4000K .......... .......... .......... .......... .......... 47% 2.75M 3s
+  4050K .......... .......... .......... .......... .......... 48% 4.97M 3s
+  4100K .......... .......... .......... .......... .......... 49% 2.44M 3s
+  4150K .......... .......... .......... .......... .......... 49% 4.17M 3s
+  4200K .......... .......... .......... .......... .......... 50% 3.75M 3s
+  4250K .......... .......... .......... .......... .......... 50% 3.21M 3s
+  4300K .......... .......... .......... .......... .......... 51% 4.48M 3s
+  4350K .......... .......... .......... .......... .......... 52%  320K 3s
+  4400K .......... .......... .......... .......... .......... 52% 7.99M 3s
+  4450K .......... .......... .......... .......... .......... 53% 9.25M 3s
+  4500K .......... .......... .......... .......... .......... 53% 1.52M 3s
+  4550K .......... .......... .......... .......... .......... 54% 9.67M 3s
+  4600K .......... .......... .......... .......... .......... 54% 1.80M 3s
+  4650K .......... .......... .......... .......... .......... 55% 5.15M 3s
+  4700K .......... .......... .......... .......... .......... 56% 9.08M 3s
+  4750K .......... .......... .......... .......... .......... 56% 2.00M 3s
+  4800K .......... .......... .......... .......... .......... 57% 4.41M 3s
+  4850K .......... .......... .......... .......... .......... 57% 2.35M 3s
+  4900K .......... .......... .......... .......... .......... 58% 4.99M 3s
+  4950K .......... .......... .......... .......... .......... 59% 4.70M 2s
+  5000K .......... .......... .......... .......... .......... 59% 2.15M 2s
+  5050K .......... .......... .......... .......... .......... 60% 4.37M 2s
+  5100K .......... .......... .......... .......... .......... 60% 9.56M 2s
+  5150K .......... .......... .......... .......... .......... 61% 2.18M 2s
+  5200K .......... .......... .......... .......... .......... 62% 2.84M 2s
+  5250K .......... .......... .......... .......... .......... 62% 3.77M 2s
+  5300K .......... .......... .......... .......... .......... 63% 2.22M 2s
+  5350K .......... .......... .......... .......... .......... 63% 3.87M 2s
+  5400K .......... .......... .......... .......... .......... 64% 5.67M 2s
+  5450K .......... .......... .......... .......... .......... 65% 2.36M 2s
+  5500K .......... .......... .......... .......... .......... 65% 4.88M 2s
+  5550K .......... .......... .......... .......... .......... 66% 6.06M 2s
+  5600K .......... .......... .......... .......... .......... 66% 1.94M 2s
+  5650K .......... .......... .......... .......... .......... 67% 4.73M 2s
+  5700K .......... .......... .......... .......... .......... 67% 2.99M 2s
+  5750K .......... .......... .......... .......... .......... 68% 3.31M 2s
+  5800K .......... .......... .......... .......... .......... 69% 4.31M 2s
+  5850K .......... .......... .......... .......... .......... 69% 3.75M 2s
+  5900K .......... .......... .......... .......... .......... 70% 3.24M 2s
+  5950K .......... .......... .......... .......... .......... 70% 4.56M 2s
+  6000K .......... .......... .......... .......... .......... 71% 2.45M 2s
+  6050K .......... .......... .......... .......... .......... 72% 4.40M 2s
+  6100K .......... .......... .......... .......... .......... 72% 3.70M 1s
+  6150K .......... .......... .......... .......... .......... 73% 3.62M 1s
+  6200K .......... .......... .......... .......... .......... 73% 3.60M 1s
+  6250K .......... .......... .......... .......... .......... 74% 4.39M 1s
+  6300K .......... .......... .......... .......... .......... 75% 1012K 1s
+  6350K .......... .......... .......... .......... .......... 75% 41.5M 1s
+  6400K .......... .......... .......... .......... .......... 76% 51.1M 1s
+  6450K .......... .......... .......... .......... .......... 76% 1.40M 1s
+  6500K .......... .......... .......... .......... .......... 77% 9.52M 1s
+  6550K .......... .......... .......... .......... .......... 78% 9.72M 1s
+  6600K .......... .......... .......... .......... .......... 78% 1.71M 1s
+  6650K .......... .......... .......... .......... .......... 79% 4.11M 1s
+  6700K .......... .......... .......... .......... .......... 79% 10.1M 1s
+  6750K .......... .......... .......... .......... .......... 80% 2.23M 1s
+  6800K .......... .......... .......... .......... .......... 80% 3.52M 1s
+  6850K .......... .......... .......... .......... .......... 81% 7.51M 1s
+  6900K .......... .......... .......... .......... .......... 82% 2.10M 1s
+  6950K .......... .......... .......... .......... .......... 82% 6.47M 1s
+  7000K .......... .......... .......... .......... .......... 83% 2.63M 1s
+  7050K .......... .......... .......... .......... .......... 83% 4.25M 1s
+  7100K .......... .......... .......... .......... .......... 84% 6.27M 1s
+  7150K .......... .......... .......... .......... .......... 85% 2.83M 1s
+  7200K .......... .......... .......... .......... .......... 85% 3.34M 1s
+  7250K .......... .......... .......... .......... .......... 86% 5.19M 1s
+  7300K .......... .......... .......... .......... .......... 86% 2.32M 1s
+  7350K .......... .......... .......... .......... .......... 87% 5.45M 1s
+  7400K .......... .......... .......... .......... .......... 88% 6.66M 1s
+  7450K .......... .......... .......... .......... .......... 88% 2.35M 1s
+  7500K .......... .......... .......... .......... .......... 89% 4.63M 1s
+  7550K .......... .......... .......... .......... .......... 89% 5.60M 0s
+  7600K .......... .......... .......... .......... .......... 90% 1.83M 0s
+  7650K .......... .......... .......... .......... .......... 91% 6.48M 0s
+  7700K .......... .......... .......... .......... .......... 91% 3.68M 0s
+  7750K .......... .......... .......... .......... .......... 92% 2.72M 0s
+  7800K .......... .......... .......... .......... .......... 92% 8.54M 0s
+  7850K .......... .......... .......... .......... .......... 93% 2.89M 0s
+  7900K .......... .......... .......... .......... .......... 93% 2.93M 0s
+  7950K .......... .......... .......... .......... .......... 94% 5.72M 0s
+  8000K .......... .......... .......... .......... .......... 95% 3.05M 0s
+  8050K .......... .......... .......... .......... .......... 95% 2.87M 0s
+  8100K .......... .......... .......... .......... .......... 96% 4.98M 0s
+  8150K .......... .......... .......... .......... .......... 96% 4.23M 0s
+  8200K .......... .......... .......... .......... .......... 97% 2.97M 0s
+  8250K .......... .......... .......... .......... .......... 98% 4.52M 0s
+  8300K .......... .......... .......... .......... .......... 98% 3.44M 0s
+  8350K .......... .......... .......... .......... .......... 99%  506K 0s
+  8400K .......... .......... .......... .......... .......... 99% 8.81M 0s
+  8450K ........                                              100% 31.5M=4.7s
+
+2020-07-24 16:17:02 (1.77 MB/s) - ‘model’ saved [8661484/8661484]
+
++ 1595603822.994766 3017994240 (30) cd /home/f/rtems_split
++ 1595603822.996713 3017994240 (31) export SPLIT_FILE_PREF=/home/g/Private/tmp/rtems_test/src
++ 1595603822.998362 3017994240 (31) SPLIT_FILE_PREF=/home/g/Private/tmp/rtems_test/src
++ 1595603823.000324 3017994240 (32) export SPLIT_FILE_C=/home/f/smpmrsp01/init_out.c0
++ 1595603823.001864 3017994240 (32) SPLIT_FILE_C=/home/f/smpmrsp01/init_out.c0
++ 1595603823.003827 3017994240 (33) export SPLIT_FILE_PML=/home/f/smpmrsp01/model
++ 1595603823.005621 3017994240 (33) SPLIT_FILE_PML=/home/f/smpmrsp01/model
++ 1595603823.008359 3017994240 (34) export SPLIT_FILE_EXEC=
++ 1595603823.009927 3017994240 (34) SPLIT_FILE_EXEC=
++ 1595603823.011908 3017994240 (35) /home/f/Isabelle2019/bin/isabelle build -o parallel_proofs=3 -v -d . -b Isabelle_Split
+Started at Fri Jul 24 16:17:04 GMT+1 2020 (polyml-5.8_x86_64_32-linux on debian)
+ISABELLE_BUILD_OPTIONS=""
+
+ML_PLATFORM="x86_64_32-linux"
+ML_HOME="/home/f/Isabelle2019/contrib/polyml-5.8/x86_64_32-linux"
+ML_SYSTEM="polyml-5.8"
+ML_OPTIONS="--minheap 500"
+
+Session Pure/Pure
+Session HOL/HOL (main)
+Session Unsorted/Isabelle_C
+Session Unsorted/Isabelle_Split
+Building Isabelle_C ...
+Isabelle_C: theory Isabelle_C.C_Ast
+Isabelle_C: theory Isabelle_C.C_Lexer_Language
+Isabelle_C: theory Isabelle_C.C_Environment
+Isabelle_C: theory Isabelle_C.C_Parser_Language
+Isabelle_C: theory Isabelle_C.C_Lexer_Annotation
+Isabelle_C: theory Isabelle_C.C_Parser_Annotation
+Isabelle_C: theory Isabelle_C.C_Eval
+Isabelle_C: theory Isabelle_C.C_Command
+Isabelle_C: theory Isabelle_C.C_Document
+Isabelle_C: theory Isabelle_C.C_Main
+Timing Isabelle_C (1 threads, 9.493s elapsed time, 9.410s cpu time, 1.273s GC time, factor 0.99)
+Finished Isabelle_C (0:00:14 elapsed time, 0:00:14 cpu time, factor 0.99)
+Building Isabelle_Split ...
+Isabelle_Split: theory Isabelle_Split.Split_Command
+Isabelle_Split: theory Isabelle_Split.Split_Main
+Timing Isabelle_Split (1 threads, 8.781s elapsed time, 8.758s cpu time, 5.063s GC time, factor 1.00)
+Finished Isabelle_Split (0:00:13 elapsed time, 0:00:13 cpu time, factor 0.97)
+
+Finished at Fri Jul 24 16:17:39 GMT+1 2020
+0:00:35 elapsed time, 0:00:28 cpu time, factor 0.80
++ 1595603860.017517 3058401280 (38) ls c pml
+c:
+rsb
+rtems
+smpmrsp01
+
+pml:
+rsb
+rtems
+	Command being timed: "/media/sf_VirtualBox_shared/isabelle_c.sh"
+	User time (seconds): 45.15
+	System time (seconds): 40.85
+	Percent of CPU this job got: 34%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 4:06.52
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 1656372
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 158
+	Minor (reclaiming a frame) page faults: 1529193
+	Voluntary context switches: 246018
+	Involuntary context switches: 108930
+	Swaps: 0
+	File system inputs: 181480
+	File system outputs: 3388520
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
