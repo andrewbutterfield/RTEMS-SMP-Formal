@@ -32,6 +32,7 @@ import os
 import glob
 import shutil
 import yaml
+from pathlib import Path
 
 
 def clean(model):
@@ -88,12 +89,12 @@ def generate(model, testgen):
     no_of_trails = len(glob.glob(model + '*.trail'))
     if no_of_trails == 1:
         os.system("spin -T -t " + model + ".pml > " + model + ".spn")
-        os.system(testgen + " " + model)
+        os.system(f"python {testgen} {model}")
         sys.exit(0)
     for i in range(no_of_trails):
         os.system("spin -T -t" + str(i + 1) + " " + model + ".pml > " +
                   model + "-" + str(i) + ".spn")
-        os.system(testgen + " " + model + " " + str(i))
+        os.system(f"python {testgen} {model} {i}")
 
 
 def copy(model, codedir, rtems, modfile):
@@ -163,6 +164,14 @@ def main():
                 and testexe):
             print("Please configure testbuilder.yml")
             sys.exit(1)
+
+    if not Path.exists(Path(f"{source_dir}/spin2test.py"))\
+            or not Path.exists(Path(f"{source_dir}/env")):
+        print(f"Setup incomplete...")
+        print(f"Please run the following before continuing:")
+        print(f"cd {source_dir} && bash src.sh")
+        print(f". {source_dir}/env/bin/activate")
+        sys.exit(1)
 
     if sys.argv[1] == "help":
         with open(source_dir + "/testbuilder.help") as helpfile:

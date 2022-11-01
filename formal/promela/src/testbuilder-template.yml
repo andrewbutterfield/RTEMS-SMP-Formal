@@ -30,7 +30,7 @@
 # located in the same directory as testbuilder.py
 # All pathnames should be absolute
 
-spin2test: <spin2test_directory>/spin2test.sh
+spin2test: <spin2test_directory>/spin2test.py
 rtems: <path-to-main-rtems-directory>  # rtems.git, or ..../modules/rtems/
 rsb: <rsb-build_directory>/rtems/6/bin/
 simulator: <path-to>/sparc-rtems6-sis
