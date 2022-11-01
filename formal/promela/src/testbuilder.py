@@ -89,12 +89,12 @@ def generate(model, testgen):
     no_of_trails = len(glob.glob(model + '*.trail'))
     if no_of_trails == 1:
         os.system("spin -T -t " + model + ".pml > " + model + ".spn")
-        os.system(testgen + " " + model)
+        os.system(f"python {testgen} {model}")
         sys.exit(0)
     for i in range(no_of_trails):
         os.system("spin -T -t" + str(i + 1) + " " + model + ".pml > " +
                   model + "-" + str(i) + ".spn")
-        os.system(testgen + " " + model + " " + str(i))
+        os.system(f"python {testgen} {model} {i}")
 
 
 def copy(model, codedir, rtems, modfile):
