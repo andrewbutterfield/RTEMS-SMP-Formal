@@ -52,7 +52,7 @@ def clean(model):
 
 
 def archive(model):
-    print(f"Archiving spin files for {model}")
+    print(f"Archiving spin, test files for {model}")
     files = glob.glob(f"tr-{model}-*.c")
     files += glob.glob(f"{model}*.trail")
     files += glob.glob(f"{model}*.spn")
@@ -61,6 +61,7 @@ def archive(model):
     archive_dir.mkdir(parents=True, exist_ok=True)
     for file in files:
         shutil.copy2(file, archive_dir)
+    print(f"Archived files available in archive/{date}")
 
 
 def zero(modelfile):
@@ -157,7 +158,7 @@ def main():
         print("USAGE:")
         print("help - these instructions")
         print("clean modelname - remove spin, test files")
-        print("archive - archives spin files")
+        print("archive modelname - archives spin, test files")
         print("zero  - remove all tesfiles from RTEMS")
         print("generate modelname - generate spin and test files")
         print("copy modelname - copy test files and configuration to RTEMS")
