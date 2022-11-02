@@ -33,6 +33,7 @@ import glob
 import shutil
 import yaml
 from pathlib import Path
+from datetime import datetime
 
 
 def clean(model):
@@ -48,6 +49,19 @@ def clean(model):
         files += glob.glob('tr-' + model + '-*.c')
     for file in files:
         os.remove(file)
+
+
+def archive(model):
+    print(f"Archiving spin, test files for {model}")
+    files = glob.glob(f"tr-{model}-*.c")
+    files += glob.glob(f"{model}*.trail")
+    files += glob.glob(f"{model}*.spn")
+    date = datetime.now().strftime("%Y%m%d-%H%M%S")
+    archive_dir = Path(f"archive/{date}")
+    archive_dir.mkdir(parents=True, exist_ok=True)
+    for file in files:
+        shutil.copy2(file, archive_dir)
+    print(f"Archived files available in archive/{date}")
 
 
 def zero(modelfile):
@@ -135,6 +149,7 @@ def main():
     """generates and deploys C tests from Promela models"""
     if not (len(sys.argv) == 2 and sys.argv[1] == "help"
             or len(sys.argv) == 3 and sys.argv[1] == "clean"
+            or len(sys.argv) == 3 and sys.argv[1] == "archive"
             or len(sys.argv) == 2 and sys.argv[1] == "zero"
             or len(sys.argv) == 3 and sys.argv[1] == "generate"
             or len(sys.argv) == 3 and sys.argv[1] == "copy"
@@ -143,6 +158,7 @@ def main():
         print("USAGE:")
         print("help - these instructions")
         print("clean modelname - remove spin, test files")
+        print("archive modelname - archives spin, test files")
         print("zero  - remove all tesfiles from RTEMS")
         print("generate modelname - generate spin and test files")
         print("copy modelname - copy test files and configuration to RTEMS")
@@ -182,6 +198,9 @@ def main():
 
     if sys.argv[1] == "clean":
         clean(sys.argv[2])
+
+    if sys.argv[1] == "archive":
+        archive(sys.argv[2])
 
     if sys.argv[1] == "zero":
         zero(testyaml)
