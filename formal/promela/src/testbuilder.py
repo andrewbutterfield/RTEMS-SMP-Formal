@@ -53,8 +53,9 @@ def clean(model):
 
 def archive(model):
     print(f"Archiving spin files for {model}")
-    files = glob.glob(model + '*.trail')
-    files += glob.glob(model + '*.spn')
+    files = glob.glob(f"tr-{model}-*.c")
+    files += glob.glob(f"{model}*.trail")
+    files += glob.glob(f"{model}*.spn")
     date = datetime.now().strftime("%Y%m%d-%H%M%S")
     archive_dir = Path(f"archive/{date}")
     archive_dir.mkdir(parents=True, exist_ok=True)
