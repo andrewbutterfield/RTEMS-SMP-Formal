@@ -7,7 +7,7 @@ This repository contains the models and tooling developed as part of the ESA-spo
 * Andrew Butterfield
 * Frédéric Tuong
 * Robert Jennings
-* Jerzy Jaskuc
+* Jerzy Jaśkuć
 * Eoin Lynch
 * James Gooding Hunt
 
