@@ -54,7 +54,7 @@
 #include <rtems/score/statesimpl.h>
 #include <rtems/score/threadimpl.h>
 
-#include "tr-model-barrier-mgr.h"
+#include "tr-barrier-mgr-model.h"
 
 #include <rtems/test.h>
 
@@ -63,8 +63,8 @@
  *
  * @ingroup RTEMSTestSuiteTestsuitesValidation0
  *
- * @brief Tests the rtems_barrier_create, rtems_barrier_ident, 
- * rtems_barrier_wait, rtems_barrier_release and rtems_barrier_delete 
+ * @brief Tests the rtems_barrier_create, rtems_barrier_ident,
+ * rtems_barrier_wait, rtems_barrier_release and rtems_barrier_delete
  * directives.
  *
  * This test case performs the following actions:

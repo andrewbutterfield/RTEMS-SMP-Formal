@@ -47,7 +47,7 @@
 
 #include <rtems/score/threadimpl.h>
 
-#include "tr-model-barrier-mgr.h"
+#include "tr-barrier-mgr-model.h"
 
 static const char PromelaModelBarrierMgr[] = "/PML-BarrierMgr";
 
