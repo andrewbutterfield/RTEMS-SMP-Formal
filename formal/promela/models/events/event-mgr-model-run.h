@@ -146,7 +146,7 @@ void RtemsModelEventsMgr_Run{0}(
   ctx->unsatisfied_pending = 0xffffffff;
   memset( &ctx->thread_switch_log, 0, sizeof( ctx->thread_switch_log ) );
   T_eq_u32( GetPending( ctx ), 0 );
-  _Thread_Wait_flags_set( ctx->runner_thread, THREAD_WAIT_FLAGS_INITIAL );
+  _Thread_Wait_flags_set( ctx->runner_thread, THREAD_WAIT_CLASS_PERIOD );
 
   TestSegment0( ctx );
 
