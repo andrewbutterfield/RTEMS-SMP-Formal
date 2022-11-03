@@ -1,11 +1,10 @@
-# SPIN-PromelaTestGeneration
+# Message Manager model
 
-Eoin Lynch
+Developer: Eoin Lynch
 
-This repo contains the code for the generation/running of tests for the RTEMS Message Manager,
-https://docs.rtems.org/branches/master/c-user/message/index.html
+This directory contains the code for the generation/running of tests for the [RTEMS Message Manager](https://docs.rtems.org/branches/master/c-user/message/index.html)
 
-This project is research work done for my dissertation as part of the MAI in Computer Engineering program at Trinity College Dublin
+It is a subset of the material available at [Eoin Lynch's project repository](https://github.com/lynche12/SPIN-PromelaTestGeneration).
 
-This project requires the spin2test and testbuilder projects to generate tests. These are located in testgen-src. Not created by me
+This project is research work done for his dissertation as part of the MAI in Computer Engineering program at Trinity College Dublin
 
