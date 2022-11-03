@@ -100,7 +100,7 @@ static void RtemsModelMessageMgr_Setup{0}(
   //T_assert_rsc_success( sc );
 
   sc = rtems_task_create("WRKR",
-                          PRIO_NORMAL, 
+                          PRIO_NORMAL,
                           RTEMS_MINIMUM_STACK_SIZE,
                           RTEMS_DEFAULT_MODES,
                           RTEMS_DEFAULT_ATTRIBUTES,
@@ -113,7 +113,7 @@ static void RtemsModelMessageMgr_Setup{0}(
   T_assert_rsc_success( sc );
 
   sc = rtems_task_create("WRKR",
-                          PRIO_NORMAL, 
+                          PRIO_NORMAL,
                           RTEMS_MINIMUM_STACK_SIZE,
                           RTEMS_DEFAULT_MODES,
                           RTEMS_DEFAULT_ATTRIBUTES,
@@ -167,14 +167,14 @@ void RtemsModelMessageMgr_Run{0}()
   T_log( T_NORMAL, "Test Fixture Pushed" );
 
 
-  
+
   ctx->this_test_number = {0};
 
 
   ctx->send_status = RTEMS_INCORRECT_STATE;
   ctx->receive_option_set = 0;
   ctx->receive_timeout = RTEMS_NO_TIMEOUT;
-  _Thread_Wait_flags_set( ctx->runner_thread, THREAD_WAIT_FLAGS_INITIAL );
+  _Thread_Wait_flags_set( ctx->runner_thread, THREAD_WAIT_CLASS_PERIOD );
 
   TestSegment0( ctx );
 
