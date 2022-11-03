@@ -164,20 +164,20 @@ def main():
         print("run - runs RTEMS tests")
         sys.exit(1)
 
+    config = dict()
     source_dir = os.path.dirname(os.path.realpath(__file__))
     with open(source_dir + "/testbuilder.yml") as file:
-        config = yaml.load(file, Loader=yaml.FullLoader)
-        spin2test = config['spin2test']
-        rtems = config['rtems']
-        rsb = config['rsb']
-        simulator = config['simulator']
-        testyaml = config['testyaml']
-        testcode = config['testcode']
-        testexe = config['testexe']
-        if not (spin2test and rtems and rsb and simulator and testyaml
-                and testexe):
-            print("Please configure testbuilder.yml")
-            sys.exit(1)
+        global_config = yaml.load(file, Loader=yaml.FullLoader)
+        for key, val in global_config.items():
+            config[key] = val
+    if Path("testbuilder.yml").exists():
+        with open("testbuilder.yml") as file:
+            local_config = yaml.load(file, Loader=yaml.FullLoader)
+            for key, val in local_config.items():
+                config[key] = val
+    if {"spin2test", "rtems", "rsb", "simulator", "testyaml", "testcode", "testexe"} - config.keys():
+        print("Please configure testbuilder.yml")
+        sys.exit(1)
 
     if not Path.exists(Path(f"{source_dir}/spin2test.py"))\
             or not Path.exists(Path(f"{source_dir}/env")):
@@ -192,7 +192,7 @@ def main():
             print(helpfile.read())
 
     if sys.argv[1] == "generate":
-        generate(sys.argv[2], spin2test)
+        generate(sys.argv[2], config["spin2test"])
 
     if sys.argv[1] == "clean":
         clean(sys.argv[2])
@@ -201,21 +201,21 @@ def main():
         archive(sys.argv[2])
 
     if sys.argv[1] == "zero":
-        zero(testyaml)
+        zero(config["testyaml"])
 
     if sys.argv[1] == "copy":
-        copy(sys.argv[2], testcode, rtems, testyaml)
+        copy(sys.argv[2], config["testcode"], config["rtems"], config["testyaml"])
 
     if sys.argv[1] == "compile":
-        os.chdir(rtems)
+        os.chdir(config["rtems"])
         os.system("./waf configure")
         os.system("./waf")
 
     if sys.argv[1] == "run":
-        os.chdir(rsb)
-        sim_command = simulator + " -leon3 -r s -m 2 "
-        print("Doing " + sim_command + testexe)
-        os.system(sim_command + testexe)
+        os.chdir(config["rsb"])
+        sim_command = config["simulator"] + " -leon3 -r s -m 2 "
+        print("Doing " + sim_command + config["testexe"])
+        os.system(sim_command + config["testexe"])
 
 
 if __name__ == '__main__':
