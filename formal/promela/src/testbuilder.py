@@ -143,6 +143,24 @@ def copy(model, codedir, rtems, modfile):
         yaml.dump(model0, file)
 
 
+def get_config(source_dir):
+    config = dict()
+    with open(source_dir + "/testbuilder.yml") as file:
+        global_config = yaml.load(file, Loader=yaml.FullLoader)
+        for key, val in global_config.items():
+            config[key] = val
+    if Path("testbuilder.yml").exists():
+        with open("testbuilder.yml") as file:
+            local_config = yaml.load(file, Loader=yaml.FullLoader)
+            for key, val in local_config.items():
+                config[key] = val
+
+    if {"spin2test", "rtems", "rsb", "simulator", "testyaml", "testcode", "testexe"} - config.keys():
+        print("Please configure testbuilder.yml")
+        sys.exit(1)
+    return config
+
+
 def main():
     """generates and deploys C tests from Promela models"""
     if not (len(sys.argv) == 2 and sys.argv[1] == "help"
@@ -164,20 +182,9 @@ def main():
         print("run - runs RTEMS tests")
         sys.exit(1)
 
-    config = dict()
     source_dir = os.path.dirname(os.path.realpath(__file__))
-    with open(source_dir + "/testbuilder.yml") as file:
-        global_config = yaml.load(file, Loader=yaml.FullLoader)
-        for key, val in global_config.items():
-            config[key] = val
-    if Path("testbuilder.yml").exists():
-        with open("testbuilder.yml") as file:
-            local_config = yaml.load(file, Loader=yaml.FullLoader)
-            for key, val in local_config.items():
-                config[key] = val
-    if {"spin2test", "rtems", "rsb", "simulator", "testyaml", "testcode", "testexe"} - config.keys():
-        print("Please configure testbuilder.yml")
-        sys.exit(1)
+
+    config = get_config(source_dir)
 
     if not Path.exists(Path(f"{source_dir}/spin2test.py"))\
             or not Path.exists(Path(f"{source_dir}/env")):
