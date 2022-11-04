@@ -53,6 +53,7 @@
 #include <rtems/score/thread.h>
 
 #include <rtems/test.h>
+#include "tx-support.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -66,12 +67,12 @@ typedef struct {
 
   Thread_Control *runner_thread; // TCB of the runner task
   rtems_id runner_id; // ID of the tasks
-  rtems_id worker0_id; 
+  rtems_id worker0_id;
   rtems_id worker1_id;
 
   rtems_id runner_sema; // ID of the Runner semaphore
   rtems_id worker0_sema; // ID of the Worker0 semaphore
-  rtems_id worker1_sema; // ID of the Worker1 semaphore 
+  rtems_id worker1_sema; // ID of the Worker1 semaphore
   rtems_id barrier_id; // ID of the created barrier
 
   rtems_id runner_sched; // scheduler ID of scheduler used by the runner task
@@ -80,12 +81,12 @@ typedef struct {
   T_thread_switch_log_4 thread_switch_log; // thread switch log
 } RtemsModelBarrierMgr_Context;
 
-typedef enum {
-  PRIO_HIGH = 1,
-  PRIO_NORMAL,
-  PRIO_LOW,
-  PRIO_OTHER
-} Priorities;
+// typedef enum {
+//   PRIO_HIGH = 1,
+//   PRIO_NORMAL,
+//   PRIO_LOW,
+//   PRIO_OTHER
+// } Priorities;
 
 #define POWER_OF_10 100
 
