@@ -38,23 +38,23 @@ from datetime import datetime
 
 def clean(model):
     """Cleans out generated files in current directory"""
-    print("Removing spin and test files for", model)
+    print(f"Removing spin and test files for {model}")
     files = glob.glob('pan')
-    trails = glob.glob(model + '*.trail')
+    trails = glob.glob(f"{model}*.trail")
     files += trails
-    files += glob.glob(model + '*.spn')
+    files += glob.glob(f"{model}*.spn")
     if len(trails) == 1:
-        files += glob.glob('tr-' + model + '.c')
+        files += glob.glob(f"tr-{model}.c")
     else:
-        files += glob.glob('tr-' + model + '-*.c')
+        files += glob.glob(f"tr-{model}-.c")
     for file in files:
         os.remove(file)
 
 
 def archive(model):
     print(f"Archiving spin files for {model}")
-    files = glob.glob(model + '*.trail')
-    files += glob.glob(model + '*.spn')
+    files = glob.glob(f"{model}*.trail")
+    files += glob.glob(f"{model}*.spn")
     date = datetime.now().strftime("%Y%m%d-%H%M%S")
     archive_dir = Path(f"archive/{date}")
     archive_dir.mkdir(parents=True, exist_ok=True)
@@ -77,35 +77,34 @@ def generate(model, testgen):
     """Generates all the test sources in the current directory"""
     # Check necessary files are present
     ready = True
-    if not os.path.isfile(model + ".pml"):
+    if not os.path.isfile(f"{model}.pml"):
         print("Promela file does not exist for model")
         ready = False
-    if not os.path.isfile(model + "-pre.h"):
+    if not os.path.isfile(f"{model}-pre.h"):
         print("Preconditions file does not exist for model")
         ready = False
-    if not os.path.isfile(model + "-post.h"):
+    if not os.path.isfile(f"{model}-post.h"):
         print("Postconditions file does not exist for model")
         ready = False
-    if not os.path.isfile(model + "-run.h"):
+    if not os.path.isfile(f"{model}-run.h"):
         print("Promela file does not exist for model")
         ready = False
-    if not os.path.isfile(model + "-rfn.yml"):
+    if not os.path.isfile(f"{model}-rfn.yml"):
         print("Refinement file does not exist for model")
         ready = False
     if not ready:
         sys.exit(1)
 
     # Generate trail, spin and c files
-    print("Generating spin and test files for", model)
-    os.system("spin -DTEST_GEN -run -E -c0 -e " + model + ".pml")
-    no_of_trails = len(glob.glob(model + '*.trail'))
+    print(f"Generating spin and test files for {model}")
+    os.system(f"spin -DTEST_GEN -run -E -c0 -e {model}.pml")
+    no_of_trails = len(glob.glob(f"model*.trail"))
     if no_of_trails == 1:
-        os.system("spin -T -t " + model + ".pml > " + model + ".spn")
+        os.system(f"spin -T -t {model}.pml > {model}.spn")
         os.system(f"python {testgen} {model}")
         sys.exit(0)
     for i in range(no_of_trails):
-        os.system("spin -T -t" + str(i + 1) + " " + model + ".pml > " +
-                  model + "-" + str(i) + ".spn")
+        os.system(f"spin -T -t {i + 1} {model}.pml > {model}-{i}.spn")
         os.system(f"python {testgen} {model} {i}")
 
 
@@ -113,39 +112,39 @@ def copy(model, codedir, rtems, modfile, testsuite_name):
     """Copies C testfiles to test directory and updates the model file """
     # Remove old test files
     print(f"Removing old files for model {model}")
-    files = glob.glob(codedir + "tr-" + model + '*.c')
-    files += glob.glob(codedir + "tr-" + model + '*.h')
-    files += glob.glob(codedir + "tc-" + model + '*.c')
+    files = glob.glob(f"{codedir}tr-{model}*.c")
+    files += glob.glob(f"{codedir}tr-{model}*.h")
+    files += glob.glob(f"{codedir}tc-{model}*.c")
     for file in files:
         os.remove(file)
 
     # Copy new test files
     print(f"Copying new files for model {model}")
-    files = glob.glob("tr-" + model + '*.c')
-    files += glob.glob("tr-" + model + '*.h')
-    files += glob.glob("tc-" + model + '*.c')
+    files = glob.glob(f"tr-{model}*.c")
+    files += glob.glob(f"tr-{model}*.h")
+    files += glob.glob(f"tc-{model}*.c")
     for file in files:
-        shutil.copyfile(file, rtems + "testsuites/validation/" + file)
+        shutil.copyfile(file, f"{rtems}testsuites/validation/{file}")
 
-    # Update model-0.yml
+    # Update {testsuite name}.yml
     print(f"Updating {testsuite_name} for model {model}")
     with open(modfile) as file:
-        model0 = yaml.load(file, Loader=yaml.FullLoader)
-    source_list = model0['source']
+        model_yaml = yaml.load(file, Loader=yaml.FullLoader)
+    source_list = model_yaml['source']
     source_set = set(source_list)
-    files = glob.glob("tr-" + model + '*.c')
-    files += glob.glob("tc-" + model + '*.c')
+    files = glob.glob(f"tr-{model}*.c")
+    files += glob.glob(f"tc-{model}*.c")
     for file in files:
-        source_set.add('testsuites/validation/' + file)
+        source_set.add(f"testsuites/validation/{file}")
     new_list = list(source_set)
-    model0['source'] = sorted(new_list)
+    model_yaml['source'] = sorted(new_list)
     with open(modfile, 'w') as file:
-        yaml.dump(model0, file)
+        yaml.dump(model_yaml, file)
 
 
 def get_config(source_dir):
     config = dict()
-    with open(source_dir + "/testbuilder.yml") as file:
+    with open(f"{source_dir}/testbuilder.yml") as file:
         global_config = yaml.load(file, Loader=yaml.FullLoader)
         for key, val in global_config.items():
             config[key] = val
@@ -199,7 +198,7 @@ def main():
         sys.exit(1)
 
     if sys.argv[1] == "help":
-        with open(source_dir + "/testbuilder.help") as helpfile:
+        with open(f"{source_dir}/testbuilder.help") as helpfile:
             print(helpfile.read())
 
     if sys.argv[1] == "generate":
@@ -225,8 +224,8 @@ def main():
     if sys.argv[1] == "run":
         os.chdir(config["rsb"])
         sim_command = config["simulator"] + " -leon3 -r s -m 2 "
-        print("Doing " + sim_command + config["testexe"])
-        os.system(sim_command + config["testexe"])
+        print(f"Doing {sim_command} {config['testexe']}")
+        os.system(f"{sim_command} {config['testexe']}")
 
 
 if __name__ == '__main__':
