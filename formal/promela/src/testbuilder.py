@@ -91,13 +91,13 @@ def generate(model, testgen):
     # Generate trail, spin and c files
     print(f"Generating spin and test files for {model}")
     os.system(f"spin -DTEST_GEN -run -E -c0 -e {model}.pml")
-    no_of_trails = len(glob.glob(f"model*.trail"))
+    no_of_trails = len(glob.glob(f"{model}*.trail"))
     if no_of_trails == 1:
         os.system(f"spin -T -t {model}.pml > {model}.spn")
         os.system(f"python {testgen} {model}")
         sys.exit(0)
     for i in range(no_of_trails):
-        os.system(f"spin -T -t {i + 1} {model}.pml > {model}-{i}.spn")
+        os.system(f"spin -T -t{i + 1} {model}.pml > {model}-{i}.spn")
         os.system(f"python {testgen} {model} {i}")
 
 
