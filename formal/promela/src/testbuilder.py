@@ -62,13 +62,13 @@ def archive(model):
         shutil.copy2(file, archive_dir)
 
 
-def zero(model_file, model_name):
+def zero(model_file, testsuite_name):
     """Modifies model file to refer only to the top-level testcase source"""
     # Update {model_file}.yml
-    print(f"Zeroing {model_name}.yml")
+    print(f"Zeroing {testsuite_name}.yml")
     with open(model_file) as file:
         model_yaml = yaml.load(file, Loader=yaml.FullLoader)
-    model_yaml['source'] = [f"testsuites/validation/ts-{model_name}.c"]
+    model_yaml['source'] = [f"testsuites/validation/ts-{testsuite_name}.c"]
     with open(model_file, 'w') as file:
         yaml.dump(model_yaml, file)
 
@@ -109,10 +109,10 @@ def generate(model, testgen):
         os.system(f"python {testgen} {model} {i}")
 
 
-def copy(model, codedir, rtems, modfile):
+def copy(model, codedir, rtems, modfile, testsuite_name):
     """Copies C testfiles to test directory and updates the model file """
     # Remove old test files
-    print("Removing old files for model " + model)
+    print(f"Removing old files for model {model}")
     files = glob.glob(codedir + "tr-" + model + '*.c')
     files += glob.glob(codedir + "tr-" + model + '*.h')
     files += glob.glob(codedir + "tc-" + model + '*.c')
@@ -120,7 +120,7 @@ def copy(model, codedir, rtems, modfile):
         os.remove(file)
 
     # Copy new test files
-    print("Copying new files for model " + model)
+    print(f"Copying new files for model {model}")
     files = glob.glob("tr-" + model + '*.c')
     files += glob.glob("tr-" + model + '*.h')
     files += glob.glob("tc-" + model + '*.c')
@@ -128,7 +128,7 @@ def copy(model, codedir, rtems, modfile):
         shutil.copyfile(file, rtems + "testsuites/validation/" + file)
 
     # Update model-0.yml
-    print(f"Updating {modfile} for model " + model)
+    print(f"Updating {testsuite_name} for model {model}")
     with open(modfile) as file:
         model0 = yaml.load(file, Loader=yaml.FullLoader)
     source_list = model0['source']
@@ -152,15 +152,16 @@ def get_config(source_dir):
     if Path("testbuilder.yml").exists():
         with open("testbuilder.yml") as file:
             local_config = yaml.load(file, Loader=yaml.FullLoader)
-            for key, val in local_config.items():
-                config[key] = val
-    if "modelname" not in config.keys():
-        config["modelname"] = "model-0"
+            if local_config:
+                for key, val in local_config.items():
+                    config[key] = val
+    if "testsuite" not in config.keys():
+        config["testsuite"] = "model-0"
     if {"spin2test", "rtems", "rsb", "simulator", "testyamldir", "testcode", "testexedir"} - config.keys():
         print("Please configure testbuilder.yml")
         sys.exit(1)
-    config["testyaml"] = f"{config['testyamldir']}{config['modelname']}.yml"
-    config["testexe"] = f"{config['testexedir']}ts-{config['modelname']}.exe"
+    config["testyaml"] = f"{config['testyamldir']}{config['testsuite']}.yml"
+    config["testexe"] = f"{config['testexedir']}ts-{config['testsuite']}.exe"
     return config
 
 
@@ -176,11 +177,11 @@ def main():
             or len(sys.argv) == 2 and sys.argv[1] == "run"):
         print("USAGE:")
         print("help - these instructions")
-        print("clean modelname - remove spin, test files")
+        print("clean testsuite - remove spin, test files")
         print("archive - archives spin files")
         print("zero  - remove all tesfiles from RTEMS")
-        print("generate modelname - generate spin and test files")
-        print("copy modelname - copy test files and configuration to RTEMS")
+        print("generate testsuite - generate spin and test files")
+        print("copy testsuite - copy test files and configuration to RTEMS")
         print("compile - compiles RTEMS tests")
         print("run - runs RTEMS tests")
         sys.exit(1)
@@ -211,10 +212,10 @@ def main():
         archive(sys.argv[2])
 
     if sys.argv[1] == "zero":
-        zero(config["testyaml"], config["modelname"])
+        zero(config["testyaml"], config["testsuite"])
 
     if sys.argv[1] == "copy":
-        copy(sys.argv[2], config["testcode"], config["rtems"], config["testyaml"])
+        copy(sys.argv[2], config["testcode"], config["rtems"], config["testyaml"], config["testsuite"])
 
     if sys.argv[1] == "compile":
         os.chdir(config["rtems"])

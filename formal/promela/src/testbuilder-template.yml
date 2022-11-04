@@ -37,4 +37,4 @@ simulator: <path-to>/sparc-rtems6-sis
 testyamldir: <rtems>/spec/build/testsuites/validation/ # directory containing <modelname>.yml
 testcode: <rtems>/testsuites/validation/
 testexedir:  <rtems>/build/.../testsuites/validation/ # directory containing ts-<modelname>.exe
-modelname: model-0
+testsuite: model-0
