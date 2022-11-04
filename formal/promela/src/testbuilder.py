@@ -52,8 +52,9 @@ def clean(model):
 
 
 def archive(model):
-    print(f"Archiving spin files for {model}")
-    files = glob.glob(f"{model}*.trail")
+    print(f"Archiving spin, test files for {model}")
+    files = glob.glob(f"tr-{model}-*.c")
+    files += glob.glob(f"{model}*.trail")
     files += glob.glob(f"{model}*.spn")
     date = datetime.now().strftime("%Y%m%d-%H%M%S")
     archive_dir = Path(f"archive/{date}")
@@ -176,11 +177,11 @@ def main():
             or len(sys.argv) == 2 and sys.argv[1] == "run"):
         print("USAGE:")
         print("help - these instructions")
-        print("clean testsuite - remove spin, test files")
-        print("archive - archives spin files")
+        print("clean modelname - remove spin, test files")
+        print("archive modelname - archives spin, test files")
         print("zero  - remove all tesfiles from RTEMS")
-        print("generate testsuite - generate spin and test files")
-        print("copy testsuite - copy test files and configuration to RTEMS")
+        print("generate modelname - generate spin and test files")
+        print("copy modelname - copy test files and configuration to RTEMS")
         print("compile - compiles RTEMS tests")
         print("run - runs RTEMS tests")
         sys.exit(1)
