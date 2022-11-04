@@ -64,8 +64,8 @@ def archive(model):
 
 def zero(modelfile):
     """Modifies model file to refer only to the top-level testcase source"""
-    # Update model-0.yml
-    print("Zeroing model-0.yml")
+    # Update {modelname}.yml
+    print(f"Zeroing {modelfile}")
     with open(modelfile) as file:
         model0 = yaml.load(file, Loader=yaml.FullLoader)
     model0['source'] = ["testsuites/validation/ts-model-0.c"]
@@ -128,7 +128,7 @@ def copy(model, codedir, rtems, modfile):
         shutil.copyfile(file, rtems + "testsuites/validation/" + file)
 
     # Update model-0.yml
-    print("Updating model-0.yml for model " + model)
+    print(f"Updating {modfile} for model " + model)
     with open(modfile) as file:
         model0 = yaml.load(file, Loader=yaml.FullLoader)
     source_list = model0['source']
