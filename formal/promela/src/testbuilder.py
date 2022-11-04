@@ -39,28 +39,20 @@ from datetime import datetime
 def clean(model):
     """Cleans out generated files in current directory"""
     print(f"Removing spin and test files for {model}")
-    files = glob.glob('pan')
-    trails = glob.glob(f"{model}*.trail")
-    files += trails
-    files += glob.glob(f"{model}*.spn")
-    if len(trails) == 1:
-        files += glob.glob(f"tr-{model}.c")
-    else:
-        files += glob.glob(f"tr-{model}-.c")
+    files = get_generated_files(model)
     for file in files:
         os.remove(file)
 
 
 def archive(model):
-    print(f"Archiving spin, test files for {model}")
-    files = glob.glob(f"tr-{model}-*.c")
-    files += glob.glob(f"{model}*.trail")
-    files += glob.glob(f"{model}*.spn")
+    print(f"Archiving spin and test files for {model}")
+    files = get_generated_files(model)
     date = datetime.now().strftime("%Y%m%d-%H%M%S")
     archive_dir = Path(f"archive/{date}")
     archive_dir.mkdir(parents=True, exist_ok=True)
     for file in files:
         shutil.copy2(file, archive_dir)
+    print(f"Files archived to {archive_dir}")
 
 
 def zero(model_file, testsuite_name):
@@ -128,7 +120,7 @@ def copy(model, codedir, rtems, modfile, testsuite_name):
         shutil.copyfile(file, f"{rtems}testsuites/validation/{file}")
 
     # Update {testsuite name}.yml
-    print(f"Updating {testsuite_name} for model {model}")
+    print(f"Updating {testsuite_name}.yml for model {model}")
     with open(modfile) as file:
         model_yaml = yaml.load(file, Loader=yaml.FullLoader)
     source_list = model_yaml['source']
@@ -141,6 +133,18 @@ def copy(model, codedir, rtems, modfile, testsuite_name):
     model_yaml['source'] = sorted(new_list)
     with open(modfile, 'w') as file:
         yaml.dump(model_yaml, file)
+
+
+def get_generated_files(model):
+    files = glob.glob('pan')
+    trails = glob.glob(f"{model}*.trail")
+    files += trails
+    files += glob.glob(f"{model}*.spn")
+    if len(trails) == 1:
+        files += glob.glob(f"tr-{model}.c")
+    else:
+        files += glob.glob(f"tr-{model}-*.c")
+    return files
 
 
 def get_config(source_dir):
