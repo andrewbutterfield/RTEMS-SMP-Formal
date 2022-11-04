@@ -36,6 +36,8 @@ spin2test: <spin2test_directory>/spin2test.py
 rtems: <path-to-main-rtems-directory>  # rtems.git, or ..../modules/rtems/
 rsb: <rsb-build_directory>/rtems/6/bin/
 simulator: <path-to>/sparc-rtems6-sis
-testyaml: <rtems>/spec/build/testsuites/validation/model-0.yml
+testyamldir: <rtems>/spec/build/testsuites/validation/ # directory containing <modelname>.yml
 testcode: <rtems>/testsuites/validation/
-testexe:  <rtems>/build/.../testsuites/validation/ts-model-0.exe
+testexedir:  <rtems>/build/.../testsuites/validation/ # directory containing ts-<modelname>.exe
+modelname: model-0
+

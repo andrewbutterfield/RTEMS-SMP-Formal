@@ -62,15 +62,15 @@ def archive(model):
         shutil.copy2(file, archive_dir)
 
 
-def zero(modelfile):
+def zero(model_file, model_name):
     """Modifies model file to refer only to the top-level testcase source"""
-    # Update {modelname}.yml
-    print(f"Zeroing {modelfile}")
-    with open(modelfile) as file:
-        model0 = yaml.load(file, Loader=yaml.FullLoader)
-    model0['source'] = ["testsuites/validation/ts-model-0.c"]
-    with open(modelfile, 'w') as file:
-        yaml.dump(model0, file)
+    # Update {model_file}.yml
+    print(f"Zeroing {model_name}.yml")
+    with open(model_file) as file:
+        model_yaml = yaml.load(file, Loader=yaml.FullLoader)
+    model_yaml['source'] = [f"testsuites/validation/ts-{model_name}.c"]
+    with open(model_file, 'w') as file:
+        yaml.dump(model_yaml, file)
 
 
 def generate(model, testgen):
@@ -154,10 +154,13 @@ def get_config(source_dir):
             local_config = yaml.load(file, Loader=yaml.FullLoader)
             for key, val in local_config.items():
                 config[key] = val
-
-    if {"spin2test", "rtems", "rsb", "simulator", "testyaml", "testcode", "testexe"} - config.keys():
+    if "modelname" not in config.keys():
+        config["modelname"] = "model-0"
+    if {"spin2test", "rtems", "rsb", "simulator", "testyamldir", "testcode", "testexedir"} - config.keys():
         print("Please configure testbuilder.yml")
         sys.exit(1)
+    config["testyaml"] = f"{config['testyamldir']}{config['modelname']}.yml"
+    config["testexe"] = f"{config['testexedir']}ts-{config['modelname']}.exe"
     return config
 
 
@@ -208,7 +211,7 @@ def main():
         archive(sys.argv[2])
 
     if sys.argv[1] == "zero":
-        zero(config["testyaml"])
+        zero(config["testyaml"], config["modelname"])
 
     if sys.argv[1] == "copy":
         copy(sys.argv[2], config["testcode"], config["rtems"], config["testyaml"])
