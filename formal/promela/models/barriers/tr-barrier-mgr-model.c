@@ -192,9 +192,9 @@ void RtemsModelBarrierMgr_Teardown( void *arg )
   T_log( T_NORMAL, "Teardown" );
 
   prio = 0;
-  sc = rtems_task_set_priority( RTEMS_SELF, PRIO_HIGH, &prio );
+  sc = rtems_task_set_priority( RTEMS_SELF, BM_PRIO_HIGH, &prio );
   T_rsc_success( sc );
-  T_eq_u32( prio, PRIO_NORMAL );
+  T_eq_u32( prio, BM_PRIO_NORMAL );
 
   DeleteTask(ctx->worker0_id);
   DeleteTask(ctx->worker1_id);

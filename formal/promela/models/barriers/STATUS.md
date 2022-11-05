@@ -1,12 +1,35 @@
 # BARRIER MANAGER status
 
-## 4th Nov 2022 TEST FAIL
+## 5th Nov 2022 TEST FAIL
+
+* Platform: Dell G5, Ubuntu 20.04.5 LTS
+* Generated: OK
+* Compiles: OK
+* Runs: OK
+* All Tests Pass: No, 4 fail
+
+Log extract showing all four fails:
+
+```
+:0.19:0:WRK0/PML-BarrierMgr013:tr-barrier-mgr-model-13.c:185:RTEMS_SUCCESSFUL == RTEMS_TOO_MANY
+F:*:0:RUN:*:*:RTEMS barrier leak (1)
+E:RtemsModelBarrierMgr13:N:33:F:2:D:0.011053
+
+F:0.21:0:WRK0/PML-BarrierMgr012:tr-barrier-mgr-model-12.c:203:RTEMS_SUCCESSFUL == RTEMS_TOO_MANY
+F:*:0:RUN:*:*:RTEMS barrier leak (1)
+E:RtemsModelBarrierMgr12:N:36:F:2:D:0.011254
+```
+
+# 4th Nov 2022 TEST FAIL
 
 * Platform: Dell G5, Ubuntu 20.04.5 LTS
 * Generated: OK
 * Compiles: OK
 * Runs: OK
 * All Tests Pass: No, 27 fail
+
+Log extract showing representative sample:
+
 ```
 F:0.7:0:RUN/PML-BarrierMgr000:tr-barrier-mgr-model-9.c:332:1 == 4
 F:*:0:RUN:*:*:Wrong runner priority, expected 1, actual 4

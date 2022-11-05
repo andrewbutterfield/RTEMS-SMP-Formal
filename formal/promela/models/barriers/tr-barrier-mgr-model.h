@@ -81,12 +81,12 @@ typedef struct {
   T_thread_switch_log_4 thread_switch_log; // thread switch log
 } RtemsModelBarrierMgr_Context;
 
-// typedef enum {
-//   PRIO_HIGH = 1,
-//   PRIO_NORMAL,
-//   PRIO_LOW,
-//   PRIO_OTHER
-// } Priorities;
+typedef enum {
+  BM_PRIO_HIGH = 1,
+  BM_PRIO_NORMAL,
+  BM_PRIO_LOW,
+  BM_PRIO_OTHER
+} Priorities;
 
 #define POWER_OF_10 100
 
