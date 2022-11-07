@@ -694,23 +694,23 @@ inline chooseScenario() {
         ::  task_in[TASK1_ID].releasedNull = true;
             printf( "@@@ %d LOG sub-senario realesed passed is null\n", _pid);
         ::  task_in[TASK2_ID].idNull = true;
-            printf( "@@@ %d LOG sub-senario Worker0 ident passed id null\n", 
+            printf( "@@@ %d LOG sub-senario Worker0 ident passed id null\n",
                       _pid);
-        ::  task_in[TASK2_ID].doAcquire = false;
+        /* ::  task_in[TASK2_ID].doAcquire = false;
             task_in[TASK2_ID].doCreate = true;
             task_in[TASK2_ID].bName = BARRIER2_NAME;
-            printf( "@@@ %d LOG sub-senario TooMany barriers created\n", _pid);
+            printf( "@@@ %d LOG sub-senario TooMany barriers created\n", _pid); */
         ::  skip
-        fi       
+        fi
   ::  scenario == AutoAcq ->
         task_in[TASK1_ID].isAutomatic = true;
         task_in[TASK1_ID].maxWaiters = MAX_WAITERS;
         if
         ::  task_in[TASK1_ID].maxWaiters = 0;
-            printf( "@@@ %d LOG sub-senario bad create, max_waiters is 0\n", 
+            printf( "@@@ %d LOG sub-senario bad create, max_waiters is 0\n",
                       _pid);
         ::  skip
-        fi  
+        fi
   ::  scenario == AutoToutDel ->
         task_in[TASK1_ID].doAcquire = false;
         task_in[TASK1_ID].isAutomatic = true;
