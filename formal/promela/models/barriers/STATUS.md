@@ -1,5 +1,14 @@
 # BARRIER MANAGER status
 
+## 7th Nov 2022 DIAGNOSIS
+
+Test cases 12 and 13 fail because there is a misinterpretation of how the
+maximum number of barriers is determined. The actual configuration is set statically
+in `ts-config.h` to be 7, as `TEST_MAXIMUM_BARRIERS`. In `ts-default.h`, this is used to set the
+value of `CONFIGURE_MAXIMUM_BARRIERS`. This is not easily changed.
+
+The current Promela model only allows 2 barriers.
+
 ## 5th Nov 2022 TEST FAIL
 
 * Platform: Dell G5, Ubuntu 20.04.5 LTS
