@@ -177,14 +177,4 @@ T_TEST_CASE( RtemsModelBarrierMgr19 )
   RtemsModelBarrierMgr_Run19();
 }
 
-T_TEST_CASE( RtemsModelBarrierMgr20 )
-{
-  RtemsModelBarrierMgr_Run20();
-}
-
-T_TEST_CASE( RtemsModelBarrierMgr21 )
-{
-  RtemsModelBarrierMgr_Run21();
-}
-
 /** @} */

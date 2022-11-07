@@ -1,5 +1,15 @@
 # BARRIER MANAGER status
 
+## 7th Nov 2022 COMPLETE
+
+* Platform: Dell G5, Ubuntu 20.04.5 LTS
+* Generated: OK
+* Compiles: OK
+* Runs: OK
+* All Tests Pass: OK
+
+See `barriers/archive/20221107-131233`
+
 ## 7th Nov 2022 DIAGNOSIS
 
 Test cases 12 and 13 fail because there is a misinterpretation of how the
