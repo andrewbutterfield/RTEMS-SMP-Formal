@@ -1,3 +1,4 @@
+
 /*
  * event-mgr-model.pml
  *
@@ -56,6 +57,7 @@
 #define EVT_1 2
 #define EVT_2 4
 #define EVT_3 8
+#define EVTS_ALL 15
 #define NO_TIMEOUT 0
 
 // We envisage two RTEMS tasks involved, at most.
@@ -85,6 +87,7 @@ inline outputDefines () {
    printf("@@@ %d DEF EVT_1 %d\n",_pid,EVT_1);
    printf("@@@ %d DEF EVT_2 %d\n",_pid,EVT_2);
    printf("@@@ %d DEF EVT_3 %d\n",_pid,EVT_3);
+   printf("@@@ %d DEF EVTS_ALL %d\n",_pid,EVTS_ALL);
    printf("@@@ %d DEF NO_TIMEOUT %d\n",_pid,NO_TIMEOUT);
    printf("@@@ %d DEF TASK_MAX %d\n",_pid,TASK_MAX);
    printf("@@@ %d DEF BAD_ID %d\n",_pid,BAD_ID);
@@ -545,11 +548,13 @@ inline chooseScenario() {
         if
         ::  sendEvents = 14; // {1,1,1,0}
         ::  sendEvents = 11; // {1,0,1,1}
-        //  ::  sendEvents = 15; // {1,1,1,1}
-        //  ::  sendEvents = 10; // {1,0,1,0}
+        ::  rcvEvents = EVTS_PENDING;
+        ::  rcvEvents = EVTS_ALL;
+            rcvWait = false;
+            rcvAll = false;
         fi
-        printf( "@@@ %d LOG sub-senario send-receive events:%d\n",
-                _pid, sendEvents )
+        printf( "@@@ %d LOG sub-senario send/receive events:%d/%d\n",
+                _pid, sendEvents, rcvEvents )
   ::  scenario == SndPre ->
         sendPrio = 3;
         sendPreempt = true;
