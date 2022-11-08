@@ -161,8 +161,12 @@ def get_config(source_dir):
                     config[key] = val
     if "testsuite" not in config.keys():
         config["testsuite"] = "model-0"
-    if {"spin2test", "rtems", "rsb", "simulator", "testyamldir", "testcode", "testexedir"} - config.keys():
-        print("Please configure testbuilder.yml")
+    missing_keys = {"spin2test", "rtems", "rsb", "simulator", "testyamldir", "testcode", "testexedir"} - config.keys()
+    if missing_keys:
+        print("testbuilder.yml configuration is incomplete")
+        print("The following configuration items are missing:")
+        for key in missing_keys:
+            print(key)
         sys.exit(1)
     config["testyaml"] = f"{config['testyamldir']}{config['testsuite']}.yml"
     config["testexe"] = f"{config['testexedir']}ts-{config['testsuite']}.exe"
