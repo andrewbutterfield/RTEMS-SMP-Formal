@@ -162,7 +162,7 @@ def get_config(source_dir):
     if "testsuite" not in config.keys():
         config["testsuite"] = "model-0"
     missing_keys = {"spin2test", "rtems", "rsb", "simulator", "testyamldir",
-                    "testcode", "testexedir"} - config.keys()
+                    "testcode", "testexedir", "simulatorargs"} - config.keys()
     if missing_keys:
         print("testbuilder.yml configuration is incomplete")
         print("The following configuration items are missing:")
@@ -234,7 +234,7 @@ def main():
 
     if sys.argv[1] == "run":
         os.chdir(config["rsb"])
-        sim_command = config["simulator"] + " -leon3 -r s -m 2 "
+        sim_command = f"{config['simulator']} {config['simulatorargs']}"
         print(f"Doing {sim_command} {config['testexe']}")
         os.system(f"{sim_command} {config['testexe']}")
 
