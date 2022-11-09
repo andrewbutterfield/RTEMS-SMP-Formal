@@ -201,8 +201,8 @@ def main():
 
     if not Path.exists(Path(f"{source_dir}/spin2test.py"))\
             or not Path.exists(Path(f"{source_dir}/env")):
-        print(f"Setup incomplete...")
-        print(f"Please run the following before continuing:")
+        print("Setup incomplete...")
+        print("Please run the following before continuing:")
         print(f"cd {source_dir} && bash src.sh")
         print(f". {source_dir}/env/bin/activate")
         sys.exit(1)
