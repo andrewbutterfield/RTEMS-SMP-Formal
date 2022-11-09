@@ -66,7 +66,7 @@ def zero(model_file, testsuite_name):
         yaml.dump(model_yaml, file)
 
 
-def generate(model, testgen):
+def generate(model, testgen, spintrailargs):
     """Generates all the test sources in the current directory"""
     # Check necessary files are present
     ready = True
@@ -90,7 +90,7 @@ def generate(model, testgen):
 
     # Generate trail, spin and c files
     print(f"Generating spin and test files for {model}")
-    os.system(f"spin -DTEST_GEN -run -E -c0 -e {model}.pml")
+    os.system(f"spin {spintrailargs} {model}.pml")
     no_of_trails = len(glob.glob(f"{model}*.trail"))
     if no_of_trails == 1:
         os.system(f"spin -T -t {model}.pml > {model}.spn")
@@ -162,7 +162,8 @@ def get_config(source_dir):
     if "testsuite" not in config.keys():
         config["testsuite"] = "model-0"
     missing_keys = {"spin2test", "rtems", "rsb", "simulator", "testyamldir",
-                    "testcode", "testexedir", "simulatorargs"} - config.keys()
+                    "testcode", "testexedir", "simulatorargs",
+                    "spintrailargs"} - config.keys()
     if missing_keys:
         print("testbuilder.yml configuration is incomplete")
         print("The following configuration items are missing:")
@@ -212,7 +213,7 @@ def main():
             print(helpfile.read())
 
     if sys.argv[1] == "generate":
-        generate(sys.argv[2], config["spin2test"])
+        generate(sys.argv[2], config["spin2test"], config["spintrailargs"])
 
     if sys.argv[1] == "clean":
         clean(sys.argv[2])
