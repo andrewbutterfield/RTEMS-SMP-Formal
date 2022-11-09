@@ -161,7 +161,8 @@ def get_config(source_dir):
                     config[key] = val
     if "testsuite" not in config.keys():
         config["testsuite"] = "model-0"
-    missing_keys = {"spin2test", "rtems", "rsb", "simulator", "testyamldir", "testcode", "testexedir"} - config.keys()
+    missing_keys = {"spin2test", "rtems", "rsb", "simulator", "testyamldir",
+                    "testcode", "testexedir"} - config.keys()
     if missing_keys:
         print("testbuilder.yml configuration is incomplete")
         print("The following configuration items are missing:")
@@ -223,7 +224,8 @@ def main():
         zero(config["testyaml"], config["testsuite"])
 
     if sys.argv[1] == "copy":
-        copy(sys.argv[2], config["testcode"], config["rtems"], config["testyaml"], config["testsuite"])
+        copy(sys.argv[2], config["testcode"], config["rtems"],
+             config["testyaml"], config["testsuite"])
 
     if sys.argv[1] == "compile":
         os.chdir(config["rtems"])
