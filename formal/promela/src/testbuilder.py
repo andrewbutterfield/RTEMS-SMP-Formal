@@ -66,9 +66,16 @@ def zero(model_file, testsuite_name):
         yaml.dump(model_yaml, file)
 
 
-def generate(model, testgen, spintrailargs):
+def generate_all(model, testgen, spintrailargs):
     """Generates all the test sources in the current directory"""
-    # Check necessary files are present
+    if not ready_to_generate(model):
+        sys.exit(1)
+    generate_spin_files(model, spintrailargs)
+    generate_test_files(model, testgen)
+
+
+def ready_to_generate(model):
+    """Checks if relevant files are in place for spin and test generation"""
     ready = True
     if not os.path.isfile(f"{model}.pml"):
         print("Promela file does not exist for model")
@@ -85,20 +92,33 @@ def generate(model, testgen, spintrailargs):
     if not os.path.isfile(f"{model}-rfn.yml"):
         print("Refinement file does not exist for model")
         ready = False
-    if not ready:
-        sys.exit(1)
+    return ready
 
-    # Generate trail, spin and c files
-    print(f"Generating spin and test files for {model}")
+
+def generate_spin_files(model, spintrailargs):
+    """Create spin files from model"""
+    if not ready_to_generate(model):
+        sys.exit(1)
+    print(f"Generating spin files for {model}")
     os.system(f"spin {spintrailargs} {model}.pml")
+
+
+def generate_test_files(model, testgen):
+    """Create test files from spin files"""
+    if not ready_to_generate(model):
+        sys.exit(1)
+    print(f"Generating test files for {model}")
     no_of_trails = len(glob.glob(f"{model}*.trail"))
-    if no_of_trails == 1:
+    if no_of_trails == 0:
+        print("no trail files found")
+        print("make sure to run 'generate spin' before 'generate tests'")
+    elif no_of_trails == 1:
         os.system(f"spin -T -t {model}.pml > {model}.spn")
         os.system(f"python {testgen} {model}")
-        sys.exit(0)
-    for i in range(no_of_trails):
-        os.system(f"spin -T -t{i + 1} {model}.pml > {model}-{i}.spn")
-        os.system(f"python {testgen} {model} {i}")
+    else:
+        for i in range(no_of_trails):
+            os.system(f"spin -T -t{i + 1} {model}.pml > {model}-{i}.spn")
+            os.system(f"python {testgen} {model} {i}")
 
 
 def copy(model, codedir, rtems, modfile, testsuite_name):
@@ -182,6 +202,7 @@ def main():
             or len(sys.argv) == 3 and sys.argv[1] == "archive"
             or len(sys.argv) == 2 and sys.argv[1] == "zero"
             or len(sys.argv) == 3 and sys.argv[1] == "generate"
+            or len(sys.argv) == 4 and sys.argv[1] == "generate" and sys.argv[2] in ["tests", "spin"]
             or len(sys.argv) == 3 and sys.argv[1] == "copy"
             or len(sys.argv) == 2 and sys.argv[1] == "compile"
             or len(sys.argv) == 2 and sys.argv[1] == "run"):
@@ -191,6 +212,8 @@ def main():
         print("archive modelname - archives spin, test files")
         print("zero  - remove all tesfiles from RTEMS")
         print("generate modelname - generate spin and test files")
+        print("generate spin modelname - generate spin files")
+        print("generate tests modelname - generate test files")
         print("copy modelname - copy test files and configuration to RTEMS")
         print("compile - compiles RTEMS tests")
         print("run - runs RTEMS tests")
@@ -213,7 +236,13 @@ def main():
             print(helpfile.read())
 
     if sys.argv[1] == "generate":
-        generate(sys.argv[2], config["spin2test"], config["spintrailargs"])
+        if len(sys.argv) == 4:
+            if sys.argv[2] == "spin":
+                generate_spin_files(sys.argv[3], config["spintrailargs"])
+            elif sys.argv[2] == "tests":
+                generate_test_files(sys.argv[3], config["spin2test"])
+        else:
+            generate_all(sys.argv[2], config["spin2test"], config["spintrailargs"])
 
     if sys.argv[1] == "clean":
         clean(sys.argv[2])
