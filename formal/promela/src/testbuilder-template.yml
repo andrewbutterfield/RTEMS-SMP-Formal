@@ -39,4 +39,4 @@ testcode: <rtems>/testsuites/validation/
 testexedir:  <rtems>/build/.../testsuites/validation/ # directory containing ts-<modelname>.exe
 testsuite: model-0
 simulatorargs: -leon3 -r s -m 2  # run command executes "<simulator> <simargs> <testexedir>/ts-<testsuite>.exe"
-spintrailargs: -DTEST_GEN -run -E -c0 -e # trail generation "spin <spintrailargs> <model>.pml"
+spinallscenarios: -DTEST_GEN -run -E -c0 -e # trail generation "spin <spinallscenarios> <model>.pml"

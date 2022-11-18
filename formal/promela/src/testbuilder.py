@@ -87,12 +87,12 @@ def ready_to_generate(model):
     return ready
 
 
-def generate_spin_files(model, spintrailargs):
+def generate_spin_files(model, spinallscenarios):
     """Create spin files from model"""
     if not ready_to_generate(model):
         sys.exit(1)
     print(f"Generating spin files for {model}")
-    os.system(f"spin {spintrailargs} {model}.pml")
+    os.system(f"spin {spinallscenarios} {model}.pml")
     no_of_trails = len(glob.glob(f"{model}*.trail"))
     if no_of_trails == 0:
         print("no trail files generated")
@@ -180,7 +180,7 @@ def get_config(source_dir):
         config["testsuite"] = "model-0"
     missing_keys = {"spin2test", "rtems", "rsb", "simulator", "testyamldir",
                     "testcode", "testexedir", "simulatorargs",
-                    "spintrailargs"} - config.keys()
+                    "spinallscenarios"} - config.keys()
     if missing_keys:
         print("testbuilder.yml configuration is incomplete")
         print("The following configuration items are missing:")
@@ -232,7 +232,7 @@ def main():
             print(helpfile.read())
 
     if sys.argv[1] == "spin":
-        generate_spin_files(sys.argv[2], config["spintrailargs"])
+        generate_spin_files(sys.argv[2], config["spinallscenarios"])
 
     if sys.argv[1] == "gentests":
         generate_test_files(sys.argv[2], config["spin2test"])
