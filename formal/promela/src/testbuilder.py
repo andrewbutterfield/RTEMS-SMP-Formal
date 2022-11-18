@@ -66,9 +66,8 @@ def zero(model_file, testsuite_name):
         yaml.dump(model_yaml, file)
 
 
-def generate(model, testgen):
-    """Generates all the test sources in the current directory"""
-    # Check necessary files are present
+def ready_to_generate(model):
+    """Checks if relevant files are in place for spin and test generation"""
     ready = True
     if not os.path.isfile(f"{model}.pml"):
         print("Promela file does not exist for model")
@@ -85,20 +84,38 @@ def generate(model, testgen):
     if not os.path.isfile(f"{model}-rfn.yml"):
         print("Refinement file does not exist for model")
         ready = False
-    if not ready:
-        sys.exit(1)
+    return ready
 
-    # Generate trail, spin and c files
-    print(f"Generating spin and test files for {model}")
-    os.system(f"spin -DTEST_GEN -run -E -c0 -e {model}.pml")
+
+def generate_spin_files(model, spinallscenarios):
+    """Create spin files from model"""
+    if not ready_to_generate(model):
+        sys.exit(1)
+    print(f"Generating spin files for {model}")
+    os.system(f"spin {spinallscenarios} {model}.pml")
     no_of_trails = len(glob.glob(f"{model}*.trail"))
-    if no_of_trails == 1:
+    if no_of_trails == 0:
+        print("no trail files generated")
+    elif no_of_trails == 1:
         os.system(f"spin -T -t {model}.pml > {model}.spn")
+    else:
+        for i in range(no_of_trails):
+            os.system(f"spin -T -t{i + 1} {model}.pml > {model}-{i}.spn")
+
+
+def generate_test_files(model, testgen):
+    """Create test files from spin files"""
+    if not ready_to_generate(model):
+        sys.exit(1)
+    print(f"Generating test files for {model}")
+    no_of_trails = len(glob.glob(f"{model}*.trail"))
+    if no_of_trails == 0:
+        print("no trail files found")
+    elif no_of_trails == 1:
         os.system(f"python {testgen} {model}")
-        sys.exit(0)
-    for i in range(no_of_trails):
-        os.system(f"spin -T -t{i + 1} {model}.pml > {model}-{i}.spn")
-        os.system(f"python {testgen} {model} {i}")
+    else:
+        for i in range(no_of_trails):
+            os.system(f"python {testgen} {model} {i}")
 
 
 def copy(model, codedir, rtems, modfile, testsuite_name):
@@ -161,7 +178,9 @@ def get_config(source_dir):
                     config[key] = val
     if "testsuite" not in config.keys():
         config["testsuite"] = "model-0"
-    missing_keys = {"spin2test", "rtems", "rsb", "simulator", "testyamldir", "testcode", "testexedir"} - config.keys()
+    missing_keys = {"spin2test", "rtems", "rsb", "simulator", "testyamldir",
+                    "testcode", "testexedir", "simulatorargs",
+                    "spinallscenarios"} - config.keys()
     if missing_keys:
         print("testbuilder.yml configuration is incomplete")
         print("The following configuration items are missing:")
@@ -179,7 +198,8 @@ def main():
             or len(sys.argv) == 3 and sys.argv[1] == "clean"
             or len(sys.argv) == 3 and sys.argv[1] == "archive"
             or len(sys.argv) == 2 and sys.argv[1] == "zero"
-            or len(sys.argv) == 3 and sys.argv[1] == "generate"
+            or len(sys.argv) == 3 and sys.argv[1] == "spin"
+            or len(sys.argv) == 3 and sys.argv[1] == "gentests"
             or len(sys.argv) == 3 and sys.argv[1] == "copy"
             or len(sys.argv) == 2 and sys.argv[1] == "compile"
             or len(sys.argv) == 2 and sys.argv[1] == "run"):
@@ -188,7 +208,8 @@ def main():
         print("clean modelname - remove spin, test files")
         print("archive modelname - archives spin, test files")
         print("zero  - remove all tesfiles from RTEMS")
-        print("generate modelname - generate spin and test files")
+        print("spin modelname - generate spin files")
+        print("gentests modelname - generate test files")
         print("copy modelname - copy test files and configuration to RTEMS")
         print("compile - compiles RTEMS tests")
         print("run - runs RTEMS tests")
@@ -200,8 +221,8 @@ def main():
 
     if not Path.exists(Path(f"{source_dir}/spin2test.py"))\
             or not Path.exists(Path(f"{source_dir}/env")):
-        print(f"Setup incomplete...")
-        print(f"Please run the following before continuing:")
+        print("Setup incomplete...")
+        print("Please run the following before continuing:")
         print(f"cd {source_dir} && bash src.sh")
         print(f". {source_dir}/env/bin/activate")
         sys.exit(1)
@@ -210,8 +231,11 @@ def main():
         with open(f"{source_dir}/testbuilder.help") as helpfile:
             print(helpfile.read())
 
-    if sys.argv[1] == "generate":
-        generate(sys.argv[2], config["spin2test"])
+    if sys.argv[1] == "spin":
+        generate_spin_files(sys.argv[2], config["spinallscenarios"])
+
+    if sys.argv[1] == "gentests":
+        generate_test_files(sys.argv[2], config["spin2test"])
 
     if sys.argv[1] == "clean":
         clean(sys.argv[2])
@@ -223,7 +247,8 @@ def main():
         zero(config["testyaml"], config["testsuite"])
 
     if sys.argv[1] == "copy":
-        copy(sys.argv[2], config["testcode"], config["rtems"], config["testyaml"], config["testsuite"])
+        copy(sys.argv[2], config["testcode"], config["rtems"],
+             config["testyaml"], config["testsuite"])
 
     if sys.argv[1] == "compile":
         os.chdir(config["rtems"])
@@ -232,7 +257,7 @@ def main():
 
     if sys.argv[1] == "run":
         os.chdir(config["rsb"])
-        sim_command = config["simulator"] + " -leon3 -r s -m 2 "
+        sim_command = f"{config['simulator']} {config['simulatorargs']}"
         print(f"Doing {sim_command} {config['testexe']}")
         os.system(f"{sim_command} {config['testexe']}")
 
