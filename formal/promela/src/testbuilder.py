@@ -66,14 +66,6 @@ def zero(model_file, testsuite_name):
         yaml.dump(model_yaml, file)
 
 
-def generate_all(model, testgen, spintrailargs):
-    """Generates all the test sources in the current directory"""
-    if not ready_to_generate(model):
-        sys.exit(1)
-    generate_spin_files(model, spintrailargs)
-    generate_test_files(model, testgen)
-
-
 def ready_to_generate(model):
     """Checks if relevant files are in place for spin and test generation"""
     ready = True
@@ -206,7 +198,6 @@ def main():
             or len(sys.argv) == 3 and sys.argv[1] == "clean"
             or len(sys.argv) == 3 and sys.argv[1] == "archive"
             or len(sys.argv) == 2 and sys.argv[1] == "zero"
-            or len(sys.argv) == 3 and sys.argv[1] == "generate"
             or len(sys.argv) == 3 and sys.argv[1] == "spin"
             or len(sys.argv) == 3 and sys.argv[1] == "gentests"
             or len(sys.argv) == 3 and sys.argv[1] == "copy"
@@ -217,7 +208,6 @@ def main():
         print("clean modelname - remove spin, test files")
         print("archive modelname - archives spin, test files")
         print("zero  - remove all tesfiles from RTEMS")
-        print("generate modelname - generate spin and test files")
         print("spin modelname - generate spin files")
         print("gentests modelname - generate test files")
         print("copy modelname - copy test files and configuration to RTEMS")
@@ -240,9 +230,6 @@ def main():
     if sys.argv[1] == "help":
         with open(f"{source_dir}/testbuilder.help") as helpfile:
             print(helpfile.read())
-
-    if sys.argv[1] == "generate":
-        generate_all(sys.argv[2], config["spin2test"], config["spintrailargs"])
 
     if sys.argv[1] == "spin":
         generate_spin_files(sys.argv[2], config["spintrailargs"])
