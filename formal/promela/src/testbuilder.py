@@ -37,6 +37,24 @@ from pathlib import Path
 from datetime import datetime
 
 
+def run_all(model, config):
+    clean(model)
+    generate_spin_files(model, config["spinallscenarios"])
+    generate_test_files(model, config["spin2test"])
+    copy(sys.argv[2], config["testcode"], config["rtems"],
+         config["testyaml"], config["testsuite"])
+
+    os.chdir(config["rtems"])
+    subprocess.run("./waf configure", check=True, shell=True)
+    subprocess.run("./waf", check=True, shell=True)
+
+    os.chdir(config["rsb"])
+    sim_command = f"{config['simulator']} {config['simulatorargs']}"
+    print(f"Doing {sim_command} {config['testexe']}")
+    subprocess.run(f"{sim_command} {config['testexe']}",
+                   check=True, shell=True)
+
+
 def clean(model):
     """Cleans out generated files in current directory"""
     print(f"Removing spin and test files for {model}")
@@ -200,6 +218,7 @@ def get_config(source_dir):
 def main():
     """generates and deploys C tests from Promela models"""
     if not (len(sys.argv) == 2 and sys.argv[1] == "help"
+            or len(sys.argv) == 3 and sys.argv[1] == "all"
             or len(sys.argv) == 3 and sys.argv[1] == "clean"
             or len(sys.argv) == 3 and sys.argv[1] == "archive"
             or len(sys.argv) == 2 and sys.argv[1] == "zero"
@@ -210,6 +229,8 @@ def main():
             or len(sys.argv) == 2 and sys.argv[1] == "run"):
         print("USAGE:")
         print("help - these instructions")
+        print("all modelname - runs clean, spin, gentests, copy, compile and "
+              "run")
         print("clean modelname - remove spin, test files")
         print("archive modelname - archives spin, test files")
         print("zero  - remove all tesfiles from RTEMS")
@@ -235,6 +256,9 @@ def main():
     if sys.argv[1] == "help":
         with open(f"{source_dir}/testbuilder.help") as helpfile:
             print(helpfile.read())
+
+    if sys.argv[1] == "all":
+        run_all(sys.argv[2], config)
 
     if sys.argv[1] == "spin":
         generate_spin_files(sys.argv[2], config["spinallscenarios"])
