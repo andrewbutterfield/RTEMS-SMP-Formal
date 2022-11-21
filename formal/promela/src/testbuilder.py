@@ -29,6 +29,7 @@
 
 import sys
 import os
+import subprocess
 import glob
 import shutil
 import yaml
@@ -92,15 +93,18 @@ def generate_spin_files(model, spinallscenarios):
     if not ready_to_generate(model):
         sys.exit(1)
     print(f"Generating spin files for {model}")
-    os.system(f"spin {spinallscenarios} {model}.pml")
+    subprocess.run(f"spin {spinallscenarios} {model}.pml",
+                   check=True, shell=True)
     no_of_trails = len(glob.glob(f"{model}*.trail"))
     if no_of_trails == 0:
         print("no trail files generated")
     elif no_of_trails == 1:
-        os.system(f"spin -T -t {model}.pml > {model}.spn")
+        subprocess.run(f"spin -T -t {model}.pml > {model}.spn",
+                       check=True, shell=True)
     else:
         for i in range(no_of_trails):
-            os.system(f"spin -T -t{i + 1} {model}.pml > {model}-{i}.spn")
+            subprocess.run(f"spin -T -t{i + 1} {model}.pml > {model}-{i}.spn",
+                           check=True, shell=True)
 
 
 def generate_test_files(model, testgen):
@@ -112,10 +116,11 @@ def generate_test_files(model, testgen):
     if no_of_trails == 0:
         print("no trail files found")
     elif no_of_trails == 1:
-        os.system(f"python {testgen} {model}")
+        subprocess.run(f"python {testgen} {model}", check=True, shell=True)
     else:
         for i in range(no_of_trails):
-            os.system(f"python {testgen} {model} {i}")
+            subprocess.run(f"python {testgen} {model} {i}",
+                           check=True, shell=True)
 
 
 def copy(model, codedir, rtems, modfile, testsuite_name):
@@ -252,14 +257,15 @@ def main():
 
     if sys.argv[1] == "compile":
         os.chdir(config["rtems"])
-        os.system("./waf configure")
-        os.system("./waf")
+        subprocess.run("./waf configure", check=True, shell=True)
+        subprocess.run("./waf", check=True, shell=True)
 
     if sys.argv[1] == "run":
         os.chdir(config["rsb"])
         sim_command = f"{config['simulator']} {config['simulatorargs']}"
         print(f"Doing {sim_command} {config['testexe']}")
-        os.system(f"{sim_command} {config['testexe']}")
+        subprocess.run(f"{sim_command} {config['testexe']}",
+                       check=True, shell=True)
 
 
 if __name__ == '__main__':
