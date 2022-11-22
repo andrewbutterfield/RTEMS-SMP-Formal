@@ -43,16 +43,9 @@ def run_all(model, config):
     generate_test_files(model, config["spin2test"])
     copy(sys.argv[2], config["testcode"], config["rtems"],
          config["testyaml"], config["testsuite"])
-
-    os.chdir(config["rtems"])
-    subprocess.run("./waf configure", check=True, shell=True)
-    subprocess.run("./waf", check=True, shell=True)
-
-    os.chdir(config["rsb"])
-    sim_command = f"{config['simulator']} {config['simulatorargs']}"
-    print(f"Doing {sim_command} {config['testexe']}")
-    subprocess.run(f"{sim_command} {config['testexe']}",
-                   check=True, shell=True)
+    compile(config["rtems"])
+    run_simulator(config["rsb"], config["simulator"],
+                  config["simulatorargs"], config["testexe"])
 
 
 def clean(model):
@@ -175,6 +168,20 @@ def copy(model, codedir, rtems, modfile, testsuite_name):
         yaml.dump(model_yaml, file)
 
 
+def compile(rtems_dir):
+    os.chdir(rtems_dir)
+    subprocess.run("./waf configure", check=True, shell=True)
+    subprocess.run("./waf", check=True, shell=True)
+
+
+def run_simulator(rsb, simulator_path, simulator_args, testexe):
+    os.chdir(rsb)
+    sim_command = f"{simulator_path} {simulator_args}"
+    print(f"Doing {sim_command} {testexe}")
+    subprocess.run(f"{sim_command} {testexe}",
+                   check=True, shell=True)
+
+
 def get_generated_files(model):
     files = glob.glob('pan')
     trails = glob.glob(f"{model}*.trail")
@@ -280,16 +287,11 @@ def main():
              config["testyaml"], config["testsuite"])
 
     if sys.argv[1] == "compile":
-        os.chdir(config["rtems"])
-        subprocess.run("./waf configure", check=True, shell=True)
-        subprocess.run("./waf", check=True, shell=True)
+        compile(config["rtems"])
 
     if sys.argv[1] == "run":
-        os.chdir(config["rsb"])
-        sim_command = f"{config['simulator']} {config['simulatorargs']}"
-        print(f"Doing {sim_command} {config['testexe']}")
-        subprocess.run(f"{sim_command} {config['testexe']}",
-                       check=True, shell=True)
+        run_simulator(config["rsb"], config["simulator"],
+                      config["simulatorargs"], config["testexe"])
 
 
 if __name__ == '__main__':
