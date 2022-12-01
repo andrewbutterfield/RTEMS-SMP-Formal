@@ -118,7 +118,7 @@ def generate_spin_files(model, spinallscenarios):
     if not ready_to_generate(model):
         sys.exit(1)
     print(f"Generating spin files for {model}")
-    subprocess.run(f"spin {spinallscenarios} {model}.ml",
+    subprocess.run(f"spin {spinallscenarios} {model}.pml",
                    check=True, shell=True)
     no_of_trails = len(glob.glob(f"{model}*.trail"))
     if no_of_trails == 0:
