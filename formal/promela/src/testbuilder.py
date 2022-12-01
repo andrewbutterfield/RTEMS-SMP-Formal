@@ -45,7 +45,7 @@ def catch_subprocess_errors(func):
             result = func(*args, **kwargs)
         except subprocess.CalledProcessError as e:
             print(f"error executing: {e.cmd}")
-            raise SystemExit()
+            sys.exit(1)
         return result
     return wrapper
 
