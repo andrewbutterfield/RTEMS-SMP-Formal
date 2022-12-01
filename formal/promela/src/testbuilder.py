@@ -32,9 +32,22 @@ import os
 import subprocess
 import glob
 import shutil
+from functools import wraps
 import yaml
 from pathlib import Path
 from datetime import datetime
+
+
+def catch_subprocess_errors(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        try:
+            result = func(*args, **kwargs)
+        except subprocess.CalledProcessError as e:
+            print(f"error executing: {e.cmd}")
+            raise SystemExit()
+        return result
+    return wrapper
 
 
 def run_all(model, config):
@@ -99,12 +112,13 @@ def ready_to_generate(model):
     return ready
 
 
+@catch_subprocess_errors
 def generate_spin_files(model, spinallscenarios):
     """Create spin files from model"""
     if not ready_to_generate(model):
         sys.exit(1)
     print(f"Generating spin files for {model}")
-    subprocess.run(f"spin {spinallscenarios} {model}.pml",
+    subprocess.run(f"spin {spinallscenarios} {model}.ml",
                    check=True, shell=True)
     no_of_trails = len(glob.glob(f"{model}*.trail"))
     if no_of_trails == 0:
@@ -118,6 +132,7 @@ def generate_spin_files(model, spinallscenarios):
                            check=True, shell=True)
 
 
+@catch_subprocess_errors
 def generate_test_files(model, testgen):
     """Create test files from spin files"""
     if not ready_to_generate(model):
@@ -168,12 +183,14 @@ def copy(model, codedir, rtems, modfile, testsuite_name):
         yaml.dump(model_yaml, file)
 
 
+@catch_subprocess_errors
 def compile(rtems_dir):
     os.chdir(rtems_dir)
     subprocess.run("./waf configure", check=True, shell=True)
     subprocess.run("./waf", check=True, shell=True)
 
 
+@catch_subprocess_errors
 def run_simulator(rsb, simulator_path, simulator_args, testexe):
     os.chdir(rsb)
     sim_command = f"{simulator_path} {simulator_args}"
@@ -252,7 +269,7 @@ def main():
 
     config = get_config(source_dir)
 
-    if not Path.exists(Path(f"{source_dir}/spin2test.py"))\
+    if not Path.exists(Path(f"{source_dir}/spin2test.py")) \
             or not Path.exists(Path(f"{source_dir}/env")):
         print("Setup incomplete...")
         print("Please run the following before continuing:")
