@@ -29,11 +29,36 @@
 
 import sys
 import os
+import subprocess
 import glob
 import shutil
+from functools import wraps
 import yaml
 from pathlib import Path
 from datetime import datetime
+
+
+def catch_subprocess_errors(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        try:
+            result = func(*args, **kwargs)
+        except subprocess.CalledProcessError as e:
+            print(f"error executing: {e.cmd}")
+            sys.exit(1)
+        return result
+    return wrapper
+
+
+def run_all(model, config):
+    clean(model)
+    generate_spin_files(model, config["spinallscenarios"])
+    generate_test_files(model, config["spin2test"])
+    copy(sys.argv[2], config["testcode"], config["rtems"],
+         config["testyaml"], config["testsuite"])
+    compile(config["rtems"])
+    run_simulator(config["rsb"], config["simulator"],
+                  config["simulatorargs"], config["testexe"])
 
 
 def clean(model):
@@ -87,22 +112,27 @@ def ready_to_generate(model):
     return ready
 
 
+@catch_subprocess_errors
 def generate_spin_files(model, spinallscenarios):
     """Create spin files from model"""
     if not ready_to_generate(model):
         sys.exit(1)
     print(f"Generating spin files for {model}")
-    os.system(f"spin {spinallscenarios} {model}.pml")
+    subprocess.run(f"spin {spinallscenarios} {model}.pml",
+                   check=True, shell=True)
     no_of_trails = len(glob.glob(f"{model}*.trail"))
     if no_of_trails == 0:
         print("no trail files generated")
     elif no_of_trails == 1:
-        os.system(f"spin -T -t {model}.pml > {model}.spn")
+        subprocess.run(f"spin -T -t {model}.pml > {model}.spn",
+                       check=True, shell=True)
     else:
         for i in range(no_of_trails):
-            os.system(f"spin -T -t{i + 1} {model}.pml > {model}-{i}.spn")
+            subprocess.run(f"spin -T -t{i + 1} {model}.pml > {model}-{i}.spn",
+                           check=True, shell=True)
 
 
+@catch_subprocess_errors
 def generate_test_files(model, testgen):
     """Create test files from spin files"""
     if not ready_to_generate(model):
@@ -112,10 +142,11 @@ def generate_test_files(model, testgen):
     if no_of_trails == 0:
         print("no trail files found")
     elif no_of_trails == 1:
-        os.system(f"python {testgen} {model}")
+        subprocess.run(f"python {testgen} {model}", check=True, shell=True)
     else:
         for i in range(no_of_trails):
-            os.system(f"python {testgen} {model} {i}")
+            subprocess.run(f"python {testgen} {model} {i}",
+                           check=True, shell=True)
 
 
 def copy(model, codedir, rtems, modfile, testsuite_name):
@@ -150,6 +181,22 @@ def copy(model, codedir, rtems, modfile, testsuite_name):
     model_yaml['source'] = sorted(new_list)
     with open(modfile, 'w') as file:
         yaml.dump(model_yaml, file)
+
+
+@catch_subprocess_errors
+def compile(rtems_dir):
+    os.chdir(rtems_dir)
+    subprocess.run("./waf configure", check=True, shell=True)
+    subprocess.run("./waf", check=True, shell=True)
+
+
+@catch_subprocess_errors
+def run_simulator(rsb, simulator_path, simulator_args, testexe):
+    os.chdir(rsb)
+    sim_command = f"{simulator_path} {simulator_args}"
+    print(f"Doing {sim_command} {testexe}")
+    subprocess.run(f"{sim_command} {testexe}",
+                   check=True, shell=True)
 
 
 def get_generated_files(model):
@@ -195,6 +242,7 @@ def get_config(source_dir):
 def main():
     """generates and deploys C tests from Promela models"""
     if not (len(sys.argv) == 2 and sys.argv[1] == "help"
+            or len(sys.argv) == 3 and sys.argv[1] == "all"
             or len(sys.argv) == 3 and sys.argv[1] == "clean"
             or len(sys.argv) == 3 and sys.argv[1] == "archive"
             or len(sys.argv) == 2 and sys.argv[1] == "zero"
@@ -205,6 +253,8 @@ def main():
             or len(sys.argv) == 2 and sys.argv[1] == "run"):
         print("USAGE:")
         print("help - these instructions")
+        print("all modelname - runs clean, spin, gentests, copy, compile and "
+              "run")
         print("clean modelname - remove spin, test files")
         print("archive modelname - archives spin, test files")
         print("zero  - remove all tesfiles from RTEMS")
@@ -219,7 +269,7 @@ def main():
 
     config = get_config(source_dir)
 
-    if not Path.exists(Path(f"{source_dir}/spin2test.py"))\
+    if not Path.exists(Path(f"{source_dir}/spin2test.py")) \
             or not Path.exists(Path(f"{source_dir}/env")):
         print("Setup incomplete...")
         print("Please run the following before continuing:")
@@ -230,6 +280,9 @@ def main():
     if sys.argv[1] == "help":
         with open(f"{source_dir}/testbuilder.help") as helpfile:
             print(helpfile.read())
+
+    if sys.argv[1] == "all":
+        run_all(sys.argv[2], config)
 
     if sys.argv[1] == "spin":
         generate_spin_files(sys.argv[2], config["spinallscenarios"])
@@ -251,15 +304,11 @@ def main():
              config["testyaml"], config["testsuite"])
 
     if sys.argv[1] == "compile":
-        os.chdir(config["rtems"])
-        os.system("./waf configure")
-        os.system("./waf")
+        compile(config["rtems"])
 
     if sys.argv[1] == "run":
-        os.chdir(config["rsb"])
-        sim_command = f"{config['simulator']} {config['simulatorargs']}"
-        print(f"Doing {sim_command} {config['testexe']}")
-        os.system(f"{sim_command} {config['testexe']}")
+        run_simulator(config["rsb"], config["simulator"],
+                      config["simulatorargs"], config["testexe"])
 
 
 if __name__ == '__main__':
