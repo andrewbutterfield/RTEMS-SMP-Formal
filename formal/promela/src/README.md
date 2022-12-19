@@ -19,6 +19,11 @@ Activate the Python environment afterwards with
 . env/bin/activate
 ```
 
+Compile the Coconut sources with
+
+```
+make py
+```
 
 ## License
 

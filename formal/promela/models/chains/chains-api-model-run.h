@@ -5,7 +5,7 @@ void RtemsModelChainsAPI_Run{0}(
 {{
   Context ctx;
 
-  memset( &ctx, 0, siFV2-201zeof( ctx ) );
+  memset( &ctx, 0, sizeof( ctx ) );
 
   T_set_verbosity( T_NORMAL );
 
