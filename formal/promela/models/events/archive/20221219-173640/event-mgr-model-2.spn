@@ -1,0 +1,179 @@
+Event Manager Model running.
+Setup...
+@@@ 0 NAME Event_Manager_TestGen
+@@@ 0 DEF NO_OF_EVENTS 4
+@@@ 0 DEF EVTS_NONE 0
+@@@ 0 DEF EVTS_PENDING 0
+@@@ 0 DEF EVT_0 1
+@@@ 0 DEF EVT_1 2
+@@@ 0 DEF EVT_2 4
+@@@ 0 DEF EVT_3 8
+@@@ 0 DEF EVTS_ALL 15
+@@@ 0 DEF NO_TIMEOUT 0
+@@@ 0 DEF TASK_MAX 3
+@@@ 0 DEF BAD_ID 3
+@@@ 0 DEF SEMA_MAX 2
+@@@ 0 DEF RC_OK RTEMS_SUCCESSFUL
+@@@ 0 DEF RC_InvId RTEMS_INVALID_ID
+@@@ 0 DEF RC_InvAddr RTEMS_INVALID_ADDRESS
+@@@ 0 DEF RC_Unsat RTEMS_UNSATISFIED
+@@@ 0 DEF RC_Timeout RTEMS_TIMEOUT
+@@@ 0 DECL byte sendrc 0
+@@@ 0 DECL byte recrc 0
+@@@ 0 DCLARRAY EvtSet pending TASK_MAX
+@@@ 0 DCLARRAY byte recout TASK_MAX
+@@@ 0 DCLARRAY Semaphore semaphore SEMA_MAX
+@@@ 0 INIT
+@@@ 0 LOG scenario Receive
+@@@ 0 LOG sub-senario wait:1 interval:4, out:2
+Run...
+@@@ 1 LOG System running...
+@@@ 1 LOG Loop through tasks...
+@@@ 2 LOG Clock Started
+@@@ 4 TASK Runner
+@@@ 4 SIGNAL 0
+@@@ 4 WAIT 1
+@@@ 3 TASK Worker
+@@@ 3 CALL EqualPriority
+@@@ 3 WAIT 0
+@@@ 3 LOG WAIT 0 Over
+@@@ 3 SIGNAL 1
+@@@ 4 LOG WAIT 1 Over
+@@@ 4 SCALAR pending 2 0
+@@@ 4 CALL event_receive 10 1 1 4 2 recrc
+@@@ 4 LOG pending[2] = {0,0,0,0}
+@@@ 4 LOG satisfied(<pnd:0 wnt:10 all:1>,out:0,SAT:0)
+@@@ 4 LOG Receive Not Satisfied (timeout 4)
+@@@ 4 STATE 2 TimeWait 4
+@@@ 4 LOG Task 2 waiting, state = TimeWait
+@@@ 3 LOG Sender 1 finished
+@@@ 3 STATE 1 Zombie
+ (tick) 
+Clock: tid=1, state=Zombie
+Clock: tid=2, state=TimeWait
+ (tick) 
+Clock: tid=1, state=Zombie
+Clock: tid=2, state=TimeWait
+ (tick) 
+Clock: tid=1, state=Zombie
+Clock: tid=2, state=TimeWait
+ (tick) 
+Clock: tid=1, state=Zombie
+Clock: tid=2, state=TimeWait
+@@@ 2 STATE 2 Ready
+@@@ 4 STATE 2 Ready
+@@@ 4 LOG pending'[2] = {0,0,0,0}
+@@@ 4 SCALAR recrc 6
+@@@ 4 SCALAR recout 2 0
+@@@ 4 SCALAR pending 2 0
+@@@ 4 SIGNAL 0
+@@@ 4 LOG Receiver 2 finished
+@@@ 4 STATE 2 Zombie
+ (tick) 
+Clock: tid=1, state=Zombie
+Clock: tid=2, state=Zombie
+@@@ 1 LOG Scenario is Receive
+ (tick) 
+Clock: tid=1, state=Zombie
+Clock: tid=2, state=Zombie
+@@@ 1 LOG Task 1 state is Zombie
+ (tick) 
+Clock: tid=1, state=Zombie
+Clock: tid=2, state=Zombie
+ (tick) 
+Clock: tid=1, state=Zombie
+Clock: tid=2, state=Zombie
+@@@ 1 LOG Task 2 state is Zombie
+ (tick) 
+Clock: tid=1, state=Zombie
+Clock: tid=2, state=Zombie
+@@@ 1 LOG ...all visited, live:0
+@@@ 1 LOG All are Zombies, game over.
+ (tick) 
+Clock: tid=1, state=Zombie
+Clock: tid=2, state=Zombie
+@@@ 2 LOG Clock Stopped
+Event Manager Model finished !
+spin: trail ends after 267 steps
+#processes: 1
+		tasks[0].nodeid = 0
+		tasks[0].pmlid = 0
+		tasks[0].state = 0
+		tasks[0].preemptable = 0
+		tasks[0].prio = 0
+		tasks[0].ticks = 0
+		tasks[0].tout = 0
+		tasks[0].wanted = 0
+		tasks[0].pending = 0
+		tasks[0].all = 0
+		tasks[1].nodeid = 0
+		tasks[1].pmlid = 3
+		tasks[1].state = Zombie
+		tasks[1].preemptable = 0
+		tasks[1].prio = 2
+		tasks[1].ticks = 0
+		tasks[1].tout = 0
+		tasks[1].wanted = 0
+		tasks[1].pending = 0
+		tasks[1].all = 0
+		tasks[2].nodeid = 0
+		tasks[2].pmlid = 4
+		tasks[2].state = Zombie
+		tasks[2].preemptable = 0
+		tasks[2].prio = 2
+		tasks[2].ticks = 1
+		tasks[2].tout = 1
+		tasks[2].wanted = 10
+		tasks[2].pending = 0
+		tasks[2].all = 1
+		sendrc = 0
+		recrc = 6
+		recout[0] = 0
+		recout[1] = 0
+		recout[2] = 0
+		semaphore[0] = 1
+		semaphore[1] = 0
+		send_in[0].target_id = 0
+		send_in[0].send_evts = 0
+		send_in[1].target_id = 0
+		send_in[1].send_evts = 0
+		send_in[2].target_id = 0
+		send_in[2].send_evts = 0
+		receive_in[0].receive_evts = 0
+		receive_in[0].will_wait = 0
+		receive_in[0].everything = 0
+		receive_in[0].wait_length = 0
+		receive_in[1].receive_evts = 0
+		receive_in[1].will_wait = 0
+		receive_in[1].everything = 0
+		receive_in[1].wait_length = 0
+		receive_in[2].receive_evts = 0
+		receive_in[2].will_wait = 0
+		receive_in[2].everything = 0
+		receive_in[2].wait_length = 0
+		doSend = 0
+		sendTwice = 0
+		sentFirst = 0
+		sendPrio = 2
+		sendPreempt = 0
+		sendTarget = 2
+		sendEvents = 10
+		sendEvents1 = 10
+		sendEvents2 = 0
+		doReceive = 1
+		rcvEvents = 10
+		rcvWait = 1
+		rcvAll = 1
+		rcvInterval = 4
+		rcvOut = 2
+		rcvPrio = 2
+		sendSema = 0
+		rcvSema = 1
+		startSema = 0
+		multicore = 0
+		sendCore = 0
+		rcvCore = 0
+		scenario = Receive
+		stopclock = 1
+267:	proc  0 (:init::1) event-mgr-model.pml:848 (state 116) <valid end state>
+5 processes created
