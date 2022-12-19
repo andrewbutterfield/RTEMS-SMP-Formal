@@ -1,4 +1,4 @@
-
+/* SPDX-License-Identifier: BSD-2-Clause */
 
 static void RtemsModelBarrierMgr_Setup{0}( void *arg )
 {{

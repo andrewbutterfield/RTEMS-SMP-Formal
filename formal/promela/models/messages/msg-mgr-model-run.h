@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
 /*
 static void Worker{0}( rtems_task_argument arg )
 {{

@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
 
 // Task 0
 static void Runner( RtemsModelBarrierMgr_Context *ctx )

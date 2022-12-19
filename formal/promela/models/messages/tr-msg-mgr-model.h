@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
 #ifndef _TR_MODEL_EVENTS_MGR_H
 #define _TR_MODEL_EVENTS_MGR_H
 
