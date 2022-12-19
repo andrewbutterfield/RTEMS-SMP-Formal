@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: BSD-2-Clause
-"""Converts Annotated SPIN counter-examples to program test code"""
+"""Refines Annotated SPIN output to test program code"""
 
 # Copyright (C) 2019-2021 Trinity College Dublin (www.tcd.ie)
 #
