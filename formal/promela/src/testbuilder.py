@@ -2,9 +2,10 @@
 # SPDX-License-Identifier: BSD-2-Clause
 """Runs SPIN to generate test code for all defined scenarios"""
 
-# Copyright (C) 2021 Trinity College Dublin (www.tcd.ie)
+# Copyright (C) 2021-22 Trinity College Dublin (www.tcd.ie)
 #               Robert Jennings
 #               Andrew Butterfield
+#               James Gooding Hunt
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -51,27 +52,27 @@ def catch_subprocess_errors(func):
 
 
 def run_all(model, config):
-    clean(model)
+    clean(model, config["testsuite"])
     generate_spin_files(model, config["spinallscenarios"])
     generate_test_files(model, config["spin2test"])
     copy(sys.argv[2], config["testcode"], config["rtems"],
          config["testyaml"], config["testsuite"])
     compile(config["rtems"])
-    run_simulator(config["rsb"], config["simulator"],
-                  config["simulatorargs"], config["testexe"])
+    run_simulator(config["simulator"],
+                  config["simulatorargs"], config["testexe"], config["testsuite"])
 
 
-def clean(model):
+def clean(model,testsuite):
     """Cleans out generated files in current directory"""
     print(f"Removing spin and test files for {model}")
-    files = get_generated_files(model)
+    files = get_generated_files(model,testsuite)
     for file in files:
         os.remove(file)
 
 
-def archive(model):
+def archive(model,testsuite):
     print(f"Archiving spin and test files for {model}")
-    files = get_generated_files(model)
+    files = get_generated_files(model,testsuite)
     date = datetime.now().strftime("%Y%m%d-%H%M%S")
     archive_dir = Path(f"archive/{date}")
     archive_dir.mkdir(parents=True, exist_ok=True)
@@ -130,7 +131,7 @@ def generate_spin_files(model, spinallscenarios):
         for i in range(no_of_trails):
             subprocess.run(f"spin -T -t{i + 1} {model}.pml > {model}-{i}.spn",
                            check=True, shell=True)
-
+    os.remove('pan')
 
 @catch_subprocess_errors
 def generate_test_files(model, testgen):
@@ -185,29 +186,30 @@ def copy(model, codedir, rtems, modfile, testsuite_name):
 
 @catch_subprocess_errors
 def compile(rtems_dir):
+    cwd = os.getcwd()
     os.chdir(rtems_dir)
     subprocess.run("./waf configure", check=True, shell=True)
     subprocess.run("./waf", check=True, shell=True)
+    os.chdir(cwd)
 
 
 @catch_subprocess_errors
-def run_simulator(rsb, simulator_path, simulator_args, testexe):
-    os.chdir(rsb)
+def run_simulator(simulator_path, simulator_args, testexe, testsuite):
     sim_command = f"{simulator_path} {simulator_args}"
     print(f"Doing {sim_command} {testexe}")
-    subprocess.run(f"{sim_command} {testexe}",
+    subprocess.run(f"{sim_command} {testexe} > {testsuite}-test.log",
                    check=True, shell=True)
 
 
-def get_generated_files(model):
-    files = glob.glob('pan')
+def get_generated_files(model,testsuite):
     trails = glob.glob(f"{model}*.trail")
-    files += trails
+    files = trails
     files += glob.glob(f"{model}*.spn")
     if len(trails) == 1:
-        files += glob.glob(f"tr-{model}.c")
+        files += glob.glob(f"tr-{model}-0.c")
     else:
         files += glob.glob(f"tr-{model}-*.c")
+    files += glob.glob(f"{testsuite}-test.log")
     return files
 
 
@@ -291,10 +293,10 @@ def main():
         generate_test_files(sys.argv[2], config["spin2test"])
 
     if sys.argv[1] == "clean":
-        clean(sys.argv[2])
+        clean(sys.argv[2], config["testsuite"])
 
     if sys.argv[1] == "archive":
-        archive(sys.argv[2])
+        archive(sys.argv[2], config["testsuite"])
 
     if sys.argv[1] == "zero":
         zero(config["testyaml"], config["testsuite"])
@@ -307,8 +309,8 @@ def main():
         compile(config["rtems"])
 
     if sys.argv[1] == "run":
-        run_simulator(config["rsb"], config["simulator"],
-                      config["simulatorargs"], config["testexe"])
+        run_simulator(config["simulator"],
+                      config["simulatorargs"], config["testexe"], config["testsuite"])
 
 
 if __name__ == '__main__':
