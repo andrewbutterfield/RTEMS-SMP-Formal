@@ -254,7 +254,7 @@ def main():
             or len(sys.argv) == 2 and sys.argv[1] == "compile"
             or len(sys.argv) == 2 and sys.argv[1] == "run"):
         print("USAGE:")
-        print("help - these instructions")
+        print("help - more details about usage and commands below")
         print("all modelname - runs clean, spin, gentests, copy, compile and "
               "run")
         print("clean modelname - remove spin, test files")
