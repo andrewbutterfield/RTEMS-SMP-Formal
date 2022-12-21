@@ -1,5 +1,7 @@
 # Formal Verification
 
+`formal`
+
 This directory contains the models and tooling developed as part of the ESA-sponsored activity ***Qualification of RTEMS Symmetric Multiprocessing(SMP)***, that has been added into RTEMS in the `rtems-central` repository.
 
 ## Contributors

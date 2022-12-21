@@ -1,5 +1,7 @@
 # Promela/SPIN
 
+`formal/promela`
+
 This directory contains formal models written in Promela and tools that use SPIN to do test generation from those models.
 
 ## Contributors
