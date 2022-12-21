@@ -22,11 +22,14 @@ This project is licensed under the
 
 There are currently five models present. Four are test-generation ready, whilst the fifth is still work in progress.
 
-* Barrier Manager `formal/promela/models/barriers'
-* Chains API `formal/promela/models/chains'
-* Event Manager `formal/promela/models/events'
-* Message Manager `formal/promela/models/messages'
-* MrsP Thread Queues `formal/promela/models/threadq'
+We identify the usual RTEMS name for the component,
+the Promela "model-name", and the path to the model directory.
+
+* Barrier Manager: "barrier-mgr-model" `formal/promela/models/barriers`
+* Chains API:  "chains-api-model" `formal/promela/models/chains`
+* Event Manager "event-mgr-model" `formal/promela/models/events`
+* Message Manager "msg-mgr-model" `formal/promela/models/messages`
+* MrsP Thread Queues "mrsp-threadq-model" `formal/promela/models/threadq`
 
 ## Doing Test Generation
 
