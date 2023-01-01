@@ -50,10 +50,10 @@ def catch_subprocess_errors(func):
     return wrapper
 
 
-def run_all(model, config):
-    clean(model)
-    generate_spin_files(model, config["spinallscenarios"])
-    generate_test_files(model, config["spin2test"])
+def run_all(model, config, refine_config):
+    clean(model, refine_config["testfiletype"])
+    generate_spin_files(model, config["spinallscenarios"], refine_config)
+    generate_test_files(model, config["spin2test"], refine_config)
     copy(sys.argv[2], config["testcode"], config["rtems"],
          config["testyaml"], config["testsuite"])
     compile(config["rtems"])
@@ -61,10 +61,10 @@ def run_all(model, config):
                   config["simulatorargs"], config["testexe"])
 
 
-def clean(model):
+def clean(model, test_extenstion):
     """Cleans out generated files in current directory"""
     print(f"Removing spin and test files for {model}")
-    files = get_generated_files(model)
+    files = get_generated_files(model, test_extenstion)
     for file in files:
         os.remove(file)
 
@@ -91,31 +91,31 @@ def zero(model_file, testsuite_name):
         yaml.dump(model_yaml, file)
 
 
-def ready_to_generate(model):
+def ready_to_generate(model, refine_config):
     """Checks if relevant files are in place for spin and test generation"""
     ready = True
     if not os.path.isfile(f"{model}.pml"):
         print("Promela file does not exist for model")
         ready = False
-    if not os.path.isfile(f"{model}-pre.h"):
+    if not os.path.isfile(f"{refine_config['preamble']}"):
         print("Preconditions file does not exist for model")
         ready = False
-    if not os.path.isfile(f"{model}-post.h"):
+    if not os.path.isfile(f"{refine_config['postamble']}"):
         print("Postconditions file does not exist for model")
         ready = False
-    if not os.path.isfile(f"{model}-run.h"):
+    if not os.path.isfile(f"{refine_config['runfile']}"):
         print("Promela file does not exist for model")
         ready = False
-    if not os.path.isfile(f"{model}-rfn.yml"):
+    if not os.path.isfile(f"{refine_config['refinefile']}"):
         print("Refinement file does not exist for model")
         ready = False
     return ready
 
 
 @catch_subprocess_errors
-def generate_spin_files(model, spinallscenarios):
+def generate_spin_files(model, spinallscenarios, refine_config):
     """Create spin files from model"""
-    if not ready_to_generate(model):
+    if not ready_to_generate(model, refine_config):
         sys.exit(1)
     print(f"Generating spin files for {model}")
     subprocess.run(f"spin {spinallscenarios} {model}.pml",
@@ -133,19 +133,31 @@ def generate_spin_files(model, spinallscenarios):
 
 
 @catch_subprocess_errors
-def generate_test_files(model, testgen):
+def generate_test_files(model, testgen, refine_config):
     """Create test files from spin files"""
-    if not ready_to_generate(model):
+    if not ready_to_generate(model, refine_config):
         sys.exit(1)
     print(f"Generating test files for {model}")
     no_of_trails = len(glob.glob(f"{model}*.trail"))
     if no_of_trails == 0:
         print("no trail files found")
     elif no_of_trails == 1:
-        subprocess.run(f"python {testgen} {model}", check=True, shell=True)
+        test_file = f"tr-{model}{refine_config['testfiletype']}"
+        subprocess.run(f"python {testgen} {model} {refine_config['preamble']} "
+                       f"{refine_config['postamble']} "
+                       f"{refine_config['runfile']} "
+                       f"{refine_config['refinefile']} "
+                       f"{test_file}",
+                       check=True, shell=True)
     else:
         for i in range(no_of_trails):
-            subprocess.run(f"python {testgen} {model} {i}",
+            test_file = f"tr-{model}-{i}{refine_config['testfiletype']}"
+            subprocess.run(f"python {testgen} {model} "
+                           f"{refine_config['preamble']} "
+                           f"{refine_config['postamble']} "
+                           f"{refine_config['runfile']} "
+                           f"{refine_config['refinefile']} "
+                           f"{test_file} {i}",
                            check=True, shell=True)
 
 
@@ -199,15 +211,15 @@ def run_simulator(rsb, simulator_path, simulator_args, testexe):
                    check=True, shell=True)
 
 
-def get_generated_files(model):
+def get_generated_files(model, test_extenstion):
     files = glob.glob('pan')
     trails = glob.glob(f"{model}*.trail")
     files += trails
     files += glob.glob(f"{model}*.spn")
     if len(trails) == 1:
-        files += glob.glob(f"tr-{model}.c")
+        files += glob.glob(f"tr-{model}{test_extenstion}")
     else:
-        files += glob.glob(f"tr-{model}-*.c")
+        files += glob.glob(f"tr-{model}-*{test_extenstion}")
     return files
 
 
@@ -225,9 +237,11 @@ def get_config(source_dir):
                     config[key] = val
     if "testsuite" not in config.keys():
         config["testsuite"] = "model-0"
-    missing_keys = {"spin2test", "rtems", "rsb", "simulator", "testyamldir",
+    missing_keys = {
+                    "spin2test", "rtems", "rsb", "simulator", "testyamldir",
                     "testcode", "testexedir", "simulatorargs",
-                    "spinallscenarios"} - config.keys()
+                    "spinallscenarios"
+                    } - config.keys()
     if missing_keys:
         print("testbuilder.yml configuration is incomplete")
         print("The following configuration items are missing:")
@@ -237,6 +251,33 @@ def get_config(source_dir):
     config["testyaml"] = f"{config['testyamldir']}{config['testsuite']}.yml"
     config["testexe"] = f"{config['testexedir']}ts-{config['testsuite']}.exe"
     return config
+
+
+def get_refine_config(source_dir, model):
+    refine_config = dict()
+    with open(f"{source_dir}/refine-config.yml") as file:
+        global_config = yaml.load(file, Loader=yaml.FullLoader)
+        for key, val in global_config.items():
+            refine_config[key] = val
+    if Path("refine-config.yml").exists():
+        with open("refine-config.yml") as file:
+            local_config = yaml.load(file, Loader=yaml.FullLoader)
+            if local_config:
+                for key, val in local_config.items():
+                    refine_config[key] = val
+    missing_keys = {
+                       "preamble", "postamble", "refinefile", "testfiletype",
+                       "runfile"
+                    } - refine_config.keys()
+    if missing_keys:
+        print("refine-config.yml configuration is incomplete")
+        print("The following configuration items are missing:")
+        for key in missing_keys:
+            print(key)
+        sys.exit(1)
+    for key in ["preamble", "postamble", "refinefile", "runfile"]:
+        refine_config[key] = f"{model}{refine_config[key]}"
+    return refine_config
 
 
 def main():
@@ -257,7 +298,7 @@ def main():
               "run")
         print("clean modelname - remove spin, test files")
         print("archive modelname - archives spin, test files")
-        print("zero  - remove all tesfiles from RTEMS")
+        print("zero  - remove all testfiles from RTEMS")
         print("spin modelname - generate spin files")
         print("gentests modelname - generate test files")
         print("copy modelname - copy test files and configuration to RTEMS")
@@ -267,8 +308,6 @@ def main():
 
     source_dir = os.path.dirname(os.path.realpath(__file__))
 
-    config = get_config(source_dir)
-
     if not Path.exists(Path(f"{source_dir}/spin2test.py")) \
             or not Path.exists(Path(f"{source_dir}/env")):
         print("Setup incomplete...")
@@ -277,21 +316,28 @@ def main():
         print(f". {source_dir}/env/bin/activate")
         sys.exit(1)
 
+    config = get_config(source_dir)
+    if len(sys.argv) >= 3:
+        refine_config = get_refine_config(source_dir, sys.argv[2])
+    else:
+        refine_config = dict()
+
     if sys.argv[1] == "help":
         with open(f"{source_dir}/testbuilder.help") as helpfile:
             print(helpfile.read())
 
     if sys.argv[1] == "all":
-        run_all(sys.argv[2], config)
+        run_all(sys.argv[2], config, refine_config)
 
     if sys.argv[1] == "spin":
-        generate_spin_files(sys.argv[2], config["spinallscenarios"])
+        generate_spin_files(sys.argv[2], config["spinallscenarios"],
+                            refine_config)
 
     if sys.argv[1] == "gentests":
-        generate_test_files(sys.argv[2], config["spin2test"])
+        generate_test_files(sys.argv[2], config["spin2test"], refine_config)
 
     if sys.argv[1] == "clean":
-        clean(sys.argv[2])
+        clean(sys.argv[2], refine_config["testfiletype"])
 
     if sys.argv[1] == "archive":
         archive(sys.argv[2])
