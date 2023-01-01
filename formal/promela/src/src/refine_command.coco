@@ -40,16 +40,17 @@ class command:
         self.seqForSEQ = "" # Holds space-separated sequence output string when in SEQ
         self.inName = ""     # Set to SEQ/STRUCT name when inside
 
-        # The following should all be in refinement file
-        self.EOLC = self.ref_dict["EOLC"]
-        self.CMTBEGIN = self.ref_dict["CMTBEGIN"]
-        self.CMTEND = self.ref_dict["CMTEND"]
-        self.SEGNAMEPFX = self.ref_dict["SEGNAMEPFX"]
-        self.SEGARG = self.ref_dict["SEGARG"]
-        self.SEGDECL = self.ref_dict["SEGDECL"]
-        self.SEGBEGIN = self.ref_dict["SEGBEGIN"]
-        self.SEGEND = self.ref_dict["SEGEND"]
-        self.TESTLOGGER = self.ref_dict["TESTLOGGER"]
+# We assume the target test code language is C/C++ by default
+        self.EOLC = "//"
+        self.CMTBEGIN = "/*"
+        self.CMTEND = "*/"
+# The following should all be in refinement file
+        self.SEGNAMEPFX = "TestSegment{}"
+        self.SEGARG = "Context* ctx"
+        self.SEGDECL = "static void {}( {} )"  # segname, segarg,
+        self.SEGBEGIN = " {"
+        self.SEGEND = "}"
+        self.TESTLOGGER = 'T_log(T_NORMAL,"{}");'
 
         self.testName = "Un-named Test"
         self.defCode = []     # list of strings

@@ -62,13 +62,3 @@ prv_FPTR: |
 chain_SEQ: |
   show_chain( &chain, ctx->buffer );
   T_eq_str( ctx->buffer, "{0} 0" );
-
-EOLC: "//"
-CMTBEGIN: "/*"
-CMTEND  : "*/"
-SEGNAMEPFX: "TestSegment{}"
-SEGARG: "Context* ctx"
-SEGDECL: "static void {}( {} )"  # segname, segarg,
-SEGBEGIN: " {"
-SEGEND: "}"
-TESTLOGGER: 'T_log(T_NORMAL,"{}");'
