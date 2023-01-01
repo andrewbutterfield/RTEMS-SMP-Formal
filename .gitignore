@@ -13,3 +13,4 @@ formal/promela/src/src/tests/test_optional.py
 formal/promela/src/testgen_ml.py
 formal/promela/src/testgen_yaml.py
 formal/promela/src/src/__pycache__
+RTEMS-SMP-Formal.code-workspace

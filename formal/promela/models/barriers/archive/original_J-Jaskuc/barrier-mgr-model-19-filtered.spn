@@ -1,0 +1,72 @@
+LOG TestName: Barrier_Manager_TestGen
+DEF MAX_BARRIERS 2
+DEF BARRIER_MAN 0
+DEF BARRIER_AUTO 1
+DEF MAX_WAITERS 3
+DEF TASK_MAX 4
+DEF SEMA_MAX 3
+DCLARRAY Semaphore semaphore SEMA_MAX
+INIT
+LOG scenario AutoAcq
+LOG System running...
+LOG Loop through tasks...
+LOG Clock Started
+TASK Worker1
+CALL NormalPriority
+WAIT 2
+TASK Worker0
+CALL NormalPriority
+WAIT 1
+TASK Runner
+CALL NormalPriority
+CALL barrier_create 1 1 3 1
+LOG 1 Created {n: 1, auto: true, mw: 3}
+SCALAR created 1
+SCALAR rc 0
+SIGNAL 1
+CALL barrier_wait 1 0
+LOG WAIT 1 Over
+CALL barrier_ident 1 1
+LOG Barrier 1 Identified by name 1
+SCALAR rc 0
+SIGNAL 2
+CALL barrier_wait 1 0
+STATE 2 BarrierWait
+LOG Task 2 waiting, state = BarrierWait
+LOG WAIT 2 Over
+CALL barrier_ident 1 1
+LOG Barrier 1 Identified by name 1
+SCALAR rc 0
+SIGNAL 0
+CALL barrier_wait 1 0
+STATE 3 BarrierWait
+LOG Task 3 waiting, state = BarrierWait
+LOG Auto Barrier satisfied(<bid:1 wt:3 max:3>)
+LOG Task 1 waiting, state = Ready
+STATE 1 Ready
+SCALAR rc 0
+STATE 3 Ready
+SCALAR rc 0
+SIGNAL 2
+LOG Task 3 finished
+STATE 3 Zombie
+STATE 2 Ready
+SCALAR rc 0
+SIGNAL 1
+LOG Task 2 finished
+STATE 2 Zombie
+WAIT 0
+LOG WAIT 0 Over
+WAIT 1
+LOG WAIT 1 Over
+WAIT 2
+LOG WAIT 2 Over
+LOG Task 1 finished
+STATE 1 Zombie
+LOG Scenario is AutoAcq
+LOG Task 1 state is Zombie
+LOG Task 2 state is Zombie
+LOG Task 3 state is Zombie
+LOG ...all visited, live:0
+LOG All are Zombies, game over.
+LOG Clock Stopped

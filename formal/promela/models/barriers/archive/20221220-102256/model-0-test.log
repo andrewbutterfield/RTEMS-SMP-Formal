@@ -1,0 +1,1469 @@
+
+ SIS - SPARC/RISCV instruction simulator 2.29,  copyright Jiri Gaisler 2020
+ Bug-reports to jiri@gaisler.se
+
+ GR740/LEON4 emulation enabled, 4 cpus online, delta 50 clocks
+
+ Loaded /home/butrfeld/rtems-6-sparc-gr740-smp-4/src/rtems/build/sparc/gr740/testsuites/validation/ts-model-0.exe, entry 0x00000000
+
+
+*** BEGIN OF TEST Model0 ***
+*** TEST VERSION: 6.0.0.03337dab21e961585d323a9974c8eea6106c803d
+*** TEST STATE: EXPECTED_PASS
+*** TEST BUILD: RTEMS_SMP
+*** TEST TOOLS: 10.3.1 20210409 (RTEMS 6, RSB 889cf95db0122bd1a6b21598569620c40ff2069d, Newlib eb03ac1)
+A:Model0
+S:Platform:RTEMS
+S:Compiler:10.3.1 20210409 (RTEMS 6, RSB 889cf95db0122bd1a6b21598569620c40ff2069d, Newlib eb03ac1)
+S:Version:6.0.0.03337dab21e961585d323a9974c8eea6106c803d
+S:BSP:gr740
+S:BuildLabel:DEFAULT
+S:TargetHash:SHA256:_xQeTNJwSla2bVbhWPVcI0emLk2bE_GVQfvzt9CN84k=
+S:RTEMS_DEBUG:0
+S:RTEMS_MULTIPROCESSING:0
+S:RTEMS_POSIX_API:0
+S:RTEMS_PROFILING:0
+S:RTEMS_SMP:1
+B:RtemsModelBarrierMgr9
+L:Pushing Test Fixture...
+L:Runner Setup
+L:Creating Runner Semaphore
+L:Creating Worker0 Semaphore
+L:Creating Worker1 Semaphore
+L:Created Worker 0
+L:Started Worker 0
+L:Created Worker 1
+L:Started Worker 1
+L:Test Fixture Pushed
+L:@@@ 0 INIT
+L:Runner(Task 0) running
+L:@@@ 3 TASK Runner
+L:@@@ 3 CALL NormalPriority
+L:@@@ 3 CALL barrier_create 1 0 0 1
+L:Calling BarrierCreate(1,0,0,1)
+L:Returned 0x0 from Create
+L:@@@ 3 SCALAR created 1
+L:@@@ 3 SCALAR rc 0
+L:@@@ 3 SIGNAL 1
+L:@@@ 3 WAIT 0
+L:Worker0(Task 1) running
+L:@@@ 4 TASK Worker0
+L:@@@ 4 CALL NormalPriority
+L:@@@ 4 WAIT 1
+L:@@@ 4 CALL barrier_ident 1 1
+L:Calling BarrierIdent(1,1)
+L:Returned 0x0 from Ident
+L:@@@ 4 SCALAR rc 0
+L:@@@ 4 SIGNAL 2
+L:@@@ 4 CALL barrier_wait 1 0
+L:Calling BarrierWait(1375797249,0)
+L:Worker1(Task 2) running
+L:@@@ 5 TASK Worker1
+L:@@@ 5 CALL NormalPriority
+L:@@@ 5 WAIT 2
+L:@@@ 5 CALL barrier_ident 1 1
+L:Calling BarrierIdent(1,1)
+L:Returned 0x0 from Ident
+L:@@@ 5 SCALAR rc 0
+L:@@@ 5 SIGNAL 0
+L:
+L:
+L:@@@ 3 CALL barrier_release 1 0
+L:Calling BarrierRelease(1375797249,0)
+L:Returned 0x9 from Release
+L:@@@ 3 SCALAR rc 9
+L:@@@ 3 SIGNAL 0
+L:@@@ 3 WAIT 0
+L:@@@ 3 CALL barrier_delete 1
+L:Calling BarrierDelete(1375797249)
+L:Returned 0x0 from Delete
+L:@@@ 3 STATE 1 Ready
+L:@@@ 3 SCALAR rc 0
+L:@@@ 3 SIGNAL 0
+L:@@@ 3 WAIT 0
+L:@@@ 3 WAIT 1
+L:Returned 0x7 from Wait
+L:@@@ 4 STATE 2 BarrierWait
+L:@@@ 4 STATE 2 Ready
+L:@@@ 4 SCALAR rc 7
+L:@@@ 4 SIGNAL 1
+L:@@@ 4 STATE 2 Zombie
+L:Worker0(Task 1) finished
+L:Returned 0x7 from Wait
+L:@@@ 5 STATE 3 BarrierWait
+L:@@@ 5 STATE 3 Ready
+L:@@@ 5 SCALAR rc 7
+L:@@@ 5 SIGNAL 2
+L:@@@ 5 STATE 3 Zombie
+L:Worker1(Task 2) finished
+L:@@@ 3 WAIT 2
+L:@@@ 3 STATE 1 Zombie
+L:Runner(Task 0) finished
+L:Run Pop Fixture
+L:Teardown
+L:Deleting Runner Semaphore
+L:Deleting Worker0 Semaphore
+L:Deleting Worker1 Semaphore
+E:RtemsModelBarrierMgr9:N:33:F:0:D:0.011377
+B:RtemsModelBarrierMgr8
+L:Pushing Test Fixture...
+L:Runner Setup
+L:Creating Runner Semaphore
+L:Creating Worker0 Semaphore
+L:Creating Worker1 Semaphore
+L:Created Worker 0
+L:Started Worker 0
+L:Created Worker 1
+L:Started Worker 1
+L:Test Fixture Pushed
+L:@@@ 0 INIT
+L:Runner(Task 0) running
+L:@@@ 3 TASK Runner
+L:@@@ 3 CALL NormalPriority
+L:@@@ 3 CALL SetProcessor 1
+L:@@@ 3 CALL barrier_create 1 0 0 1
+L:Calling BarrierCreate(1,0,0,1)
+L:Returned 0x0 from Create
+L:@@@ 3 SCALAR created 1
+L:@@@ 3 SCALAR rc 0
+L:@@@ 3 SIGNAL 1
+L:@@@ 3 WAIT 0
+L:Worker0(Task 1) running
+L:@@@ 4 TASK Worker0
+L:@@@ 4 CALL NormalPriority
+L:@@@ 4 CALL SetProcessor 0
+L:@@@ 4 WAIT 1
+L:@@@ 4 CALL barrier_ident 1 1
+L:Calling BarrierIdent(1,1)
+L:Returned 0x0 from Ident
+L:@@@ 4 SCALAR rc 0
+L:@@@ 4 SIGNAL 2
+L:@@@ 4 CALL barrier_wait 1 0
+L:Calling BarrierWait(1375797250,0)
+L:Worker1(Task 2) running
+L:@@@ 5 TASK Worker1
+L:@@@ 5 CALL NormalPriority
+L:@@@ 5 CALL SetProcessor 0
+L:@@@ 5 WAIT 2
+L:@@@ 5 CALL barrier_ident 1 1
+L:Calling BarrierIdent(1,1)
+L:Returned 0x0 from Ident
+L:L:@@@ 3 CALL barrier_release 1 0
+L:Calling BarrierRelease(1375797250,0)
+L:Returned 0x9 from Release
+L:@@@ 3 SCALAR rc 9
+L:@@@ 3 SIGNAL 0
+L:@@@ 3 WAIT 0
+L:@@@ 3 CALL barrier_delete 1
+L:Calling BarrierDelete(1375797250)
+L:Returned 0x0 from Delete
+L:@@@ 3 STATE 1 Ready
+L:@@@ 3 SCALAR rc 0
+L:@@@ 3 SIGNAL 0
+L:@@@ 3 WAIT 0
+L:@@@ 3 WAIT 1
+L:Returned 0x7 from Wait
+L:@@@ 4 STATE 2 BarrierWait
+L:@@@ 4 STATE 2 Ready
+L:@@@ 4 SCALAR rc 7
+L:@@@ 4 SIGNAL 1
+L:@@@ 4 STATE 2 Zombie
+L:Worker0(Task 1) finished
+L:Returned 0x7 from Wait
+L:@@@ 5 STATE 3 BarrierWait
+L:@@@ 5 STATE 3 Ready
+L:@@@ 5 SCALAR rc 7
+L:@@@ 5 SIGNAL 2
+L:@@@ 5 STATE 3 Zombie
+L:Worker1(Task 2) finished
+L:@@@ 3 WAIT 2
+L:@@@ 3 STATE 1 Zombie
+L:Runner(Task 0) finished
+L:Run Pop Fixture
+L:Teardown
+L:Deleting Runner Semaphore
+L:Deleting Worker0 Semaphore
+L:Deleting Worker1 Semaphore
+E:RtemsModelBarrierMgr8:N:36:F:0:D:0.011677
+B:RtemsModelBarrierMgr7
+L:Pushing Test Fixture...
+L:Runner Setup
+L:Creating Runner Semaphore
+L:Creating Worker0 Semaphore
+L:Creating Worker1 Semaphore
+L:Created Worker 0
+L:Started Worker 0
+L:Created Worker 1
+L:Started Worker 1
+L:Test Fixture Pushed
+L:@@@ 0 INIT
+L:Runner(Task 0) running
+L:@@@ 3 TASK Runner
+L:@@@ 3 CALL NormalPriority
+L:@@@ 3 CALL barrier_create 1 0 0 1
+L:Calling BarrierCreate(1,0,0,1)
+L:Returned 0x0 from Create
+L:@@@ 3 SCALAR created 1
+L:@@@ 3 SCALAR rc 0
+L:@@@ 3 SIGNAL 1
+L:@@@ 3 WAIT 0
+L:Worker0(Task 1) running
+L:@@@ 4 TASK Worker0
+L:@@@ 4 CALL NormalPriority
+L:@@@ 4 WAIT 1
+L:@@@ 4 CALL barrier_ident 0 1
+L:Calling BarrierIdent(0,1)
+L:Returned 0x3 from Ident
+L:@@@ 4 SCALAR rc 3
+L:@@@ 4 SIGNAL 2
+L:@@@ 4 CALL barrier_wait 0 0
+L:Calling BarrierWait(0,0)
+L:Returned 0x4 from Wait
+L:@@@ 4 SCALAR rc 4
+L:@@@ 4 SIGNAL 1
+L:@@@ 4 STATE 2 Zombie
+L:Worker0(Task 1) finished
+L:Worker1(Task 2) running
+L:@@@ 5 TASK Worker1
+L:@@@ 5 CALL NormalPriority
+L:@@@ 5 WAIT 2
+L:@@@ 5 CALL barrier_ident 1 1
+L:
+L:
+L:
+L:@@@ 3 CALL barrier_release 1 1
+L:Calling BarrierRelease(1375797251,1)
+L:Returned 0x0 from Release
+L:@@@ 3 STATE 1 Ready
+L:@@@ 3 SCALAR released 1
+L:@@@ 3 SCALAR rc 0
+L:@@@ 3 SIGNAL 0
+L:@@@ 3 WAIT 0
+L:@@@ 3 CALL barrier_delete 1
+L:Calling BarrierDelete(1375797251)
+L:Returned 0x0 from Delete
+L:@@@ 3 STATE 1 Ready
+L:@@@ 3 SCALAR rc 0
+L:@@@ 3 SIGNAL 0
+L:@@@ 3 WAIT 0
+L:@@@ 3 WAIT 1
+L:@@@ 3 WAIT 2
+L:Returned 0x0 from Wait
+L:@@@ 5 STATE 3 BarrierWait
+L:@@@ 5 STATE 3 Ready
+L:@@@ 5 SCALAR rc 0
+L:@@@ 5 SIGNAL 2
+L:@@@ 5 STATE 3 Zombie
+L:Worker1(Task 2) finished
+L:@@@ 3 STATE 1 Zombie
+L:Runner(Task 0) finished
+L:Run Pop Fixture
+L:Teardown
+L:Deleting Runner Semaphore
+L:Deleting Worker0 Semaphore
+L:Deleting Worker1 Semaphore
+E:RtemsModelBarrierMgr7:N:34:F:0:D:0.010826
+B:RtemsModelBarrierMgr6
+L:Pushing Test Fixture...
+L:Runner Setup
+L:Creating Runner Semaphore
+L:Creating Worker0 Semaphore
+L:Creating Worker1 Semaphore
+L:Created Worker 0
+L:Started Worker 0
+L:Created Worker 1
+L:Started Worker 1
+L:Test Fixture Pushed
+L:@@@ 0 INIT
+L:Runner(Task 0) running
+L:@@@ 3 TASK Runner
+L:@@@ 3 CALL NormalPriority
+L:@@@ 3 CALL SetProcessor 1
+L:@@@ 3 CALL barrier_create 1 0 0 1
+L:Calling BarrierCreate(1,0,0,1)
+L:Returned 0x0 from Create
+L:@@@ 3 SCALAR created 1
+L:@@@ 3 SCALAR rc 0
+L:@@@ 3 SIGNAL 1
+L:@@@ 3 WAIT 0
+L:Worker0(Task 1) running
+L:@@@ 4 TASK Worker0
+L:@@@ 4 CALL NormalPriority
+L:@@@ 4 CALL SetProcessor 0
+L:@@@ 4 WAIT 1
+L:@@@ 4 CALL barrier_ident 0 1
+L:Calling BarrierIdent(0,1)
+L:Returned 0x3 from Ident
+L:@@@ 4 SCALAR rc 3
+L:@@@ 4 SIGNAL 2
+L:@@@ 4 CALL barrier_wait 0 0
+L:Calling BarrierWait(0,0)
+L:Returned 0x4 from Wait
+L:@@@ 4 SCALAR rc 4
+L:@@@ 4 SIGNAL 1
+L:@@@ 4 STATE 2 Zombie
+L:Worker0(Task 1) finished
+L:Worker1(Task 2) running
+L:@@@ 5 TASK Worker1
+L:@@@ 5 CALL NormalPriority
+L:@@@ 5 CALL SetProcessor 0L:@@@ 3 CALL barrier_release 1 1
+L:Calling BarrierRelease(1375797252,1)
+L:Returned 0x0 from Release
+L:@@@ 3 STATE 1 Ready
+L:@@@ 3 SCALAR released 1
+L:@@@ 3 SCALAR rc 0
+L:@@@ 3 SIGNAL 0
+L:@@@ 3 WAIT 0
+L:@@@ 3 CALL barrier_delete 1
+L:Calling BarrierDelete(1375797252)
+L:Returned 0x0 from Delete
+L:@@@ 3 STATE 1 Ready
+L:@@@ 3 SCALAR rc 0
+L:@@@ 3 SIGNAL 0
+L:@@@ 3 WAIT 0
+L:@@@ 3 WAIT 1
+L:@@@ 3 WAIT 2
+L:Returned 0x0 from Wait
+L:@@@ 5 STATE 3 BarrierWait
+L:@@@ 5 STATE 3 Ready
+L:@@@ 5 SCALAR rc 0
+L:@@@ 5 SIGNAL 2
+L:@@@ 5 STATE 3 Zombie
+L:Worker1(Task 2) finished
+L:@@@ 3 STATE 1 Zombie
+L:Runner(Task 0) finished
+L:Run Pop Fixture
+L:Teardown
+L:Deleting Runner Semaphore
+L:Deleting Worker0 Semaphore
+L:Deleting Worker1 Semaphore
+E:RtemsModelBarrierMgr6:N:37:F:0:D:0.011092
+B:RtemsModelBarrierMgr5
+L:Pushing Test Fixture...
+L:Runner Setup
+L:Creating Runner Semaphore
+L:Creating Worker0 Semaphore
+L:Creating Worker1 Semaphore
+L:Created Worker 0
+L:Started Worker 0
+L:Created Worker 1
+L:Started Worker 1
+L:Test Fixture Pushed
+L:@@@ 0 INIT
+L:Runner(Task 0) running
+L:@@@ 3 TASK Runner
+L:@@@ 3 CALL NormalPriority
+L:@@@ 3 CALL barrier_create 1 0 0 1
+L:Calling BarrierCreate(1,0,0,1)
+L:Returned 0x0 from Create
+L:@@@ 3 SCALAR created 1
+L:@@@ 3 SCALAR rc 0
+L:@@@ 3 SIGNAL 1
+L:@@@ 3 WAIT 0
+L:Worker0(Task 1) running
+L:@@@ 4 TASK Worker0
+L:@@@ 4 CALL NormalPriority
+L:@@@ 4 WAIT 1
+L:@@@ 4 CALL barrier_ident 1 1
+L:Calling BarrierIdent(1,1)
+L:Returned 0x0 from Ident
+L:@@@ 4 SCALAR rc 0
+L:@@@ 4 SIGNAL 2
+L:@@@ 4 SIGNAL 1
+L:@@@ 4 STATE 2 Zombie
+L:Worker0(Task 1) finished
+L:Worker1(Task 2) running
+L:@@@ 5 TASK Worker1
+L:@@@ 5 CALL NormalPriority
+L:@@@ 5 WAIT 2
+L:@@@ 5 CALL barrier_ident 1 1
+L:Calling BarrierIdent(1,1)
+L:Returned 0x0 from Ident
+L:@@@ 5 SCALAR rc 0
+L:@@@ 5 SIGNAL 0
+L:@@@ 5 SIGNAL 2
+L:
+L:@@@ 3 CALL barrier_release 1 1
+L:Calling BarrierRelease(1375797253,1)
+L:Returned 0x0 from Release
+L:@@@ 3 STATE 1 Ready
+L:@@@ 3 SCALAR released 0
+L:@@@ 3 SCALAR rc 0
+L:@@@ 3 SIGNAL 0
+L:@@@ 3 WAIT 0
+L:@@@ 3 CALL barrier_delete 1
+L:Calling BarrierDelete(1375797253)
+L:Returned 0x0 from Delete
+L:@@@ 3 STATE 1 Ready
+L:@@@ 3 SCALAR rc 0
+L:@@@ 3 SIGNAL 0
+L:@@@ 3 WAIT 0
+L:@@@ 3 WAIT 1
+L:@@@ 3 WAIT 2
+L:@@@ 3 STATE 1 Zombie
+L:Runner(Task 0) finished
+L:Run Pop Fixture
+L:Teardown
+L:Deleting Runner Semaphore
+L:Deleting Worker0 Semaphore
+L:Deleting Worker1 Semaphore
+E:RtemsModelBarrierMgr5:N:32:F:0:D:0.009524
+B:RtemsModelBarrierMgr4
+L:Pushing Test Fixture...
+L:Runner Setup
+L:Creating Runner Semaphore
+L:Creating Worker0 Semaphore
+L:Creating Worker1 Semaphore
+L:Created Worker 0
+L:Started Worker 0
+L:Created Worker 1
+L:Started Worker 1
+L:Test Fixture Pushed
+L:@@@ 0 INIT
+L:Runner(Task 0) running
+L:@@@ 3 TASK Runner
+L:@@@ 3 CALL NormalPriority
+L:@@@ 3 CALL SetProcessor 1
+L:@@@ 3 CALL barrier_create 1 0 0 1
+L:Calling BarrierCreate(1,0,0,1)
+L:Returned 0x0 from Create
+L:@@@ 3 SCALAR created 1
+L:@@@ 3 SCALAR rc 0
+L:@@@ 3 SIGNAL 1
+L:@@@ 3 WAIT 0
+L:Worker0(Task 1) running
+L:@@@ 4 TASK Worker0
+L:@@@ 4 CALL NormalPriority
+L:@@@ 4 CALL SetProcessor 0
+L:@@@ 4 WAIT 1
+L:@@@ 4 CALL barrier_ident 1 1
+L:Calling BarrierIdent(1,1)
+L:Returned 0x0 from Ident
+L:@@@ 4 SCALAR rc 0
+L:@@@ 4 SIGNAL 2
+L:@@@ 4 SIGNAL 1
+L:@@@ 4 STATE 2 Zombie
+L:Worker0(Task 1) finished
+L:Worker1(Task 2) running
+L:@@@ 5 TASK Worker1
+L:@@@ 5 CALL NormalPriority
+L:@@@ 5 CALL SetProcessor 0
+L:@@@ 5 WAIT 2
+L:@@@ 5 CALL barrier_ident 1 1
+L:Calling BarrierIdent(1,1)
+L:Returned 0x0 from Ident
+
+L:@@@ 3 CALL barrier_release 1 1
+L:Calling BarrierRelease(1375797254,1)
+L:Returned 0x0 from Release
+L:@@@ 3 STATE 1 Ready
+L:@@@ 3 SCALAR released 0
+L:@@@ 3 SCALAR rc 0
+L:@@@ 3 SIGNAL 0
+L:@@@ 3 WAIT 0
+L:@@@ 3 CALL barrier_delete 1
+L:Calling BarrierDelete(1375797254)
+L:Returned 0x0 from Delete
+L:@@@ 3 STATE 1 Ready
+L:@@@ 3 SCALAR rc 0
+L:@@@ 3 SIGNAL 0
+L:@@@ 3 WAIT 0
+L:@@@ 3 WAIT 1
+L:@@@ 3 WAIT 2
+L:@@@ 3 STATE 1 Zombie
+L:Runner(Task 0) finished
+L:Run Pop Fixture
+L:Teardown
+L:Deleting Runner Semaphore
+L:Deleting Worker0 Semaphore
+L:Deleting Worker1 Semaphore
+E:RtemsModelBarrierMgr4:N:35:F:0:D:0.009783
+B:RtemsModelBarrierMgr3
+L:Pushing Test Fixture...
+L:Runner Setup
+L:Creating Runner Semaphore
+L:Creating Worker0 Semaphore
+L:Creating Worker1 Semaphore
+L:Created Worker 0
+L:Started Worker 0
+L:Created Worker 1
+L:Started Worker 1
+L:Test Fixture Pushed
+L:@@@ 0 INIT
+L:Runner(Task 0) running
+L:@@@ 3 TASK Runner
+L:@@@ 3 CALL NormalPriority
+L:@@@ 3 CALL barrier_create 1 0 0 0
+L:Calling BarrierCreate(1,0,0,0)
+L:Returned 0x9 from Create
+L:@@@ 3 SCALAR rc 9
+L:@@@ 3 SIGNAL 1
+L:@@@ 3 WAIT 0
+L:Worker0(Task 1) running
+L:@@@ 4 TASK Worker0
+L:@@@ 4 CALL NormalPriority
+L:@@@ 4 WAIT 1
+L:@@@ 4 CALL barrier_ident 1 1
+L:Calling BarrierIdent(1,1)
+L:Returned 0x3 from Ident
+L:@@@ 4 SCALAR rc 3
+L:@@@ 4 SIGNAL 2
+L:@@@ 4 CALL barrier_wait 1 0
+L:Calling BarrierWait(0,0)
+L:Returned 0x4 from Wait
+L:@@@ 4 SCALAR rc 4
+L:@@@ 4 SIGNAL 1
+L:@@@ 4 STATE 2 Zombie
+L:Worker0(Task 1) finished
+L:Worker1(Task 2) running
+L:@@@ 5 TASK Worker1
+L:@@@ 5 CALL NormalPriority
+L:@@@ 5 WAIT 2
+L:@@@ 5 CALL barrier_ident 1 1
+L:
+L:
+L:
+L:@@@ 3 CALL barrier_release 0 1
+L:Calling BarrierRelease(0,1)
+L:Returned 0x4 from Release
+L:@@@ 3 SCALAR rc 4
+L:@@@ 3 SIGNAL 0
+L:@@@ 3 WAIT 0
+L:@@@ 3 CALL barrier_delete 0
+L:Calling BarrierDelete(0)
+L:Returned 0x4 from Delete
+L:@@@ 3 SCALAR rc 4
+L:@@@ 3 SIGNAL 0
+L:@@@ 3 WAIT 0
+L:@@@ 3 WAIT 1
+L:@@@ 3 WAIT 2
+L:@@@ 3 STATE 1 Zombie
+L:Runner(Task 0) finished
+L:Run Pop Fixture
+L:Teardown
+L:Deleting Runner Semaphore
+L:Deleting Worker0 Semaphore
+L:Deleting Worker1 Semaphore
+E:RtemsModelBarrierMgr3:N:33:F:0:D:0.009227
+B:RtemsModelBarrierMgr2
+L:Pushing Test Fixture...
+L:Runner Setup
+L:Creating Runner Semaphore
+L:Creating Worker0 Semaphore
+L:Creating Worker1 Semaphore
+L:Created Worker 0
+L:Started Worker 0
+L:Created Worker 1
+L:Started Worker 1
+L:Test Fixture Pushed
+L:@@@ 0 INIT
+L:Runner(Task 0) running
+L:@@@ 3 TASK Runner
+L:@@@ 3 CALL NormalPriority
+L:@@@ 3 CALL SetProcessor 1
+L:@@@ 3 CALL barrier_create 1 0 0 0
+L:Calling BarrierCreate(1,0,0,0)
+L:Returned 0x9 from Create
+L:@@@ 3 SCALAR rc 9
+L:@@@ 3 SIGNAL 1
+L:@@@ 3 WAIT 0
+L:Worker0(Task 1) running
+L:@@@ 4 TASK Worker0
+L:@@@ 4 CALL NormalPriority
+L:@@@ 4 CALL SetProcessor 0
+L:@@@ 4 WAIT 1
+L:@@@ 4 CALL barrier_ident 1 1
+L:Calling BarrierIdent(1,1)
+L:Returned 0x3 from Ident
+L:@@@ 4 SCALAR rc 3
+L:@@@ 4 SIGNAL 2
+L:@@@ 4 CALL barrier_wait 1 0
+L:Calling BarrierWait(0,0)
+L:Returned 0x4 from Wait
+L:@@@ 4 SCALAR rc 4
+L:@@@ 4 SIGNAL 1
+L:@@@ 4 STATE 2 Zombie
+L:Worker0(Task 1) finished
+L:Worker1(Task 2) running
+L:@@@ 5 TASK Worker1
+L:@@@ 5 CALL NormalPriority
+L:@@@ 5 CALL SetProcessor 0L:@@@ 3 CALL barrier_release 0 1
+L:Calling BarrierRelease(0,1)
+L:Returned 0x4 from Release
+L:@@@ 3 SCALAR rc 4
+L:@@@ 3 SIGNAL 0
+L:@@@ 3 WAIT 0
+L:@@@ 3 CALL barrier_delete 0
+L:Calling BarrierDelete(0)
+L:Returned 0x4 from Delete
+L:@@@ 3 SCALAR rc 4
+L:@@@ 3 SIGNAL 0
+L:@@@ 3 WAIT 0
+L:@@@ 3 WAIT 1
+L:@@@ 3 WAIT 2
+L:@@@ 3 STATE 1 Zombie
+L:Runner(Task 0) finished
+L:Run Pop Fixture
+L:Teardown
+L:Deleting Runner Semaphore
+L:Deleting Worker0 Semaphore
+L:Deleting Worker1 Semaphore
+E:RtemsModelBarrierMgr2:N:36:F:0:D:0.009459
+B:RtemsModelBarrierMgr19
+L:Pushing Test Fixture...
+L:Runner Setup
+L:Creating Runner Semaphore
+L:Creating Worker0 Semaphore
+L:Creating Worker1 Semaphore
+L:Created Worker 0
+L:Started Worker 0
+L:Created Worker 1
+L:Started Worker 1
+L:Test Fixture Pushed
+L:@@@ 0 INIT
+L:Runner(Task 0) running
+L:@@@ 3 TASK Runner
+L:@@@ 3 CALL NormalPriority
+L:@@@ 3 CALL barrier_create 1 1 3 1
+L:Calling BarrierCreate(1,1,3,1)
+L:Returned 0x0 from Create
+L:@@@ 3 SCALAR created 1
+L:@@@ 3 SCALAR rc 0
+L:@@@ 3 SIGNAL 1
+L:@@@ 3 WAIT 0
+L:Worker0(Task 1) running
+L:@@@ 4 TASK Worker0
+L:@@@ 4 CALL NormalPriority
+L:@@@ 4 WAIT 1
+L:@@@ 4 CALL barrier_ident 1 1
+L:Calling BarrierIdent(1,1)
+L:Returned 0x0 from Ident
+L:@@@ 4 SCALAR rc 0
+L:@@@ 4 SIGNAL 2
+L:@@@ 4 CALL barrier_wait 1 0
+L:Calling BarrierWait(1375797255,0)
+L:Worker1(Task 2) running
+L:@@@ 5 TASK Worker1
+L:@@@ 5 CALL NormalPriority
+L:@@@ 5 WAIT 2
+L:@@@ 5 CALL barrier_ident 1 1
+L:Calling BarrierIdent(1,1)
+L:Returned 0x0 from Ident
+L:@@@ 5 SCALAR rc 0
+L:@@@ 5 SIGNAL 0
+L:
+L:
+L:@@@ 3 WAIT 1
+L:Returned 0x6 from Wait
+L:@@@ 5 STATE 3 TimeWait 4
+L:@@@ 5 STATE 1 OtherWait
+L:@@@ 5 STATE 3 Ready
+L:@@@ 5 STATE 3 Ready
+L:@@@ 5 SCALAR rc 6
+L:@@@ 5 CALL barrier_delete 1
+L:Calling BarrierDelete(1375797255)
+L:Returned 0x0 from Delete
+L:@@@ 5 STATE 2 OtherWait
+L:@@@ 5 STATE 3 Ready
+L:@@@ 5 SCALAR rc 0
+L:@@@ 5 SIGNAL 2
+L:@@@ 5 STATE 3 Zombie
+L:Worker1(Task 2) finished
+L:Returned 0x7 from Wait
+L:@@@ 4 STATE 2 BarrierWait
+L:@@@ 4 STATE 2 Ready
+L:@@@ 4 SCALAR rc 7
+L:@@@ 4 SIGNAL 1
+L:@@@ 4 STATE 2 Zombie
+L:
+L:@@@ 3 WAIT 2
+L:@@@ 3 STATE 1 Zombie
+L:Runner(Task 0) finished
+L:Run Pop Fixture
+L:Teardown
+L:Deleting Runner Semaphore
+L:Deleting Worker0 Semaphore
+L:Deleting Worker1 Semaphore
+E:RtemsModelBarrierMgr19:N:32:F:0:D:0.012424
+B:RtemsModelBarrierMgr18
+L:Pushing Test Fixture...
+L:Runner Setup
+L:Creating Runner Semaphore
+L:Creating Worker0 Semaphore
+L:Creating Worker1 Semaphore
+L:Created Worker 0
+L:Started Worker 0
+L:Created Worker 1
+L:Started Worker 1
+L:Test Fixture Pushed
+L:@@@ 0 INIT
+L:Runner(Task 0) running
+L:@@@ 3 TASK Runner
+L:@@@ 3 CALL NormalPriority
+L:@@@ 3 CALL SetProcessor 1
+L:@@@ 3 CALL barrier_create 1 1 3 1
+L:Calling BarrierCreate(1,1,3,1)
+L:Returned 0x0 from Create
+L:@@@ 3 SCALAR created 1
+L:@@@ 3 SCALAR rc 0
+L:@@@ 3 SIGNAL 1
+L:@@@ 3 WAIT 0
+L:Worker0(Task 1) running
+L:@@@ 4 TASK Worker0
+L:@@@ 4 CALL NormalPriority
+L:@@@ 4 CALL SetProcessor 0
+L:@@@ 4 WAIT 1
+L:@@@ 4 CALL barrier_ident 1 1
+L:Calling BarrierIdent(1,1)
+L:Returned 0x0 from Ident
+L:@@@ 4 SCALAR rc 0
+L:@@@ 4 SIGNAL 2
+L:@@@ 4 CALL barrier_wait 1 0
+L:Calling BarrierWait(1375797249,0)
+L:Worker1(Task 2) running
+L:@@@ 5 TASK Worker1
+L:@@@ 5 CALL NormalPriority
+L:@@@ 5 CALL SetProcessor 0
+L:@@@ 5 WAIT 2
+L:@@@ 5 CALL barrier_ident 1 1
+L:Calling BarrierIdent(1,1)
+L:Returned 0x0 from Ident
+L:L:@@@ 3 WAIT 1
+L:Returned 0x6 from Wait
+L:@@@ 5 STATE 3 TimeWait 4
+L:@@@ 5 STATE 1 OtherWait
+L:@@@ 5 STATE 3 Ready
+L:@@@ 5 STATE 3 Ready
+L:@@@ 5 SCALAR rc 6
+L:@@@ 5 CALL barrier_delete 1
+L:Calling BarrierDelete(1375797249)
+L:Returned 0x0 from Delete
+L:@@@ 5 STATE 2 OtherWait
+L:@@@ 5 STATE 3 Ready
+L:@@@ 5 SCALAR rc 0
+L:@@@ 5 SIGNAL 2
+L:@@@ 5 STATE 3 Zombie
+L:Worker1(Task 2) finished
+L:Returned 0x7 from Wait
+L:@@@ 4 STATE 2 BarrierWait
+L:@@@ 4 STATE 2 Ready
+L:@@@ 4 SCALAR rc 7
+L:@@@ 4 SIGNAL 1
+L:@@@ 4 STATE 2 Zombie
+L:
+L:@@@ 3 WAIT 2
+L:@@@ 3 STATE 1 Zombie
+L:Runner(Task 0) finished
+L:Run Pop Fixture
+L:Teardown
+L:Deleting Runner Semaphore
+L:Deleting Worker0 Semaphore
+L:Deleting Worker1 Semaphore
+E:RtemsModelBarrierMgr18:N:35:F:0:D:0.012611
+B:RtemsModelBarrierMgr17
+L:Pushing Test Fixture...
+L:Runner Setup
+L:Creating Runner Semaphore
+L:Creating Worker0 Semaphore
+L:Creating Worker1 Semaphore
+L:Created Worker 0
+L:Started Worker 0
+L:Created Worker 1
+L:Started Worker 1
+L:Test Fixture Pushed
+L:@@@ 0 INIT
+L:Runner(Task 0) running
+L:@@@ 3 TASK Runner
+L:@@@ 3 CALL NormalPriority
+L:@@@ 3 CALL barrier_create 1 1 3 1
+L:Calling BarrierCreate(1,1,3,1)
+L:Returned 0x0 from Create
+L:@@@ 3 SCALAR created 1
+L:@@@ 3 SCALAR rc 0
+L:@@@ 3 SIGNAL 1
+L:@@@ 3 CALL barrier_wait 1 0
+L:Calling BarrierWait(1375797250,0)
+L:Worker0(Task 1) running
+L:@@@ 4 TASK Worker0
+L:@@@ 4 CALL NormalPriority
+L:@@@ 4 WAIT 1
+L:@@@ 4 CALL barrier_ident 1 1
+L:Calling BarrierIdent(1,1)
+L:Returned 0x0 from Ident
+L:@@@ 4 SCALAR rc 0
+L:@@@ 4 SIGNAL 2
+L:@@@ 4 CALL barrier_wait 1 0
+L:Calling BarrierWait(1375797250,0)
+L:Worker1(Task 2) running
+L:@@@ 5 TASK Worker1
+L:@@@ 5 CALL NormalPriority
+L:@@@ 5 WAIT 2
+L:@@@ 5 CALL barrier_ident 1 1
+L:Calling BarrierIdent(1,1)
+L:Returned 0x0 from Ident
+L:@@@ 5 SCALAR rc 0
+L:@@@ 5 SIGNAL 0
+L:
+L:
+L:
+L:
+L:
+L:
+L:
+L:Returned 0x0 from Wait
+L:@@@ 3 STATE 1 Ready
+L:@@@ 3 SCALAR rc 0
+L:@@@ 3 WAIT 0
+L:@@@ 3 WAIT 1
+L:Returned 0x0 from Wait
+L:@@@ 4 STATE 2 BarrierWait
+L:@@@ 4 STATE 2 Ready
+L:@@@ 4 SCALAR rc 0
+L:@@@ 4 SIGNAL 1
+L:@@@ 4 STATE 2 Zombie
+L:Worker0(Task 1) finished
+L:@@@ 3 WAIT 2
+L:@@@ 3 STATE 1 Zombie
+L:Runner(Task 0) finished
+L:Run Pop Fixture
+L:Teardown
+L:Deleting Runner Semaphore
+L:Deleting Worker0 Semaphore
+L:Deleting Worker1 Semaphore
+E:RtemsModelBarrierMgr17:N:32:F:0:D:0.009701
+B:RtemsModelBarrierMgr16
+L:Pushing Test Fixture...
+L:Runner Setup
+L:Creating Runner Semaphore
+L:Creating Worker0 Semaphore
+L:Creating Worker1 Semaphore
+L:Created Worker 0
+L:Started Worker 0
+L:Created Worker 1
+L:Started Worker 1
+L:Test Fixture Pushed
+L:@@@ 0 INIT
+L:Runner(Task 0) running
+L:@@@ 3 TASK Runner
+L:@@@ 3 CALL NormalPriority
+L:@@@ 3 CALL SetProcessor 1
+L:@@@ 3 CALL barrier_create 1 1 3 1
+L:Calling BarrierCreate(1,1,3,1)
+L:Returned 0x0 from Create
+L:@@@ 3 SCALAR created 1
+L:@@@ 3 SCALAR rc 0
+L:@@@ 3 SIGNAL 1
+L:@@@ 3 CALL barrier_wait 1 0
+L:Calling BarrierWait(1375797251,0)
+L:Worker0(Task 1) running
+L:@@@ 4 TASK Worker0
+L:@@@ 4 CALL NormalPriority
+L:@@@ 4 CALL SetProcessor 0
+L:@@@ 4 WAIT 1
+L:@@@ 4 CALL barrier_ident 1 1
+L:Calling BarrierIdent(1,1)
+L:Returned 0x0 from Ident
+L:@@@ 4 SCALAR rc 0
+L:@@@ 4 SIGNAL 2
+L:@@@ 4 CALL barrier_wait 1 0
+L:Calling BarrierWait(1375797251,0)
+L:Worker1(Task 2) running
+L:@@@ 5 TASK Worker1
+L:@@@ 5 CALL NormalPriority
+L:@@@ 5 CALL SetProcessor 0
+L:@@@ 5 WAIT 2
+L:@@@ 5 CALL barrier_ident 1 1
+L:Calling BarrierIdent(1,1)
+L:Returned 0x0 from Ident
+L:L:Returned 0x0 from Wait
+L:@@@ 3 STATE 1 Ready
+L:@@@ 3 SCALAR rc 0
+L:@@@ 3 WAIT 0
+L:@@@ 3 WAIT 1
+L:Returned 0x0 from Wait
+L:@@@ 4 STATE 2 BarrierWait
+L:@@@ 4 STATE 2 Ready
+L:@@@ 4 SCALAR rc 0
+L:@@@ 4 SIGNAL 1
+L:@@@ 4 STATE 2 Zombie
+L:Worker0(Task 1) finished
+L:@@@ 3 WAIT 2
+L:@@@ 3 STATE 1 Zombie
+L:Runner(Task 0) finished
+L:Run Pop Fixture
+L:Teardown
+L:Deleting Runner Semaphore
+L:Deleting Worker0 Semaphore
+L:Deleting Worker1 Semaphore
+E:RtemsModelBarrierMgr16:N:35:F:0:D:0.009967
+B:RtemsModelBarrierMgr15
+L:Pushing Test Fixture...
+L:Runner Setup
+L:Creating Runner Semaphore
+L:Creating Worker0 Semaphore
+L:Creating Worker1 Semaphore
+L:Created Worker 0
+L:Started Worker 0
+L:Created Worker 1
+L:Started Worker 1
+L:Test Fixture Pushed
+L:@@@ 0 INIT
+L:Runner(Task 0) running
+L:@@@ 3 TASK Runner
+L:@@@ 3 CALL NormalPriority
+L:@@@ 3 CALL barrier_create 1 1 0 1
+L:Calling BarrierCreate(1,1,0,1)
+L:Returned 0xa from Create
+L:@@@ 3 SCALAR rc 10
+L:@@@ 3 SIGNAL 1
+L:@@@ 3 CALL barrier_wait 1 0
+L:Calling BarrierWait(0,0)
+L:Returned 0x4 from Wait
+L:@@@ 3 SCALAR rc 4
+L:@@@ 3 WAIT 0
+L:Worker0(Task 1) running
+L:@@@ 4 TASK Worker0
+L:@@@ 4 CALL NormalPriority
+L:@@@ 4 WAIT 1
+L:@@@ 4 CALL barrier_ident 1 1
+L:Calling BarrierIdent(1,1)
+L:Returned 0x3 from Ident
+L:@@@ 4 SCALAR rc 3
+L:@@@ 4 SIGNAL 2
+L:@@@ 4 CALL barrier_wait 1 0
+L:Calling BarrierWait(0,0)
+L:Returned 0x4 from Wait
+L:@@@ 4 SCALAR rc 4
+L:@@@ 4 SIGNAL 1
+L:@@@ 4 STATE 2 Zombie
+L:Worker0(Task 1) finished
+L:Worker1(Task 2) running
+L:@@@ 5 TASK Worker1
+L:@@@ 5 CALL NormalPriority
+L:@@@ 5 WAIT 2
+L:@@@ 5 CALL barrier_ident 1 1
+L:
+L:
+L:
+L:@@@ 3 WAIT 1
+L:@@@ 3 WAIT 2
+L:@@@ 3 STATE 1 Zombie
+L:Runner(Task 0) finished
+L:Run Pop Fixture
+L:Teardown
+L:Deleting Runner Semaphore
+L:Deleting Worker0 Semaphore
+L:Deleting Worker1 Semaphore
+E:RtemsModelBarrierMgr15:N:32:F:0:D:0.008374
+B:RtemsModelBarrierMgr14
+L:Pushing Test Fixture...
+L:Runner Setup
+L:Creating Runner Semaphore
+L:Creating Worker0 Semaphore
+L:Creating Worker1 Semaphore
+L:Created Worker 0
+L:Started Worker 0
+L:Created Worker 1
+L:Started Worker 1
+L:Test Fixture Pushed
+L:@@@ 0 INIT
+L:Runner(Task 0) running
+L:@@@ 3 TASK Runner
+L:@@@ 3 CALL NormalPriority
+L:@@@ 3 CALL SetProcessor 1
+L:@@@ 3 CALL barrier_create 1 1 0 1
+L:Calling BarrierCreate(1,1,0,1)
+L:Returned 0xa from Create
+L:@@@ 3 SCALAR rc 10
+L:@@@ 3 SIGNAL 1
+L:@@@ 3 CALL barrier_wait 1 0
+L:Calling BarrierWait(0,0)
+L:Returned 0x4 from Wait
+L:@@@ 3 SCALAR rc 4
+L:@@@ 3 WAIT 0
+L:Worker0(Task 1) running
+L:@@@ 4 TASK Worker0
+L:@@@ 4 CALL NormalPriority
+L:@@@ 4 CALL SetProcessor 0
+L:@@@ 4 WAIT 1
+L:@@@ 4 CALL barrier_ident 1 1
+L:Calling BarrierIdent(1,1)
+L:Returned 0x3 from Ident
+L:@@@ 4 SCALAR rc 3
+L:@@@ 4 SIGNAL 2
+L:@@@ 4 CALL barrier_wait 1 0
+L:Calling BarrierWait(0,0)
+L:Returned 0x4 from Wait
+L:@@@ 4 SCALAR rc 4
+L:@@@ 4 SIGNAL 1
+L:@@@ 4 STATE 2 Zombie
+L:Worker0(Task 1) finished
+L:Worker1(Task 2) running
+L:@@@ 5 TASK Worker1
+L:@@@ 5 CALL NormalPriority
+L:@@@ 5 CALL SetProcessor 0L:@@@ 3 WAIT 1
+L:@@@ 3 WAIT 2
+L:@@@ 3 STATE 1 Zombie
+L:Runner(Task 0) finished
+L:Run Pop Fixture
+L:Teardown
+L:Deleting Runner Semaphore
+L:Deleting Worker0 Semaphore
+L:Deleting Worker1 Semaphore
+E:RtemsModelBarrierMgr14:N:35:F:0:D:0.008529
+B:RtemsModelBarrierMgr13
+L:Pushing Test Fixture...
+L:Runner Setup
+L:Creating Runner Semaphore
+L:Creating Worker0 Semaphore
+L:Creating Worker1 Semaphore
+L:Created Worker 0
+L:Started Worker 0
+L:Created Worker 1
+L:Started Worker 1
+L:Test Fixture Pushed
+L:@@@ 0 INIT
+L:Runner(Task 0) running
+L:@@@ 3 TASK Runner
+L:@@@ 3 CALL NormalPriority
+L:@@@ 3 CALL barrier_create 1 0 0 1
+L:Calling BarrierCreate(1,0,0,1)
+L:Returned 0x0 from Create
+L:@@@ 3 SCALAR created 1
+L:@@@ 3 SCALAR rc 0
+L:@@@ 3 SIGNAL 1
+L:@@@ 3 WAIT 0
+L:Worker0(Task 1) running
+L:@@@ 4 TASK Worker0
+L:@@@ 4 CALL NormalPriority
+L:@@@ 4 WAIT 1
+L:@@@ 4 CALL barrier_ident 1 1
+L:Calling BarrierIdent(1,1)
+L:Returned 0x0 from Ident
+L:@@@ 4 SCALAR rc 0
+L:@@@ 4 SIGNAL 2
+L:@@@ 4 CALL barrier_wait 1 0
+L:Calling BarrierWait(1375797252,0)
+L:Worker1(Task 2) running
+L:@@@ 5 TASK Worker1
+L:@@@ 5 CALL NormalPriority
+L:@@@ 5 WAIT 2
+L:@@@ 5 CALL barrier_ident 1 1
+L:Calling BarrierIdent(1,1)
+L:Returned 0x0 from Ident
+L:@@@ 5 SCALAR rc 0
+L:@@@ 5 SIGNAL 0
+L:
+L:
+L:@@@ 3 CALL barrier_release 1 1
+L:Calling BarrierRelease(1375797252,1)
+L:Returned 0x0 from Release
+L:@@@ 3 STATE 1 Ready
+L:@@@ 3 SCALAR released 2
+L:@@@ 3 SCALAR rc 0
+L:@@@ 3 SIGNAL 0
+L:@@@ 3 WAIT 0
+L:@@@ 3 CALL barrier_delete 1
+L:Calling BarrierDelete(1375797252)
+L:Returned 0x0 from Delete
+L:@@@ 3 STATE 1 Ready
+L:@@@ 3 SCALAR rc 0
+L:@@@ 3 SIGNAL 0
+L:@@@ 3 WAIT 0
+L:@@@ 3 WAIT 1
+L:Returned 0x0 from Wait
+L:@@@ 4 STATE 2 BarrierWait
+L:@@@ 4 STATE 2 Ready
+L:@@@ 4 SCALAR rc 0
+L:@@@ 4 SIGNAL 1
+L:@@@ 4 STATE 2 Zombie
+L:Worker0(Task 1) finished
+L:Returned 0x0 from Wait
+L:@@@ 5 STATE 3 BarrierWait
+L:@@@ 5 STATE 3 Ready
+L:@@@ 5 SCALAR rc 0
+L:@@@ 5 SIGNAL 2
+L:@@@ 5 STATE 3 Zombie
+L:Worker1(Task 2) finished
+L:@@@ 3 WAIT 2
+L:@@@ 3 STATE 1 Zombie
+L:Runner(Task 0) finished
+L:Run Pop Fixture
+L:Teardown
+L:Deleting Runner Semaphore
+L:Deleting Worker0 Semaphore
+L:Deleting Worker1 Semaphore
+E:RtemsModelBarrierMgr13:N:34:F:0:D:0.011630
+B:RtemsModelBarrierMgr12
+L:Pushing Test Fixture...
+L:Runner Setup
+L:Creating Runner Semaphore
+L:Creating Worker0 Semaphore
+L:Creating Worker1 Semaphore
+L:Created Worker 0
+L:Started Worker 0
+L:Created Worker 1
+L:Started Worker 1
+L:Test Fixture Pushed
+L:@@@ 0 INIT
+L:Runner(Task 0) running
+L:@@@ 3 TASK Runner
+L:@@@ 3 CALL NormalPriority
+L:@@@ 3 CALL SetProcessor 1
+L:@@@ 3 CALL barrier_create 1 0 0 1
+L:Calling BarrierCreate(1,0,0,1)
+L:Returned 0x0 from Create
+L:@@@ 3 SCALAR created 1
+L:@@@ 3 SCALAR rc 0
+L:@@@ 3 SIGNAL 1
+L:@@@ 3 WAIT 0
+L:Worker0(Task 1) running
+L:@@@ 4 TASK Worker0
+L:@@@ 4 CALL NormalPriority
+L:@@@ 4 CALL SetProcessor 0
+L:@@@ 4 WAIT 1
+L:@@@ 4 CALL barrier_ident 1 1
+L:Calling BarrierIdent(1,1)
+L:Returned 0x0 from Ident
+L:@@@ 4 SCALAR rc 0
+L:@@@ 4 SIGNAL 2
+L:@@@ 4 CALL barrier_wait 1 0
+L:Calling BarrierWait(1375797253,0)
+L:Worker1(Task 2) running
+L:@@@ 5 TASK Worker1
+L:@@@ 5 CALL NormalPriority
+L:@@@ 5 CALL SetProcessor 0
+L:@@@ 5 WAIT 2
+L:@@@ 5 CALL barrier_ident 1 1
+L:Calling BarrierIdent(1,1)
+L:Returned 0x0 from Ident
+L:L:@@@ 3 CALL barrier_release 1 1
+L:Calling BarrierRelease(1375797253,1)
+L:Returned 0x0 from Release
+L:@@@ 3 STATE 1 Ready
+L:@@@ 3 SCALAR released 2
+L:@@@ 3 SCALAR rc 0
+L:@@@ 3 SIGNAL 0
+L:@@@ 3 WAIT 0
+L:@@@ 3 CALL barrier_delete 1
+L:Calling BarrierDelete(1375797253)
+L:Returned 0x0 from Delete
+L:@@@ 3 STATE 1 Ready
+L:@@@ 3 SCALAR rc 0
+L:@@@ 3 SIGNAL 0
+L:@@@ 3 WAIT 0
+L:@@@ 3 WAIT 1
+L:Returned 0x0 from Wait
+L:@@@ 4 STATE 2 BarrierWait
+L:@@@ 4 STATE 2 Ready
+L:@@@ 4 SCALAR rc 0
+L:@@@ 4 SIGNAL 1
+L:@@@ 4 STATE 2 Zombie
+L:Worker0(Task 1) finished
+L:Returned 0x0 from Wait
+L:@@@ 5 STATE 3 BarrierWait
+L:@@@ 5 STATE 3 Ready
+L:@@@ 5 SCALAR rc 0
+L:@@@ 5 SIGNAL 2
+L:@@@ 5 STATE 3 Zombie
+L:Worker1(Task 2) finished
+L:@@@ 3 WAIT 2
+L:@@@ 3 STATE 1 Zombie
+L:Runner(Task 0) finished
+L:Run Pop Fixture
+L:Teardown
+L:Deleting Runner Semaphore
+L:Deleting Worker0 Semaphore
+L:Deleting Worker1 Semaphore
+E:RtemsModelBarrierMgr12:N:37:F:0:D:0.011951
+B:RtemsModelBarrierMgr11
+L:Pushing Test Fixture...
+L:Runner Setup
+L:Creating Runner Semaphore
+L:Creating Worker0 Semaphore
+L:Creating Worker1 Semaphore
+L:Created Worker 0
+L:Started Worker 0
+L:Created Worker 1
+L:Started Worker 1
+L:Test Fixture Pushed
+L:@@@ 0 INIT
+L:Runner(Task 0) running
+L:@@@ 3 TASK Runner
+L:@@@ 3 CALL NormalPriority
+L:@@@ 3 CALL barrier_create 1 0 0 1
+L:Calling BarrierCreate(1,0,0,1)
+L:Returned 0x0 from Create
+L:@@@ 3 SCALAR created 1
+L:@@@ 3 SCALAR rc 0
+L:@@@ 3 SIGNAL 1
+L:@@@ 3 WAIT 0
+L:Worker0(Task 1) running
+L:@@@ 4 TASK Worker0
+L:@@@ 4 CALL NormalPriority
+L:@@@ 4 WAIT 1
+L:@@@ 4 CALL barrier_ident 1 0
+L:Calling BarrierIdent(1,0)
+L:Returned 0x9 from Ident
+L:@@@ 4 SCALAR rc 9
+L:@@@ 4 SIGNAL 2
+L:@@@ 4 CALL barrier_wait 0 0
+L:Calling BarrierWait(0,0)
+L:Returned 0x4 from Wait
+L:@@@ 4 SCALAR rc 4
+L:@@@ 4 SIGNAL 1
+L:@@@ 4 STATE 2 Zombie
+L:Worker0(Task 1) finished
+L:Worker1(Task 2) running
+L:@@@ 5 TASK Worker1
+L:@@@ 5 CALL NormalPriority
+L:@@@ 5 WAIT 2
+L:@@@ 5 CALL barrier_ident 1 1
+L:
+L:
+L:
+L:@@@ 3 CALL barrier_release 1 1
+L:Calling BarrierRelease(1375797254,1)
+L:Returned 0x0 from Release
+L:@@@ 3 STATE 1 Ready
+L:@@@ 3 SCALAR released 1
+L:@@@ 3 SCALAR rc 0
+L:@@@ 3 SIGNAL 0
+L:@@@ 3 WAIT 0
+L:@@@ 3 CALL barrier_delete 1
+L:Calling BarrierDelete(1375797254)
+L:Returned 0x0 from Delete
+L:@@@ 3 STATE 1 Ready
+L:@@@ 3 SCALAR rc 0
+L:@@@ 3 SIGNAL 0
+L:@@@ 3 WAIT 0
+L:@@@ 3 WAIT 1
+L:@@@ 3 WAIT 2
+L:Returned 0x0 from Wait
+L:@@@ 5 STATE 3 BarrierWait
+L:@@@ 5 STATE 3 Ready
+L:@@@ 5 SCALAR rc 0
+L:@@@ 5 SIGNAL 2
+L:@@@ 5 STATE 3 Zombie
+L:Worker1(Task 2) finished
+L:@@@ 3 STATE 1 Zombie
+L:Runner(Task 0) finished
+L:Run Pop Fixture
+L:Teardown
+L:Deleting Runner Semaphore
+L:Deleting Worker0 Semaphore
+L:Deleting Worker1 Semaphore
+E:RtemsModelBarrierMgr11:N:34:F:0:D:0.010846
+B:RtemsModelBarrierMgr10
+L:Pushing Test Fixture...
+L:Runner Setup
+L:Creating Runner Semaphore
+L:Creating Worker0 Semaphore
+L:Creating Worker1 Semaphore
+L:Created Worker 0
+L:Started Worker 0
+L:Created Worker 1
+L:Started Worker 1
+L:Test Fixture Pushed
+L:@@@ 0 INIT
+L:Runner(Task 0) running
+L:@@@ 3 TASK Runner
+L:@@@ 3 CALL NormalPriority
+L:@@@ 3 CALL SetProcessor 1
+L:@@@ 3 CALL barrier_create 1 0 0 1
+L:Calling BarrierCreate(1,0,0,1)
+L:Returned 0x0 from Create
+L:@@@ 3 SCALAR created 1
+L:@@@ 3 SCALAR rc 0
+L:@@@ 3 SIGNAL 1
+L:@@@ 3 WAIT 0
+L:Worker0(Task 1) running
+L:@@@ 4 TASK Worker0
+L:@@@ 4 CALL NormalPriority
+L:@@@ 4 CALL SetProcessor 0
+L:@@@ 4 WAIT 1
+L:@@@ 4 CALL barrier_ident 1 0
+L:Calling BarrierIdent(1,0)
+L:Returned 0x9 from Ident
+L:@@@ 4 SCALAR rc 9
+L:@@@ 4 SIGNAL 2
+L:@@@ 4 CALL barrier_wait 0 0
+L:Calling BarrierWait(0,0)
+L:Returned 0x4 from Wait
+L:@@@ 4 SCALAR rc 4
+L:@@@ 4 SIGNAL 1
+L:@@@ 4 STATE 2 Zombie
+L:Worker0(Task 1) finished
+L:Worker1(Task 2) running
+L:@@@ 5 TASK Worker1
+L:@@@ 5 CALL NormalPriority
+L:@@@ 5 CALL SetProcessor 0L:@@@ 3 CALL barrier_release 1 1
+L:Calling BarrierRelease(1375797255,1)
+L:Returned 0x0 from Release
+L:@@@ 3 STATE 1 Ready
+L:@@@ 3 SCALAR released 1
+L:@@@ 3 SCALAR rc 0
+L:@@@ 3 SIGNAL 0
+L:@@@ 3 WAIT 0
+L:@@@ 3 CALL barrier_delete 1
+L:Calling BarrierDelete(1375797255)
+L:Returned 0x0 from Delete
+L:@@@ 3 STATE 1 Ready
+L:@@@ 3 SCALAR rc 0
+L:@@@ 3 SIGNAL 0
+L:@@@ 3 WAIT 0
+L:@@@ 3 WAIT 1
+L:@@@ 3 WAIT 2
+L:Returned 0x0 from Wait
+L:@@@ 5 STATE 3 BarrierWait
+L:@@@ 5 STATE 3 Ready
+L:@@@ 5 SCALAR rc 0
+L:@@@ 5 SIGNAL 2
+L:@@@ 5 STATE 3 Zombie
+L:Worker1(Task 2) finished
+L:@@@ 3 STATE 1 Zombie
+L:Runner(Task 0) finished
+L:Run Pop Fixture
+L:Teardown
+L:Deleting Runner Semaphore
+L:Deleting Worker0 Semaphore
+L:Deleting Worker1 Semaphore
+E:RtemsModelBarrierMgr10:N:37:F:0:D:0.011002
+B:RtemsModelBarrierMgr1
+L:Pushing Test Fixture...
+L:Runner Setup
+L:Creating Runner Semaphore
+L:Creating Worker0 Semaphore
+L:Creating Worker1 Semaphore
+L:Created Worker 0
+L:Started Worker 0
+L:Created Worker 1
+L:Started Worker 1
+L:Test Fixture Pushed
+L:@@@ 0 INIT
+L:Runner(Task 0) running
+L:@@@ 3 TASK Runner
+L:@@@ 3 CALL NormalPriority
+L:@@@ 3 CALL barrier_create 0 0 0 1
+L:Calling BarrierCreate(0,0,0,1)
+L:Returned 0x3 from Create
+L:@@@ 3 SCALAR rc 3
+L:@@@ 3 SIGNAL 1
+L:@@@ 3 WAIT 0
+L:Worker0(Task 1) running
+L:@@@ 4 TASK Worker0
+L:@@@ 4 CALL NormalPriority
+L:@@@ 4 WAIT 1
+L:@@@ 4 CALL barrier_ident 1 1
+L:Calling BarrierIdent(1,1)
+L:Returned 0x3 from Ident
+L:@@@ 4 SCALAR rc 3
+L:@@@ 4 SIGNAL 2
+L:@@@ 4 CALL barrier_wait 1 0
+L:Calling BarrierWait(0,0)
+L:Returned 0x4 from Wait
+L:@@@ 4 SCALAR rc 4
+L:@@@ 4 SIGNAL 1
+L:@@@ 4 STATE 2 Zombie
+L:Worker0(Task 1) finished
+L:Worker1(Task 2) running
+L:@@@ 5 TASK Worker1
+L:@@@ 5 CALL NormalPriority
+L:@@@ 5 WAIT 2
+L:@@@ 5 CALL barrier_ident 1 1
+L:
+L:
+L:
+L:@@@ 3 CALL barrier_release 1 1
+L:Calling BarrierRelease(0,1)
+L:Returned 0x4 from Release
+L:@@@ 3 SCALAR rc 4
+L:@@@ 3 SIGNAL 0
+L:@@@ 3 WAIT 0
+L:@@@ 3 CALL barrier_delete 1
+L:Calling BarrierDelete(0)
+L:Returned 0x4 from Delete
+L:@@@ 3 SCALAR rc 4
+L:@@@ 3 SIGNAL 0
+L:@@@ 3 WAIT 0
+L:@@@ 3 WAIT 1
+L:@@@ 3 WAIT 2
+L:@@@ 3 STATE 1 Zombie
+L:Runner(Task 0) finished
+L:Run Pop Fixture
+L:Teardown
+L:Deleting Runner Semaphore
+L:Deleting Worker0 Semaphore
+L:Deleting Worker1 Semaphore
+E:RtemsModelBarrierMgr1:N:33:F:0:D:0.009197
+B:RtemsModelBarrierMgr0
+L:Pushing Test Fixture...
+L:Runner Setup
+L:Creating Runner Semaphore
+L:Creating Worker0 Semaphore
+L:Creating Worker1 Semaphore
+L:Created Worker 0
+L:Started Worker 0
+L:Created Worker 1
+L:Started Worker 1
+L:Test Fixture Pushed
+L:@@@ 0 INIT
+L:Runner(Task 0) running
+L:@@@ 3 TASK Runner
+L:@@@ 3 CALL NormalPriority
+L:@@@ 3 CALL SetProcessor 1
+L:@@@ 3 CALL barrier_create 0 0 0 1
+L:Calling BarrierCreate(0,0,0,1)
+L:Returned 0x3 from Create
+L:@@@ 3 SCALAR rc 3
+L:@@@ 3 SIGNAL 1
+L:@@@ 3 WAIT 0
+L:Worker0(Task 1) running
+L:@@@ 4 TASK Worker0
+L:@@@ 4 CALL NormalPriority
+L:@@@ 4 CALL SetProcessor 0
+L:@@@ 4 WAIT 1
+L:@@@ 4 CALL barrier_ident 1 1
+L:Calling BarrierIdent(1,1)
+L:Returned 0x3 from Ident
+L:@@@ 4 SCALAR rc 3
+L:@@@ 4 SIGNAL 2
+L:@@@ 4 CALL barrier_wait 1 0
+L:Calling BarrierWait(0,0)
+L:Returned 0x4 from Wait
+L:@@@ 4 SCALAR rc 4
+L:@@@ 4 SIGNAL 1
+L:@@@ 4 STATE 2 Zombie
+L:Worker0(Task 1) finished
+L:Worker1(Task 2) running
+L:@@@ 5 TASK Worker1
+L:@@@ 5 CALL NormalPriority
+L:@@@ 5 CALL SetProcessor 0L:@@@ 3 CALL barrier_release 1 1
+L:Calling BarrierRelease(0,1)
+L:Returned 0x4 from Release
+L:@@@ 3 SCALAR rc 4
+L:@@@ 3 SIGNAL 0
+L:@@@ 3 WAIT 0
+L:@@@ 3 CALL barrier_delete 1
+L:Calling BarrierDelete(0)
+L:Returned 0x4 from Delete
+L:@@@ 3 SCALAR rc 4
+L:@@@ 3 SIGNAL 0
+L:@@@ 3 WAIT 0
+L:@@@ 3 WAIT 1
+L:@@@ 3 WAIT 2
+L:@@@ 3 STATE 1 Zombie
+L:Runner(Task 0) finished
+L:Run Pop Fixture
+L:Teardown
+L:Deleting Runner Semaphore
+L:Deleting Worker0 Semaphore
+L:Deleting Worker1 Semaphore
+E:RtemsModelBarrierMgr0:N:36:F:0:D:0.009464
+Z:Model0:C:20:N:688:F:0:D:0.216295
+Y:ReportHash:SHA256:nSKSHqyXx0EKjyExKZSbY6EgX1b2lS1MWPpCiaqP0ZU=
+
+*** END OF TEST Model0 ***
+
+cpu 0 in error mode (tt = 0x80)
+ 11178900  00014900:  91d02000   ta  0x0

@@ -1,0 +1,229 @@
+Barrier Manager Model running.
+Setup...
+@@@ 0 LOG TestName: Barrier_Manager_TestGen
+@@@ 0 DEF MAX_BARRIERS 2
+@@@ 0 DEF BARRIER_MAN 0
+@@@ 0 DEF BARRIER_AUTO 1
+@@@ 0 DEF MAX_WAITERS 3
+@@@ 0 DEF TASK_MAX 4
+@@@ 0 DEF SEMA_MAX 3
+@@@ 0 DCLARRAY Semaphore semaphore SEMA_MAX
+@@@ 0 INIT
+@@@ 0 LOG scenario ManAcqRel
+@@@ 0 LOG sub-senario Worker0 ident barrier name is 0
+Run...
+@@@ 1 LOG System running...
+@@@ 1 LOG Loop through tasks...
+@@@ 2 LOG Clock Started
+@@@ 5 TASK Worker1
+@@@ 5 CALL NormalPriority
+@@@ 5 WAIT 2
+@@@ 4 TASK Worker0
+@@@ 4 CALL NormalPriority
+@@@ 4 WAIT 1
+@@@ 3 TASK Runner
+@@@ 3 CALL NormalPriority
+@@@ 3 CALL barrier_create 1 0 0 1
+@@@ 3 LOG 1 Created {n: 1, auto: false}
+@@@ 3 SCALAR created 1
+@@@ 3 SCALAR rc 0
+@@@ 3 SIGNAL 1
+@@@ 4 LOG WAIT 1 Over
+@@@ 4 CALL barrier_ident 0 1
+@@@ 4 SCALAR rc 3
+@@@ 4 SIGNAL 2
+@@@ 4 CALL barrier_wait 0 0
+@@@ 4 SCALAR rc 4
+@@@ 5 LOG WAIT 2 Over
+@@@ 5 CALL barrier_ident 1 1
+@@@ 5 LOG Barrier 1 Identified by name 1
+@@@ 5 SCALAR rc 0
+@@@ 5 SIGNAL 0
+@@@ 5 CALL barrier_wait 1 0
+@@@ 5 STATE 3 BarrierWait
+@@@ 5 LOG Task 3 waiting, state = BarrierWait
+@@@ 4 SIGNAL 1
+@@@ 4 LOG Task 2 finished
+@@@ 4 STATE 2 Zombie
+@@@ 3 WAIT 0
+@@@ 3 LOG WAIT 0 Over
+@@@ 3 CALL barrier_release 1 1
+@@@ 3 LOG Task 1 waiting, state = Ready
+@@@ 3 STATE 1 Ready
+@@@ 3 LOG Barrier 1 manually released
+@@@ 3 SCALAR released 1
+@@@ 3 SCALAR rc 0
+@@@ 5 STATE 3 Ready
+@@@ 5 SCALAR rc 0
+@@@ 5 SIGNAL 2
+@@@ 5 LOG Task 3 finished
+@@@ 5 STATE 3 Zombie
+@@@ 3 SIGNAL 0
+@@@ 3 WAIT 0
+@@@ 3 LOG WAIT 0 Over
+@@@ 3 CALL barrier_delete 1
+@@@ 3 LOG Task 1 waiting, state = Ready
+@@@ 3 STATE 1 Ready
+@@@ 3 LOG Barrier 1 deleted
+@@@ 3 SCALAR rc 0
+@@@ 3 SIGNAL 0
+@@@ 3 WAIT 0
+@@@ 3 LOG WAIT 0 Over
+@@@ 3 WAIT 1
+@@@ 3 LOG WAIT 1 Over
+@@@ 3 WAIT 2
+@@@ 3 LOG WAIT 2 Over
+@@@ 3 LOG Task 1 finished
+@@@ 3 STATE 1 Zombie
+ (tick) 
+Clock: tid=1, state=Zombie
+Clock: tid=2, state=Zombie
+Clock: tid=3, state=Zombie
+@@@ 1 LOG Scenario is ManAcqRel
+ (tick) 
+Clock: tid=1, state=Zombie
+Clock: tid=2, state=Zombie
+Clock: tid=3, state=Zombie
+@@@ 1 LOG Task 1 state is Zombie
+ (tick) 
+Clock: tid=1, state=Zombie
+Clock: tid=2, state=Zombie
+Clock: tid=3, state=Zombie
+ (tick) 
+Clock: tid=1, state=Zombie
+Clock: tid=2, state=Zombie
+Clock: tid=3, state=Zombie
+@@@ 1 LOG Task 2 state is Zombie
+ (tick) 
+Clock: tid=1, state=Zombie
+Clock: tid=2, state=Zombie
+Clock: tid=3, state=Zombie
+ (tick) 
+Clock: tid=1, state=Zombie
+Clock: tid=2, state=Zombie
+Clock: tid=3, state=Zombie
+@@@ 1 LOG Task 3 state is Zombie
+ (tick) 
+Clock: tid=1, state=Zombie
+Clock: tid=2, state=Zombie
+Clock: tid=3, state=Zombie
+@@@ 1 LOG ...all visited, live:0
+@@@ 1 LOG All are Zombies, game over.
+ (tick) 
+Clock: tid=1, state=Zombie
+Clock: tid=2, state=Zombie
+Clock: tid=3, state=Zombie
+@@@ 2 LOG Clock Stopped
+spin: model-barrier-mgr.pml:1152, Error: assertion violated
+spin: text of failed assertion: assert(0)
+Barrier Manager Model finished !
+spin: trail ends after 390 steps
+#processes: 1
+		tasks[0].nodeid = 0
+		tasks[0].pmlid = 0
+		tasks[0].state = 0
+		tasks[0].preemptable = 0
+		tasks[0].prio = 0
+		tasks[0].ticks = 0
+		tasks[0].tout = 0
+		tasks[1].nodeid = 0
+		tasks[1].pmlid = 3
+		tasks[1].state = Zombie
+		tasks[1].preemptable = 0
+		tasks[1].prio = 2
+		tasks[1].ticks = 0
+		tasks[1].tout = 0
+		tasks[2].nodeid = 0
+		tasks[2].pmlid = 4
+		tasks[2].state = Zombie
+		tasks[2].preemptable = 0
+		tasks[2].prio = 2
+		tasks[2].ticks = 0
+		tasks[2].tout = 0
+		tasks[3].nodeid = 0
+		tasks[3].pmlid = 5
+		tasks[3].state = Zombie
+		tasks[3].preemptable = 0
+		tasks[3].prio = 2
+		tasks[3].ticks = 0
+		tasks[3].tout = 0
+		barriers[0].b_name = 0
+		barriers[0].isAutomatic = 0
+		barriers[0].maxWaiters = 0
+		barriers[0].waiterCount = 0
+		barriers[0].waiters[0] = 0
+		barriers[0].waiters[1] = 0
+		barriers[0].waiters[2] = 0
+		barriers[0].waiters[3] = 0
+		barriers[0].isInitialised = 0
+		barriers[1].b_name = 1
+		barriers[1].isAutomatic = 0
+		barriers[1].maxWaiters = 0
+		barriers[1].waiterCount = 0
+		barriers[1].waiters[0] = 0
+		barriers[1].waiters[1] = 0
+		barriers[1].waiters[2] = 0
+		barriers[1].waiters[3] = 0
+		barriers[1].isInitialised = 0
+		semaphore[0] = 0
+		semaphore[1] = 0
+		semaphore[2] = 0
+		task_in[0].doCreate = 0
+		task_in[0].isAutomatic = 0
+		task_in[0].maxWaiters = 0
+		task_in[0].bName = 0
+		task_in[0].doAcquire = 0
+		task_in[0].timeoutLength = 0
+		task_in[0].doDelete = 0
+		task_in[0].doRelease = 0
+		task_in[0].taskPrio = 0
+		task_in[0].taskPreempt = 0
+		task_in[0].idNull = 0
+		task_in[0].releasedNull = 0
+		task_in[1].doCreate = 1
+		task_in[1].isAutomatic = 0
+		task_in[1].maxWaiters = 0
+		task_in[1].bName = 1
+		task_in[1].doAcquire = 0
+		task_in[1].timeoutLength = 0
+		task_in[1].doDelete = 1
+		task_in[1].doRelease = 1
+		task_in[1].taskPrio = 2
+		task_in[1].taskPreempt = 0
+		task_in[1].idNull = 0
+		task_in[1].releasedNull = 0
+		task_in[2].doCreate = 0
+		task_in[2].isAutomatic = 0
+		task_in[2].maxWaiters = 0
+		task_in[2].bName = 0
+		task_in[2].doAcquire = 1
+		task_in[2].timeoutLength = 0
+		task_in[2].doDelete = 0
+		task_in[2].doRelease = 0
+		task_in[2].taskPrio = 2
+		task_in[2].taskPreempt = 0
+		task_in[2].idNull = 0
+		task_in[2].releasedNull = 0
+		task_in[3].doCreate = 0
+		task_in[3].isAutomatic = 0
+		task_in[3].maxWaiters = 0
+		task_in[3].bName = 1
+		task_in[3].doAcquire = 1
+		task_in[3].timeoutLength = 0
+		task_in[3].doDelete = 0
+		task_in[3].doRelease = 0
+		task_in[3].taskPrio = 2
+		task_in[3].taskPreempt = 0
+		task_in[3].idNull = 0
+		task_in[3].releasedNull = 0
+		task1Sema = 0
+		task2Sema = 1
+		task3Sema = 2
+		multicore = 0
+		task1Core = 0
+		task2Core = 0
+		task3Core = 0
+		scenario = ManAcqRel
+		stopclock = 1
+390:	proc  0 (:init::1) model-barrier-mgr.pml:1156 (state 146) <valid end state>
+6 processes created

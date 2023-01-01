@@ -2,9 +2,10 @@
 # SPDX-License-Identifier: BSD-2-Clause
 """Runs SPIN to generate test code for all defined scenarios"""
 
-# Copyright (C) 2021 Trinity College Dublin (www.tcd.ie)
+# Copyright (C) 2021-22 Trinity College Dublin (www.tcd.ie)
 #               Robert Jennings
 #               Andrew Butterfield
+#               James Gooding Hunt
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -51,27 +52,27 @@ def catch_subprocess_errors(func):
 
 
 def run_all(model, config, refine_config):
-    clean(model, refine_config["testfiletype"])
+    clean(model, config["testsuite"], refine_config["testfiletype"])
     generate_spin_files(model, config["spinallscenarios"], refine_config)
     generate_test_files(model, config["spin2test"], refine_config)
     copy(sys.argv[2], config["testcode"], config["rtems"],
          config["testyaml"], config["testsuite"])
     compile(config["rtems"])
-    run_simulator(config["rsb"], config["simulator"],
-                  config["simulatorargs"], config["testexe"])
+    run_simulator(config["simulator"],
+                  config["simulatorargs"], config["testexe"], config["testsuite"])
 
 
-def clean(model, test_extenstion):
+def clean(model, testsuite, test_extension):
     """Cleans out generated files in current directory"""
     print(f"Removing spin and test files for {model}")
-    files = get_generated_files(model, test_extenstion)
+    files = get_generated_files(model, testsuite, test_extension)
     for file in files:
         os.remove(file)
 
 
-def archive(model):
+def archive(model, testsuite, test_extension):
     print(f"Archiving spin and test files for {model}")
-    files = get_generated_files(model)
+    files = get_generated_files(model, testsuite, test_extension)
     date = datetime.now().strftime("%Y%m%d-%H%M%S")
     archive_dir = Path(f"archive/{date}")
     archive_dir.mkdir(parents=True, exist_ok=True)
@@ -130,7 +131,7 @@ def generate_spin_files(model, spinallscenarios, refine_config):
         for i in range(no_of_trails):
             subprocess.run(f"spin -T -t{i + 1} {model}.pml > {model}-{i}.spn",
                            check=True, shell=True)
-
+    os.remove('pan')
 
 @catch_subprocess_errors
 def generate_test_files(model, testgen, refine_config):
@@ -197,29 +198,30 @@ def copy(model, codedir, rtems, modfile, testsuite_name):
 
 @catch_subprocess_errors
 def compile(rtems_dir):
+    cwd = os.getcwd()
     os.chdir(rtems_dir)
     subprocess.run("./waf configure", check=True, shell=True)
     subprocess.run("./waf", check=True, shell=True)
+    os.chdir(cwd)
 
 
 @catch_subprocess_errors
-def run_simulator(rsb, simulator_path, simulator_args, testexe):
-    os.chdir(rsb)
+def run_simulator(simulator_path, simulator_args, testexe, testsuite):
     sim_command = f"{simulator_path} {simulator_args}"
     print(f"Doing {sim_command} {testexe}")
-    subprocess.run(f"{sim_command} {testexe}",
+    subprocess.run(f"{sim_command} {testexe} > {testsuite}-test.log",
                    check=True, shell=True)
 
 
-def get_generated_files(model, test_extenstion):
-    files = glob.glob('pan')
+def get_generated_files(model, testsuite, test_extenstion):
     trails = glob.glob(f"{model}*.trail")
-    files += trails
+    files = trails
     files += glob.glob(f"{model}*.spn")
     if len(trails) == 1:
-        files += glob.glob(f"tr-{model}{test_extenstion}")
+        files += glob.glob(f"tr-{model}-0{test_extenstion}")
     else:
         files += glob.glob(f"tr-{model}-*{test_extenstion}")
+    files += glob.glob(f"{testsuite}-test.log")
     return files
 
 
@@ -293,7 +295,7 @@ def main():
             or len(sys.argv) == 2 and sys.argv[1] == "compile"
             or len(sys.argv) == 2 and sys.argv[1] == "run"):
         print("USAGE:")
-        print("help - these instructions")
+        print("help - more details about usage and commands below")
         print("all modelname - runs clean, spin, gentests, copy, compile and "
               "run")
         print("clean modelname - remove spin, test files")
@@ -337,10 +339,10 @@ def main():
         generate_test_files(sys.argv[2], config["spin2test"], refine_config)
 
     if sys.argv[1] == "clean":
-        clean(sys.argv[2], refine_config["testfiletype"])
+        clean(sys.argv[2], config["testsuite"], refine_config["testfiletype"])
 
     if sys.argv[1] == "archive":
-        archive(sys.argv[2])
+        archive(sys.argv[2], config["testsuite"], refine_config["testfiletype"])
 
     if sys.argv[1] == "zero":
         zero(config["testyaml"], config["testsuite"])
@@ -353,8 +355,8 @@ def main():
         compile(config["rtems"])
 
     if sys.argv[1] == "run":
-        run_simulator(config["rsb"], config["simulator"],
-                      config["simulatorargs"], config["testexe"])
+        run_simulator(config["simulator"],
+                      config["simulatorargs"], config["testexe"], config["testsuite"])
 
 
 if __name__ == '__main__':

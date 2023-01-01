@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
 void RtemsModelChainsAPI_Run{0}(
 )
 {{
