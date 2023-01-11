@@ -40,11 +40,11 @@ class command:
         self.seqForSEQ = "" # Holds space-separated sequence output string when in SEQ
         self.inName = ""     # Set to SEQ/STRUCT name when inside
 
-        # We assume the target test code language is C/C++ by default
-        self.EOLC     =  "//"
-        self.CMTBEGIN =  "/*"
-        self.CMTEND   =  "*/"
-        # The following should all be in refinement file
+# We assume the target test code language is C/C++ by default
+        self.EOLC = "//"
+        self.CMTBEGIN = "/*"
+        self.CMTEND = "*/"
+# The following should all be in refinement file
         self.SEGNAMEPFX = "TestSegment{}"
         self.SEGARG = "Context* ctx"
         self.SEGDECL = "static void {}( {} )"  # segname, segarg,
