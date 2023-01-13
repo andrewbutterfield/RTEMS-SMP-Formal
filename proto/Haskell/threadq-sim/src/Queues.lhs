@@ -1,25 +1,17 @@
 \section{RTEMS Thread Queues}
 \begin{code}
-module ThreadQ
-    ( whatAmI
-    , FIFOQ
+module Queues
+    ( FIFOQ
     , isEmptyFIFOQ,  viewFIFOQ,  enqueueFIFO,  dequeueFIFO
     , Priority, PRIOQ
     , isEmptyPRIOQ,  viewPRIOQ,  enqueuePRIO,  dequeuePRIO
     , Cluster, CLSTRQ
     , isEmptyCLSTRQ, viewCLSTRQ, enqueueCLSTR, dequeueCLSTR 
     ) where
-
-whatAmI :: String
-whatAmI =  "Models of RTEMS Thread Queues"
 \end{code}
 
-At present,
-we simply explore how to model thread queues,
-in a context where several tasks are using semaphores 
-to access a critical region.
-
-Later we will refactor this out into seperate modules.
+Here we define the three types of queues used for thread synchronisation
+and scheduling.
 
 \subsection{FIFO Queues}
 

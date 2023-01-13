@@ -25,7 +25,8 @@ source-repository head
 
 library
   exposed-modules:
-      ThreadQ
+      Queues
+      Runner
   other-modules:
       Paths_tqsim
   hs-source-dirs:
