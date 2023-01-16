@@ -1,23 +1,33 @@
 \section{Program Mainline}
 
 \begin{code}
--- 45678 1 2345678 2 2345678 3 2345678 4 2345678 5 2345678 6 2345678 7 2345678 8
 module Main where
 
-import System.IO
+import System.Environment
 
 import Queues
 import Runner
 
 main :: IO ()
-main 
-  = do putStrLn "\n\tThread Q Simulator\n"
-       
-       putStr "Enter simulation filename: "
-       hFlush stdout
-       simFileName <- getLine
-       simCommands <- fmap lines $ readFile simFileName
-       run simFileName simCommands
-        
-       putStrLn "\n\tFinished!\n"
+main = do 
+  putStrLn "\n\tThread Q Simulator\n"       
+  args <- getArgs
+  case args of
+    [] -> interactive 
+    (["-i"]) -> interactive 
+    (["-b"]) -> do
+      simFileName <- requestInput "Enter simulation filename: "
+      batch simFileName
+    (["-b",simFileName]) -> batch simFileName
+    ([simFileName]) -> batch simFileName
+    _ -> usage
+  putStrLn "\n\tFinished!\n"
+
+usage = putStrLn $ unlines
+  [ "usage: tqsim [-i|-b] [fname]"
+  , " -i        :  run iteractively (default if no args)"
+  , " -b        :  request sim file name"
+  , " -b fname  :  use sim file 'fname'"
+  , " fname mmm :  use sim file 'fname'"
+  ]
 \end{code}

@@ -1,8 +1,11 @@
 \section{RTEMS Simulation Runner}
 \begin{code}
 module Runner
-    ( run
+    ( requestInput
+    , interactive
+    , batch
     ) where
+import System.IO
 import Queues
 \end{code}
 
@@ -12,15 +15,6 @@ The basic idea is to declare some objects,
 and then invoke actions upon them.
 
 The language is line based, each line starting with a keyword.
-
-\begin{code}
-run :: String -> [String] -> IO ()
-run sfn cmds
-  = do putStrLn ("Running '"++sfn)
-       putStrLn ("Initial State:\n"++show initstate)
-       s' <- perform initstate cmds
-       putStrLn ("Final State:\n"++show s')
-\end{code}
 
 \subsection{Objects}
 
@@ -68,26 +62,52 @@ initstate = State [] [] [] []
 
 \subsection{Running Simulations}
 
+\subsubsection{Interactive Simulation}
+
 \begin{code}
+requestInput prompt = do
+  putStr prompt
+  hFlush stdout
+  getLine
+
+interactive = request initstate
+
+request s = do
+  cmd <- requestInput "Cmd> "
+  s' <- doCommand s cmd
+  putStrLn ("State:\n"++show s')
+  request s'
+\end{code}
+
+\subsubsection{Batch Simulation}
+
+\begin{code}  
+batch sfn = do
+  cmds <- fmap lines $ readFile sfn
+  putStrLn ("Running '"++sfn)
+  putStrLn ("Initial State:\n"++show initstate)
+  s' <- perform initstate cmds
+  putStrLn ("Final State:\n"++show s')
+
 perform :: SimState -> [String] -> IO SimState
 perform s [] = do { putStrLn "Completed" ; return s }
-perform s (cmd:cmds)
-  = do  s' <- doCommand s cmd
-        putStrLn ("State:\n"++show s')
-        perform s' cmds
+perform s (cmd:cmds) = do  
+  s' <- doCommand s cmd
+  putStrLn ("State:\n"++show s')
+  perform s' cmds
 \end{code}
 
 \subsection{Simulation Commands}
 
 \begin{code}
 doCommand :: SimState -> String -> IO SimState
-doCommand s cmd
-  = do  putStrLn ("\n> "++cmd)
-        case words cmd of
-          []  ->  return s 
-          ("new":what:args) -> makeNewObject s what args
-          _ -> do putStrLn ("Unrecognised command '"++cmd++"'")
-                  return s
+doCommand s cmd = do
+  putStrLn ("\n> "++cmd)
+  case words cmd of
+    []  ->  return s 
+    ("new":what:args) -> makeNewObject s what args
+    _ -> do putStrLn ("Unrecognised command '"++cmd++"'")
+            return s
 \end{code}
 
 \subsubsection{Creating New Objects}

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.9.12)  13 JAN 2023 19:06
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.9.12)  16 JAN 2023 18:59
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -326,31 +326,27 @@ Overfull \hbox (0.63074pt too wide) in paragraph at lines 109--110
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
-) [4] (./src/Runner.lhs [5]) [6] (./app/Main.lhs
-Overfull \hbox (0.63074pt too wide) in paragraph at lines 4--5
-[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
- []
-
-LaTeX Font Info:    Trying to load font information for TS1+cmtt on input line 19.
-(/usr/local/texlive/2022/texmf-dist/tex/latex/base/ts1cmtt.fd
+) [4] (./src/Runner.lhs [5]
+LaTeX Font Info:    Trying to load font information for TS1+cmtt on input line 86.
+ (/usr/local/texlive/2022/texmf-dist/tex/latex/base/ts1cmtt.fd
 File: ts1cmtt.fd 2019/12/16 v2.5j Standard LaTeX font definitions
-)) [7] (./test/Spec.lhs) [8] (./MAIN.bbl) [9] (./MAIN.aux)
+)) [6] (./app/Main.lhs) [7] (./test/Spec.lhs) [8] (./MAIN.bbl) [9] (./MAIN.aux)
 Package rerunfilecheck Info: File `MAIN.out' has not changed.
-(rerunfilecheck)             Checksum: 14C67C0371466C034B9BD8181D457AD3;1130.
+(rerunfilecheck)             Checksum: 19BFDCFE3474299F6E5749E32975ADED;2181.
  ) 
 Here is how much of TeX's memory you used:
- 11307 strings out of 478268
- 172316 string characters out of 5846347
- 543081 words of memory out of 5000000
- 29201 multiletter control sequences out of 15000+600000
+ 11370 strings out of 478268
+ 173291 string characters out of 5846347
+ 544803 words of memory out of 5000000
+ 29218 multiletter control sequences out of 15000+600000
  475126 words of font info for 48 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 60i,6n,63p,346b,1444s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 60i,6n,63p,346b,1916s stack positions out of 10000i,1000n,20000p,200000b,200000s
 {/usr/local/texlive/2022/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}</usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt9.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/cm-super/sftt0900.pfb>
-Output written on MAIN.pdf (9 pages, 160956 bytes).
+Output written on MAIN.pdf (9 pages, 165904 bytes).
 PDF statistics:
- 356 PDF objects out of 1000 (max. 8388607)
- 319 compressed objects within 4 object streams
- 173 named destinations out of 1000 (max. 500000)
- 65 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 443 PDF objects out of 1000 (max. 8388607)
+ 405 compressed objects within 5 object streams
+ 219 named destinations out of 1000 (max. 500000)
+ 121 words of extra memory for PDF output out of 10000 (max. 10000000)
 
