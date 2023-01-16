@@ -17,7 +17,7 @@ main
        hFlush stdout
        simFileName <- getLine
        simCommands <- fmap lines $ readFile simFileName
-       run (simFileName:simCommands)
+       run simFileName simCommands
         
        putStrLn "\n\tFinished!\n"
 \end{code}

@@ -14,13 +14,15 @@ and then invoke actions upon them.
 The language is line based, each line starting with a keyword.
 
 \begin{code}
-run :: [String] -> IO ()
-run [] = putStrLn "Runner has no input"
-run (sfn:cmds) 
+run :: String -> [String] -> IO ()
+run sfn cmds
   = do putStrLn ("Running '"++sfn)
-       putStrLn "Contents:"
-       enact initstate cmds
+       putStrLn ("Initial State:\n"++show initstate)
+       s' <- perform initstate cmds
+       putStrLn ("Final State:\n"++show s')
 \end{code}
+
+\subsection{Objects}
 
 We segregate objects by their type.
 \begin{code}
@@ -46,6 +48,9 @@ data Object
 \end{description}
 The queue objects are themselves parameterised with a content object.
 
+
+\subsection{Simulation State}
+
 We define the state to be a collection of named objects:
 \begin{code}
 type NamedObject obj = (String,obj)
@@ -59,19 +64,44 @@ data SimState
   deriving Show
 
 initstate = State [] [] [] []
-
-
-enact :: SimState -> [String] -> IO ()
-enact s cmds
-  = do putStrLn ("Start state is "++show s)
-       perform s cmds
-
-perform :: SimState -> [String] -> IO ()
-perform s [] = putStrLn "Completed"
-perform s (cmd:cmds)
-  = do putStrLn ("Doing "++cmd++" ...")
-       putStrLn (" ... done: "++show s)
-       perform s cmds
 \end{code}
 
+\subsection{Running Simulations}
 
+\begin{code}
+perform :: SimState -> [String] -> IO SimState
+perform s [] = do { putStrLn "Completed" ; return s }
+perform s (cmd:cmds)
+  = do  s' <- doCommand s cmd
+        putStrLn ("State:\n"++show s')
+        perform s' cmds
+\end{code}
+
+\subsection{Simulation Commands}
+
+\begin{code}
+doCommand :: SimState -> String -> IO SimState
+doCommand s cmd
+  = do  putStrLn ("\n> "++cmd)
+        case words cmd of
+          []  ->  return s 
+          ("new":what:args) -> makeNewObject s what args
+          _ -> do putStrLn ("Unrecognised command '"++cmd++"'")
+                  return s
+\end{code}
+
+\subsubsection{Creating New Objects}
+
+\begin{code}
+makeNewObject :: SimState -> String -> [String] -> IO SimState
+makeNewObject s what args
+  | what == "arb"  =  makeNewArbitraryObjects s args
+  | otherwise  =  do putStrLn ("Unknown object type '"++what++"'")
+                     return s
+\end{code}
+
+\begin{code}
+makeNewArbitraryObjects :: SimState -> [String] -> IO SimState
+makeNewArbitraryObjects s args
+  = return s{ arbobjs = args ++ arbobjs s }
+\end{code}
