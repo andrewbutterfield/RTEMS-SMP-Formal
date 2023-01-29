@@ -26,6 +26,8 @@
 
 import itertools
 import logging
+import yaml
+from pathlib import Path
 
 logger = logging.getLogger (__name__)
 
@@ -40,18 +42,6 @@ class command:
         self.seqForSEQ = "" # Holds space-separated sequence output string when in SEQ
         self.inName = ""     # Set to SEQ/STRUCT name when inside
 
-# We assume the target test code language is C/C++ by default
-        self.EOLC = "//"
-        self.CMTBEGIN = "/*"
-        self.CMTEND = "*/"
-# The following should all be in refinement file
-        self.SEGNAMEPFX = "TestSegment{}"
-        self.SEGARG = "Context* ctx"
-        self.SEGDECL = "static void {}( {} )"  # segname, segarg,
-        self.SEGBEGIN = " {"
-        self.SEGEND = "}"
-        self.TESTLOGGER = 'T_log(T_NORMAL,"{}");'
-
         self.testName = "Un-named Test"
         self.defCode = []     # list of strings
         self.declCode = []    # list of strings
@@ -60,25 +50,42 @@ class command:
         self.currentId = 0    # currently running process
         self.switchNo = 0
 
+        # Use c by default if language not set
+        self.setComments("C")
+        self.setDefaults("C")
+
         self.outputLOG = outputLOG
         self.annoteComments = annoteComments
         self.outputSWITCH = outputSWITCH
 
-    match def setComments(self, 'C'):
-        logger.debug("Set LANGUAGE to C\n")
-        self.EOLC     = "//"
-        self.CMTBEGIN = "/*"
-        self.CMTEND   = "*/"
+    def setComments(self, language):
+        logger.debug(f"Set LANGUAGE to {language} (comments)\n")
+        language_file = Path(Path(__file__).parent.absolute() / f"languages/{language}.yml")
+        if language_file.exists():
+            with open(language_file) as f:
+                language_yaml = yaml.load(f, Loader=yaml.FullLoader)
+                comment_keys = {"EOLC", "CMTBEGIN", "CMTEND"}
+                for key in comment_keys:
+                    if key not in language_yaml.keys():
+                        logger.error(f"{key} not set in {language}.yml")
+                        raise SystemExit()
+                    else:
+                        setattr(self, key, language_yaml[key])
+        else:
+            logger.debug(f"Unknown LANGUAGE {language}, set to C\n")
+            self.setComments("C")
 
-    addpattern def setComments(self, 'Python'):
-        logger.debug("Set LANGUAGE to Python\n")
-        self.EOLC     = "#"
-        self.CMTBEGIN = '"""\n'
-        self.CMTEND   = '\n"""'
-
-    # catch-all for setComments
-    addpattern def setComments(self, lang):
-       logger.debug("Unknown LANGUAGE "+lang+", set to C\n")
+    def setDefaults(self, language):
+        logger.debug(f"Set LANGUAGE to {language} (non-comment defaults)\n")
+        language_file = Path(Path(__file__).parent.absolute() / f"languages/{language}.yml")
+        if language_file.exists():
+            with open(language_file) as f:
+                language_yaml = yaml.load(f, Loader=yaml.FullLoader)
+                comment_keys = {"EOLC", "CMTBEGIN", "CMTEND"}
+                for key in language_yaml.keys() - comment_keys:
+                    setattr(self, key, language_yaml[key])
+        else:
+            self.setDefaults("C")
 
     def setupSegmentCode(self):
         if 'SEGNAMEPFX' in self.ref_dict_keys:
@@ -111,6 +118,7 @@ class command:
         if 'LANGUAGE' in self.ref_dict_keys:
             language = self.ref_dict['LANGUAGE']
             self.setComments(language)
+            self.setDefaults(language)
             self.setupSegmentCode()
         else:
             pass  # assume default: C
