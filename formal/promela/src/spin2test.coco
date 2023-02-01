@@ -33,9 +33,17 @@ import argparse
 #
 
 if __name__ == '__main__':
-    claparser = argparse.ArgumentParser(description="Promela to Program Test Generator")
+    claparser = argparse.ArgumentParser(
+        description="Promela to Program Test Generator")
     claparser.add_argument("root", help="Model filename root")
+    claparser.add_argument("pre_amble", help="Model pre-amble file")
+    claparser.add_argument("post_amble", help="Model post-amble file")
+    claparser.add_argument("run", help="Model test run file")
+    claparser.add_argument("refine", help="Model test refine file")
+    claparser.add_argument("testfile", help="Model helper file")
     claparser.add_argument("tstno", help="Model test number")
 
     cl_args = claparser.parse_args()
-    src.spin2test.main (cl_args.tstno, '', cl_args.root)
+    src.spin2test.main(cl_args.tstno, '', cl_args.root, cl_args.pre_amble,
+                       cl_args.post_amble, cl_args.run, cl_args.refine,
+                       cl_args.testfile)

@@ -1,0 +1,11 @@
+EOLC: "//"
+CMTBEGIN:  "/*"
+CMTEND: "*/"
+
+# The following should all be in refinement file
+SEGNAMEPFX: "TestSegment{}"
+SEGARG: "Context* ctx"
+SEGDECL: "static void {}( {} )"  # segname, segarg,
+SEGBEGIN: " {"
+SEGEND: "}"
+TESTLOGGER: 'T_log(T_NORMAL,"{}");'

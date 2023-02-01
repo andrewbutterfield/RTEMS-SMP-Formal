@@ -39,8 +39,8 @@ refine.logger.addHandler (logging.StreamHandler (sys.stderr))
 
 def words(string): return string.rsplit(' ')
 
-def main (testNumber, dir0, fileRoot):
-    "\n\tSpin2Test (Coconut/Python)\n\n" |> refine.logger.debug
+def main(testNumber, dir0, fileRoot, preFile, postFile, runFile, refFile, testFile):
+    (refine.logger.debug)("\n\tSpin2Test (Coconut/Python)\n\n")
     refine.logger.debug("Test Number {}\n".format(testNumber))
 
     if int(testNumber) < 0:
@@ -48,19 +48,14 @@ def main (testNumber, dir0, fileRoot):
     else:
         num = "-{}".format(testNumber)
 
-    spinFile = dir0 +         fileRoot + num + ".spn"
-    refFile  = dir0 +         fileRoot +   "-rfn.yml"
-    preFile  = dir0 +         fileRoot +   "-pre.h"
-    postFile = dir0 +         fileRoot +  "-post.h"
-    runFile  = dir0 +         fileRoot +   "-run.h"
-    testFile = dir0 + "tr-" + fileRoot + num + ".c"
+    spinFile = dir0 + fileRoot + num + ".spn"
 
     summaryFormat = "!{} --({}`)-> [{};_;{};{}] >> {}\n"
-    refine.logger.debug(summaryFormat.format( spinFile,refFile
-                                            , preFile,postFile
-                                            , runFile,testFile ))
+    refine.logger.debug(
+        summaryFormat.format(spinFile, refFile, preFile, postFile, runFile,
+                             testFile))
 
-    print summaryFormat
+    print(summaryFormat)
 
     annote_lines = []
     with open(spinFile) as spinfile:
@@ -69,16 +64,16 @@ def main (testNumber, dir0, fileRoot):
             if line[0:4] == "@@@ ":
                 debug_lines = debug_lines + line
                 annote_lines = annote_lines + [line[4:][:-1]]
-        refine.logger.debug (debug_lines)
+        refine.logger.debug(debug_lines)
 
-    annote_bundle = fmap (words,annote_lines)
+    annote_bundle = fmap(words, annote_lines)
 
     refine.logger.debug("Annotation Bundle:\n {}".format(annote_bundle))
 
     with open(refFile) as reffile:
-       ref_dict = yaml.safe_load(reffile.read())
-       refine.logger.debug("\nREFINE DUMP")
-       refine.logger.debug(yaml.dump(ref_dict))
+        ref_dict = yaml.safe_load(reffile.read())
+        refine.logger.debug("\nREFINE DUMP")
+        refine.logger.debug(yaml.dump(ref_dict))
 
     cmd = refine.command(ref_dict)
 
@@ -87,9 +82,10 @@ def main (testNumber, dir0, fileRoot):
         cmd.refineSPINLine_main(ln)
 
     refine.logger.debug("\nP-Ids in use: {}\n ".format(cmd.procIds))
-    refine.logger.debug("\n\tRefinement Complete; No of processes = {}".format(len(cmd.procIds)))
+    refine.logger.debug("\n\tRefinement Complete; No of processes = {}".format(
+        len(cmd.procIds)))
 
-    with open(testFile,'w') as tstfile:
+    with open(testFile, 'w') as tstfile:
 
         with open(preFile) as prefile:
             tstfile.write(prefile.read())

@@ -14,3 +14,14 @@ formal/promela/src/testgen_ml.py
 formal/promela/src/testgen_yaml.py
 formal/promela/src/src/__pycache__
 RTEMS-SMP-Formal.code-workspace
+proto/Haskell/threadq-sim/.stack-work
+proto/Haskell/threadq-sim/MAIN.aux
+proto/Haskell/threadq-sim/MAIN.bbl
+proto/Haskell/threadq-sim/MAIN.blg
+proto/Haskell/threadq-sim/MAIN.fdb_latexmk
+proto/Haskell/threadq-sim/MAIN.fls
+proto/Haskell/threadq-sim/MAIN.log
+proto/Haskell/threadq-sim/MAIN.out
+proto/Haskell/threadq-sim/MAIN.pdf
+proto/Haskell/threadq-sim/MAIN.synctex.gz
+proto/Haskell/threadq-sim/MAIN.toc
