@@ -34,13 +34,14 @@ import yaml
 
 #
 
-refine.logger.setLevel (logging.DEBUG)
-refine.logger.addHandler (logging.StreamHandler (sys.stderr))
+refine.logger.setLevel(logging.DEBUG)
+refine.logger.addHandler(logging.StreamHandler (sys.stderr))
 
-def words(string): return string.rsplit(' ')
+def words(string):
+    return string.rsplit(' ')
 
 def main(testNumber, dir0, fileRoot, preFile, postFile, runFile, refFile, testFile):
-    (refine.logger.debug)("\n\tSpin2Test (Coconut/Python)\n\n")
+    refine.logger.debug("\n\tSpin2Test (Coconut/Python)\n\n")
     refine.logger.debug("Test Number {}\n".format(testNumber))
 
     if int(testNumber) < 0:
