@@ -28,6 +28,6 @@ usage = putStrLn $ unlines
   , " -i        :  run iteractively (default if no args)"
   , " -b        :  request sim file name"
   , " -b fname  :  use sim file 'fname'"
-  , " fname mmm :  use sim file 'fname'"
+  , " fname     :  use sim file 'fname'"
   ]
 \end{code}

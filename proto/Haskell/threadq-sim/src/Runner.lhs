@@ -6,6 +6,7 @@ module Runner
     , batch
     ) where
 import Data.List
+import Data.Char
 import System.IO
 import Queues
 \end{code}
@@ -61,22 +62,24 @@ initstate = State [] [] [] []
 
 instance Show SimState where
   show s = unlines $
-    [ "arbitrary > " ++ sepBy " " (arbobjs s)
-    , "fifo :\n"  ++ (sepBy "\n" $ map showFIFOq $ fifoQs s)
-    , "prio :\n"  ++ (sepBy "\n" $ map showPrioQ $ prioQs s)
-    , "cluster :\n"  ++ (sepBy "\n" $ map showClusterQ $ clusterQs s)
+    [ "__________"
+    , "arbitrary: "   ++ sepBy " " (arbobjs s)
+    , "fifo::\n  "    ++ (sepBy "\n  " $ map showFIFOq $ fifoQs s)
+    , "prio::\n  "    ++ (sepBy "\n  " $ map showPrioQ $ prioQs s)
+    , "cluster::\n  " ++ (sepBy "\n  " $ map showClusterQ $ clusterQs s)
+    , "----------"
     ]
 sepBy sep css = concat $ intersperse sep css
 
-showFIFOq (nm,fifoq) = "  " ++ nm ++ " <" ++ sepBy "," fifoq ++ ">"
+showFIFOq (nm,fifoq) = nm ++ " <" ++ sepBy "," fifoq ++ ">"
 
 showPrioQ (nm,prioq) 
-  = "  " ++ nm ++ " <" ++ sepBy "," (map showPItem prioq) ++ ">"
+  = nm ++ " <" ++ sepBy "," (map showPItem prioq) ++ ">"
 showPItem (p,thing) = show p ++ ':':thing
 
 showClusterQ :: NamedObject (CLSTRQ String) -> String
 showClusterQ (nm,clstq) 
-  = "  " ++ nm ++ " :\n    " ++ sepBy "\n    " (map showCLItem clstq)
+  = nm ++ "::\n    " ++ sepBy "\n    " (map showCLItem clstq)
 showCLItem (cno,prioq) = "["++show cno++"] "++ showPrioQ ("",prioq)
 
 \end{code}
@@ -86,18 +89,25 @@ showCLItem (cno,prioq) = "["++show cno++"] "++ showPrioQ ("",prioq)
 \subsubsection{Interactive Simulation}
 
 \begin{code}
+interactive = request initstate
+
+request state = do
+  cmd <- requestInput "_______________________\nCmd> "
+  if null cmd
+  then request state
+  else do
+    state' <- doCommand state cmd
+    putStrLn $ show state'
+    request state'
+
 requestInput prompt = do
   putStr prompt
   hFlush stdout
-  getLine
+  fmap trim getLine
 
-interactive = request initstate
+trim = ltrim . reverse . ltrim . reverse
 
-request s = do
-  cmd <- requestInput "Cmd> "
-  s' <- doCommand s cmd
-  putStrLn $ show s'
-  request s'
+ltrim = dropWhile isSpace 
 \end{code}
 
 \subsubsection{Batch Simulation}
@@ -106,9 +116,9 @@ request s = do
 batch sfn = do
   cmds <- fmap lines $ readFile sfn
   putStrLn ("Running '"++sfn)
-  putStrLn ("Initial State:\n"++show initstate)
+  putStrLn ("\nInitial State:\n"++show initstate)
   s' <- perform initstate cmds
-  putStrLn ("Final State:\n"++show s')
+  putStrLn ("\nFinal State:\n"++show s')
 
 perform :: SimState -> [String] -> IO SimState
 perform s [] = do { putStrLn "Completed" ; return s }
@@ -122,17 +132,17 @@ perform s (cmd:cmds) = do
 
 \begin{code}
 doCommand :: SimState -> String -> IO SimState
-doCommand s cmd = do
+doCommand state cmd = do
   putStrLn ("\n> "++cmd)
   case words cmd of
-    []  ->  return s 
-    ("new":what:args) -> makeNewObject s what args
+    []  ->  return state 
+    ("new":what:args) -> makeNewObject state what args
     _ -> do putStrLn ("Unrecognised command '"++cmd++"'")
             putStrLn $ unlines 
               [ "Commands:"
               , "  new <type> <names> - create new objects"
               ]
-            return s
+            return state
 \end{code}
 
 \subsubsection{Creating New Objects}

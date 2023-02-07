@@ -1,10 +1,10 @@
-new arb o1
+new A o1
 command 2
-new fifo ff1
-new arb a2
-new prio pr1
-new cluster c1
-new arb 42
+new F ff1
+new A a2
+new P pr1
+new C c1
+new A 42
 
 whatever
 
