@@ -44,18 +44,27 @@ data Object
 \end{description}
 The queue objects are themselves parameterised with a content object.
 
-
+\newpage
 \subsection{Simulation State}
+
+We have a notion of an association list between names and objects
+\begin{code}
+type NamedObject obj = (String,obj)
+type NamedObjects obj = [NamedObject obj]
+
+nameLookup :: NamedObjects obj -> String -> Maybe obj
+nameLookup namedObjs name = fmap snd $ find (hasName name) namedObjs
+hasName name (n,_) = name == n
+\end{code}
 
 We define the state to be a collection of named objects:
 \begin{code}
-type NamedObject obj = (String,obj)
 data SimState
   =  State {
        arbobjs  :: [String] -- basically tokens naming themselves
-     , fifoQs    :: [NamedObject (FIFOQ String)]
-     , prioQs    :: [NamedObject (PRIOQ String)]
-     , clusterQs :: [NamedObject (CLSTRQ String)]
+     , fifoQs    :: NamedObjects (FIFOQ String)
+     , prioQs    :: NamedObjects (PRIOQ String)
+     , clusterQs :: NamedObjects (CLSTRQ String)
      }
 
 initstate = State [] [] [] []
@@ -137,31 +146,41 @@ doCommand state cmd = do
   case words cmd of
     []  ->  return state 
     ("new":what:args) -> makeNewObject state what args
+    ["enq",queue,object] -> enQueueObject state queue object
     _ -> do putStrLn ("Unrecognised command '"++cmd++"'")
             putStrLn $ unlines 
               [ "Commands:"
               , "  new <type> <names> - create new objects"
+              , "  enq <type> <name> <name> - enqueue objects"
               ]
             return state
 \end{code}
 
 \subsubsection{Creating New Objects}
 
+Object kinds:
+\begin{code}
+arbObj   = "a" ; arbDescr     = "arbitrary"
+fifoQ    = "f" ; fifoDescr    = "FIFO Queue"
+prioQ    = "p" ; prioDescr    = "Priority Queue"
+clusterQ = "c" ; clusterDescr = "Cluster Queue"
+\end{code}
+
 \begin{code}
 makeNewObject :: SimState -> String -> [String] -> IO SimState
 makeNewObject state what args
-  | what == "A"  =  makeNewArbitraryObjects state args
-  | what == "F"  =  makeNewFIFOQueues state args
-  | what == "P"  =  makeNewPriorityQueues state args
-  | what == "C"  =  makeNewClusterQueues state args
+  | what == arbObj    =  makeNewArbitraryObjects state args
+  | what == fifoQ     =  makeNewFIFOQueues state args
+  | what == prioQ     =  makeNewPriorityQueues state args
+  | what == clusterQ  =  makeNewClusterQueues state args
   | otherwise    =  do 
       putStrLn ("Unknown object type '"++what++"'")
       putStrLn $ unlines 
         [ "Object types:"
-        , "  A - arbitrary"
-        , "  F - FIFO queue"
-        , "  P - Priority queue"
-        , "  C - Cluster queue"
+        , "  " ++ arbObj   ++ " - " ++ arbDescr
+        , "  " ++ fifoQ    ++ " - " ++ fifoDescr
+        , "  " ++ prioQ    ++ " - " ++ prioDescr
+        , "  " ++ clusterQ ++ " - " ++ clusterDescr
         ]
       return state
 \end{code}
@@ -196,3 +215,9 @@ makeNewClusterQueues state args
 newClusterQueue name = (name,[])
 \end{code}
 
+\subsubsection{Enqueing Objects}
+
+\begin{code}
+enQueueObject :: SimState -> String -> String -> IO SimState
+enQueueObject state queue object = return state
+\end{code}
