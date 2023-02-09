@@ -61,12 +61,12 @@ data SimState
 initstate = State [] [] [] []
 
 instance Show SimState where
-  show s = unlines $
+  show state = unlines $
     [ "__________"
-    , "arbitrary: "   ++ sepBy " " (arbobjs s)
-    , "fifo::\n  "    ++ (sepBy "\n  " $ map showFIFOq $ fifoQs s)
-    , "prio::\n  "    ++ (sepBy "\n  " $ map showPrioQ $ prioQs s)
-    , "cluster::\n  " ++ (sepBy "\n  " $ map showClusterQ $ clusterQs s)
+    , "arbitrary: "   ++ sepBy " " (arbobjs state)
+    , "fifo::\n  "    ++ (sepBy "\n  " $ map showFIFOq $ fifoQs state)
+    , "prio::\n  "    ++ (sepBy "\n  " $ map showPrioQ $ prioQs state)
+    , "cluster::\n  " ++ (sepBy "\n  " $ map showClusterQ $ clusterQs state)
     , "----------"
     ]
 sepBy sep css = concat $ intersperse sep css
@@ -117,15 +117,15 @@ batch sfn = do
   cmds <- fmap lines $ readFile sfn
   putStrLn ("Running '"++sfn)
   putStrLn ("\nInitial State:\n"++show initstate)
-  s' <- perform initstate cmds
-  putStrLn ("\nFinal State:\n"++show s')
+  state' <- perform initstate cmds
+  putStrLn ("\nFinal State:\n"++show state')
 
 perform :: SimState -> [String] -> IO SimState
-perform s [] = do { putStrLn "Completed" ; return s }
-perform s (cmd:cmds) = do  
-  s' <- doCommand s cmd
-  putStrLn ("State:\n"++show s')
-  perform s' cmds
+perform state [] = do { putStrLn "Completed" ; return state }
+perform state (cmd:cmds) = do  
+  state' <- doCommand state cmd
+  putStrLn ("State:\n"++show state')
+  perform state' cmds
 \end{code}
 
 \subsection{Simulation Commands}
@@ -149,11 +149,11 @@ doCommand state cmd = do
 
 \begin{code}
 makeNewObject :: SimState -> String -> [String] -> IO SimState
-makeNewObject s what args
-  | what == "A"  =  makeNewArbitraryObjects s args
-  | what == "F"  =  makeNewFIFOQueues s args
-  | what == "P"  =  makeNewPriorityQueues s args
-  | what == "C"  =  makeNewClusterQueues s args
+makeNewObject state what args
+  | what == "A"  =  makeNewArbitraryObjects state args
+  | what == "F"  =  makeNewFIFOQueues state args
+  | what == "P"  =  makeNewPriorityQueues state args
+  | what == "C"  =  makeNewClusterQueues state args
   | otherwise    =  do 
       putStrLn ("Unknown object type '"++what++"'")
       putStrLn $ unlines 
@@ -163,35 +163,36 @@ makeNewObject s what args
         , "  P - Priority queue"
         , "  C - Cluster queue"
         ]
-      return s
+      return state
 \end{code}
 
 \begin{code}
 makeNewArbitraryObjects :: SimState -> [String] -> IO SimState
-makeNewArbitraryObjects s args
-  = return s{ arbobjs = args ++ arbobjs s }
+makeNewArbitraryObjects state args
+  = return state{ arbobjs = args ++ arbobjs state }
 \end{code}
 
 \begin{code}
 makeNewFIFOQueues :: SimState -> [String] -> IO SimState
-makeNewFIFOQueues s args
-  = return s{ fifoQs = map newFIFOQueue args ++ fifoQs s }
+makeNewFIFOQueues state args
+  = return state{ fifoQs = map newFIFOQueue args ++ fifoQs state }
 
 newFIFOQueue name = (name,[])
 \end{code}
 
 \begin{code}
 makeNewPriorityQueues :: SimState -> [String] -> IO SimState
-makeNewPriorityQueues s args
-  = return s{ prioQs = map newPriorityQueue args ++ prioQs s }
+makeNewPriorityQueues state args
+  = return state{ prioQs = map newPriorityQueue args ++ prioQs state }
 
 newPriorityQueue name = (name,[])
 \end{code}
 
 \begin{code}
 makeNewClusterQueues :: SimState -> [String] -> IO SimState
-makeNewClusterQueues s args
-  = return s{ clusterQs = map newClusterQueue args ++ clusterQs s }
+makeNewClusterQueues state args
+  = return state{ clusterQs = map newClusterQueue args ++ clusterQs state }
 
 newClusterQueue name = (name,[])
 \end{code}
+
