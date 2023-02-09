@@ -55,6 +55,12 @@ type NamedObjects obj = [NamedObject obj]
 nameLookup :: NamedObjects obj -> String -> Maybe obj
 nameLookup namedObjs name = fmap snd $ find (hasName name) namedObjs
 hasName name (n,_) = name == n
+
+nameUpdate :: String -> obj -> NamedObjects obj -> NamedObjects obj
+nameUpdate name value []  =  []
+nameUpdate name value (no@(n,_):namedObjs)
+  | n == name  =  (n,value) : namedObjs
+  | otherwise  =  no : nameUpdate name value namedObjs
 \end{code}
 
 We define the state to be a collection of named objects:
@@ -94,6 +100,13 @@ showCLItem (cno,prioq) = "["++show cno++"] "++ showPrioQ ("",prioq)
 \end{code}
 
 \subsection{Running Simulations}
+
+\subsubsection{Reporting Failure}
+
+\begin{code}
+simFail :: SimState -> String -> IO SimState
+simFail state msg = do { putStrLn msg ; return state }
+\end{code}
 
 \subsubsection{Interactive Simulation}
 
@@ -146,14 +159,13 @@ doCommand state cmd = do
   case words cmd of
     []  ->  return state 
     ("new":what:args) -> makeNewObject state what args
-    ["enq",queue,object] -> enQueueObject state queue object
-    _ -> do putStrLn ("Unrecognised command '"++cmd++"'")
-            putStrLn $ unlines 
-              [ "Commands:"
-              , "  new <type> <names> - create new objects"
-              , "  enq <type> <name> <name> - enqueue objects"
-              ]
-            return state
+    ["enq",queue,qName,objName] -> enQueueObject state queue qName objName
+    _ -> simFail state $ unlines
+          [ "Unrecognised command '"++cmd++"'"
+          , "Commands:"
+          , "  new <type> <names> - create new objects"
+          , "  enq <qtype> <qname> <oname> - enqueue objects"
+          ]
 \end{code}
 
 \subsubsection{Creating New Objects}
@@ -169,20 +181,18 @@ clusterQ = "c" ; clusterDescr = "Cluster Queue"
 \begin{code}
 makeNewObject :: SimState -> String -> [String] -> IO SimState
 makeNewObject state what args
-  | what == arbObj    =  makeNewArbitraryObjects state args
-  | what == fifoQ     =  makeNewFIFOQueues state args
-  | what == prioQ     =  makeNewPriorityQueues state args
-  | what == clusterQ  =  makeNewClusterQueues state args
-  | otherwise    =  do 
-      putStrLn ("Unknown object type '"++what++"'")
-      putStrLn $ unlines 
-        [ "Object types:"
-        , "  " ++ arbObj   ++ " - " ++ arbDescr
-        , "  " ++ fifoQ    ++ " - " ++ fifoDescr
-        , "  " ++ prioQ    ++ " - " ++ prioDescr
-        , "  " ++ clusterQ ++ " - " ++ clusterDescr
-        ]
-      return state
+  | what == arbObj    = makeNewArbitraryObjects state args
+  | what == fifoQ     = makeNewFIFOQueues state args
+  | what == prioQ     = makeNewPriorityQueues state args
+  | what == clusterQ  = makeNewClusterQueues state args
+  | otherwise         = simFail state $ unlines
+                          [ "Unknown object type '"++what++"'"
+                          ,"Object types:"
+                          , "  " ++ arbObj   ++ " - " ++ arbDescr
+                          , "  " ++ fifoQ    ++ " - " ++ fifoDescr
+                          , "  " ++ prioQ    ++ " - " ++ prioDescr
+                          , "  " ++ clusterQ ++ " - " ++ clusterDescr
+                          ]
 \end{code}
 
 \begin{code}
@@ -218,6 +228,21 @@ newClusterQueue name = (name,[])
 \subsubsection{Enqueing Objects}
 
 \begin{code}
-enQueueObject :: SimState -> String -> String -> IO SimState
-enQueueObject state queue object = return state
+enQueueObject :: SimState -> String -> String -> String -> IO SimState
+enQueueObject state queue qName objName
+  | queue == fifoQ  =  enQueueStateFIFO state qName objName
+  | otherwise = simFail state ("unrecognised queue: "++queue)
+
+\end{code}
+
+\begin{code}
+enQueueStateFIFO :: SimState -> String -> String -> IO SimState
+enQueueStateFIFO state qName objName 
+  = case nameLookup fifoqs qName of
+      Nothing  ->  simFail state ("no such FIFO queue: "++qName)
+      Just fifo -> 
+        let fifo' = enqueueFIFO objName fifo
+            state' =  state{ fifoQs = nameUpdate qName fifo' fifoqs}
+        in return state'
+  where fifoqs = fifoQs state
 \end{code}
