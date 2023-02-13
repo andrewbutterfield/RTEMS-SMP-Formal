@@ -33,9 +33,9 @@ viewFIFOQ = show
 enqueueFIFO :: obj -> FIFOQ obj -> FIFOQ obj
 enqueueFIFO thing fifoq = fifoq ++ [thing]
 
-dequeueFIFO :: MonadFail m => FIFOQ obj -> m (obj,FIFOQ obj)
-dequeueFIFO [] = fail "empty FIFO queue"
-dequeueFIFO (thing:restq) = return (thing,restq)
+dequeueFIFO :: FIFOQ obj -> (obj,FIFOQ obj)
+dequeueFIFO [] = error "empty FIFO queue"
+dequeueFIFO (thing:restq) = (thing,restq)
 \end{code}
 
 We have a variant of a FIFO queue called round-robin (RR).
@@ -46,9 +46,9 @@ Typically the queue is initially setup by enqueuing all desired items,
 and subsequent operations consists solely of dequeing.
 
 \begin{code}
-dequeueRR :: MonadFail m => FIFOQ obj -> m (obj,FIFOQ obj)
-dequeueRR [] = fail "empty RR queue"
-dequeueRR (thing:restq) = return (thing,restq++[thing])
+dequeueRR :: FIFOQ obj -> (obj,FIFOQ obj)
+dequeueRR [] = error "empty RR queue"
+dequeueRR (thing:restq) = (thing,restq++[thing])
 \end{code}
 
 \newpage
@@ -77,9 +77,9 @@ enqueuePRIO thing p prioq@(first@(q,_):restq)
   -- p == q, insert as per FIFO, after those of same priority (c-user 3.5)
   | otherwise  =  first     : enqueuePRIO thing p restq
 
-dequeuePRIO :: MonadFail m => PRIOQ obj -> m (obj,Priority,PRIOQ obj)
-dequeuePRIO [] = fail "empty PRIO queue"
-dequeuePRIO ((p,thing):restq) = return (thing,p,restq)
+dequeuePRIO :: PRIOQ obj -> (obj,Priority,PRIOQ obj)
+dequeuePRIO [] = error "empty PRIO queue"
+dequeuePRIO ((p,thing):restq) = (thing,p,restq)
 \end{code}
 
 \subsection{Clustered Scheduling Queues (SMP)}
@@ -106,11 +106,11 @@ enqueueCLSTR thing p c (first@(c',prioq):rest)
   | c == c'    =  (c',enqueuePRIO thing p prioq):rest
   | otherwise  =  first : enqueueCLSTR thing p c rest
 
-dequeueCLSTR :: MonadFail m => CLSTRQ obj -> m (obj,Priority,Cluster,CLSTRQ obj)
-dequeueCLSTR [] = fail "empty CLSTR queue"
+dequeueCLSTR :: CLSTRQ obj -> (obj,Priority,Cluster,CLSTRQ obj)
+dequeueCLSTR [] = error "empty CLSTR queue"
 dequeueCLSTR ((c,prioq):restq)
-  = do (thing,p,prioq') <- dequeuePRIO prioq
-       if isEmptyPRIOQ prioq' -- delete empty queues (???)
-         then return (thing,p,c,restq)
-         else return (thing,p,c,restq ++ [(c,prioq')])
+  = let (thing,p,prioq') =  dequeuePRIO prioq
+    in if isEmptyPRIOQ prioq' -- delete empty queues (???)
+         then (thing,p,c,restq)
+         else (thing,p,c,restq ++ [(c,prioq')])
 \end{code}
