@@ -27,6 +27,7 @@ library
   exposed-modules:
       Queues
       Runner
+      SimState
   other-modules:
       Paths_tqsim
   hs-source-dirs:

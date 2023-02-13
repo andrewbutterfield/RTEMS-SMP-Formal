@@ -9,6 +9,7 @@ import Data.List
 import Data.Char
 import System.IO
 import Queues
+import SimState
 \end{code}
 
 Here we provide a simple mechanism/language to run simulations
@@ -19,64 +20,8 @@ and then invoke actions upon them.
 The language is line based, each line starting with a keyword.
 
 
-\newpage
-\subsection{Simulation State}
 
-We have a notion of an association list between names and objects
-\begin{code}
-type NamedObject obj = (String,obj)
-type NamedObjects obj = [NamedObject obj]
-
-nameLookup :: NamedObjects obj -> String -> Maybe obj
-nameLookup namedObjs name = fmap snd $ find (hasName name) namedObjs
-hasName name (n,_) = name == n
-
-nameUpdate :: String -> obj -> NamedObjects obj -> NamedObjects obj
-nameUpdate name value []  =  []
-nameUpdate name value (no@(n,_):namedObjs)
-  | n == name  =  (n,value) : namedObjs
-  | otherwise  =  no : nameUpdate name value namedObjs
-\end{code}
-
-We define the state to be a collection of named objects:
-\begin{code}
-data SimState
-  =  State {
-       arbobjs  :: [String] -- basically tokens naming themselves
-     , fifoQs    :: NamedObjects (FIFOQ String)
-     , prioQs    :: NamedObjects (PRIOQ String)
-     , clusterQs :: NamedObjects (CLSTRQ String)
-     }
-
-initstate = State [] [] [] []
-
-instance Show SimState where
-  show state = unlines $
-    [ "__________"
-    , "arbitrary: "   ++ sepBy " " (arbobjs state)
-    , "fifo::\n  "    ++ (sepBy "\n  " $ map showFIFOq $ fifoQs state)
-    , "prio::\n  "    ++ (sepBy "\n  " $ map showPrioQ $ prioQs state)
-    , "cluster::\n  " ++ (sepBy "\n  " $ map showClusterQ $ clusterQs state)
-    , "----------"
-    ]
-sepBy sep css = concat $ intersperse sep css
-
-showFIFOq (nm,fifoq) = nm ++ " <" ++ sepBy "," fifoq ++ ">"
-
-showPrioQ (nm,prioq) 
-  = nm ++ " <" ++ sepBy "," (map showPItem prioq) ++ ">"
-showPItem (p,thing) = show p ++ ':':thing
-
-showClusterQ :: NamedObject (CLSTRQ String) -> String
-showClusterQ (nm,clstq) 
-  = nm ++ "::\n    " ++ sepBy "\n    " (map showCLItem clstq)
-showCLItem (cno,prioq) = "["++show cno++"] "++ showPrioQ ("",prioq)
-
-\end{code}
-
-\subsection{Running Simulations}
-
-\subsubsection{Reporting Failure}
+\subsection{Reporting Failure}
 
 \begin{code}
 simFail :: SimState -> String -> IO SimState
@@ -85,7 +30,7 @@ simFail2 :: SimState -> obj -> String -> IO (obj, SimState)
 simFail2 state obj msg = do { putStrLn msg ; return (obj,state) }
 \end{code}
 
-\subsubsection{Interactive Simulation}
+\subsection{Interactive Simulation}
 
 \begin{code}
 interactive = request initstate
@@ -109,7 +54,9 @@ trim = ltrim . reverse . ltrim . reverse
 ltrim = dropWhile isSpace 
 \end{code}
 
-\subsubsection{Batch Simulation}
+\newpage
+
+\subsection{Batch Simulation}
 
 \begin{code}  
 batch sfn = do
@@ -135,7 +82,7 @@ doCommand state cmd = do
   putStrLn ("\n> "++cmd)
   case words cmd of
     []  ->  return state 
-    ("new":what:args)           -> makeNewObject state what args
+    ("new":what:args) -> makeNewObject state what args
     ["fq",qName,objName] -> enQueueStateFIFO state qName objName
     ["fd",qName] -> 
       do  (obj,state') <- deQueueStateFIFO state qName 
@@ -144,7 +91,13 @@ doCommand state cmd = do
     ["pq",qName,objName,prio] -> enQueueStatePRIO state qName objName (rEAD prio)
     ["pd",qName] -> 
       do  ((obj,prio),state') <- deQueueStatePRIO state qName 
-          putStrLn ("dequeued: "++obj++"@"++show prio)
+          putStrLn ("dequeued: "++obj++"!"++show prio)
+          return state'
+    ["cq",qName,objName,prio,cluster] 
+      -> enQueueStateCLSTR state qName objName (rEAD prio) (rEAD cluster)
+    ["cd",qName] -> 
+      do  ((obj,prio,cluster),state') <- deQueueStateCLSTR state qName 
+          putStrLn ("dequeued: "++obj++"!"++show prio++"@"++show cluster)
           return state'
     _ -> simFail state $ unlines
           [ "Unrecognised command '"++cmd++"'"
@@ -154,6 +107,7 @@ doCommand state cmd = do
           , "  fd <qname> - FIFO dequeue"
           , "  pq <qname> <oname> <prio> - PRIO enqueue"
           , "  pd <qname> - PRIO dequeue"
+          , "  cq <qname> <oname> <prio> <cluster> - CLSTR enqueue"
           ]
 
 rEAD :: String -> Int
@@ -161,6 +115,8 @@ rEAD str
  | all isDigit str  =  read str
  | otherwise        =  42
 \end{code}
+
+\newpage 
 
 \subsubsection{Creating New Objects}
 
@@ -219,8 +175,9 @@ makeNewClusterQueues state args
 newClusterQueue name = (name,[])
 \end{code}
 
-\subsubsection{Enqueing Objects}
+\newpage
 
+\subsubsection{Enqueing Objects}
 
 \begin{code}
 enQueueStateFIFO :: SimState -> String -> String -> IO SimState
@@ -246,6 +203,20 @@ enQueueStatePRIO state qName objName prio
   where prioqs = prioQs state
 \end{code}
 
+\begin{code}
+enQueueStateCLSTR :: SimState -> String -> String -> Priority -> Cluster
+                  -> IO SimState
+enQueueStateCLSTR state qName objName prio cluster
+  = case nameLookup clusterqs qName of
+      Nothing  ->  simFail state ("no such CLSTR queue: "++qName)
+      Just clusterq -> 
+        let clusterq' = enqueueCLSTR objName prio cluster clusterq
+            state' =  state{ clusterQs = nameUpdate qName clusterq' clusterqs}
+        in return state'
+  where clusterqs = clusterQs state
+\end{code}
+
+\newpage
 
 \subsubsection{Dequeing Objects}
 
@@ -263,6 +234,7 @@ deQueueStateFIFO state qName
   where fifoqs = fifoQs state
 \end{code}
 
+
 \begin{code}
 deQueueStatePRIO :: SimState -> String -> IO ((String, Priority), SimState)
 deQueueStatePRIO state qName 
@@ -275,4 +247,20 @@ deQueueStatePRIO state qName
                   state' = state{prioQs = nameUpdate qName prioq' prioqs}
               in return ((objName,prio),state')
   where prioqs = prioQs state
+\end{code}
+
+
+\begin{code}
+deQueueStateCLSTR :: SimState -> String 
+                  -> IO ((String, Priority, Cluster), SimState)
+deQueueStateCLSTR state qName 
+  = case nameLookup clusterqs qName of
+      Nothing  ->  simFail2 state ("",0,0) ("no such CLSTR queue: "++qName)
+      Just clusterq -> 
+        if isEmptyCLSTRQ clusterq
+         then simFail2 state ("",0,0) ("CLSTR queue "++qName++" is empty")
+         else let ((objName,prio,cluster),clusterq') = dequeueCLSTR clusterq 
+                  state' = state{clusterQs = nameUpdate qName clusterq' clusterqs}
+              in return ((objName,prio,cluster),state')
+  where clusterqs = clusterQs state
 \end{code}
