@@ -18,31 +18,7 @@ and then invoke actions upon them.
 
 The language is line based, each line starting with a keyword.
 
-\subsection{Objects}
 
-We segregate objects by their type.
-\begin{code}
-data Object
-\end{code}
-\begin{description}
-  \item [Uninterpreted] arbitrary test objects
-\begin{code}
-  = Unint
-\end{code}
-  \item [FIFO]  FIFO queue objects
-\begin{code}
-  | FIFO Object
-\end{code}
-  \item [PRIO]  Priority queue objects
-\begin{code}
-  | PRIO Object
-\end{code}
-  \item [CLSTR] Cluster queue objects
-\begin{code}
-  | ClusterQ Object
-\end{code}
-\end{description}
-The queue objects are themselves parameterised with a content object.
 
 \newpage
 \subsection{Simulation State}
@@ -169,7 +145,7 @@ doCommand state cmd = do
     _ -> simFail state $ unlines
           [ "Unrecognised command '"++cmd++"'"
           , "Commands:"
-          , "  new <type> <names> - create new objects"
+          , "  new <otype> <names> - create new objects"
           , "  enq <qtype> <qname> <oname> - enqueue objects"
           , "  deq <qtype> <qname> - dequeue objects"
           ]
@@ -271,10 +247,10 @@ deQueueStateFIFO state qName
   = case nameLookup fifoqs qName of
       Nothing  ->  simFail2 state "" ("no such FIFO queue: "++qName)
       Just fifo -> 
-        case dequeueFIFO fifo of
-          Nothing -> simFail2 state "" ("FIFO queue "++qName++" is empty")
-          Just (objName,fifo') ->
-            let state' = state{fifoQs = nameUpdate qName fifo' fifoqs}
-             in return (objName,state')
+        if isEmptyFIFOQ fifo
+         then simFail2 state "" ("FIFO queue "++qName++" is empty")
+         else let (objName,fifo') = dequeueFIFO fifo 
+                  state' = state{fifoQs = nameUpdate qName fifo' fifoqs}
+              in return (objName,state')
   where fifoqs = fifoQs state
 \end{code}
