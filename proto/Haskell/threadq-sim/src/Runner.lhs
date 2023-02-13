@@ -19,7 +19,6 @@ and then invoke actions upon them.
 The language is line based, each line starting with a keyword.
 
 
-
 \newpage
 \subsection{Simulation State}
 
@@ -137,18 +136,30 @@ doCommand state cmd = do
   case words cmd of
     []  ->  return state 
     ("new":what:args)           -> makeNewObject state what args
-    ["enq",queue,qName,objName] -> enQueueObject state queue qName objName
-    ["deq",queue,qName] -> 
-      do  (obj,state') <- deQueueObject state queue qName
+    ["fq",qName,objName] -> enQueueStateFIFO state qName objName
+    ["fd",qName] -> 
+      do  (obj,state') <- deQueueStateFIFO state qName 
           putStrLn ("dequeued: "++obj)
+          return state'
+    ["pq",qName,objName,prio] -> enQueueStatePRIO state qName objName (rEAD prio)
+    ["pd",qName] -> 
+      do  ((obj,prio),state') <- deQueueStatePRIO state qName 
+          putStrLn ("dequeued: "++obj++"@"++show prio)
           return state'
     _ -> simFail state $ unlines
           [ "Unrecognised command '"++cmd++"'"
           , "Commands:"
           , "  new <otype> <names> - create new objects"
-          , "  enq <qtype> <qname> <oname> - enqueue objects"
-          , "  deq <qtype> <qname> - dequeue objects"
+          , "  fq <qname> <oname> - FIFO enqueue"
+          , "  fd <qname> - FIFO dequeue"
+          , "  pq <qname> <oname> <prio> - PRIO enqueue"
+          , "  pd <qname> - PRIO dequeue"
           ]
+
+rEAD :: String -> Int
+rEAD str
+ | all isDigit str  =  read str
+ | otherwise        =  42
 \end{code}
 
 \subsubsection{Creating New Objects}
@@ -210,36 +221,33 @@ newClusterQueue name = (name,[])
 
 \subsubsection{Enqueing Objects}
 
-\begin{code}
-enQueueObject :: SimState -> String -> String -> String -> IO SimState
-enQueueObject state queue qName objName
-  | queue == fifoQ  =  enQueueStateFIFO state qName objName
-  | otherwise = simFail state ("unrecognised queue: "++queue)
-
-\end{code}
 
 \begin{code}
 enQueueStateFIFO :: SimState -> String -> String -> IO SimState
 enQueueStateFIFO state qName objName 
   = case nameLookup fifoqs qName of
       Nothing  ->  simFail state ("no such FIFO queue: "++qName)
-      Just fifo -> 
-        let fifo' = enqueueFIFO objName fifo
-            state' =  state{ fifoQs = nameUpdate qName fifo' fifoqs}
+      Just fifoq -> 
+        let fifoq' = enqueueFIFO objName fifoq
+            state' =  state{ fifoQs = nameUpdate qName fifoq' fifoqs}
         in return state'
   where fifoqs = fifoQs state
 \end{code}
 
+\begin{code}
+enQueueStatePRIO :: SimState -> String -> String -> Priority -> IO SimState
+enQueueStatePRIO state qName objName prio
+  = case nameLookup prioqs qName of
+      Nothing  ->  simFail state ("no such PRIO queue: "++qName)
+      Just prioq -> 
+        let prioq' = enqueuePRIO objName prio prioq
+            state' =  state{ prioQs = nameUpdate qName prioq' prioqs}
+        in return state'
+  where prioqs = prioQs state
+\end{code}
+
 
 \subsubsection{Dequeing Objects}
-
-\begin{code}
-deQueueObject :: SimState -> String -> String -> IO (String, SimState)
-deQueueObject state queue qName
-  | queue == fifoQ  =  deQueueStateFIFO state qName
-  | otherwise = simFail2 state "" ("unrecognised queue: "++queue)
-
-\end{code}
 
 \begin{code}
 deQueueStateFIFO :: SimState -> String -> IO (String, SimState)
@@ -253,4 +261,18 @@ deQueueStateFIFO state qName
                   state' = state{fifoQs = nameUpdate qName fifo' fifoqs}
               in return (objName,state')
   where fifoqs = fifoQs state
+\end{code}
+
+\begin{code}
+deQueueStatePRIO :: SimState -> String -> IO ((String, Priority), SimState)
+deQueueStatePRIO state qName 
+  = case nameLookup prioqs qName of
+      Nothing  ->  simFail2 state ("",0) ("no such PRIO queue: "++qName)
+      Just prioq -> 
+        if isEmptyPRIOQ prioq
+         then simFail2 state ("",0) ("PRIO queue "++qName++" is empty")
+         else let ((objName,prio),prioq') = dequeuePRIO prioq 
+                  state' = state{prioQs = nameUpdate qName prioq' prioqs}
+              in return ((objName,prio),state')
+  where prioqs = prioQs state
 \end{code}

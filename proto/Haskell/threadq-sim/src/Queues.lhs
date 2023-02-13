@@ -77,9 +77,9 @@ enqueuePRIO thing p prioq@(first@(q,_):restq)
   -- p == q, insert as per FIFO, after those of same priority (c-user 3.5)
   | otherwise  =  first     : enqueuePRIO thing p restq
 
-dequeuePRIO :: PRIOQ obj -> (obj,Priority,PRIOQ obj)
+dequeuePRIO :: PRIOQ obj -> ((obj,Priority),PRIOQ obj)
 dequeuePRIO [] = error "empty PRIO queue"
-dequeuePRIO ((p,thing):restq) = (thing,p,restq)
+dequeuePRIO ((p,thing):restq) = ((thing,p),restq)
 \end{code}
 
 \subsection{Clustered Scheduling Queues (SMP)}
@@ -106,11 +106,11 @@ enqueueCLSTR thing p c (first@(c',prioq):rest)
   | c == c'    =  (c',enqueuePRIO thing p prioq):rest
   | otherwise  =  first : enqueueCLSTR thing p c rest
 
-dequeueCLSTR :: CLSTRQ obj -> (obj,Priority,Cluster,CLSTRQ obj)
+dequeueCLSTR :: CLSTRQ obj -> ((obj,Priority,Cluster),CLSTRQ obj)
 dequeueCLSTR [] = error "empty CLSTR queue"
 dequeueCLSTR ((c,prioq):restq)
-  = let (thing,p,prioq') =  dequeuePRIO prioq
+  = let ((thing,p),prioq') =  dequeuePRIO prioq
     in if isEmptyPRIOQ prioq' -- delete empty queues (???)
-         then (thing,p,c,restq)
-         else (thing,p,c,restq ++ [(c,prioq')])
+         then ((thing,p,c),restq)
+         else ((thing,p,c),restq ++ [(c,prioq')])
 \end{code}
