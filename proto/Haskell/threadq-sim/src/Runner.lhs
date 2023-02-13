@@ -106,6 +106,8 @@ showCLItem (cno,prioq) = "["++show cno++"] "++ showPrioQ ("",prioq)
 \begin{code}
 simFail :: SimState -> String -> IO SimState
 simFail state msg = do { putStrLn msg ; return state }
+simFail2 :: SimState -> obj -> String -> IO (obj, SimState)
+simFail2 state obj msg = do { putStrLn msg ; return (obj,state) }
 \end{code}
 
 \subsubsection{Interactive Simulation}
@@ -158,13 +160,18 @@ doCommand state cmd = do
   putStrLn ("\n> "++cmd)
   case words cmd of
     []  ->  return state 
-    ("new":what:args) -> makeNewObject state what args
+    ("new":what:args)           -> makeNewObject state what args
     ["enq",queue,qName,objName] -> enQueueObject state queue qName objName
+    ["deq",queue,qName] -> 
+      do  (obj,state') <- deQueueObject state queue qName
+          putStrLn ("dequeued: "++obj)
+          return state'
     _ -> simFail state $ unlines
           [ "Unrecognised command '"++cmd++"'"
           , "Commands:"
           , "  new <type> <names> - create new objects"
           , "  enq <qtype> <qname> <oname> - enqueue objects"
+          , "  deq <qtype> <qname> - dequeue objects"
           ]
 \end{code}
 
@@ -244,5 +251,30 @@ enQueueStateFIFO state qName objName
         let fifo' = enqueueFIFO objName fifo
             state' =  state{ fifoQs = nameUpdate qName fifo' fifoqs}
         in return state'
+  where fifoqs = fifoQs state
+\end{code}
+
+
+\subsubsection{Dequeing Objects}
+
+\begin{code}
+deQueueObject :: SimState -> String -> String -> IO (String, SimState)
+deQueueObject state queue qName
+  | queue == fifoQ  =  deQueueStateFIFO state qName
+  | otherwise = simFail2 state "" ("unrecognised queue: "++queue)
+
+\end{code}
+
+\begin{code}
+deQueueStateFIFO :: SimState -> String -> IO (String, SimState)
+deQueueStateFIFO state qName 
+  = case nameLookup fifoqs qName of
+      Nothing  ->  simFail2 state "" ("no such FIFO queue: "++qName)
+      Just fifo -> 
+        case dequeueFIFO fifo of
+          Nothing -> simFail2 state "" ("FIFO queue "++qName++" is empty")
+          Just (objName,fifo') ->
+            let state' = state{fifoQs = nameUpdate qName fifo' fifoqs}
+             in return (objName,state')
   where fifoqs = fifoQs state
 \end{code}
