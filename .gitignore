@@ -15,3 +15,6 @@ formal/promela/src/testgen_yaml.py
 formal/promela/src/src/__pycache__
 RTEMS-SMP-Formal.code-workspace
 refine-config.yml
+proto/Haskell/rtems-spec/MAIN.log
+proto/Haskell/rtems-spec/MAIN.pdf
+proto/Haskell/rtems-spec/rtems-spec.cabal
