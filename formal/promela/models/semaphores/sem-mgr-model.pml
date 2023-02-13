@@ -209,7 +209,6 @@ inline sema_create(name,count,scope,rtems_priority,sem_type,locking,task_priorit
         ::  id == 0 -> rc = RC_InvAddr;
         ::  name <= 0 -> rc = RC_InvName;
         ::  locking != NO_LOCKING -> rc = RC_NotDefined;
-        ::  count <=0 -> rc = RC_InvNum;
         ::  else ->
             do
             ::  new_sem_id < MAX_MODEL_SEMAS ->
@@ -219,6 +218,7 @@ inline sema_create(name,count,scope,rtems_priority,sem_type,locking,task_priorit
                     ::  sem_type == COUNTING_S -> //sem_type
                         if 
                         ::  task_priority != 0 -> rc = RC_InvPrio;
+                        ::  count == 0 -> rc = RC_InvNum;
                         ::  else -> skip;
                         fi
 
@@ -428,8 +428,8 @@ inline chooseScenario() {
         printf( "@@@ %d LOG sub-senario bad create, invalid name\n", _pid); //RTEMS_INVALID_NAME
     ::  task_in[TASK1_ID].idNull = true;
         printf( "@@@ %d LOG sub-senario bad create, passed id null\n", _pid); //RTEMS_INVALID_ADDRESS
-    ::  task_in[TASK1_ID].Count = -1;
-        printf( "@@@ %d LOG sub-senario bad create, passed invalid initial count\n", _pid); //RTEMS_INVALID_NUMBER
+    ::  task_in[TASK1_ID].Count = 0;
+    	printf( "@@@ %d LOG sub-senario bad create, passed invalid initial count\n", _pid); //RTEMS_INVALID_NUMBER
     ::  task_in[TASK1_ID].LockingProtocol = INHERIT_LOCKING;
         printf( "@@@ %d LOG sub-senario bad create, passed invalid locking protocol\n", _pid); //RTEMS_INVALID_PRIORITY
     ::  task_in[TASK1_ID].doDelete = true;
