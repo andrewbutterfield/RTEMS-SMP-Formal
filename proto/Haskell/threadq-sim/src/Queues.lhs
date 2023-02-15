@@ -110,7 +110,5 @@ dequeueCLSTR :: CLSTRQ obj -> ((obj,Priority,Cluster),CLSTRQ obj)
 dequeueCLSTR [] = error "empty CLSTR queue"
 dequeueCLSTR ((c,prioq):restq)
   = let ((thing,p),prioq') =  dequeuePRIO prioq
-    in if isEmptyPRIOQ prioq' -- delete empty queues (???)
-         then ((thing,p,c),restq)
-         else ((thing,p,c),restq ++ [(c,prioq')])
+    in ((thing,p,c),restq ++ [(c,prioq')])
 \end{code}
