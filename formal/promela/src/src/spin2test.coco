@@ -67,7 +67,7 @@ def main(testNumber, dir0, fileRoot, preFile, postFile, runFile, refFile, testFi
                 annote_lines = annote_lines + [line[4:][:-1]]
         refine.logger.debug(debug_lines)
 
-    annote_bundle = fmap(words, annote_lines)
+    annote_bundle = map(words, annote_lines)
 
     refine.logger.debug("Annotation Bundle:\n {}".format(annote_bundle))
 
