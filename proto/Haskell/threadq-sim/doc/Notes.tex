@@ -1,6 +1,8 @@
 \section{Notes}
 
 \begin{itemize}
+    \item  Read Thread Queues \cite[\S3.5]{RTEMS:CUSER}
+      (\url{https://docs.rtems.org/branches/master/c-user/key_concepts.html#thread-queues})
     \item 
       ``priority-based, preemptive algorithm augmented to provide round-robin
         characteristics within individual priority groups. The goal \dots is to
@@ -49,6 +51,13 @@
        The processors managed by a scheduler instance are allocated 
        to the highest priority tasks allowed to run.``
       \cite[\S5.4]{RTEMS:CUSER}
+    \item 
+      The Earliest Deadline First SMP Scheduler is the default in SMP configurations
+      if more than one processor is configured
+      \cite[\S5.4.1]{RTEMS:CUSER}
+      (\url{https://docs.rtems.org/branches/master/c-user/scheduling-concepts/smp-schedulers.html})
+    \item TODO: SMP
+      (\url{https://docs.rtems.org/branches/master/c-user/symmetric_multiprocessing_services.html})
 \end{itemize}
 
 
