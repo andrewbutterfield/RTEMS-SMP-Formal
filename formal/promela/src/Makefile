@@ -11,7 +11,7 @@ PY_GEN_FILES = $(patsubst %.coco,%.py,$(COCO_SRC_FILES))
 all: check format analyse coverage-report
 
 %.py: %.coco | check-env
-	coconut --target 3 $< $@
+	coconut --target 310 --recursion-limit 3000 $< $@
 
 py: $(PY_GEN_FILES) | check-env
 
@@ -47,7 +47,13 @@ coverage-report: | check-env
 
 # sudo apt-get install python3-venv python3-dev
 env:
-	python3 -m venv env
+	if python3.10 -m venv env; then \
+	    :; \
+	else \
+	    echo failed to create venv; \
+	    echo Ensure python3.10-venv is installed; \
+	    exit 1; \
+	fi
 	. env/bin/activate && pip install --upgrade pip && pip install -r requirements.txt
 
 clean:

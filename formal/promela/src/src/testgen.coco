@@ -37,7 +37,6 @@
 from src.library import *
 from src import refine_command
 from src import syntax_ml
-from src.syntax_ml import token_ident, token_antiquotation
 from src import syntax_pml
 from src.syntax_pml import arg_pml, arg_pml_file, arg_annotation, arg_annotation_file, src_directive, binding_refine_uniform, find_annot, find_annot0, find_annot_bool, find_annot_list, find_annot_list1, find_annot_list2
 from src import syntax_yaml
@@ -47,15 +46,12 @@ from src.modules.promela_yacc.promela import yacc
 
 #
 
-import copy
 import errno
 from itertools import groupby
 import os
 import random
-import re
 import shutil
 import subprocess
-import sys
 import tempfile
 import traceback
 
@@ -81,7 +77,7 @@ def tl (l):
         return []
 
 def get_forest_ass (node):
-    if type node is ast.Assert:
+    if type(node) == ast.Assert:
         return [ (node, ast.Assert (ast.Unary ('!', node.expr), pos = node.pos)) ]
     else:
         def get_forest_ass00 (cons_pair, dest_pair, node, cons_node):
@@ -100,15 +96,15 @@ def get_forest_ass (node):
         def get_forest_ass0_proc_inl (cons_node):
             return list (map ((msg_t_ass -> ((node.name, msg_t_ass[0]), msg_t_ass[1])), get_forest_ass0 ([node.body], cons_node <.. (node -> node[0]))))
 
-        if type node is ast.Sequence:
+        if type(node) == ast.Sequence:
             return get_forest_ass0 (node, (node0 -> ast.Sequence (node0, context = node.context, is_option = node.is_option)))
-        elif type node is ast.Options:
+        elif type(node) == ast.Options:
             return get_forest_ass0 (node.options, (node0 -> ast.Options (node.type, node0)))
-        elif type node is ast.Program:
+        elif type(node) == ast.Program:
             return get_forest_ass00 ((t_t -> t_t), (t_t -> t_t), node, ast.Program)
         elif isinstance (node, ast.Proctype) and not node.disable_negation:
-            return get_forest_ass0_proc_inl ((node0 -> ast.Proctype (node.name, node0, node.args, node.active, node.d_proc, node.priority, node.provided)) if type node is ast.Proctype else (node0 -> ast.Init (node.name, node0, node.args, node.active, node.d_proc, node.priority, node.provided)))
-        elif type node is ast.InlineDef and not node.disable_negation:
+            return get_forest_ass0_proc_inl ((node0 -> ast.Proctype (node.name, node0, node.args, node.active, node.d_proc, node.priority, node.provided)) if type(node) == ast.Proctype else (node0 -> ast.Init (node.name, node0, node.args, node.active, node.d_proc, node.priority, node.provided)))
+        elif type(node) == ast.InlineDef and not node.disable_negation:
             return get_forest_ass0_proc_inl (node0 -> ast.InlineDef (node.name, node.decl, node0))
         else:
             return []
@@ -122,10 +118,10 @@ def fold_prog (args):
     for arg_ty, arg in args:
         parsed = []
         try:
-            case arg_ty:
-                match arg_pml ():
+            match arg_ty:
+                case arg_pml ():
                     parsed = promela_parser.parse (arg, None)
-                match arg_pml_file ():
+                case arg_pml_file ():
                     parsed = promela_parser.parse (None, arg)
         except Exception:
             input_continue_err (traceback.format_exc ())
@@ -168,7 +164,7 @@ def subprocess_exec (print_stdout, print_stderr, exec_name, exec_args):
         else:
             input_continue_err stderr
             returncode = 0
-    
+
     print ('+', ' '.join (exec_cmd))
     p_stdout = print_stdout and stdout
     p_stderr = print_stderr and stderr
@@ -178,7 +174,7 @@ def subprocess_exec (print_stdout, print_stderr, exec_name, exec_args):
         print ('+')
     if p_stderr:
         print (stderr.strip ())
-    
+
     if returncode != 0:
         input_continue_warn (f'return code = {returncode}')
     return stdout
@@ -240,20 +236,20 @@ class read_eval_print:
         self.parse_commands = syntax_yaml.parse_commands if input_output_yaml else syntax_ml.parse_commands
         self.parse_directive = syntax_yaml.parse_directive if input_output_yaml else syntax_ml.parse_directive
         self.unparse_annotation_cmd = syntax_yaml.unparse_annotation_cmd if input_output_yaml else syntax_ml.unparse_annotation_cmd
-        
+
         options_pml = ['-p', '--promela']
         options0 = ['-a', '--annotation'] + options_pml
         options_annotation_file = ['-af', '--annotation_file']
         options = options_annotation_file + options0
         def map_arg (l):
-            case l:
-                match [option, cts] + xs if option in options0 or option in options_annotation_file:
+            match l:
+                case [option, cts] + xs if option in options0 or option in options_annotation_file:
                     yield (  arg_pml () if option in options_pml else
                              arg_annotation () if option in options0 else
                              arg_annotation_file ()
                            , cts)
                     yield from map_arg xs
-                match [fic] + xs:
+                case [fic] + xs:
                     if fic.find ('-') == 0:
                         if fic in options:
                             input_continue (f'Missing parameter: {fic} {xs}')
@@ -284,14 +280,14 @@ class read_eval_print:
         if proc_args:
             printf.args = ast.Sequence (map ((x -> (map ((index -> ast.VarRef (x[1], index = index)), range (x[0][1])) if x[0][1] > 1 else [ast.VarRef (x[1])]) if x[0][0] else [ast.VarRef (print_default[1])]), proc_args) |> flatten)
         atomic = 'atomic'
-        
+
         def insert_printf_node0 ():
             sequence = ast.Sequence ([printf] + node.body if print_first else node.body + [printf])
             if not no_atomic:
                 sequence.context = atomic
             node.body = sequence
         match [seq] in node.body:
-            if type seq is ast.Sequence:
+            if type(seq) == ast.Sequence:
                 if not no_atomic and seq.context != atomic:
                     seq.context = atomic
                 if print_first:
@@ -316,9 +312,9 @@ class read_eval_print:
                       os.path.dirname (os.path.abspath arg_cts) if arg_ty == arg_pml_file () or arg_ty == arg_annotation_file () else self.cwd)
                   for (pos_file, (arg_ty, arg_cts)) in mapi (args -> args, sys_args) ]
         dict_top_elem = {}
-        
+
         for (node_file, (node, node_line)) in programs:
-            if isinstance (node, ast.Proctype) or type node is ast.InlineDef or type node is ast.LTL:
+            if isinstance (node, ast.Proctype) or type(node) == ast.InlineDef or type(node) == ast.LTL:
                 dict_top_elem[node.name] = (node_file, node_line)
 
         def check_binding (binding):
@@ -333,7 +329,7 @@ class read_eval_print:
         check_print_first = check_binding binding_print_first
         binding_disable_negation = 'disable_negation'
         check_disable_negation = check_binding binding_disable_negation
-        
+
         l_refine_uniform_strip = find_annot_bool ((annots, dict_top_elem), 'refine_uniform_strip')
         def strip (s):
             if l_refine_uniform_strip:
@@ -377,8 +373,8 @@ class read_eval_print:
         procs_args = {}
         for (node_file, (node, node_line)) in programs:
             type_inst_proctype = isinstance (node, ast.Proctype)
-            type_is_ltl = type node is ast.LTL
-            if type_inst_proctype or type node is ast.InlineDef or type_is_ltl:
+            type_is_ltl = type(node) == ast.LTL
+            if type_inst_proctype or type(node) == ast.InlineDef or type_is_ltl:
                 node_pos = (node_file, node_line)
 
                 if check_no_printf node_pos:
@@ -393,7 +389,7 @@ class read_eval_print:
                                 input_continue (f'Duplicated parameters: {name}')
                             node_args[name] = ty_arit
                             return node_args
-                            
+
                         if type_inst_proctype:
                             for arg in node.args if node.args else []:
                                 node_args = add_dic (node_args, arg[0].name, (arg[0].type, None))
@@ -447,7 +443,7 @@ class read_eval_print:
                 else:
                     input_continue (f'Empty command: {binding}')
         
-        promelas_no_ltl_str, promelas_no_ltl, promelas_ltl = partition_pml_ast ((promela -> type promela is ast.LTL), promelas)
+        promelas_no_ltl_str, promelas_no_ltl, promelas_ltl = partition_pml_ast ((promela -> type(promela) == ast.LTL), promelas)
         l_refine_uniform_log = find_annot_bool (annots, 'refine_uniform_log')
         l_enclose = find_annot_list1 (annots, 'enclose') |> map $ (args -> (args[0], args[1])) |> list
         l_enclose_uniform = find_annot_list1 (annots, 'enclose_uniform') |> map $ (args -> (args[0], args[1])) |> list

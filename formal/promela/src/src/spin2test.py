@@ -34,13 +34,14 @@ import yaml
 
 #
 
-refine.logger.setLevel (logging.DEBUG)
-refine.logger.addHandler (logging.StreamHandler (sys.stderr))
+refine.logger.setLevel(logging.DEBUG)
+refine.logger.addHandler(logging.StreamHandler (sys.stderr))
 
-def words(string): return string.rsplit(' ')
+def words(string):
+    return string.rsplit(' ')
 
 def main(testNumber, dir0, fileRoot, preFile, postFile, runFile, refFile, testFile):
-    (refine.logger.debug)("\n\tSpin2Test (Coconut/Python)\n\n")
+    refine.logger.debug("\n\tSpin2Test (Coconut/Python)\n\n")
     refine.logger.debug("Test Number {}\n".format(testNumber))
 
     if int(testNumber) < 0:
@@ -66,7 +67,7 @@ def main(testNumber, dir0, fileRoot, preFile, postFile, runFile, refFile, testFi
                 annote_lines = annote_lines + [line[4:][:-1]]
         refine.logger.debug(debug_lines)
 
-    annote_bundle = fmap(words, annote_lines)
+    annote_bundle = map(words, annote_lines)
 
     refine.logger.debug("Annotation Bundle:\n {}".format(annote_bundle))
 

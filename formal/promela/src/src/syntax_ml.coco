@@ -39,7 +39,7 @@ from src import syntax_pml
 
 #
 
-from parsec import generate, many, many1, optional, regex, re, string # explicit listing for mypy
+from parsec import generate, many, optional, regex, re, string # explicit listing for mypy
 from parsec import * # mainly for importing operators
 
 ##
@@ -58,7 +58,7 @@ spaces = regex (r'\s*', re.MULTILINE)
 spaces1 = regex (r'\s+', re.MULTILINE)
 ident00 = regex (r"[._'a-zA-Z0-9]+")
 ident0 = regex (r"[\[\]._'a-zA-Z0-9]+")
-ident = regex (r"[_'a-zA-Z][_'a-zA-Z0-9]*")
+\ident = regex (r"[_'a-zA-Z][_'a-zA-Z0-9]*")
 filename = regex (r"[./_'a-zA-Z0-9]+")
 
 #
@@ -107,7 +107,7 @@ spaces_cmt = many (spaces1 ^ enclose_nested0 ('(*', '*)'))
 def enclose_nested (delim_beg, delim_end):
     return spaces_cmt >> enclose_nested0 (delim_beg, delim_end)
 
-def quoted (scan):
+def quoted (\scan):
     @generate
     def quoted0 ():
         delim = r'"'
