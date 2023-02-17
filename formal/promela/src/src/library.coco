@@ -76,7 +76,7 @@ def mapi (f, l):
         yield f ((n, x))
         n += 1
 
-def flatten (l): return (x for xs in l for x in xs)
+def \flatten (l): return (x for xs in l for x in xs)
 
 def update_dic (dic, pos, cmds):
     dic[pos] = dic[pos] + cmds if pos in dic else cmds
