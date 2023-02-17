@@ -40,9 +40,9 @@ from src.modules.comment_filter.comment_filter import rfc
 
 #
 
-from itertools import chain, groupby, islice, zip_longest
+from itertools import chain, groupby, islice, \zip_longest
 import os
-from parsec import generate, many, many1, optional, regex, re, string # explicit listing for mypy
+from parsec import generate, optional, regex, re, string # explicit listing for mypy
 from parsec import * # mainly for importing operators
 
 #
@@ -231,10 +231,10 @@ def parse_comment0 (lines):
             yield [line_head] + [flat_list xs + flat_list (lines0.__next__ ()) for xs in lines0]
 
 def parse_comment (lines):
-    case lines:
-        match (arg_annotation (), annot):
+    match lines:
+        case (arg_annotation (), annot):
             yield (src_annotation (), annot)
-        match (arg_annotation_file (), annot):
+        case (arg_annotation_file (), annot):
             yield (src_annotation (), fileinput_input0 annot)
     else:
         for xs in flatten (parse_comment0 lines):
@@ -244,12 +244,12 @@ def parse_comment (lines):
                 yield (src_comment (), (xs[1], xs[2:-1] if xs[2][1] else [], xs[-1]))
 
 def parse_comment_annot (cmt):
-    case cmt:
-        match (src_comment (), ((pos_line, _), cmt, _)):
+    match cmt:
+        case (src_comment (), ((pos_line, _), cmt, _)):
             cmt0 = map ((x -> x[1]), cmt) |> reduce $ (+) if cmt else ''
             if cmt0 and cmt0.startswith delim_annot:
                 return (pos_line, cmt0.split (delim_annot, 1) [1])
-        match (src_annotation (), cmt0):
+        case (src_annotation (), cmt0):
             return (1, cmt0)
     return None
 
@@ -283,7 +283,7 @@ def make_annotations (cmds_generic0, cmds0, pos_file, pos_line, pos_dir):
 #
 
 spaces = regex (r'\s*', re.MULTILINE)
-ident = regex (r"[_'a-zA-Z][_'a-zA-Z0-9]*")
+\ident = regex (r"[_'a-zA-Z][_'a-zA-Z0-9]*")
 
 @generate
 def typ ():
@@ -330,8 +330,8 @@ unparse_annotation_cmd = toks -> delim_comment.line_comment[0] + delim_annot + '
 def unparse_source_directive (unparse_directive, lines):
     lines_last = []
     for line in lines:
-        case line:
-            match src_directive (cvar, _, pvar):
+        match line:
+            case src_directive (cvar, _, pvar):
                 lines0 = unparse_directive ((cvar, pvar))
                 if lines0[0]:
                     for line0 in lines0[0]:
@@ -339,7 +339,7 @@ def unparse_source_directive (unparse_directive, lines):
                 else:
                     input_continue ('Generating an empty line')
                 lines_last = lines_last + lines0[1]
-            match src_code (line):
+            case src_code (line):
                 yield line
     for line in lines_last:
         yield line
@@ -370,8 +370,8 @@ def map_source0 (parse_comment, map_annotation, parse_commands, only_content, su
                 yield from map_comment ()
     inline = cmt -> '\n' not in cmt
     for src in parse_comment lines:
-        case src:
-            match (src_comment (), (cmt_begin, cmt, cmt_end)):
+        match src:
+            case (src_comment (), (cmt_begin, cmt, cmt_end)):
                 def map_comment ():
                     for _, toks in chain ((cmt_begin,), cmt, (cmt_end,)):
                         yield toks
@@ -382,11 +382,11 @@ def map_source0 (parse_comment, map_annotation, parse_commands, only_content, su
                                                    if only_content else
                                                    (src_comment (), (cmt_begin, cmt_end))
                                                  , src )
-            match (src_annotation (), cmt):
+            case (src_annotation (), cmt):
                 def map_comment ():
                     yield cmt
                 yield from map_source_annotation ('annotation', (_ -> cmt), map_comment, (src_annotation (), inline cmt), src)
-            match (src_code ((_, code))):
+            case (src_code ((_, code))):
                 if only_content and len code > 1 and code[-1] == '\n':
                     yield from map_annotation0 ('code', _ -> code[:-1])
                 else:
