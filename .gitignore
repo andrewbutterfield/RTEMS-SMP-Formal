@@ -1,7 +1,5 @@
 formal/promela/src/env
 formal/promela/src/src/library.py
-formal/promela/src/src/refine_command.py
-formal/promela/src/src/spin2test.py
 formal/promela/src/src/syntax_ml.py
 formal/promela/src/src/syntax_pml.py
 formal/promela/src/src/syntax_yaml.py
