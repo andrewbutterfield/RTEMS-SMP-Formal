@@ -161,6 +161,22 @@ def generate_test_files(model, testgen, refine_config):
                            f"{test_file} {i}",
                            check=True, shell=True)
 
+    generate_testcase_file(model, refine_config, no_of_trails)
+
+
+def generate_testcase_file(model, refine_config, no_of_trails):
+    file_name = f"tc-{model}.c"
+    with open(file_name, "w") as f:
+        preamble = Path(refine_config["testcase_preamble"]).read_text()
+        f.write(preamble)
+        run = Path(refine_config["testcase_runfile"]).read_text()
+        for i in range(no_of_trails):
+            f.write(run.format(i))
+
+        postamble = Path(refine_config["testcase_postamble"]).read_text()
+        f.write(postamble)
+
+
 
 def copy(model, codedir, rtems, modfile, testsuite_name):
     """Copies C testfiles to test directory and updates the model file """
