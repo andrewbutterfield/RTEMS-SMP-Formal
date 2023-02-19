@@ -233,6 +233,7 @@ def get_generated_files(model, testsuite, test_extenstion):
     trails = glob.glob(f"{model}*.trail")
     files = trails
     files += glob.glob(f"{model}*.spn")
+    files += glob.glob(f"tc-{model}*.c")
     if len(trails) == 1:
         files += glob.glob(f"tr-{model}-0{test_extenstion}")
     else:
