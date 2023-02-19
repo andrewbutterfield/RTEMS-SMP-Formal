@@ -34,4 +34,7 @@ testfiletype: .c #tr-<model><testfiletype>
 runfile: -run.h #<model><runfile>
 preamble: -pre.h #<model><preamble>
 postamble: -post.h #<model><postamble>
+testcase_runfile: -run.h #tc-<model><runfile>
+testcase_preamble: -pre.h #tc-<model><preamble>
+testcase_postamble: -post.h #tc-<model><postamble>
 refinefile: -rfn.yml #<model><refinefile>
