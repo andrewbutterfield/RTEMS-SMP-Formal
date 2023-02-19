@@ -203,6 +203,28 @@ T_TEST_CASE( RtemsModelEventsMgr8 )
   );
 }
 
+T_TEST_CASE( RtemsModelEventsMgr9 )
+{
+  RtemsModelEventsMgr_Run9(
+    EventSend,
+    EventReceive,
+    GetPendingEvents,
+    THREAD_WAIT_CLASS_EVENT,
+    STATES_WAITING_FOR_EVENT
+  );
+}
+
+T_TEST_CASE( RtemsModelEventsMgr10 )
+{
+  RtemsModelEventsMgr_Run10(
+    EventSend,
+    EventReceive,
+    GetPendingEvents,
+    THREAD_WAIT_CLASS_EVENT,
+    STATES_WAITING_FOR_EVENT
+  );
+}
+
 /** @} */
 
 /**
@@ -347,6 +369,28 @@ T_TEST_CASE( RtemsModelSystemEventsMgr7 )
 T_TEST_CASE( RtemsModelSystemEventsMgr8 )
 {
   RtemsModelEventsMgr_Run8(
+    EventSystemSend,
+    EventSystemReceive,
+    GetPendingSystemEvents,
+    THREAD_WAIT_CLASS_SYSTEM_EVENT,
+    STATES_WAITING_FOR_SYSTEM_EVENT
+  );
+}
+
+T_TEST_CASE( RtemsModelSystemEventsMgr9 )
+{
+  RtemsModelEventsMgr_Run9(
+    EventSystemSend,
+    EventSystemReceive,
+    GetPendingSystemEvents,
+    THREAD_WAIT_CLASS_SYSTEM_EVENT,
+    STATES_WAITING_FOR_SYSTEM_EVENT
+  );
+}
+
+T_TEST_CASE( RtemsModelSystemEventsMgr10 )
+{
+  RtemsModelEventsMgr_Run10(
     EventSystemSend,
     EventSystemReceive,
     GetPendingSystemEvents,
