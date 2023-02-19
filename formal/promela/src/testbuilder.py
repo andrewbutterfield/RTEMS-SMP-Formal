@@ -165,16 +165,27 @@ def generate_test_files(model, testgen, refine_config):
 
 
 def generate_testcase_file(model, refine_config, no_of_trails):
-    file_name = f"tc-{model}.c"
-    with open(file_name, "w") as f:
-        preamble = Path(refine_config["testcase_preamble"]).read_text()
-        f.write(preamble)
-        run = Path(refine_config["testcase_runfile"]).read_text()
-        for i in range(no_of_trails):
-            f.write(run.format(i))
+    missing_files = list()
+    for key in ["testcase_preamble", "testcase_runfile", "testcase_postamble"]:
+        if not Path(refine_config[key]).exists():
+            missing_files.append(refine_config[key])
 
-        postamble = Path(refine_config["testcase_postamble"]).read_text()
-        f.write(postamble)
+    if not missing_files:
+        file_name = f"tc-{model}.c"
+        with open(file_name, "w") as f:
+            preamble = Path(refine_config["testcase_preamble"]).read_text()
+            f.write(preamble)
+            run = Path(refine_config["testcase_runfile"]).read_text()
+            for i in range(no_of_trails):
+                f.write(run.format(i))
+
+            postamble = Path(refine_config["testcase_postamble"]).read_text()
+            f.write(postamble)
+    else:
+        for file in missing_files:
+            print(f"File not found: {file}")
+        print(f"tc-{model}.c will not be generated")
+
 
 
 
