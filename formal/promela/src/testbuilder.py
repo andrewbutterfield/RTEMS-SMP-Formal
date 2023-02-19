@@ -269,7 +269,8 @@ def get_refine_config(source_dir, model):
                     refine_config[key] = val
     missing_keys = {
                        "preamble", "postamble", "refinefile", "testfiletype",
-                       "runfile"
+                       "runfile", "testcase_preamble", "testcase_postamble",
+                       "testcase_runfile"
                     } - refine_config.keys()
     if missing_keys:
         print("refine-config.yml configuration is incomplete")
@@ -279,6 +280,8 @@ def get_refine_config(source_dir, model):
         sys.exit(1)
     for key in ["preamble", "postamble", "refinefile", "runfile"]:
         refine_config[key] = f"{model}{refine_config[key]}"
+    for key in ["testcase_preamble", "testcase_postamble", "testcase_runfile"]:
+        refine_config[key] = f"tc-{model}{refine_config[key]}"
     return refine_config
 
 
