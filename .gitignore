@@ -23,3 +23,7 @@ proto/Haskell/threadq-sim/MAIN.out
 proto/Haskell/threadq-sim/MAIN.pdf
 proto/Haskell/threadq-sim/MAIN.synctex.gz
 proto/Haskell/threadq-sim/MAIN.toc
+refine-config.yml
+proto/Haskell/rtems-spec/MAIN.log
+proto/Haskell/rtems-spec/MAIN.pdf
+proto/Haskell/rtems-spec/rtems-spec.cabal

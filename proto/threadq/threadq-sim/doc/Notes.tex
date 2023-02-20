@@ -1,0 +1,64 @@
+\section{Notes}
+
+\begin{itemize}
+    \item  Read Thread Queues \cite[\S3.5]{RTEMS:CUSER}
+      (\url{https://docs.rtems.org/branches/master/c-user/key_concepts.html#thread-queues})
+    \item 
+      ``priority-based, preemptive algorithm augmented to provide round-robin
+        characteristics within individual priority groups. The goal \dots is to
+        guarantee that the task which is executing on the processor at any point
+        in time is the one with the highest priority among all tasks in the
+        ready state.''
+        \cite[\S5.2.2]{RTEMS:CUSER}
+    \item 
+      ``Another mechanism is to maintain a list of FIFOs per priority. 
+        When a task is readied, 
+        it is placed on the rear of the FIFO for its priority.
+        This method is often used with a bitmap to assist in
+        locating which FIFOs have ready tasks on them. 
+        This data structure has $O(1)$ insert, extract and 
+        find highest ready run-time complexities.''
+        \cite[\S5.2.2]{RTEMS:CUSER}
+    \item 
+      ``RTEMS provides four mechanisms which allow the user to alter 
+        the task scheduling decisions:
+        \begin{itemize}
+            \item user-selectable task priority level
+            \item task preemption control
+            \item task timeslicing control
+            \item manual round-robin selection
+    \end{itemize}''
+      \cite[\S5.2.3]{RTEMS:CUSER}
+    \item 
+      ``The evaluation order for scheduling characteristics is always priority,
+        preemption mode, and timeslicing. 
+        When reading the descriptions of timeslicing and manual round-robin
+        it is important to keep in mind that preemption (if enabled)
+        of a task by higher priority tasks will occur as required, 
+        overriding the other factors presented in the description.''
+        \cite[\S5.2.3]{RTEMS:CUSER}
+    \item 
+      ``Note that the preemption setting has no effect on the manner
+        in which a task is scheduled. 
+        It only applies once a task has control of the processor.''
+        \cite[\S5.2.3.2]{RTEMS:CUSER}
+    \item
+      Task State Transitions \cite[\S5.2.5]{RTEMS:CUSER}
+      \\
+      \includegraphics[scale=0.3]{images/states.png}
+    \item
+      ``All SMP schedulers included in RTEMS are priority based. 
+       The processors managed by a scheduler instance are allocated 
+       to the highest priority tasks allowed to run.``
+      \cite[\S5.4]{RTEMS:CUSER}
+    \item 
+      The Earliest Deadline First SMP Scheduler is the default in SMP configurations
+      if more than one processor is configured
+      \cite[\S5.4.1]{RTEMS:CUSER}
+      (\url{https://docs.rtems.org/branches/master/c-user/scheduling-concepts/smp-schedulers.html})
+    \item TODO: SMP
+      (\url{https://docs.rtems.org/branches/master/c-user/symmetric_multiprocessing_services.html})
+\end{itemize}
+
+
+

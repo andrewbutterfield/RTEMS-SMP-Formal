@@ -29,7 +29,6 @@ the Promela "model-name", and the path to the model directory.
 * Chains API:  "chains-api-model" `formal/promela/models/chains`
 * Event Manager "event-mgr-model" `formal/promela/models/events`
 * Message Manager "msg-mgr-model" `formal/promela/models/messages`
-* MrsP Thread Queues "mrsp-threadq-model" `formal/promela/models/threadq`
 
 ## Doing Test Generation
 

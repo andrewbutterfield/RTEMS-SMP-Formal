@@ -1,0 +1,5 @@
+.stack-work/
+*~
+*.code-workspace
+MAIN.pdf
+MAIN.log

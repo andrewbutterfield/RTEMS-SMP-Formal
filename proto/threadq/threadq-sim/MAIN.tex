@@ -1,0 +1,41 @@
+\documentclass[fleqn,10pt]{article}
+\usepackage[a4paper, margin=1.0in]{geometry}
+\usepackage{listings}
+\usepackage{lstlhs}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\def\includepicture#1{\includegraphics{#1.eps}}
+\usepackage{hyperref}
+\usepackage{threadq}
+
+\parindent=0pt % I hate first line indentation
+\parskip=3pt   % I like a visual white gap between paragraphs
+
+
+\title{RTEMS Thread Queue Simulation}
+\author{Andrew Butterfield}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+
+
+\bibliographystyle{alpha}
+
+\newpage\input{doc/Introduction}
+\newpage\input{src/Queues.lhs}
+\newpage\input{src/SimState.lhs}
+\newpage\input{src/Runner.lhs}
+\newpage\input{app/Main.lhs}
+\newpage\input{test/Spec.lhs}
+
+\newpage
+\bibliography{MAIN}
+
+\appendix
+
+\newpage\input{doc/Notes.tex}
+
+\end{document}

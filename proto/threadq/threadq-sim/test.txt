@@ -1,0 +1,10 @@
+new A o1
+command 2
+new F ff1
+new A a2
+new P pr1
+new C c1
+new A 42
+
+whatever
+

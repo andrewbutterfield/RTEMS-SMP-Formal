@@ -1,0 +1,39 @@
+\section{Introduction}
+
+This document provides simulations of the various thread queue designs used
+in the RTEMS operating system. 
+These range from simple first-in first-out (FIFO) designs,
+through priority-based approaches, 
+to algorithms for SMP that support schedulability analysis.
+
+We focus on thread queues for RTEMS Tasks waiting to gain access
+to a shared resource, via a mutex lock.
+
+The basic building blocks are a simple FIFO queue, 
+and a priority queue that assumes all threads have a unique priority.
+
+The most complex form is a round-robin/FIFO queue 
+whose contents are priority queues, 
+one for each scheduling cluster.
+This is used to implement the 
+Multiprocessor Resource Sharing Protocol(MrsP) 
+thread queue algorithm.
+
+
+Key papers are: 
+\cite{Burns:2013:MrsP}, 
+\cite{Brandenburg:2013:OMIP},
+\cite{Catellani:2015:MrsP},
+\cite{Garrido:2017:MrsP},
+\cite{Zhao:2017:MrsP},
+\cite{Gomes:2019:MrsP},
+\cite{Zhao:2020:MrsP},
+\cite{Zhao:2021:MrsP}
+.
+
+Most relevant RTEMS documents:
+\cite{RTEMS:CUSER}, 
+\cite{RTEMS:ENG}, 
+and \cite{RTEMS:USERM}.
+
+% What about \cite{RTEMS:Classic} ?
