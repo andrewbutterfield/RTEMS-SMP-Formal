@@ -211,10 +211,10 @@ def copy(model, codedir, rtems, modfile, testsuite_name):
     print(f"Updating {testsuite_name}.yml for model {model}")
     with open(modfile) as file:
         model_yaml = yaml.load(file, Loader=yaml.FullLoader)
-    source_set = set()
+    source_list = model_yaml['source']
+    source_set = set(source_list)
     files = glob.glob(f"tr-{model}*.c")
     files += glob.glob(f"tc-{model}*.c")
-    files.append(f"ts-{testsuite_name}.c")
     for file in files:
         source_set.add(f"testsuites/validation/{file}")
     new_list = list(source_set)
