@@ -161,6 +161,33 @@ def generate_test_files(model, testgen, refine_config):
                            f"{test_file} {i}",
                            check=True, shell=True)
 
+    generate_testcase_file(model, refine_config, no_of_trails)
+
+
+def generate_testcase_file(model, refine_config, no_of_trails):
+    missing_files = list()
+    for key in ["testcase_preamble", "testcase_runfile", "testcase_postamble"]:
+        if not Path(refine_config[key]).exists():
+            missing_files.append(refine_config[key])
+
+    if not missing_files:
+        file_name = f"tc-{model}.c"
+        with open(file_name, "w") as f:
+            preamble = Path(refine_config["testcase_preamble"]).read_text()
+            f.write(preamble)
+            run = Path(refine_config["testcase_runfile"]).read_text()
+            for i in range(no_of_trails):
+                f.write(run.format(i))
+
+            postamble = Path(refine_config["testcase_postamble"]).read_text()
+            f.write(postamble)
+    else:
+        for file in missing_files:
+            print(f"File not found: {file}")
+        print(f"tc-{model}.c will not be generated")
+
+
+
 
 def copy(model, codedir, rtems, modfile, testsuite_name):
     """Copies C testfiles to test directory and updates the model file """
@@ -217,6 +244,7 @@ def get_generated_files(model, testsuite, test_extenstion):
     trails = glob.glob(f"{model}*.trail")
     files = trails
     files += glob.glob(f"{model}*.spn")
+    files += glob.glob(f"tc-{model}*.c")
     if len(trails) == 1:
         files += glob.glob(f"tr-{model}-0{test_extenstion}")
     else:
@@ -269,7 +297,8 @@ def get_refine_config(source_dir, model):
                     refine_config[key] = val
     missing_keys = {
                        "preamble", "postamble", "refinefile", "testfiletype",
-                       "runfile"
+                       "runfile", "testcase_preamble", "testcase_postamble",
+                       "testcase_runfile"
                     } - refine_config.keys()
     if missing_keys:
         print("refine-config.yml configuration is incomplete")
@@ -279,6 +308,8 @@ def get_refine_config(source_dir, model):
         sys.exit(1)
     for key in ["preamble", "postamble", "refinefile", "runfile"]:
         refine_config[key] = f"{model}{refine_config[key]}"
+    for key in ["testcase_preamble", "testcase_postamble", "testcase_runfile"]:
+        refine_config[key] = f"tc-{model}{refine_config[key]}"
     return refine_config
 
 
