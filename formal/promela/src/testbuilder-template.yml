@@ -31,6 +31,7 @@
 # All pathnames should be absolute
 
 spin2test: <spin2test_directory>/spin2test.py
+modelsfile: <formal_directory>/promela/models/models.yml
 rtems: <path-to-main-rtems-directory>  # rtems.git, or ..../modules/rtems/
 rsb: <rsb-build_directory>/rtems/6/bin/
 simulator: <path-to>/sparc-rtems6-sis
