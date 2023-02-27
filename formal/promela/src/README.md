@@ -85,7 +85,7 @@ A file is required by the test-generation process to create files in any languag
 This file exists for c at `path-to-formal/formal/promela/src/src/languages/c.yml`
 
 If the desired language file does not exist you can create on in `path-to-formal/formal/promela/src/src/languages/`.
-The language file should be all lower case to avoid errors.
+The file name must be lower-case to avoid errors.
 
 The language for test generation can be set in the models refinement file using `LANGUAGE: your-language-here`.
 An example can be found in `path-to-formal/formal/promela/models/barrier/barrier-mgr-model-rfn.yml`.
