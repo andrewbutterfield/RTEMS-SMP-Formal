@@ -76,8 +76,9 @@ class command:
             logger.debug(f"Unknown LANGUAGE {language}, set to C\n")
             self.setComments("C")
         else:
-            logger.error(f"Failed to find file {language_file} when"
-                         f"setting language to c (comments)\n")
+            logger.error(f"Ensure language file for {language} is present "
+                         f"before generating tests (comments)\n")
+            logger.error(f"File {language_file} not found\n")
             raise SystemExit()
 
     def setDefaults(self, language):
@@ -94,8 +95,9 @@ class command:
             logger.debug(f"Unknown LANGUAGE {language}, set to C\n")
             self.setDefaults("C")
         else:
-            logger.error(f"Failed to find file {language_file} when"
-                         f"setting language to c (non-comment defaults)\n")
+            logger.error(f"Ensure language file for {language} is present "
+                         f"before generating tests (non-comment defaults)\n")
+            logger.error(f"File {language_file} not found\n")
             raise SystemExit()
 
     def setupSegmentCode(self):
