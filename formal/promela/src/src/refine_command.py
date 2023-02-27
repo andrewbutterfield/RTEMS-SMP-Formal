@@ -51,8 +51,8 @@ class command:
         self.switchNo = 0
 
         # Use c by default if language not set
-        self.setComments("C")
-        self.setDefaults("C")
+        self.setComments("c")
+        self.setDefaults("c")
 
         self.outputLOG = outputLOG
         self.annoteComments = annoteComments
@@ -72,9 +72,9 @@ class command:
                         raise SystemExit()
                     else:
                         setattr(self, key, language_yaml[key])
-        elif language.lower() != "c":
+        elif language != "c":
             logger.debug(f"Unknown LANGUAGE {language}, set to C\n")
-            self.setComments("C")
+            self.setComments("c")
         else:
             logger.error(f"Ensure language file for {language} is present "
                          f"before generating tests (comments)\n")
@@ -93,7 +93,7 @@ class command:
                     setattr(self, key, language_yaml[key])
         elif language.lower() != "c":
             logger.debug(f"Unknown LANGUAGE {language}, set to C\n")
-            self.setDefaults("C")
+            self.setDefaults("c")
         else:
             logger.error(f"Ensure language file for {language} is present "
                          f"before generating tests (non-comment defaults)\n")
@@ -130,8 +130,8 @@ class command:
     def setupLanguage(self):
         if 'LANGUAGE' in self.ref_dict_keys:
             language = self.ref_dict['LANGUAGE']
-            self.setComments(language)
-            self.setDefaults(language)
+            self.setComments(language.lower())
+            self.setDefaults(language.lower())
             self.setupSegmentCode()
         else:
             pass  # assume default: C
