@@ -42,8 +42,9 @@ You need to activate this virtual environment to use the toolset.
 
 The top-level program is `testbuilder.py`. 
 
-It relies on a configuration file `testbuilder.yml` that defines various key names/paths related to your RTEMS installation. A template file `testbuilder-template.yml` is provided. This should be edited to reflect your setup, and than saved as `testbuilder.yml`.
+It relies on a configuration file `testbuilder.yml` that defines various key names/paths related to your RTEMS installation. A template file `testbuilder-template.yml` is provided. This should be edited to reflect your setup, and then saved as `testbuilder.yml`.
 
+Another configuration file `refine-config.yml` defines file names for files used during the test-generation process. A template file `refine-config-template.yml` is provided. This should be edited to reflect your setup, and then saved as `refine-config.yml`.
 
 To simplify matters, it helps to create a short alias for the full pathname to `testbuilder.py`. This should be defined in `.bashrc` or similar.
 
