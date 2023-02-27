@@ -70,3 +70,24 @@ run - runs RTEMS tests
 ```
 
 If there are obvious problems with `testbuilder.yml`, it will report an error.
+
+Note: Both `testbuilder.yml` and `refine-config.yml` can be configured globally and on a per-model basis.
+Model specific configuration can be created in the models' directory, eg `path-to-formal/formal/promela/models/chains/testbuilder.yml`.
+
+Local configuration items will take precedence over their global counterparts.
+
+### Test Language Configuration
+
+The default language for test files is c.
+
+A file is required by the test-generation process to create files in any language.
+
+This file exists for c at `path-to-formal/formal/promela/src/src/languages/c.yml`
+
+If the desired language file does not exist you can create on in `path-to-formal/formal/promela/src/src/languages/`.
+The language file should be all lower case to avoid errors.
+
+The language for test generation can be set in the models refinement file using `LANGUAGE: your-language-here`.
+An example can be found in `path-to-formal/formal/promela/models/barrier/barrier-mgr-model-rfn.yml`.
+
+`refine-config.yml` must also be updated to reference language-specific pre-amble, post-amble and run files, as well as desired file extensions.
