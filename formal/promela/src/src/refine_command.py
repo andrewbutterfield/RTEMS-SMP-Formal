@@ -60,7 +60,8 @@ class command:
 
     def setComments(self, language):
         logger.debug(f"Set LANGUAGE to {language} (comments)\n")
-        language_file = Path(Path(__file__).parent.absolute() / f"languages/{language}.yml")
+        language_file = Path(Path(__file__).parent.absolute() /
+                             f"languages/{language}.yml")
         if language_file.exists():
             with open(language_file) as f:
                 language_yaml = yaml.load(f, Loader=yaml.FullLoader)
@@ -71,21 +72,31 @@ class command:
                         raise SystemExit()
                     else:
                         setattr(self, key, language_yaml[key])
-        else:
+        elif language.lower() != "c":
             logger.debug(f"Unknown LANGUAGE {language}, set to C\n")
             self.setComments("C")
+        else:
+            logger.error(f"Failed to find file {language_file} when"
+                         f"setting language to c (comments)\n")
+            raise SystemExit()
 
     def setDefaults(self, language):
         logger.debug(f"Set LANGUAGE to {language} (non-comment defaults)\n")
-        language_file = Path(Path(__file__).parent.absolute() / f"languages/{language}.yml")
+        language_file = Path(Path(__file__).parent.absolute() /
+                             f"languages/{language}.yml")
         if language_file.exists():
             with open(language_file) as f:
                 language_yaml = yaml.load(f, Loader=yaml.FullLoader)
                 comment_keys = {"EOLC", "CMTBEGIN", "CMTEND"}
                 for key in language_yaml.keys() - comment_keys:
                     setattr(self, key, language_yaml[key])
-        else:
+        elif language.lower() != "c":
+            logger.debug(f"Unknown LANGUAGE {language}, set to C\n")
             self.setDefaults("C")
+        else:
+            logger.error(f"Failed to find file {language_file} when"
+                         f"setting language to c (non-comment defaults)\n")
+            raise SystemExit()
 
     def setupSegmentCode(self):
         if 'SEGNAMEPFX' in self.ref_dict_keys:
