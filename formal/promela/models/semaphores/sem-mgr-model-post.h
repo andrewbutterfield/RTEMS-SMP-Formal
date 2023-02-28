@@ -8,8 +8,8 @@ static void Runner( RtemsModelSemMgr_Context *ctx )
 
   // Ensure we hold no semaphores
   ReleaseSema( ctx->runner_sema );
-  //ReleaseSema( ctx->worker0_sema );
-  //ReleaseSema( ctx->worker1_sema );
+  ReleaseSema( ctx->worker0_sema );
+  ReleaseSema( ctx->worker1_sema );
 }
 
 

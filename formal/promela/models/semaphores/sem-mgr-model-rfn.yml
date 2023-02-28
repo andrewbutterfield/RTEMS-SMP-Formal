@@ -62,8 +62,26 @@ sema_create: |
   rtems_status_code rc;
   rc = rtems_semaphore_create({0}, {1},attribs, {2}, {3} ? &sem_id : NULL);
   T_log(T_NORMAL, "Returned 0x%x from Create", rc );
-
-
+  
+sema_ident: |
+  T_log(T_NORMAL, "Calling SemaIdent(%d,%d, %d)", {0}, {1}, {2});
+  rtems_id sem_id;
+  initialise_id(&sem_id);
+  rtems_status_code rc;
+  rc = rtems_semaphore_ident({0} , {1}, {2} ? &sem_id : NULL);
+  T_log(T_NORMAL, "Returned 0x%x from Ident", rc );
+  
+sema_obtain: |
+  rtems_interval timeout = {2};
+  T_log(T_NORMAL, "Calling SemaObtain(%d,%d,%d)", sem_id, opts, timeout );
+  rc = rtems_semaphore_obtain(sem_id, opts timeout);
+  T_log(T_NORMAL, "Returned 0x%x from Obtain", rc );
+  
+sema_release: |
+  T_log(T_NORMAL, "Calling SemaRelease(%d)", sem_id);
+  uint32_t released;
+  rc = rtems_semaphore_release(sem_id ? &released : NULL);
+  T_log(T_NORMAL, "Returned 0x%x from Release", rc );
 
 sema_delete: |
   T_log(T_NORMAL, "Calling SemaDelete(%d)", sem_id);
