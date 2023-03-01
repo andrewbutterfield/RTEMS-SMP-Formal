@@ -58,10 +58,12 @@ def all_steps(model, config, refine_config):
     copy(sys.argv[2], config["testcode"], config["rtems"],
          config["testyaml"], config["testsuite"])
     compile(config["rtems"])
-    run_simulator(config["simulator"],
-                  config["simulatorargs"], config["testexe"], config["testsuite"])
+    run_simulator(config["simulator"], config["simulatorargs"],
+                  config["testexe"], config["testsuite"])
+
 
 def all_models(config, source_dir, model_to_path):
+    cwd = os.getcwd()
     for model, path in model_to_path.items():
         refine_config = get_refine_config(source_dir, model)
         os.chdir(path)
@@ -70,11 +72,10 @@ def all_models(config, source_dir, model_to_path):
         generate_test_files(model, config["spin2test"], refine_config)
         copy(model, config["testcode"], config["rtems"],
              config["testyaml"], config["testsuite"])
-
+    os.chdir(cwd)
     compile(config["rtems"])
     run_simulator(config["simulator"], config["simulatorargs"],
                   config["testexe"], config["testsuite"])
-
 
 
 def clean(model, testsuite, test_extension):
@@ -148,6 +149,7 @@ def generate_spin_files(model, spinallscenarios, refine_config):
                            check=True, shell=True)
     os.remove('pan')
 
+
 @catch_subprocess_errors
 def generate_test_files(model, testgen, refine_config):
     """Create test files from spin files"""
@@ -200,8 +202,6 @@ def generate_testcase_file(model, refine_config, no_of_trails):
         for file in missing_files:
             print(f"File not found: {file}")
         print(f"tc-{model}.c will not be generated")
-
-
 
 
 def copy(model, codedir, rtems, modfile, testsuite_name):
