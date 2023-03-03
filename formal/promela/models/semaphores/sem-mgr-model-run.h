@@ -13,6 +13,12 @@ static void RtemsModelSemMgr_Setup{0}( void *arg )
 
   T_log( T_NORMAL, "Creating Runner Semaphore" );
   ctx->runner_sema = CreateSema("RUNR");
+  
+  T_log( T_NORMAL, "Creating Worker0 Semaphore" );
+  ctx->worker0_sema = CreateSema("WRS0");
+
+  T_log( T_NORMAL, "Creating Worker1 Semaphore" );
+  ctx->worker1_sema = CreateSema("WRS1");
 
 
 
@@ -29,6 +35,16 @@ static void RtemsModelSemMgr_Setup{0}( void *arg )
   sc = rtems_task_set_priority( RTEMS_SELF, SM_PRIO_NORMAL, &prio );
   T_rsc_success( sc );
   T_eq_u32( prio, SM_PRIO_HIGH );
+  
+  ctx->worker0_id = CreateTask( "WRK0", SM_PRIO_NORMAL );
+  T_log( T_NORMAL, "Created Worker 0");
+  StartTask( ctx->worker0_id, Worker0, ctx );
+  T_log( T_NORMAL, "Started Worker 0");
+
+  ctx->worker1_id = CreateTask( "WRK1", SM_PRIO_NORMAL );
+  T_log( T_NORMAL, "Created Worker 1");
+  StartTask( ctx->worker1_id, Worker1, ctx );
+  T_log( T_NORMAL, "Started Worker 1");
 
 }}
 

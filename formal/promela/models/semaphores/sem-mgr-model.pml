@@ -574,7 +574,7 @@ inline chooseScenario() {
     defaults.semType = COUNTING_S;
     defaults.isPriority = false;
     defaults.LockingProtocol = NO_LOCKING;
-    defaults.doAcquire = true;
+    defaults.doAcquire = false;
     defaults.doRelease = false;
     defaults.Wait = false;
     defaults.timeoutLength = NO_TIMEOUT;
@@ -1088,9 +1088,9 @@ init {
 
     _nr_pr == 1;
 
-    //#ifdef TEST_GEN
+    #ifdef TEST_GEN
     assert(false);
-    //#endif
+    #endif
 
     printf("Semaphore Manager Model finished !\n")
 

@@ -218,5 +218,86 @@ T_TEST_CASE( RtemsModelSemMgr27 )
   RtemsModelSemMgr_Run27();
 }
 
+T_TEST_CASE( RtemsModelSemMgr28 )
+{
+  RtemsModelSemMgr_Run28();
+}
+
+T_TEST_CASE( RtemsModelSemMgr29 )
+{
+  RtemsModelSemMgr_Run29();
+}
+
+T_TEST_CASE( RtemsModelSemMgr30 )
+{
+  RtemsModelSemMgr_Run30();
+}
+
+T_TEST_CASE( RtemsModelSemMgr31 )
+{
+  RtemsModelSemMgr_Run31();
+}
+
+T_TEST_CASE( RtemsModelSemMgr32 )
+{
+  RtemsModelSemMgr_Run32();
+}
+
+T_TEST_CASE( RtemsModelSemMgr33 )
+{
+  RtemsModelSemMgr_Run33();
+}
+
+T_TEST_CASE( RtemsModelSemMgr34 )
+{
+  RtemsModelSemMgr_Run34();
+}
+
+T_TEST_CASE( RtemsModelSemMgr35 )
+{
+  RtemsModelSemMgr_Run35();
+}
+
+T_TEST_CASE( RtemsModelSemMgr36 )
+{
+  RtemsModelSemMgr_Run36();
+}
+
+T_TEST_CASE( RtemsModelSemMgr37 )
+{
+  RtemsModelSemMgr_Run37();
+}
+
+T_TEST_CASE( RtemsModelSemMgr38 )
+{
+  RtemsModelSemMgr_Run38();
+}
+
+T_TEST_CASE( RtemsModelSemMgr39 )
+{
+  RtemsModelSemMgr_Run39();
+}
+
+T_TEST_CASE( RtemsModelSemMgr40 )
+{
+  RtemsModelSemMgr_Run40();
+}
+
+T_TEST_CASE( RtemsModelSemMgr41 )
+{
+  RtemsModelSemMgr_Run41();
+}
+
+T_TEST_CASE( RtemsModelSemMgr42 )
+{
+  RtemsModelSemMgr_Run42();
+}
+
+T_TEST_CASE( RtemsModelSemMgr43 )
+{
+  RtemsModelSemMgr_Run43();
+}
+
+
 
 /** @} */

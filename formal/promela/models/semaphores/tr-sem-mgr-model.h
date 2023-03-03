@@ -80,6 +80,7 @@ typedef struct {
   T_thread_switch_log_4 thread_switch_log; // thread switch log
 } RtemsModelSemMgr_Context;
 
+
 typedef enum {
   SM_PRIO_HIGH = 1,
   SM_PRIO_NORMAL,
@@ -171,6 +172,22 @@ void RtemsModelSemMgr_Run24(void);
 void RtemsModelSemMgr_Run25(void);
 void RtemsModelSemMgr_Run26(void);
 void RtemsModelSemMgr_Run27(void);
+void RtemsModelSemMgr_Run28(void);
+void RtemsModelSemMgr_Run29(void);
+void RtemsModelSemMgr_Run30(void);
+void RtemsModelSemMgr_Run31(void);
+void RtemsModelSemMgr_Run32(void);
+void RtemsModelSemMgr_Run33(void);
+void RtemsModelSemMgr_Run34(void);
+void RtemsModelSemMgr_Run35(void);
+void RtemsModelSemMgr_Run36(void);
+void RtemsModelSemMgr_Run37(void);
+void RtemsModelSemMgr_Run38(void);
+void RtemsModelSemMgr_Run39(void);
+void RtemsModelSemMgr_Run40(void);
+void RtemsModelSemMgr_Run41(void);
+void RtemsModelSemMgr_Run42(void);
+void RtemsModelSemMgr_Run43(void);
 
 
 
