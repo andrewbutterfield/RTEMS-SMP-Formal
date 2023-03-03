@@ -73,8 +73,9 @@ sema_ident: |
   
 sema_obtain: |
   rtems_interval timeout = {2};
-  T_log(T_NORMAL, "Calling SemaObtain(%d,%d,%d)", sem_id, opts, timeout );
-  rc = rtems_semaphore_obtain(sem_id, opts timeout);
+  rtems_option option_set = {1};
+  T_log(T_NORMAL, "Calling SemaObtain(%d,%d,%d)", sem_id, option_set, timeout );
+  rc = rtems_semaphore_obtain(sem_id, option_set, timeout);
   T_log(T_NORMAL, "Returned 0x%x from Obtain", rc );
   
 sema_release: |

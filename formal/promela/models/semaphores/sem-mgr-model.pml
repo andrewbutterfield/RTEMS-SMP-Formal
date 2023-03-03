@@ -635,7 +635,12 @@ inline chooseScenario() {
         printf( "@@@ %d LOG sub-senario bad create, passed invalid locking protocol\n", _pid); //RTEMS_INVALID_PRIORITY
     ::  task_in[TASK1_ID].doDelete = true;
         printf( "@@@ %d LOG sub-senario created and deleted\n", _pid); //RTEMS_SUCCESSFUL
-    
+        
+    :: task_in[TASK2_ID].doAcquire = true;
+       task_in[TASK3_ID].doAcquire = true;
+       task_in[TASK2_ID].doRelease = true;
+       task_in[TASK3_ID].doRelease = true;
+        
     //::  task_in[TASK2_ID].doAcquire = false;
     //    task_in[TASK3_ID].doAcquire = false;
     //    printf( "@@@ %d LOG sub-senario semaphore not acquired\n", _pid);
@@ -672,6 +677,8 @@ proctype Runner (byte nid, taskid; TaskInputs opts) {
     //    printf("@@@ %d CALL SetProcessor %d\n", _pid, tasks[taskid].nodeid);
     //::  else -> skip
     //fi
+    
+    Release(task1Sema);
 
     if
     ::  opts.doCreate ->
@@ -696,6 +703,7 @@ proctype Runner (byte nid, taskid; TaskInputs opts) {
     fi
 
     Release(task2Sema);
+    Release(task3Sema);
 
     if
     ::  opts.doAcquire -> 
@@ -735,6 +743,9 @@ proctype Runner (byte nid, taskid; TaskInputs opts) {
         Release(task1Sema);
     ::  else -> skip
     fi
+    
+    Release(task2Sema);
+    Release(task3Sema);
 
     // Make sure everyone ran
     Obtain(task1Sema);
