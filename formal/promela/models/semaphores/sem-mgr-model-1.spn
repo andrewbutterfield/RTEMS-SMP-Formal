@@ -233,5 +233,5 @@ spin: trail ends after 340 steps
 		task3Sema = 2
 		scenario = obt1_rel1_obt2_rel2
 		stopclock = 1
-340:	proc  0 (:init::1) sem-mgr-model.pml:1096 (state 139) <valid end state>
+340:	proc  0 (:init::1) sem-mgr-model.pml:1097 (state 139) <valid end state>
 6 processes created

@@ -84,8 +84,7 @@ sema_obtain: |
   
 sema_release: |
   T_log(T_NORMAL, "Calling SemaRelease(%d)", sem_id);
-  uint32_t released;
-  rc = rtems_semaphore_release(sem_id ? &released : NULL);
+  rc = rtems_semaphore_release(sem_id);
   T_log(T_NORMAL, "Returned 0x%x from Release", rc );
 
 sema_delete: |
@@ -97,8 +96,6 @@ sema_delete: |
 rc:
   T_rsc( rc, {0} );
 
-released:
-  T_eq_u32( released, {0} );
 
 created:
   /* This is used later for cleanup */

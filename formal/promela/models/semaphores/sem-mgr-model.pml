@@ -810,19 +810,18 @@ proctype Worker0 (byte nid, taskid; TaskInputs opts) {
     if
     ::  opts.doAcquire -> 
         atomic{
-            Release(task3Sema);
             printf("@@@ %d CALL sema_obtain %d %d %d\n",
                     _pid, sem_id, opts.Wait, opts.timeoutLength);
                     /* (self,   sem_id, optionset, timeout,   rc) */
             sema_obtain(taskid, sem_id, opts.Wait, opts.timeoutLength, rc);
         }
         printf("@@@ %d SCALAR rc %d\n",_pid, rc);
-    ::  else -> Release(task3Sema);
+    ::  else -> skip;
     fi
 
     if
     ::  opts.doRelease -> 
-        
+        atomic{
             printf("@@@ %d CALL sema_release %d\n", _pid, sem_id);
                         /* (self,   sem_id, rc) */
             sema_release(taskid, sem_id, rc);
@@ -832,8 +831,10 @@ proctype Worker0 (byte nid, taskid; TaskInputs opts) {
             :: else -> skip;
             fi
             printf("@@@ %d SCALAR rc %d\n",_pid, rc);
+            Release(task3Sema);
+	}
            
-    ::  else -> skip
+    ::  else -> Release(task3Sema);
     fi
 
     if 

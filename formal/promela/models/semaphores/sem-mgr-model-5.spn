@@ -40,17 +40,20 @@ Run...
 @@@ 4 CALL sema_ident 1 0 1
 @@@ 4 LOG Semaphore 1 Identified by name 1
 @@@ 4 SCALAR rc 0
-@@@ 4 SIGNAL 2
 @@@ 4 CALL sema_obtain 1 0 0
 @@@ 4 SCALAR rc 0
 @@@ 4 CALL sema_release 1
+@@@ 4 LOG Semaphore 1 released
+@@@ 4 SCALAR released 1
+@@@ 4 SCALAR rc 0
+@@@ 4 SIGNAL 2
 @@@ 5 LOG WAIT 2 Over
 @@@ 5 CALL sema_ident 1 0 1
 @@@ 5 LOG Semaphore 1 Identified by name 1
 @@@ 5 SCALAR rc 0
 @@@ 5 SIGNAL 0
 @@@ 5 CALL sema_obtain 1 0 0
-@@@ 5 SCALAR rc 13
+@@@ 5 SCALAR rc 0
 @@@ 5 CALL sema_release 1
 @@@ 5 LOG Semaphore 1 released
 @@@ 5 SCALAR released 1
@@ -58,7 +61,6 @@ Run...
 @@@ 5 SIGNAL 2
 @@@ 5 LOG Task 3 finished
 @@@ 5 STATE 3 Zombie
-@@@ 4 SCALAR rc 13
 @@@ 4 SIGNAL 1
 @@@ 4 LOG Task 2 finished
 @@@ 4 STATE 2 Zombie
@@ -110,7 +112,7 @@ Clock: tid=2, state=Zombie
 Clock: tid=3, state=Zombie
 @@@ 2 LOG Clock Stopped
 Semaphore Manager Model finished !
-spin: trail ends after 354 steps
+spin: trail ends after 355 steps
 #processes: 1
 		multicore = 0
 		task1Core = 0
@@ -246,5 +248,5 @@ spin: trail ends after 354 steps
 		task3Sema = 2
 		scenario = obt1_rel1_obt2_rel2
 		stopclock = 1
-354:	proc  0 (:init::1) sem-mgr-model.pml:1096 (state 139) <valid end state>
+355:	proc  0 (:init::1) sem-mgr-model.pml:1097 (state 139) <valid end state>
 6 processes created

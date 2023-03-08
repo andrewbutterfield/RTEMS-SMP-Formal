@@ -165,9 +165,6 @@ static void TestSegment4( Context* ctx ) {
   
   T_log(T_NORMAL,"@@@ 4 SCALAR rc 0");
   T_rsc( rc, 0 );
-  T_log(T_NORMAL,"@@@ 4 SIGNAL 2");
-  ReleaseSema( semaphore[2] );
-  
   T_log(T_NORMAL,"@@@ 4 CALL sema_obtain 1 0 0");
   rtems_interval timeout = 0;
   rtems_option option_set = 0;
@@ -179,12 +176,16 @@ static void TestSegment4( Context* ctx ) {
   T_rsc( rc, 0 );
   T_log(T_NORMAL,"@@@ 4 CALL sema_release 1");
   T_log(T_NORMAL, "Calling SemaRelease(%d)", sem_id);
-  uint32_t released;
-  rc = rtems_semaphore_release(sem_id ? &released : NULL);
+  rc = rtems_semaphore_release(sem_id);
   T_log(T_NORMAL, "Returned 0x%x from Release", rc );
   
-  T_log(T_NORMAL,"@@@ 4 SCALAR rc 13");
-  T_rsc( rc, 13 );
+  T_log(T_NORMAL,"@@@ 4 SCALAR released 1");
+  // SCALAR: no refinement entry for 'released'
+  T_log(T_NORMAL,"@@@ 4 SCALAR rc 0");
+  T_rsc( rc, 0 );
+  T_log(T_NORMAL,"@@@ 4 SIGNAL 2");
+  ReleaseSema( semaphore[2] );
+  
   T_log(T_NORMAL,"@@@ 4 SIGNAL 1");
   ReleaseSema( semaphore[1] );
   
@@ -229,16 +230,15 @@ static void TestSegment5( Context* ctx ) {
   rc = rtems_semaphore_obtain(sem_id, option_set, timeout);
   T_log(T_NORMAL, "Returned 0x%x from Obtain", rc );
   
-  T_log(T_NORMAL,"@@@ 5 SCALAR rc 13");
-  T_rsc( rc, 13 );
+  T_log(T_NORMAL,"@@@ 5 SCALAR rc 0");
+  T_rsc( rc, 0 );
   T_log(T_NORMAL,"@@@ 5 CALL sema_release 1");
   T_log(T_NORMAL, "Calling SemaRelease(%d)", sem_id);
-  uint32_t released;
-  rc = rtems_semaphore_release(sem_id ? &released : NULL);
+  rc = rtems_semaphore_release(sem_id);
   T_log(T_NORMAL, "Returned 0x%x from Release", rc );
   
   T_log(T_NORMAL,"@@@ 5 SCALAR released 1");
-  T_eq_u32( released, 1 );
+  // SCALAR: no refinement entry for 'released'
   T_log(T_NORMAL,"@@@ 5 SCALAR rc 0");
   T_rsc( rc, 0 );
   T_log(T_NORMAL,"@@@ 5 SIGNAL 2");
