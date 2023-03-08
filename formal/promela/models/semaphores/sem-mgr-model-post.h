@@ -41,5 +41,3 @@ static void Worker1( rtems_task_argument arg )
   // Wait for events so that we don't terminate
   rtems_event_receive( RTEMS_ALL_EVENTS, RTEMS_DEFAULT_OPTIONS, 0, &events );
 }
-
-

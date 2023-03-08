@@ -150,44 +150,8 @@ void RtemsModelSemMgr_Run2(void);
 void RtemsModelSemMgr_Run3(void);
 void RtemsModelSemMgr_Run4(void);
 void RtemsModelSemMgr_Run5(void);
-void RtemsModelSemMgr_Run6(void);
-void RtemsModelSemMgr_Run7(void);
-void RtemsModelSemMgr_Run8(void);
-void RtemsModelSemMgr_Run9(void);
-void RtemsModelSemMgr_Run10(void);
-void RtemsModelSemMgr_Run11(void);
-void RtemsModelSemMgr_Run12(void);
-void RtemsModelSemMgr_Run13(void);
-void RtemsModelSemMgr_Run14(void);
-void RtemsModelSemMgr_Run15(void);
-void RtemsModelSemMgr_Run16(void);
-void RtemsModelSemMgr_Run17(void);
-void RtemsModelSemMgr_Run18(void);
-void RtemsModelSemMgr_Run19(void);
-void RtemsModelSemMgr_Run20(void);
-void RtemsModelSemMgr_Run21(void);
-void RtemsModelSemMgr_Run22(void);
-void RtemsModelSemMgr_Run23(void);
-void RtemsModelSemMgr_Run24(void);
-void RtemsModelSemMgr_Run25(void);
-void RtemsModelSemMgr_Run26(void);
-void RtemsModelSemMgr_Run27(void);
-void RtemsModelSemMgr_Run28(void);
-void RtemsModelSemMgr_Run29(void);
-void RtemsModelSemMgr_Run30(void);
-void RtemsModelSemMgr_Run31(void);
-void RtemsModelSemMgr_Run32(void);
-void RtemsModelSemMgr_Run33(void);
-void RtemsModelSemMgr_Run34(void);
-void RtemsModelSemMgr_Run35(void);
-void RtemsModelSemMgr_Run36(void);
-void RtemsModelSemMgr_Run37(void);
-void RtemsModelSemMgr_Run38(void);
-void RtemsModelSemMgr_Run39(void);
-void RtemsModelSemMgr_Run40(void);
-void RtemsModelSemMgr_Run41(void);
-void RtemsModelSemMgr_Run42(void);
-void RtemsModelSemMgr_Run43(void);
+
+
 
 
 

@@ -580,7 +580,7 @@ inline chooseScenario() {
     defaults.timeoutLength = NO_TIMEOUT;
     defaults.doDelete = false;
     defaults.doFlush=false;
-    defaults.taskPrio = 0;
+    defaults.taskPrio = 2;
     defaults.taskPreempt = false;
     defaults.idNull = false;
     defaults.sName = SEMAPHORE1_NAME;
@@ -634,12 +634,11 @@ inline chooseScenario() {
     ::  task_in[TASK1_ID].LockingProtocol = INHERIT_LOCKING;
         printf( "@@@ %d LOG sub-senario bad create, passed invalid locking protocol\n", _pid); //RTEMS_INVALID_PRIORITY
     ::  task_in[TASK1_ID].doDelete = true;
-        printf( "@@@ %d LOG sub-senario created and deleted\n", _pid); //RTEMS_SUCCESSFUL
-        
-    :: task_in[TASK2_ID].doAcquire = true;
-       task_in[TASK3_ID].doAcquire = true;
-       task_in[TASK2_ID].doRelease = true;
-       task_in[TASK3_ID].doRelease = true;
+        printf( "@@@ %d LOG sub-senario created and deleted\n", _pid); //RTEMS_SUCCESSFUL    
+    ::  task_in[TASK2_ID].doAcquire = true;
+        task_in[TASK3_ID].doAcquire = true;
+        task_in[TASK2_ID].doRelease = true;
+        task_in[TASK3_ID].doRelease = true;
         
     //::  task_in[TASK2_ID].doAcquire = false;
     //    task_in[TASK3_ID].doAcquire = false;
@@ -659,11 +658,11 @@ proctype Runner (byte nid, taskid; TaskInputs opts) {
     tasks[taskid].prio = opts.taskPrio;
 
     printf("@@@ %d TASK Runner\n",_pid);
-    //if 
-    //::  tasks[taskid].prio == 1 -> printf("@@@ %d CALL HighPriority\n", _pid);
-    //::  tasks[taskid].prio == 2 -> printf("@@@ %d CALL NormalPriority\n", _pid);
-    //::  tasks[taskid].prio == 3 -> printf("@@@ %d CALL LowPriority\n", _pid);
-    //fi
+    if 
+    ::  tasks[taskid].prio == 1 -> printf("@@@ %d CALL HighPriority\n", _pid);
+    ::  tasks[taskid].prio == 2 -> printf("@@@ %d CALL NormalPriority\n", _pid);
+    ::  tasks[taskid].prio == 3 -> printf("@@@ %d CALL LowPriority\n", _pid);
+    fi
 
     byte rc;
     byte sem_id;
@@ -678,7 +677,7 @@ proctype Runner (byte nid, taskid; TaskInputs opts) {
     //::  else -> skip
     //fi
     
-    Release(task1Sema);
+
 
     if
     ::  opts.doCreate ->
@@ -701,9 +700,8 @@ proctype Runner (byte nid, taskid; TaskInputs opts) {
             sema_ident(opts.sName,nid,sem_id,rc);
             printf("@@@ %d SCALAR rc %d\n",_pid, rc);
     fi
-
     Release(task2Sema);
-    Release(task3Sema);
+
 
     if
     ::  opts.doAcquire -> 
@@ -717,9 +715,9 @@ proctype Runner (byte nid, taskid; TaskInputs opts) {
 
     if
     ::  opts.doRelease -> 
-            Obtain(task1Sema);
+           
             printf("@@@ %d CALL sema_release %d\n", _pid, sem_id);
-                        /* (self,   bid, rc) */
+                        /* (self,   sem_id, rc) */
             sema_release(taskid, sem_id, rc);
             if
             :: rc == RC_OK -> 
@@ -727,7 +725,7 @@ proctype Runner (byte nid, taskid; TaskInputs opts) {
             :: else -> skip;
             fi
             printf("@@@ %d SCALAR rc %d\n",_pid, rc);
-            Release(task1Sema);
+            
     ::  else -> skip
     fi
 
@@ -744,8 +742,7 @@ proctype Runner (byte nid, taskid; TaskInputs opts) {
     ::  else -> skip
     fi
     
-    Release(task2Sema);
-    Release(task3Sema);
+    
 
     // Make sure everyone ran
     Obtain(task1Sema);
@@ -766,11 +763,11 @@ proctype Worker0 (byte nid, taskid; TaskInputs opts) {
     tasks[taskid].prio = opts.taskPrio;
 
     printf("@@@ %d TASK Worker0\n",_pid);
-    //if 
-    //:: tasks[taskid].prio == 1 -> printf("@@@ %d CALL HighPriority\n", _pid);
-    //:: tasks[taskid].prio == 2 -> printf("@@@ %d CALL NormalPriority\n", _pid);
-    //:: tasks[taskid].prio == 3 -> printf("@@@ %d CALL LowPriority\n", _pid);
-    //fi
+    if 
+    :: tasks[taskid].prio == 1 -> printf("@@@ %d CALL HighPriority\n", _pid);
+    :: tasks[taskid].prio == 2 -> printf("@@@ %d CALL NormalPriority\n", _pid);
+    :: tasks[taskid].prio == 3 -> printf("@@@ %d CALL LowPriority\n", _pid);
+    fi
 
     // Preemption check setup, uncomment if necessary
     //printf("@@@ %d CALL StartLog\n",_pid);
@@ -825,9 +822,9 @@ proctype Worker0 (byte nid, taskid; TaskInputs opts) {
 
     if
     ::  opts.doRelease -> 
-            Obtain(task1Sema);
+        
             printf("@@@ %d CALL sema_release %d\n", _pid, sem_id);
-                        /* (self,   bid, rc) */
+                        /* (self,   sem_id, rc) */
             sema_release(taskid, sem_id, rc);
             if
             :: rc == RC_OK -> 
@@ -835,7 +832,7 @@ proctype Worker0 (byte nid, taskid; TaskInputs opts) {
             :: else -> skip;
             fi
             printf("@@@ %d SCALAR rc %d\n",_pid, rc);
-            Release(task1Sema);
+           
     ::  else -> skip
     fi
 
@@ -862,11 +859,11 @@ proctype Worker1 (byte nid, taskid; TaskInputs opts) {
     tasks[taskid].prio = opts.taskPrio;
 
     printf("@@@ %d TASK Worker1\n",_pid);
-    //if 
-    //:: tasks[taskid].prio == 1 -> printf("@@@ %d CALL HighPriority\n", _pid);
-    //:: tasks[taskid].prio == 2 -> printf("@@@ %d CALL NormalPriority\n", _pid);
-    //:: tasks[taskid].prio == 3 -> printf("@@@ %d CALL LowPriority\n", _pid);
-    //fi
+    if 
+    :: tasks[taskid].prio == 1 -> printf("@@@ %d CALL HighPriority\n", _pid);
+    :: tasks[taskid].prio == 2 -> printf("@@@ %d CALL NormalPriority\n", _pid);
+    :: tasks[taskid].prio == 3 -> printf("@@@ %d CALL LowPriority\n", _pid);
+    fi
 
     // Preemption check setup, uncomment if necessary
     //printf("@@@ %d CALL StartLog\n",_pid);
@@ -883,8 +880,10 @@ proctype Worker1 (byte nid, taskid; TaskInputs opts) {
     //    printf("@@@ %d CALL SetProcessor %d\n", _pid, tasks[taskid].nodeid);
     //:: else -> skip
     //fi
-
+    
     Obtain(task3Sema);
+
+    
 
     if
     ::  opts.doCreate ->
@@ -911,7 +910,7 @@ proctype Worker1 (byte nid, taskid; TaskInputs opts) {
     if
     ::  opts.doAcquire -> 
         atomic{
-            Release(task3Sema);
+            Release(task1Sema);
             printf("@@@ %d CALL sema_obtain %d %d %d\n",
                     _pid, sem_id, opts.Wait, opts.timeoutLength);
                     /* (self,   sem_id, optionset, timeout,   rc) */
@@ -923,9 +922,9 @@ proctype Worker1 (byte nid, taskid; TaskInputs opts) {
 
     if
     ::  opts.doRelease -> 
-            Obtain(task1Sema);
+         
             printf("@@@ %d CALL sema_release %d\n", _pid, sem_id);
-                        /* (self,   bid, rc) */
+                        /* (self,   sem_id, rc) */
             sema_release(taskid, sem_id, rc);
             if
             :: rc == RC_OK -> 
@@ -933,7 +932,7 @@ proctype Worker1 (byte nid, taskid; TaskInputs opts) {
             :: else -> skip;
             fi
             printf("@@@ %d SCALAR rc %d\n",_pid, rc);
-            Release(task1Sema);
+         
     ::  else -> skip
     fi
 
