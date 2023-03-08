@@ -51,21 +51,12 @@ def catch_subprocess_errors(func):
     return wrapper
 
 
-def all_steps(model, model_dir, config, refine_config):
-    clean(model, model_dir, config["testsuite"], refine_config["testfiletype"])
-    generate_spin_files(model, model_dir,
-                        config["spinallscenarios"], refine_config)
-    generate_test_files(model, model_dir,
-                        config["spin2test"], refine_config)
-    copy(model, model_dir, config["testcode"], config["rtems"],
-         config["testyaml"], config["testsuite"])
-    compile(config["rtems"])
-    run_simulator(config["simulator"], config["simulatorargs"],
-                  config["testexe"], config["testsuite"])
+def all_steps(models, model_to_path, config, source_dir):
+    if models == ["allmodels"]:
+        models = list(model_to_path.keys())
 
-
-def all_models(config, source_dir, model_to_path):
-    for model, path in model_to_path.items():
+    for model in models:
+        path = model_to_path[model]
         refine_config = get_refine_config(source_dir, model, path)
         clean(model, path, config["testsuite"], refine_config["testfiletype"])
         generate_spin_files(model, path, config["spinallscenarios"],
@@ -73,6 +64,7 @@ def all_models(config, source_dir, model_to_path):
         generate_test_files(model, path, config["spin2test"], refine_config)
         copy(model, path, config["testcode"], config["rtems"],
              config["testyaml"], config["testsuite"])
+
     compile(config["rtems"])
     run_simulator(config["simulator"], config["simulatorargs"],
                   config["testexe"], config["testsuite"])
@@ -362,11 +354,27 @@ def get_refine_config(source_dir, model, model_dir):
     return refine_config
 
 
+def check_models_exist(modelnames, model_to_path, config):
+    if modelnames == ["allmodels"]:
+        return True
+    else:
+        all_models_exist = True
+        for model in modelnames:
+            if model not in model_to_path.keys():
+                all_models_exist = False
+                print(f"{model} not found in model file")
+        if not all_models_exist:
+            print(f"\nChoose model(s) from: ")
+            for key in model_to_path.keys():
+                print(key)
+            print(f"\nOr update {config['modelsfile']}")
+            raise SystemExit(1)
+
+
 def main():
     """generates and deploys C tests from Promela models"""
     if not (len(sys.argv) == 2 and sys.argv[1] == "help"
-            or len(sys.argv) == 3 and sys.argv[1] == "allsteps"
-            or len(sys.argv) == 2 and sys.argv[1] == "models"
+            or len(sys.argv) >= 3 and sys.argv[1] == "allsteps"
             or len(sys.argv) == 3 and sys.argv[1] == "clean"
             or len(sys.argv) == 3 and sys.argv[1] == "archive"
             or len(sys.argv) == 2 and sys.argv[1] == "zero"
@@ -377,10 +385,9 @@ def main():
             or len(sys.argv) == 2 and sys.argv[1] == "run"):
         print("USAGE:")
         print("help - more details about usage and commands below")
-        print("allsteps modelname - runs clean, spin, gentests, copy, compile "
-              "and run")
-        print("models - runs clean, spin, gentests, copy, compile and "
-              "run for all models")
+        print("allsteps [modelname | allmodels | list of modelnames] - runs "
+              "clean, spin, gentests, copy, compile and run "
+              "for desired model(s)")
         print("clean modelname - remove spin, test files")
         print("archive modelname - archives spin, test files")
         print("zero  - remove all testfiles from RTEMS")
@@ -403,31 +410,20 @@ def main():
 
     config = get_config(source_dir)
     model_to_path = get_model_paths(config)
+    refine_config = dict()
     if len(sys.argv) >= 3:
-        if sys.argv[2] not in model_to_path.keys():
-            print(f"{sys.argv[2]} not found in model file")
-            print(f"\nChoose model from: ")
-            for key in model_to_path.keys():
-                print(key)
-            print(f"\nOr update {config['modelsfile']}")
-            raise SystemExit(1)
-        else:
+        check_models_exist(sys.argv[2::], model_to_path, config)
+        if sys.argv[2] != "allmodels":
             refine_config = get_refine_config(source_dir, sys.argv[2],
                                               model_to_path[sys.argv[2]])
-
-    else:
-        refine_config = dict()
 
     if sys.argv[1] == "help":
         with open(f"{source_dir}/testbuilder.help") as helpfile:
             print(helpfile.read())
 
     if sys.argv[1] == "allsteps":
-        all_steps(sys.argv[2], model_to_path[sys.argv[2]],
-                  config, refine_config)
-
-    if sys.argv[1] == "models":
-        all_models(config, source_dir, model_to_path)
+        all_steps(sys.argv[2::], model_to_path,
+                  config, source_dir)
 
     if sys.argv[1] == "spin":
         generate_spin_files(sys.argv[2], model_to_path[sys.argv[2]],
