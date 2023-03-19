@@ -54,6 +54,9 @@ import shutil
 import subprocess
 import tempfile
 import traceback
+import yaml
+
+data arg_yml_file
 
 ##
 # parse
@@ -240,14 +243,26 @@ class read_eval_print:
         options_pml = ['-p', '--promela']
         options0 = ['-a', '--annotation'] + options_pml
         options_annotation_file = ['-af', '--annotation_file']
-        options = options_annotation_file + options0
+        options_pml_file = ['--pf']
+        options = options_annotation_file + options0 + options_pml_file
         def map_arg (l):
             match l:
-                case [option, cts] + xs if option in options0 or option in options_annotation_file:
-                    yield (  arg_pml () if option in options_pml else
-                             arg_annotation () if option in options0 else
-                             arg_annotation_file ()
-                           , cts)
+                case [option, cts] + xs if option in options:
+                    print(f"option: {option}, cts: {cts}, xs: {xs}")
+                    if option in options_pml_file:
+                        if os.path.isfile cts:
+                            yield (arg_pml_file(), cts)
+                        else:
+                            input_continue (f'Expecting an existing file: {cts}')
+                    elif option in options_pml:
+                        yield (arg_pml(), cts)
+                    elif option in options_annotation_file:
+                        if os.path.isfile cts:
+                            yield (arg_annotation_file(), cts)
+                        else:
+                            input_continue (f'Expecting an existing file: {cts}')
+                    elif option in options0:
+                        yield (arg_annotation(), cts)
                     yield from map_arg xs
                 case [fic] + xs:
                     if fic.find ('-') == 0:
@@ -256,7 +271,7 @@ class read_eval_print:
                         else:
                             input_continue (f'Unknown option: {fic} {xs}')
                     elif os.path.isfile fic:
-                        yield (arg_pml_file (), fic)
+                        yield (arg_yml_file(), fic)
                     else:
                         input_continue (f'Expecting an existing file: {fic}')
                     yield from map_arg xs
@@ -303,13 +318,33 @@ class read_eval_print:
     ##
     #
 
+    def parse_configurations(self, parse_commands, hash_cmd_generic, lines, pos_file, pos_dir):
+        config_items = list()
+        arg_type = lines[0]
+        if arg_type == arg_yml_file():
+            file_path = lines[1]
+            with open(file_path) as file:
+                config_dict = yaml.load(file, Loader=yaml.FullLoader)
+            for index, (key, values) in enumerate(config_dict.items()):
+                next_list = list()
+                if type(values) == list:
+                    for value in values:
+                        next_list.append(tuple((pos_dir, value)))
+                else:
+                    next_list.append(tuple((pos_dir, values)))
+                config_items.append(((pos_file, 0, index), tuple((key, next_list))))
+            annot_equiv = {(pos_file, 0): config_items}
+            return {(pos_file, 0): config_items}
+        else:
+            return syntax_pml.parse_annotations(parse_commands, hash_cmd_generic,
+                                                lines, pos_file, pos_dir)
+
     def init_top_elems (self, programs, sys_args, l_check_unparse_parse = False):
-        annots = [ syntax_pml.parse_annotations
-                     (self.parse_commands,
+        annots = [self.parse_configurations(self.parse_commands,
                       self.hash_cmd_generic,
                       (arg_ty, arg_cts),
                       pos_file,
-                      os.path.dirname (os.path.abspath arg_cts) if arg_ty == arg_pml_file () or arg_ty == arg_annotation_file () else self.cwd)
+                      os.path.dirname (os.path.abspath arg_cts) if arg_ty == arg_pml_file () or arg_ty == arg_annotation_file () or arg_ty == arg_yml_file() else self.cwd)
                   for (pos_file, (arg_ty, arg_cts)) in mapi (args -> args, sys_args) ]
         dict_top_elem = {}
 

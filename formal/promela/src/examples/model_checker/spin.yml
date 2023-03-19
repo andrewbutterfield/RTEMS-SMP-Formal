@@ -1,0 +1,5 @@
+model_checker_verifier: [spin, -a]
+model_checker_compile: [gcc, -DVECTORSZ=4096, -o, pan, pan.c]
+model_checker_exec_one: [./pan, -a, -n]
+model_checker_exec_all: [./pan, -a, -n, -e]
+model_checker_trail: [spin, -p, -T, -t, -k]
