@@ -325,14 +325,29 @@ class read_eval_print:
             file_path = lines[1]
             with open(file_path) as file:
                 config_dict = yaml.load(file, Loader=yaml.FullLoader)
+            index_offset = 0
             for index, (key, values) in enumerate(config_dict.items()):
-                next_list = list()
-                if type(values) == list:
-                    for value in values:
-                        next_list.append(tuple((pos_dir, value)))
+                if index_offset > 0:
+                    index_offset -= 1
+                if key == "dict":
+                    for dictionary in values:
+                        for subkey, subvalues in dictionary.items():
+                            next_list = list()
+                            if type(subvalues) == list:
+                                for value in subvalues:
+                                    next_list.append(tuple((pos_dir, value)))
+                            else:
+                                next_list.append(tuple((pos_dir, subvalues)))
+                            config_items.append(((pos_file, 0 , index + index_offset), tuple((subkey, next_list))))
+                            index_offset += 1
                 else:
-                    next_list.append(tuple((pos_dir, values)))
-                config_items.append(((pos_file, 0, index), tuple((key, next_list))))
+                    next_list = list()
+                    if type(values) == list:
+                        for value in values:
+                            next_list.append(tuple((pos_dir, value)))
+                    else:
+                        next_list.append(tuple((pos_dir, values)))
+                    config_items.append(((pos_file, 0, index + index_offset), tuple((key, next_list))))
             annot_equiv = {(pos_file, 0): config_items}
             return {(pos_file, 0): config_items}
         else:
