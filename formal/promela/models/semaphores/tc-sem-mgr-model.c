@@ -114,5 +114,4 @@ T_TEST_CASE( RtemsModelSemMgr5 )
 
 
 
-
 /** @} */

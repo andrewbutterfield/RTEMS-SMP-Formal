@@ -610,52 +610,51 @@ inline chooseScenario() {
     task2Core = THIS_CORE;
     task3Core = THIS_CORE;
 
-    //if
-    scenario = obt1_rel1_obt2_rel2;
-    //::  scenario = SimpleBinAcqRel;
-    //::  scenario = BinAcqRel;
-    //::  scenario = AcqTimeoutDel;
-    //fi
-    atomic{printf("@@@ %d LOG scenario ",_pid); printm(scenario); nl()}
-
-    //if
-    //::  scenario == CountingAcqRel -> 
-    //task_in[TASK1_ID].doAcquire = false;
-    //task_in[TASK1_ID].doRelease = true;
-    //task_in[TASK1_ID].doDelete = true;
-
     if
-    ::  task_in[TASK1_ID].sName = 0;
-        printf( "@@@ %d LOG sub-senario bad create, invalid name\n", _pid); //RTEMS_INVALID_NAME
-    ::  task_in[TASK1_ID].idNull = true;
-        printf( "@@@ %d LOG sub-senario bad create, passed id null\n", _pid); //RTEMS_INVALID_ADDRESS
-    ::  task_in[TASK1_ID].Count = 0;
-    	printf( "@@@ %d LOG sub-senario bad create, passed invalid initial count\n", _pid); //RTEMS_INVALID_NUMBER
-    ::  task_in[TASK1_ID].LockingProtocol = INHERIT_LOCKING;
-        printf( "@@@ %d LOG sub-senario bad create, passed invalid locking protocol\n", _pid); //RTEMS_INVALID_PRIORITY
-    ::  task_in[TASK1_ID].doDelete = true;
-        printf( "@@@ %d LOG sub-senario created and deleted\n", _pid); //RTEMS_SUCCESSFUL    
-    ::  task_in[TASK2_ID].doAcquire = true;
-        task_in[TASK3_ID].doAcquire = true;
-        task_in[TASK2_ID].doRelease = true;
-        task_in[TASK3_ID].doRelease = true;
+    ::	scenario = obt1_rel1_obt2_rel2;
+    ::  scenario = obt1_obt2_rel1_rel2;
+    fi
+    atomic{printf("@@@ %d LOG scenario ",_pid); printm(scenario); nl()}
+    
+    if
+    ::	scenario==obt1_rel1_obt2_rel2->
+    
+      	if
+    	::  task_in[TASK1_ID].sName = 0;
+        	printf( "@@@ %d LOG sub-senario bad create, invalid name\n", _pid); //RTEMS_INVALID_NAME
+    	::  task_in[TASK1_ID].idNull = true;
+        	printf( "@@@ %d LOG sub-senario bad create, passed id null\n", _pid); //RTEMS_INVALID_ADDRESS
+    	::  task_in[TASK1_ID].Count = 0;
+    		printf( "@@@ %d LOG sub-senario bad create, passed invalid initial count\n", _pid); //RTEMS_INVALID_NUMBER
+    	::  task_in[TASK1_ID].LockingProtocol = INHERIT_LOCKING;
+        	printf( "@@@ %d LOG sub-senario bad create, passed invalid locking protocol\n", _pid); //RTEMS_INVALID_PRIORITY
+    	::  task_in[TASK1_ID].doDelete = true;
+        	printf( "@@@ %d LOG sub-senario created and deleted\n", _pid); //RTEMS_SUCCESSFUL    
+    	::  task_in[TASK2_ID].doAcquire = true;
+            task_in[TASK3_ID].doAcquire = true;
+            task_in[TASK2_ID].doRelease = true;
+            task_in[TASK3_ID].doRelease = true;
+        fi
         
-    //::  task_in[TASK2_ID].doAcquire = false;
-    //    task_in[TASK3_ID].doAcquire = false;
-    //    printf( "@@@ %d LOG sub-senario semaphore not acquired\n", _pid);
-    //::  task_in[TASK2_ID].sName = 0;
-    //    printf( "@@@ %d LOG sub-senario Worker0 ident semaphore name is 0\n", _pid); //RTEMS_INVALID_NAME
+    ::  scenario==obt1_obt2_rel1_rel2->
+	    task_in[TASK2_ID].doAcquire = true;
+            task_in[TASK3_ID].doAcquire = true;
+            task_in[TASK2_ID].doRelease = true;
+            task_in[TASK3_ID].doRelease = true;
     fi
 
-    //fi
 
 }
 
 
 proctype Runner (byte nid, taskid; TaskInputs opts) {
+
+    Obtain(task1Sema);
     tasks[taskid].nodeid = nid;
     tasks[taskid].pmlid = _pid;
     tasks[taskid].prio = opts.taskPrio;
+    
+   
 
     printf("@@@ %d TASK Runner\n",_pid);
     if 
@@ -677,7 +676,7 @@ proctype Runner (byte nid, taskid; TaskInputs opts) {
     //::  else -> skip
     //fi
     
-
+    
 
     if
     ::  opts.doCreate ->
@@ -701,7 +700,9 @@ proctype Runner (byte nid, taskid; TaskInputs opts) {
             printf("@@@ %d SCALAR rc %d\n",_pid, rc);
     fi
     Release(task2Sema);
-
+    Release(task3Sema);
+    
+    
 
     if
     ::  opts.doAcquire -> 
@@ -710,7 +711,7 @@ proctype Runner (byte nid, taskid; TaskInputs opts) {
                     /* (self,   sem_id, optionset, timeout,   rc) */
             sema_obtain(taskid, sem_id, opts.Wait, opts.timeoutLength, rc);
             printf("@@@ %d SCALAR rc %d\n",_pid, rc);
-    ::  else -> skip
+    ::  else -> skip;
     fi
 
     if
@@ -726,19 +727,21 @@ proctype Runner (byte nid, taskid; TaskInputs opts) {
             fi
             printf("@@@ %d SCALAR rc %d\n",_pid, rc);
             
-    ::  else -> skip
+    ::  else -> skip;
     fi
 
 
 
     if 
     ::  opts.doDelete ->
-        Obtain(task1Sema);
-        printf("@@@ %d CALL sema_delete %d\n",_pid, sem_id);
-                  /*  (self,   sem_id, rc) */
-        sema_delete(taskid, sem_id, rc);
-        printf("@@@ %d SCALAR rc %d\n",_pid, rc);
-        Release(task1Sema);
+		Obtain(task1Sema);
+	       
+		printf("@@@ %d CALL sema_delete %d\n",_pid, sem_id);
+		          /*  (self,   sem_id, rc) */
+		sema_delete(taskid, sem_id, rc);
+		printf("@@@ %d SCALAR rc %d\n",_pid, rc);
+	  
+		Release(task1Sema);
     ::  else -> skip
     fi
     
@@ -758,10 +761,11 @@ proctype Runner (byte nid, taskid; TaskInputs opts) {
 
 
 proctype Worker0 (byte nid, taskid; TaskInputs opts) {
+    Obtain(task2Sema);
     tasks[taskid].nodeid = nid;
     tasks[taskid].pmlid = _pid;
     tasks[taskid].prio = opts.taskPrio;
-
+    
     printf("@@@ %d TASK Worker0\n",_pid);
     if 
     :: tasks[taskid].prio == 1 -> printf("@@@ %d CALL HighPriority\n", _pid);
@@ -783,8 +787,8 @@ proctype Worker0 (byte nid, taskid; TaskInputs opts) {
     //    printf("@@@ %d CALL SetProcessor %d\n", _pid, tasks[taskid].nodeid);
     //:: else -> skip
     //fi
+	
 
-    Obtain(task2Sema);
     if
     ::  opts.doCreate ->
         printf("@@@ %d CALL merge_attribs %d %d %d %d \n", _pid, opts.isGlobal, opts.isPriority, opts.semType, opts.LockingProtocol);
@@ -814,13 +818,19 @@ proctype Worker0 (byte nid, taskid; TaskInputs opts) {
                     _pid, sem_id, opts.Wait, opts.timeoutLength);
                     /* (self,   sem_id, optionset, timeout,   rc) */
             sema_obtain(taskid, sem_id, opts.Wait, opts.timeoutLength, rc);
+           
         }
+        Release(task3Sema);
         printf("@@@ %d SCALAR rc %d\n",_pid, rc);
-    ::  else -> skip;
+    ::  else -> Release(task3Sema);
     fi
+    
+    
+    
 
     if
     ::  opts.doRelease -> 
+    	Obtain(task2Sema);
         atomic{
             printf("@@@ %d CALL sema_release %d\n", _pid, sem_id);
                         /* (self,   sem_id, rc) */
@@ -831,11 +841,12 @@ proctype Worker0 (byte nid, taskid; TaskInputs opts) {
             :: else -> skip;
             fi
             printf("@@@ %d SCALAR rc %d\n",_pid, rc);
-            Release(task3Sema);
 	}
            
-    ::  else -> Release(task3Sema);
+    ::  else -> Obtain(task2Sema);
     fi
+    
+    Release(task3Sema);
 
     if 
     ::  opts.doDelete ->
@@ -845,7 +856,7 @@ proctype Worker0 (byte nid, taskid; TaskInputs opts) {
         printf("@@@ %d SCALAR rc %d\n",_pid, rc);
     ::  else -> skip
     fi
-
+    
     atomic{
         Release(task2Sema);
         printf("@@@ %d LOG Task %d finished\n",_pid,taskid);
@@ -855,9 +866,14 @@ proctype Worker0 (byte nid, taskid; TaskInputs opts) {
 }
 
 proctype Worker1 (byte nid, taskid; TaskInputs opts) {
+   
+    Release(task1Sema);
+    Obtain(task3Sema);
     tasks[taskid].nodeid = nid;
     tasks[taskid].pmlid = _pid;
     tasks[taskid].prio = opts.taskPrio;
+    
+
 
     printf("@@@ %d TASK Worker1\n",_pid);
     if 
@@ -882,7 +898,7 @@ proctype Worker1 (byte nid, taskid; TaskInputs opts) {
     //:: else -> skip
     //fi
     
-    Obtain(task3Sema);
+   
 
     
 
@@ -911,19 +927,25 @@ proctype Worker1 (byte nid, taskid; TaskInputs opts) {
     if
     ::  opts.doAcquire -> 
         atomic{
-            Release(task1Sema);
+            
             printf("@@@ %d CALL sema_obtain %d %d %d\n",
                     _pid, sem_id, opts.Wait, opts.timeoutLength);
                     /* (self,   sem_id, optionset, timeout,   rc) */
             sema_obtain(taskid, sem_id, opts.Wait, opts.timeoutLength, rc);
+            
+ 
         }
+        Release(task2Sema);
         printf("@@@ %d SCALAR rc %d\n",_pid, rc);
-    ::  else -> Release(task1Sema);
+    ::  else -> Release(task2Sema);
     fi
+ 	
+    Obtain(task3Sema);
+   
 
     if
-    ::  opts.doRelease -> 
-         
+    ::  opts.doRelease ->
+    	atomic{
             printf("@@@ %d CALL sema_release %d\n", _pid, sem_id);
                         /* (self,   sem_id, rc) */
             sema_release(taskid, sem_id, rc);
@@ -933,9 +955,14 @@ proctype Worker1 (byte nid, taskid; TaskInputs opts) {
             :: else -> skip;
             fi
             printf("@@@ %d SCALAR rc %d\n",_pid, rc);
-         
-    ::  else -> skip
+            
+      
+	}
+	Release(task1Sema);
+
+    ::  else -> Release(task1Sema);
     fi
+    
 
     if 
     ::  opts.doDelete ->
@@ -945,6 +972,9 @@ proctype Worker1 (byte nid, taskid; TaskInputs opts) {
         printf("@@@ %d SCALAR rc %d\n",_pid, rc);
     ::  else -> skip
     fi
+    
+  
+    
     atomic {
         Release(task3Sema);
         printf("@@@ %d LOG Task %d finished\n",_pid,taskid);
@@ -1081,16 +1111,20 @@ init {
 
     run System();
     run Clock();
+    
 
     run Runner(task1Core,TASK1_ID,task_in[TASK1_ID]);
     run Worker0(task2Core,TASK2_ID,task_in[TASK2_ID]);
     run Worker1(task3Core,TASK3_ID,task_in[TASK3_ID]);
+    
+    
+    
 
     _nr_pr == 1;
 
-    #ifdef TEST_GEN
+    //#ifdef TEST_GEN
     assert(false);
-    #endif
+    //#endif
 
     printf("Semaphore Manager Model finished !\n")
 
