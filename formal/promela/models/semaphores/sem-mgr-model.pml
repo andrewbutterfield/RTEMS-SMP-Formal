@@ -385,6 +385,7 @@ inline sema_obtain(self, sem_id, optionset, interval,rc) {
                 ::  model_semaphores[sem_id].Count > 0 -> 
                     model_semaphores[sem_id].Count = model_semaphores[sem_id].Count -1;
                     rc = RC_OK;
+                    printf("@@@ %d LOG Semaphore %d obtained\n", _pid, sem_id)
                     //change global variable
                 :: else -> //semaphore already in use add task to wait queue if FIFO
                     if
@@ -637,9 +638,9 @@ inline chooseScenario() {
         fi
         
     ::  scenario==obt1_obt2_rel1_rel2->
-	    task_in[TASK2_ID].doAcquire = true;
+	    task_in[TASK2_ID].doAcquire = false;
             task_in[TASK3_ID].doAcquire = true;
-            task_in[TASK2_ID].doRelease = true;
+            task_in[TASK2_ID].doRelease = false;
             task_in[TASK3_ID].doRelease = true;
     fi
 
@@ -699,8 +700,10 @@ proctype Runner (byte nid, taskid; TaskInputs opts) {
             sema_ident(opts.sName,nid,sem_id,rc);
             printf("@@@ %d SCALAR rc %d\n",_pid, rc);
     fi
+    
     Release(task2Sema);
-    Release(task3Sema);
+
+    
     
     
 
@@ -820,8 +823,9 @@ proctype Worker0 (byte nid, taskid; TaskInputs opts) {
             sema_obtain(taskid, sem_id, opts.Wait, opts.timeoutLength, rc);
            
         }
-        Release(task3Sema);
+        
         printf("@@@ %d SCALAR rc %d\n",_pid, rc);
+        Release(task3Sema);
     ::  else -> Release(task3Sema);
     fi
     
@@ -935,8 +939,9 @@ proctype Worker1 (byte nid, taskid; TaskInputs opts) {
             
  
         }
-        Release(task2Sema);
+        
         printf("@@@ %d SCALAR rc %d\n",_pid, rc);
+        Release(task2Sema);
     ::  else -> Release(task2Sema);
     fi
  	

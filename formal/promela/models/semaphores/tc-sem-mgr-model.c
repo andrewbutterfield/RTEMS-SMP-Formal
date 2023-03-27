@@ -107,6 +107,10 @@ T_TEST_CASE( RtemsModelSemMgr5 )
 {
   RtemsModelSemMgr_Run5();
 }
+T_TEST_CASE( RtemsModelSemMgr6 )
+{
+  RtemsModelSemMgr_Run6();
+}
 
 
 
