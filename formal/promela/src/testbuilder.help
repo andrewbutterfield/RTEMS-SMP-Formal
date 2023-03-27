@@ -8,7 +8,7 @@ In order to generate test files the following input files are required:
     `<model>-run.h`
 where `<model>` is the name of the model.
 
-`all <model>` will run clean, spin, gentests, copy, compile and run
+`allsteps [<model> | allmodels | <list of models>]` will run clean, spin, gentests, copy, compile and run for desired model(s)
 `spin <model>` will run SPIN to find all scenarios
 `gentests <model>` will produce C tests
 `clean <model>` will remove generated files.
