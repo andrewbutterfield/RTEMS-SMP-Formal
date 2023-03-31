@@ -51,8 +51,8 @@ class command:
         self.switchNo = 0
 
         # Use c by default if language not set
-        self.setComments("C")
-        self.setDefaults("C")
+        self.setComments("c")
+        self.setDefaults("c")
 
         self.outputLOG = outputLOG
         self.annoteComments = annoteComments
@@ -60,7 +60,8 @@ class command:
 
     def setComments(self, language):
         logger.debug(f"Set LANGUAGE to {language} (comments)\n")
-        language_file = Path(Path(__file__).parent.absolute() / f"languages/{language}.yml")
+        language_file = Path(Path(__file__).parent.absolute() /
+                             f"languages/{language}.yml")
         if language_file.exists():
             with open(language_file) as f:
                 language_yaml = yaml.load(f, Loader=yaml.FullLoader)
@@ -71,21 +72,33 @@ class command:
                         raise SystemExit()
                     else:
                         setattr(self, key, language_yaml[key])
-        else:
+        elif language != "c":
             logger.debug(f"Unknown LANGUAGE {language}, set to C\n")
-            self.setComments("C")
+            self.setComments("c")
+        else:
+            logger.error(f"Ensure language file for {language} is present "
+                         f"before generating tests (comments)\n")
+            logger.error(f"File {language_file} not found\n")
+            raise SystemExit()
 
     def setDefaults(self, language):
         logger.debug(f"Set LANGUAGE to {language} (non-comment defaults)\n")
-        language_file = Path(Path(__file__).parent.absolute() / f"languages/{language}.yml")
+        language_file = Path(Path(__file__).parent.absolute() /
+                             f"languages/{language}.yml")
         if language_file.exists():
             with open(language_file) as f:
                 language_yaml = yaml.load(f, Loader=yaml.FullLoader)
                 comment_keys = {"EOLC", "CMTBEGIN", "CMTEND"}
                 for key in language_yaml.keys() - comment_keys:
                     setattr(self, key, language_yaml[key])
+        elif language.lower() != "c":
+            logger.debug(f"Unknown LANGUAGE {language}, set to C\n")
+            self.setDefaults("c")
         else:
-            self.setDefaults("C")
+            logger.error(f"Ensure language file for {language} is present "
+                         f"before generating tests (non-comment defaults)\n")
+            logger.error(f"File {language_file} not found\n")
+            raise SystemExit()
 
     def setupSegmentCode(self):
         if 'SEGNAMEPFX' in self.ref_dict_keys:
@@ -117,8 +130,8 @@ class command:
     def setupLanguage(self):
         if 'LANGUAGE' in self.ref_dict_keys:
             language = self.ref_dict['LANGUAGE']
-            self.setComments(language)
-            self.setDefaults(language)
+            self.setComments(language.lower())
+            self.setDefaults(language.lower())
             self.setupSegmentCode()
         else:
             pass  # assume default: C
