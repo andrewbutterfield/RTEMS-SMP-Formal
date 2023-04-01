@@ -965,6 +965,9 @@ def cpp(code, fic):
     logger.debug('cpp stdout:\n {out}'.format(out=stdout))
     if p.returncode != 0:
         raise Exception('C preprocessor return code: {returncode}'.format(returncode=p.returncode))
+    print("stdout")
+    for index, line in enumerate(stdout.split("\n")):
+        print(f"{index}: {line}")
     return stdout
 
 
