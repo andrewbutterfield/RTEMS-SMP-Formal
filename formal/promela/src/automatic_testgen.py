@@ -2,31 +2,27 @@ from src.modules.promela_yacc.promela import yacc, ast, lex
 import sys
 import pathlib
 
+class NegatedThing:
+    def __init__(self, node, negated_expression):
+        self.node = node
+        self.negated_expression = negated_expression
 
-def get_forest_ass00(cons_pair, dest_pair, node, node_partial_constructor):
+
+def get_forest_ass001(node, node_partial_constructor):
     checked_sub_nodes = []
     remaining_sub_nodes = remove_first_element(node)
     nodes_with_negations = []
     for sub_node in node:
-        t_t = dest_pair(sub_node)
-        my_func = lambda msg_t_ass: (cons_pair((msg_t_ass[0], t_t[1])), node_partial_constructor(checked_sub_nodes + [cons_pair((msg_t_ass[1], t_t[1]))] + remaining_sub_nodes))
+        t_t = (sub_node, None)
+        my_func = lambda msg_t_ass: (msg_t_ass[0], node_partial_constructor(checked_sub_nodes + [msg_t_ass[1]] + remaining_sub_nodes))
         nodes_with_negations += [my_func(thing) for thing in get_negations_in_node(t_t[0])]
-        checked_sub_nodes = checked_sub_nodes + [cons_pair((t_t[0], t_t[1]))]
+        checked_sub_nodes = checked_sub_nodes + [t_t[0]]
         remaining_sub_nodes = remove_first_element(remaining_sub_nodes)
     return nodes_with_negations
 
 
-def get_forest_ass0(node, node_partial_constructor):
-    return get_forest_ass00(
-        (lambda t_t: t_t[0]),
-        (lambda t_t: (t_t, None)),
-        node,
-        node_partial_constructor
-    )
-
-
 def get_negations_inline_and_proctype(node, node_partial_constructor):
-    nodes_with_negation = get_forest_ass0(
+    nodes_with_negation = get_forest_ass001(
                     [node.body],
                     node_partial_constructor
                 )
@@ -37,13 +33,22 @@ def get_negations_inline_and_proctype(node, node_partial_constructor):
     return negations
 
 
+def format_assertion_program(negation_in_program, node, checked_nodes, remaining_nodes):
+    return (negation_in_program[0], node[1]), \
+           ast.Program(checked_nodes
+                       + [(negation_in_program[1], node[1])]
+                       + remaining_nodes)
+
+
 def get_all_programs(program: ast.Program):
-    return get_forest_ass00(
-        (lambda t_t: t_t),
-        (lambda t_t: t_t),
-        program,
-        ast.Program
-    )
+    checked_nodes = []
+    remaining_nodes = remove_first_element(program)
+    nodes_with_negations = []
+    for node in program:
+        nodes_with_negations += [format_assertion_program(negation_in_program, node, checked_nodes, remaining_nodes) for negation_in_program in get_negations_in_node(node[0])]
+        checked_nodes = checked_nodes + [(node[0], node[1])]
+        remaining_nodes = remove_first_element(remaining_nodes)
+    return nodes_with_negations
 
 
 def get_negations_in_node(node):
@@ -52,7 +57,7 @@ def get_negations_in_node(node):
     elif type(node) == ast.LTL:
         return [(node, ast.LTL(ast.Unary('!', node.formula), name=node.name))]
     elif type(node) == ast.Sequence:
-        return get_forest_ass0(
+        return get_forest_ass001(
             node,
             lambda node0: ast.Sequence(
                 node0,
@@ -61,7 +66,7 @@ def get_negations_in_node(node):
             )
         )
     elif type(node) == ast.Options:
-        return get_forest_ass0(
+        return get_forest_ass001(
             node.options,
             lambda node0: ast.Options(
                 node.type,
