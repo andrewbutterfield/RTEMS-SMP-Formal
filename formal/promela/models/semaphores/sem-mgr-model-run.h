@@ -78,7 +78,7 @@ void RtemsModelSemMgr_Run{0}()
 
   memset( &ctx->thread_switch_log, 0, sizeof( ctx->thread_switch_log ) );
   _Thread_Wait_flags_set( ctx->runner_thread, THREAD_WAIT_CLASS_PERIOD );
-
+  
   TestSegment0( ctx );
 
   Runner( ctx );

@@ -151,6 +151,11 @@ void RtemsModelSemMgr_Run3(void);
 void RtemsModelSemMgr_Run4(void);
 void RtemsModelSemMgr_Run5(void);
 void RtemsModelSemMgr_Run6(void);
+void RtemsModelSemMgr_Run7(void);
+
+
+
+
 
 
 

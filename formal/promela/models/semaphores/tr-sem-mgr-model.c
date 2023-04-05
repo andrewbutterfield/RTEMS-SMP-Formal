@@ -83,6 +83,7 @@ void DeleteSema( rtems_id id )
 void ObtainSema( rtems_id id )
 {
   rtems_status_code sc;
+  T_log(T_NORMAL,"obtain id= %d ", id);
   sc = rtems_semaphore_obtain( id, RTEMS_WAIT, RTEMS_NO_TIMEOUT );
   T_quiet_rsc_success( sc );
 }
@@ -90,9 +91,12 @@ void ObtainSema( rtems_id id )
 void ReleaseSema( rtems_id id )
 {
   rtems_status_code sc;
-
+  
+  T_log(T_NORMAL,"semaphore release id = %d", id);
   sc = rtems_semaphore_release( id );
+  T_log(T_NORMAL,"semaphore release");
   T_quiet_rsc_success( sc );
+  T_log(T_NORMAL, "Returned 0x%x from release", sc );
 }
 
 //rtems_task_priority SetPriority( rtems_id id, rtems_task_priority priority )

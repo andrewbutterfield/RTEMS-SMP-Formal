@@ -51,16 +51,19 @@ Worker1: |
 SIGNAL: |
   ReleaseSema( semaphore[{}] );
 
+
 WAIT: |
-  ObtainSema( semaphore[{}] );
+  ObtainSema( semaphore[{0}] );
+
   
 merge_attribs: |
   T_log(T_NORMAL, "Calling mergeattribs(%d,%d,%d,%d)", {0}, {1}, {2}, {3} );
   rtems_attribute attribs;
   attribs = mergeattribs({0},{1},{2},{3});
+  T_log(T_NORMAL, "Attribs= 0x%x", attribs );
 
 sema_create: |
-  T_log(T_NORMAL, "Calling SemaCreate(%d,%d,%d,%d)", {0}, {1}, {2}, {3} );
+  T_log(T_NORMAL, "Calling SemaCreate(%d,%d, %d, %d,%d)", {0}, {1},attribs, {2}, {3} );
   rtems_id sem_id;
   initialise_id(&sem_id);
   rtems_status_code rc;
@@ -72,6 +75,7 @@ sema_ident: |
   rtems_id sem_id;
   initialise_id(&sem_id);
   rtems_status_code rc;
+  T_log(T_NORMAL, "identifying sem %d", {2});
   rc = rtems_semaphore_ident({0} , {1}, {2} ? &sem_id : NULL);
   T_log(T_NORMAL, "Returned 0x%x from Ident", rc );
   
