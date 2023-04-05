@@ -1,63 +1,90 @@
 from src.modules.promela_yacc.promela import yacc, ast, lex
 import sys
 import pathlib
-
-class NegatedThing:
-    def __init__(self, node, negated_expression):
-        self.node = node
-        self.negated_expression = negated_expression
+import filecmp
+from dataclasses import dataclass
+from typing import Union, List, Any
 
 
-def get_forest_ass001(node, node_partial_constructor):
+@dataclass
+class ProgramWithNegations:
+    expression: Union[ast.Assert, ast.LTL]
+    node: Union[ast.InlineDef, ast.Proctype, ast.TypeDef,
+                ast.Sequence, ast.LTL, ast.Assert]
+    name: str = ""
+    program: ast.Program = None
+
+
+def format_negations_top_level_nodes(
+        negations_in_node: List[ProgramWithNegations],
+        node_partial_constructor, checked_sub_nodes,
+        remaining_sub_nodes) -> List[ProgramWithNegations]:
+    negations_formatted = list()
+    for negation in negations_in_node:
+        negation.node = node_partial_constructor(checked_sub_nodes +
+                                                 [negation.node] +
+                                                 remaining_sub_nodes)
+        negations_formatted.append(negation)
+    return negations_formatted
+
+
+def get_negations_top_level_node(node, node_partial_constructor) -> List[ProgramWithNegations]:
     checked_sub_nodes = []
     remaining_sub_nodes = remove_first_element(node)
     nodes_with_negations = []
     for sub_node in node:
-        t_t = (sub_node, None)
-        my_func = lambda msg_t_ass: (msg_t_ass[0], node_partial_constructor(checked_sub_nodes + [msg_t_ass[1]] + remaining_sub_nodes))
-        nodes_with_negations += [my_func(thing) for thing in get_negations_in_node(t_t[0])]
-        checked_sub_nodes = checked_sub_nodes + [t_t[0]]
+        negations_in_sub_node = get_negations_in_node(sub_node)
+        nodes_with_negations += format_negations_top_level_nodes(negations_in_sub_node, node_partial_constructor, checked_sub_nodes, remaining_sub_nodes)
+        checked_sub_nodes.append(sub_node)
         remaining_sub_nodes = remove_first_element(remaining_sub_nodes)
     return nodes_with_negations
 
 
-def get_negations_inline_and_proctype(node, node_partial_constructor):
-    nodes_with_negation = get_forest_ass001(
+def get_negations_inline_and_proctype(node: Union[ast.InlineDef, ast.Proctype],
+                                      node_partial_constructor) -> List[ProgramWithNegations]:
+    nodes_with_negation = get_negations_top_level_node(
                     [node.body],
                     node_partial_constructor
                 )
     negations = list()
     for node_with_negation in nodes_with_negation:
-        formatted_node = ((node.name, node_with_negation[0]), node_with_negation[1])
-        negations.append(formatted_node)
+        node_with_negation.name = node.name
+        negations.append(node_with_negation)
     return negations
 
 
-def format_assertion_program(negation_in_program, node, checked_nodes, remaining_nodes):
-    return (negation_in_program[0], node[1]), \
-           ast.Program(checked_nodes
-                       + [(negation_in_program[1], node[1])]
-                       + remaining_nodes)
+def format_assertions_program(negation_in_program: ProgramWithNegations,
+                              line_number: int, checked_nodes: list,
+                              remaining_nodes: list) -> ProgramWithNegations:
+    negation_in_program.program = ast.Program(checked_nodes
+                                   + [(negation_in_program.node, line_number)]
+                                   + remaining_nodes)
+    return negation_in_program
 
 
-def get_all_programs(program: ast.Program):
+def get_all_programs(program: ast.Program) -> List[ProgramWithNegations]:
     checked_nodes = []
     remaining_nodes = remove_first_element(program)
     nodes_with_negations = []
     for node in program:
-        nodes_with_negations += [format_assertion_program(negation_in_program, node, checked_nodes, remaining_nodes) for negation_in_program in get_negations_in_node(node[0])]
-        checked_nodes = checked_nodes + [(node[0], node[1])]
+        for node_with_negation in get_negations_in_node(node[0]):
+            nodes_with_negations.append(format_assertions_program(node_with_negation, node[1],
+                                                              checked_nodes, remaining_nodes))
+        checked_nodes.append(node)
         remaining_nodes = remove_first_element(remaining_nodes)
     return nodes_with_negations
 
 
-def get_negations_in_node(node):
+def get_negations_in_node(node) -> List[ProgramWithNegations]:
     if type(node) == ast.Assert:
-        return [(node, ast.Assert(ast.Unary('!', node.expr), pos=node.pos))]
+        expression = ast.Assert(ast.Unary('!', node.expr))
+        return [ProgramWithNegations(expression=expression, node=expression)]
     elif type(node) == ast.LTL:
-        return [(node, ast.LTL(ast.Unary('!', node.formula), name=node.name))]
+        expression = ast.LTL(ast.Unary('!', node.formula), node.name)
+        return [ProgramWithNegations(expression, name=node.name,
+                                     node=expression)]
     elif type(node) == ast.Sequence:
-        return get_forest_ass001(
+        return get_negations_top_level_node(
             node,
             lambda node0: ast.Sequence(
                 node0,
@@ -66,7 +93,7 @@ def get_negations_in_node(node):
             )
         )
     elif type(node) == ast.Options:
-        return get_forest_ass001(
+        return get_negations_top_level_node(
             node.options,
             lambda node0: ast.Options(
                 node.type,
@@ -126,18 +153,19 @@ def main(args):
     pathlib.Path("_").mkdir(exist_ok=True)
     name_to_num = dict()
     for program in all_programs:
-        if type(program[0][0]) == ast.LTL:
-            file_name = f"_/ltl_{program[0][0].name}.pml"
-            write_file(file_name, program[1])
-        elif type(program[0][0][1]) == ast.Assert:
-            if program[0][0][0] not in name_to_num.keys():
-                name_to_num[program[0][0][0]] = 0
+        if type(program.expression) == ast.LTL:
+            file_name = f"_/ltl_{program.name}.pml"
+            write_file(file_name, program.program)
+        elif type(program.expression) == ast.Assert:
+            if program.name not in name_to_num.keys():
+                name_to_num[program.name] = 0
             else:
-                name_to_num[program[0][0][0]] += 1
-            file_name = f"_/assert_{program[0][0][0]}_{name_to_num[program[0][0][0]]}.pml"
-            write_file(file_name, program[1])
+                name_to_num[program.name] += 1
+            file_name = f"_/assert_{program.name}_{name_to_num[program.name]}.pml"
+            write_file(file_name, program.program)
 
 
 if __name__ == "__main__":
     print(sys.argv)
     main(sys.argv)
+
