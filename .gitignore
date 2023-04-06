@@ -29,4 +29,5 @@ proto/Haskell/rtems-spec/rtems-spec.cabal
 *.spn
 *.trail
 tr-*-*[0-9].c
+tc-*.c
 
