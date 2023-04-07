@@ -2,8 +2,10 @@ from src.modules.promela_yacc.promela import yacc, ast, lex
 import sys
 import pathlib
 import filecmp
+import yaml
 from dataclasses import dataclass
 from typing import Union, List, Any
+from pathlib import Path
 
 
 @dataclass
@@ -17,7 +19,7 @@ class ProgramWithNegations:
 
 def format_negations_top_level_nodes(
         negations_in_node: List[ProgramWithNegations],
-        node_partial_constructor, checked_sub_nodes,
+        node_partial_constructor: callable, checked_sub_nodes,
         remaining_sub_nodes) -> List[ProgramWithNegations]:
     negations_formatted = list()
     for negation in negations_in_node:
@@ -53,13 +55,16 @@ def get_negations_inline_and_proctype(node: Union[ast.InlineDef, ast.Proctype],
     return negations
 
 
-def format_assertions_program(negation_in_program: ProgramWithNegations,
+def format_assertions_program(negations_in_program: List[ProgramWithNegations],
                               line_number: int, checked_nodes: list,
-                              remaining_nodes: list) -> ProgramWithNegations:
-    negation_in_program.program = ast.Program(checked_nodes
-                                   + [(negation_in_program.node, line_number)]
-                                   + remaining_nodes)
-    return negation_in_program
+                              remaining_nodes: list) -> List[ProgramWithNegations]:
+    return_val = list()
+    for negation_in_program in negations_in_program:
+        negation_in_program.program = ast.Program(checked_nodes
+                                       + [(negation_in_program.node, line_number)]
+                                       + remaining_nodes)
+        return_val.append(negation_in_program)
+    return return_val
 
 
 def get_all_programs(program: ast.Program) -> List[ProgramWithNegations]:
@@ -67,9 +72,9 @@ def get_all_programs(program: ast.Program) -> List[ProgramWithNegations]:
     remaining_nodes = remove_first_element(program)
     nodes_with_negations = []
     for node in program:
-        for node_with_negation in get_negations_in_node(node[0]):
-            nodes_with_negations.append(format_assertions_program(node_with_negation, node[1],
-                                                              checked_nodes, remaining_nodes))
+        nodes = get_negations_in_node(node[0])
+        nodes_with_negations += format_assertions_program(nodes, node[1],
+                                                          checked_nodes, remaining_nodes)
         checked_nodes.append(node)
         remaining_nodes = remove_first_element(remaining_nodes)
     return nodes_with_negations
@@ -145,24 +150,55 @@ def write_file(file_name, program):
         f.write(program.__str__())
 
 
-def main(args):
-    model_file = args[1]
+def get_config(source_dir):
+    config = dict()
+    required_keys = {"disable_negation_at", "max_trails", "spin_assert",
+                     "spin_ltl"}
+    with open(f"{source_dir}/automatic_tesgen.yml") as file:
+        global_config = yaml.load(file, Loader=yaml.FullLoader)
+        for key, val in global_config.items():
+            config[key] = val
+    if Path("automatic_tesgen.yml").exists():
+        with open("automatic_tesgen.yml") as file:
+            local_config = yaml.load(file, Loader=yaml.FullLoader)
+            if local_config:
+                for key, val in local_config.items():
+                    config[key] = val
+    missing_keys = required_keys - config.keys()
+    if missing_keys:
+        print("automatic_tesgen.yml configuration is incomplete")
+        print("The following configuration items are missing:")
+        for key in missing_keys:
+            print(key)
+        sys.exit(1)
+
+
+def get_programs(model_file):
     parser = yacc.Parser(ast, lex.Lexer())
     parsed = parser.parse(None, model_file)
-    all_programs = get_all_programs(parsed)
+    return get_all_programs(parsed)
+
+
+def write_all_programs(all_programs: List[ProgramWithNegations]):
     pathlib.Path("_").mkdir(exist_ok=True)
     name_to_num = dict()
     for program in all_programs:
         if type(program.expression) == ast.LTL:
-            file_name = f"_/ltl_{program.name}.pml"
+            file_name = f"ltl_{program.name}.pml"
             write_file(file_name, program.program)
         elif type(program.expression) == ast.Assert:
             if program.name not in name_to_num.keys():
                 name_to_num[program.name] = 0
             else:
                 name_to_num[program.name] += 1
-            file_name = f"_/assert_{program.name}_{name_to_num[program.name]}.pml"
+            file_name = f"assert_{program.name}_{name_to_num[program.name]}.pml"
             write_file(file_name, program.program)
+
+
+def main(args):
+    model_file = args[1]
+    programs = get_programs(model_file)
+    write_all_programs(programs)
 
 
 if __name__ == "__main__":
