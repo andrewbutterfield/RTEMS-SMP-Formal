@@ -73,6 +73,7 @@ typedef struct {
   rtems_id worker0_sema; // ID of the Worker0 semaphore
   rtems_id worker1_sema; // ID of the Worker1 semaphore 
   rtems_id sem_id; // ID of the created semaphore
+  rtems_id sem_id2;
 
   rtems_id runner_sched; // scheduler ID of scheduler used by the runner task
   rtems_id other_sched; // scheduler ID of another scheduler
@@ -152,10 +153,15 @@ void RtemsModelSemMgr_Run4(void);
 void RtemsModelSemMgr_Run5(void);
 void RtemsModelSemMgr_Run6(void);
 void RtemsModelSemMgr_Run7(void);
-
-
-
-
+void RtemsModelSemMgr_Run8(void);
+void RtemsModelSemMgr_Run9(void);
+void RtemsModelSemMgr_Run10(void);
+void RtemsModelSemMgr_Run11(void);
+void RtemsModelSemMgr_Run12(void);
+void RtemsModelSemMgr_Run13(void);
+void RtemsModelSemMgr_Run14(void);
+void RtemsModelSemMgr_Run15(void);
+void RtemsModelSemMgr_Run16(void);
 
 
 

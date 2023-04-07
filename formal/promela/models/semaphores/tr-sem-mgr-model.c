@@ -263,4 +263,11 @@ void RtemsModelSemMgr_Cleanup(
       T_quiet_rsc( sc, RTEMS_INVALID_ID );
     }
   }
+  
+  if (ctx->sem_id2 != 0) {
+    sc = rtems_semaphore_delete(ctx->sem_id2);
+    if ( sc != RTEMS_SUCCESSFUL ) {
+      T_quiet_rsc( sc, RTEMS_INVALID_ID );
+    }
+  }
 }

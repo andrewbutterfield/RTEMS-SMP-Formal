@@ -118,11 +118,51 @@ T_TEST_CASE( RtemsModelSemMgr7 )
   RtemsModelSemMgr_Run7();
 }
 
+T_TEST_CASE( RtemsModelSemMgr8 )
+{
+  RtemsModelSemMgr_Run8();
+}
+
+T_TEST_CASE( RtemsModelSemMgr9 )
+{
+  RtemsModelSemMgr_Run9();
+}
 
 
+T_TEST_CASE( RtemsModelSemMgr10 )
+{
+  RtemsModelSemMgr_Run10();
+}
 
+T_TEST_CASE( RtemsModelSemMgr11 )
+{
+  RtemsModelSemMgr_Run11();
+}
 
+T_TEST_CASE( RtemsModelSemMgr12 )
+{
+  RtemsModelSemMgr_Run12();
+}
 
+T_TEST_CASE( RtemsModelSemMgr13 )
+{
+  RtemsModelSemMgr_Run13();
+}
+
+T_TEST_CASE( RtemsModelSemMgr14 )
+{
+  RtemsModelSemMgr_Run14();
+}
+
+T_TEST_CASE( RtemsModelSemMgr15 )
+{
+  RtemsModelSemMgr_Run15();
+}
+
+T_TEST_CASE( RtemsModelSemMgr16 )
+{
+  RtemsModelSemMgr_Run16();
+}
 
 
 

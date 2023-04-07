@@ -96,7 +96,6 @@ typedef Semaphore_model {
     bool isGlobal; // true for global, false for local
     bool isInitialised; // indicated whenever this semaphore was created
     int taskPriority; // relevant for binary sem, 0 otherwise
-    bool isFlushed; //if true all tasks waiting must be flushed.
     int waiters[TASK_MAX]; // waiters on the semaphore indicated by position in queue ( 1 is next in queue)
     //bool isFIFO; // true for tasks wait by FIFO (default)
     //bool isPriority // true for tasks wait by priority
@@ -213,16 +212,16 @@ inline nl() { printf("\n") } // Useful shorthand
  */
 inline sema_create(name,count, maxcount, scope,rtems_priority,sem_type,locking,task_priority,id,rc) {
     atomic{
-
+        int new_sem_id = 1;
         if
         ::  id == 0 -> rc = RC_InvAddr;
         ::  name <= 0 -> rc = RC_InvName;
         ::  locking != NO_LOCKING -> rc = RC_NotDefined;
         ::  else ->
-            if
-            ::  id < MAX_MODEL_SEMAS ->
+            do
+            ::  new_sem_id < MAX_MODEL_SEMAS ->
                 if
-                ::  !model_semaphores[id].isInitialised ->
+                ::  !model_semaphores[new_sem_id].isInitialised ->
                     if
                     ::  sem_type == COUNTING_S -> //sem_type
                         if 
@@ -231,38 +230,40 @@ inline sema_create(name,count, maxcount, scope,rtems_priority,sem_type,locking,t
                         ::  else -> skip;
                         fi
 
-                        model_semaphores[id].Count = count;
-                        model_semaphores[id].maxCount = maxcount;
-                        model_semaphores[id].LockingProtocol = locking;
-                        model_semaphores[id].s_name = name;
-                        model_semaphores[id].semType = sem_type;
-                        model_semaphores[id].isGlobal = scope; //if local can only be used by node that created it
-                        model_semaphores[id].Priority = rtems_priority;
-                        model_semaphores[id].isInitialised = true;
-                        model_semaphores[id].taskPriority = task_priority;
+                        model_semaphores[new_sem_id].Count = count;
+                        model_semaphores[new_sem_id].maxCount = maxcount;
+                        model_semaphores[new_sem_id].LockingProtocol = locking;
+                        model_semaphores[new_sem_id].s_name = name;
+                        model_semaphores[new_sem_id].semType = sem_type;
+                        model_semaphores[new_sem_id].isGlobal = scope; //if local can only be used by node that created it
+                        model_semaphores[new_sem_id].Priority = rtems_priority;
+                        model_semaphores[new_sem_id].isInitialised = true;
+                        model_semaphores[new_sem_id].taskPriority = task_priority;
+                        id = new_sem_id;
                         rc = RC_OK;
-                        printf("@@@ %d LOG %d Created {n: %d, count: %d, global: %d, RTEMS_Priority:%d, sem_type: counting, locking protocol: None, task_priority:%d}\n", _pid, id, name, count, scope, rtems_priority, task_priority);
-                        
+                        printf("@@@ %d LOG %d Created {n: %d, count: %d, global: %d, RTEMS_Priority:%d, sem_type: counting, locking protocol: None, task_priority:%d}\n", _pid, new_sem_id, name, count, scope, rtems_priority, task_priority);
+                        break;
                 
                     ::  sem_type == BINARY_S ->
                         if
-                        ::  count ==1 -> model_semaphores[id].Count = count;
-                        ::  count ==0 -> model_semaphores[id].Count = count; // make task the owner
+                        ::  count ==1 -> model_semaphores[new_sem_id].Count = count;
+                        ::  count ==0 -> model_semaphores[new_sem_id].Count = count; // make task the owner
                         ::  else -> rc = RC_InvNum;
                         fi
 
                     ::  sem_type == SIMPLE_BINARY_S ->
                         if
                         ::  count != 1 -> rc = RC_InvNum;
-                        ::  else -> model_semaphores[id].Count = count; 
+                        ::  else -> model_semaphores[new_sem_id].Count = count; 
                         fi
                     fi
-                ::  else /* model_semaphores[id].isInitialised */ -> RC_InvId;
+                ::  else /* model_semaphores[id].isInitialised */ -> new_sem_id++;
                 fi
 
             ::  else -> // new_sem_id >= MAX_MODEL_SEMAS
                 rc = RC_TooMany;
-            fi
+                break;
+            od
         fi
     }
 }
@@ -330,18 +331,23 @@ inline WaitForSemaphore(tid,sem_id, optionset, interval, rc){
     printf("@@@ %d STATE %d Ready\n",_pid,tid)
     if
     ::  tasks[tid].tout -> 
-        model_semaphores[sem_id].waiters[tid] = false;
+        atomic{
+            model_semaphores[sem_id].waiters[tid] = false;
+            int tsks = 1;
+            do
+            ::  tsks < TASK_MAX ->
+                if
+                ::  model_semaphores[sem_id].waiters[tsks] !=0 -> model_semaphores[sem_id].waiters[tsks] = model_semaphores[sem_id].waiters[tsks] -1;
+                ::  else -> skip;
+                fi
+                tid++;
+            ::  else-> break;
+            od  
+        }
         rc = RC_Timeout;
         tasks[tid].tout = false;
-        rc = RC_Timeout;
-        printf("@@@ %d LOG timeout for Semaphore %d \n", _pid, sem_id); //timeout
     ::  !model_semaphores[sem_id].isInitialised ->
-        model_semaphores[sem_id].waiters[tid] = false;
         rc = RC_Deleted;
-    ::  model_semaphores[sem_id].isFlushed ->
-        model_semaphores[sem_id].waiters[tid] = false;
-        rc = RC_Unsatisfied;
-        printf("@@@ %d LOG task %d flushed from Semaphore %d \n", _pid, tid, sem_id); //semaphore obtained
     ::  else -> model_semaphores[sem_id].Count = model_semaphores[sem_id].Count -1;
                 rc = RC_OK;
                 printf("@@@ %d LOG Semaphore %d obtained\n", _pid, sem_id); //semaphore obtained
@@ -469,8 +475,8 @@ inline sema_release(self,sem_id,rc) {
                 ::  else -> skip;
                 fi
                 tid++;
-            ::  else-> break;
-            od
+                ::  else-> break;
+                od
 
             printf("@@@ %d LOG Semaphore %d released\n", _pid, sem_id)
             rc = RC_OK;
@@ -502,65 +508,11 @@ inline sema_delete(self,sem_id,rc) {
         ::  sem_id >= MAX_MODEL_SEMAS || sem_id <= 0 || !model_semaphores[sem_id].isInitialised ->
             rc = RC_InvId
         ::  else -> 
-            model_semaphores[sem_id].isInitialised = false;
-            int tid=1;
-            do
-            ::  tid < TASK_MAX ->
-                if
-                ::  model_semaphores[sem_id].waiters[tid]!=0 ->
-                    tasks[tid].state = Ready;
-                ::  else -> skip;
-                fi
-                tid++;
-            :: else-> break;
-            od
-
+            model_semaphores[sem_id].isInitialised = false; 
             printf("@@@ %d LOG Semaphore %d deleted\n", _pid, sem_id)
             rc = RC_OK
         fi
     }
-}
-
-
-/*
- * sema_flush(self,sem_id,rc)
- *
- * Simulates a call to rtems_semaphore_flush
- *   sem_id : id of the semaphore
- *   rc : updated with the return code when the directive completes
- *
- * Corresponding RTEMS call:
- *   rc = rtems_semaphore_flush(sem_id);
- *     `sem_id`  models `rtems_id id`
- *
-This directive unblocks all tasks waiting on the semaphore specified by id. 
-The semaphore’s count is not changed by this directive. 
-Tasks which are unblocked as the result of this directive will return from the rtems_semaphore_obtain() directive with a 
-status code of RTEMS_UNSATISFIED to indicate that the semaphore was not obtained.
- */
-inline sema_flush(self, sem_id, rc) {
-    atomic {
-        if
-        ::  sem_id >= MAX_MODEL_SEMAS || sem_id <= 0 || !model_semaphores[sem_id].isInitialised ->
-            rc = RC_InvId;
-        ::  else ->
-            model_semaphores[sem_id].isFlushed = true;
-            int tid=1;
-            do
-            ::  tid < TASK_MAX ->
-                if
-                ::  model_semaphores[sem_id].waiters[tid]!=0 ->
-                    tasks[tid].state = Ready;
-                ::  else -> skip;
-                fi
-                tid++;
-            ::  else -> break;
-            od
-            printf("@@@ %d LOG Semaphore %d Flushed\n", _pid, sem_id)
-            rc = RC_OK;
-        fi
-    }
-
 }
 
 
@@ -600,7 +552,6 @@ typedef TaskInputs {
     bool doRelease; // will task release the semaphore
     bool doRelease2;
     bool doFlush; //will task flush the semaphore
-    bool doFlush2;
 
     byte taskPrio;
     bool taskPreempt;
@@ -626,7 +577,6 @@ inline assignDefaults(defaults, opts) {
     opts.timeoutLength=defaults.timeoutLength;
     opts.doDelete=defaults.doDelete;
     opts.doDelete2=defaults.doDelete2;
-    opts.doFlush2=defaults.doFlush2;
     opts.doRelease=defaults.doRelease;
     opts.doRelease2=defaults.doRelease2;
     opts.doFlush=defaults.doFlush;
@@ -645,7 +595,7 @@ int task2Sema;
 int task3Sema;
 
 
-mtype = {onesema, twosemas};
+mtype = {obt1_rel1_obt2_rel2, obt1_obt2_rel1_rel2, obt1_obt2_rel1_del, obt1_obt2_timeout, twosemas};
 mtype scenario;
 
 inline chooseScenario() {
@@ -670,7 +620,6 @@ inline chooseScenario() {
     defaults.doDelete = false;
     defaults.doDelete2 = false;
     defaults.doFlush=false;
-    defaults.doFlush2=false;
     defaults.taskPrio = 2;
     defaults.taskPreempt = false;
     defaults.idNull = false;
@@ -702,13 +651,14 @@ inline chooseScenario() {
     task3Core = THIS_CORE;
 
     if
-    ::  scenario = onesema;
+    ::  scenario = obt1_rel1_obt2_rel2;
+    ::  scenario = obt1_obt2_rel1_rel2;
     ::  scenario = twosemas;
     fi
     atomic{printf("@@@ %d LOG scenario ",_pid); printm(scenario); nl()}
     
     if
-    ::  scenario==onesema->
+    ::  scenario==obt1_rel1_obt2_rel2->
     
         if
         ::  task_in[TASK1_ID].sName = 0;
@@ -725,65 +675,29 @@ inline chooseScenario() {
             task_in[TASK3_ID].doAcquire = true;
             task_in[TASK2_ID].doRelease = true;
             task_in[TASK3_ID].doRelease = false;
-            //no wait 
-
-        ::  task_in[TASK2_ID].doAcquire = true;
-            task_in[TASK3_ID].doAcquire = true;
-            task_in[TASK3_ID].Wait = true;
-            task_in[TASK2_ID].doRelease=true;
-            task_in[TASK3_ID].doRelease = false;
-            printf( "@@@ %d LOG sub-senario WAIT no timeout\n", _pid);   
-            //wait with no timeout scenario
-
-        ::  task_in[TASK2_ID].doAcquire = true;
-            task_in[TASK3_ID].doAcquire = true;
-            task_in[TASK3_ID].Wait = true;
-            task_in[TASK3_ID].timeoutLength = 2;
-            task_in[TASK2_ID].doRelease=true;
-            task_in[TASK3_ID].doRelease = true;
-            //timeout scenario
-
-        ::  task_in[TASK2_ID].doAcquire= true;
-            task_in[TASK3_ID].doAcquire = true;
-            task_in[TASK3_ID].Wait = true;
-            task_in[TASK2_ID].doRelease= false;
-            task_in[TASK3_ID].doRelease = false;
-            task_in[TASK2_ID].doFlush= true;
-            task_in[TASK2_ID].doRelease = false;
-
-            printf( "@@@ %d LOG sub-senario FLUSH\n", _pid);  
-            //fush on waiting task scenario
 
         fi
+        
+    ::  scenario==obt1_obt2_rel1_rel2->
+            task_in[TASK1_ID].doAcquire = true;
+            task_in[TASK3_ID].doAcquire = true;
+            task_in[TASK3_ID].Wait = true;
+            task_in[TASK1_ID].doRelease=true;
+            task_in[TASK2_ID].doRelease = false;
+            task_in[TASK3_ID].doRelease = true;
 
 
-    ::  scenario == twosemas->
-        if
-        ::  task_in[TASK1_ID].doCreate2 = true;
+ ::  scenario == twosemas->
+            task_in[TASK1_ID].doCreate2 = true;
             task_in[TASK2_ID].doAcquire = true;
             task_in[TASK3_ID].doAcquire = true;
             task_in[TASK2_ID].doRelease = true;
-            task_in[TASK3_ID].doRelease = true;
+            task_in[TASK3_ID].doRelease = false;
             task_in[TASK2_ID].doAcquire2 = true;
             task_in[TASK3_ID].doAcquire2 = true;
             task_in[TASK2_ID].doRelease2 = true;
             task_in[TASK3_ID].doRelease2 = true;
-            //no wait 
 
-        ::  task_in[TASK1_ID].doCreate2 = true;
-            task_in[TASK2_ID].doAcquire = true;
-            task_in[TASK3_ID].doAcquire = true;
-            task_in[TASK3_ID].Wait = true;
-            task_in[TASK2_ID].doRelease=true;
-            task_in[TASK3_ID].doRelease = false;
-            task_in[TASK2_ID].doAcquire2 = true;
-            task_in[TASK3_ID].doAcquire2 = true;
-            task_in[TASK2_ID].doRelease2=true;
-            task_in[TASK3_ID].doRelease2 = false;
-            //wait with no timeout  
-
-
-        fi
 
     fi
 
@@ -824,7 +738,6 @@ proctype Runner (byte nid, taskid; TaskInputs opts) {
 
     if
     ::  opts.doCreate ->
-        sem_id=1
         printf("@@@ %d CALL merge_attribs %d %d %d %d \n", _pid, opts.isGlobal, opts.isPriority, opts.semType, opts.LockingProtocol);
 
         printf("@@@ %d CALL sema_create %d %d %d %d \n", 
@@ -839,7 +752,6 @@ proctype Runner (byte nid, taskid; TaskInputs opts) {
         fi
         printf("@@@ %d SCALAR rc %d\n",_pid, rc);
     ::  else -> //ident
-            sem_id=1
             printf("@@@ %d CALL sema_ident %d %d %d\n", _pid, opts.sName, nid, sem_id);
                                                             /* (name,   node, id,  rc) */
             sema_ident(opts.sName,nid,sem_id,rc);
@@ -849,25 +761,23 @@ proctype Runner (byte nid, taskid; TaskInputs opts) {
 
     if
     ::  opts.doCreate2 ->
-        sem_id=2;
-        printf("@@@ %d CALL merge_attribs2 %d %d %d %d \n", _pid, opts.isGlobal, opts.isPriority, opts.semType, opts.LockingProtocol);
+        printf("@@@ %d CALL merge_attribs %d %d %d %d \n", _pid, opts.isGlobal, opts.isPriority, opts.semType, opts.LockingProtocol);
 
-        printf("@@@ %d CALL sema_create2 %d %d %d %d \n", 
-                _pid, SEMAPHORE2_NAME, opts.Count, opts.taskPrio, sem_id);
+        printf("@@@ %d CALL sema_create %d %d %d %d \n", 
+                _pid, SEMAPHORE2_NAME, opts.Count, opts.taskPrio, 2);
                 /*  (name,      count,       max Count,      scope,        rtems_priority,     sem_type,     locking,           task_priority,   id, rc) */
-        sema_create(SEMAPHORE2_NAME, opts.Count, opts.maxCount, opts.isGlobal, opts.isPriority, opts.semType, opts.LockingProtocol, opts.taskPrio, sem_id, rc);
+        sema_create(SEMAPHORE2_NAME, opts.Count, opts.maxCount, opts.isGlobal, opts.isPriority, opts.semType, opts.LockingProtocol, opts.taskPrio, 2, rc);
 
         if
         ::  rc == RC_OK ->
-            printf("@@@ %d SCALAR created2 %d\n", _pid, 2);
+            printf("@@@ %d SCALAR created %d\n", _pid, 2);
         :: else -> skip;
         fi
         printf("@@@ %d SCALAR rc %d\n",_pid, rc);
     ::  else -> //ident
-            sem_id=2;
-            printf("@@@ %d CALL sema_ident2 %d %d %d\n", _pid, SEMAPHORE2_NAME, nid, sem_id);
+            printf("@@@ %d CALL sema_ident %d %d %d\n", _pid, SEMAPHORE2_NAME, nid, 2);
                                                             /* (name,   node, id,  rc) */
-            sema_ident(SEMAPHORE2_NAME,nid,sem_id,rc);
+            sema_ident(SEMAPHORE2_NAME,nid,2,rc);
             printf("@@@ %d SCALAR rc %d\n",_pid, rc);
     fi
     
@@ -878,7 +788,6 @@ proctype Runner (byte nid, taskid; TaskInputs opts) {
 
     if
     ::  opts.doAcquire -> 
-            sem_id=1
             printf("@@@ %d CALL sema_obtain %d %d %d\n",
                     _pid, sem_id, opts.Wait, opts.timeoutLength);
                     /* (self,   sem_id, optionset, timeout,   rc) */
@@ -889,11 +798,10 @@ proctype Runner (byte nid, taskid; TaskInputs opts) {
 
     if
     ::  opts.doAcquire2 -> 
-            sem_id=2;
-            printf("@@@ %d CALL sema_obtain2 %d %d %d\n",
-                    _pid, sem_id, opts.Wait, opts.timeoutLength);
+            printf("@@@ %d CALL sema_obtain %d %d %d\n",
+                    _pid, 2, opts.Wait, opts.timeoutLength);
                     /* (self,   sem_id, optionset, timeout,   rc) */
-            sema_obtain(taskid, sem_id, opts.Wait, opts.timeoutLength, rc);
+            sema_obtain(taskid, 2, opts.Wait, opts.timeoutLength, rc);
             printf("@@@ %d SCALAR rc %d\n",_pid, rc);
     ::  else -> skip;
     fi
@@ -905,7 +813,6 @@ proctype Runner (byte nid, taskid; TaskInputs opts) {
     
     if
     ::  opts.doRelease -> 
-            sem_id=1
             Obtain(task1Sema);
            
             printf("@@@ %d CALL sema_release %d\n", _pid, sem_id);
@@ -924,15 +831,14 @@ proctype Runner (byte nid, taskid; TaskInputs opts) {
 
     if
     ::  opts.doRelease2 -> 
-            sem_id=2
             Obtain(task1Sema);
            
-            printf("@@@ %d CALL sema_release2 %d\n", _pid, sem_id);
+            printf("@@@ %d CALL sema_release %d\n", _pid, 2);
                         /* (self,   sem_id, rc) */
-            sema_release(taskid, sem_id, rc);
+            sema_release(taskid, 2, rc);
             if
             :: rc == RC_OK -> 
-                printf("@@@ %d SCALAR released %d\n", _pid, sem_id);
+                printf("@@@ %d SCALAR released %d\n", _pid, 2);
             :: else -> skip;
             fi
             printf("@@@ %d SCALAR rc %d\n",_pid, rc);
@@ -942,35 +848,9 @@ proctype Runner (byte nid, taskid; TaskInputs opts) {
     fi
 
 
-    if 
-    ::  opts.doFlush ->
-        atomic {
-            sem_id=1
-            printf("@@@ %d CALL sema_flush %d\n",_pid, sem_id);
-                                /*  (self,   sem_id, rc) */
-            sema_flush(taskid, sem_id, rc);
-            printf("@@@ %d SCALAR rc %d\n",_pid, rc);
-        }
-    ::  else -> skip
-    fi
-
-    if 
-    ::  opts.doFlush2 ->
-        atomic {
-            sem_id=2
-            printf("@@@ %d CALL sema_flush %d\n",_pid, sem_id);
-                        /*  (self,   sem_id, rc) */
-            sema_flush(taskid, sem_id, rc);
-            printf("@@@ %d SCALAR rc %d\n",_pid, rc);
-        }
-    ::  else -> skip
-    fi
-
-
 
     if 
     ::  opts.doDelete ->
-        sem_id=1
         Obtain(task1Sema);
            
         printf("@@@ %d CALL sema_delete %d\n",_pid, sem_id);
@@ -984,12 +864,11 @@ proctype Runner (byte nid, taskid; TaskInputs opts) {
 
     if 
     ::  opts.doDelete2 ->
-        sem_id=2;
         Obtain(task1Sema);
            
-        printf("@@@ %d CALL sema_delete2 %d\n",_pid, sem_id);
+        printf("@@@ %d CALL sema_delete %d\n",_pid, 2);
                   /*  (self,   sem_id, rc) */
-        sema_delete(taskid, sem_id, rc);
+        sema_delete(taskid, 2, rc);
         printf("@@@ %d SCALAR rc %d\n",_pid, rc);
       
         Release(task1Sema);
@@ -1042,7 +921,6 @@ proctype Worker0 (byte nid, taskid; TaskInputs opts) {
 
     if
     ::  opts.doCreate ->
-        sem_id=1
         printf("@@@ %d CALL merge_attribs %d %d %d %d \n", _pid, opts.isGlobal, opts.isPriority, opts.semType, opts.LockingProtocol);
 
         printf("@@@ %d CALL sema_create %d %d %d %d \n", 
@@ -1057,7 +935,6 @@ proctype Worker0 (byte nid, taskid; TaskInputs opts) {
         fi
         printf("@@@ %d SCALAR rc %d\n",_pid, rc);
     ::  else -> //ident
-            sem_id=1
             printf("@@@ %d CALL sema_ident %d %d %d\n", _pid, opts.sName, nid, sem_id);
                                                             /* (name,   node, id,  rc) */
             sema_ident(opts.sName,nid,sem_id,rc);
@@ -1066,25 +943,23 @@ proctype Worker0 (byte nid, taskid; TaskInputs opts) {
 
     if
     ::  opts.doCreate2 ->
-        sem_id=2;
-        printf("@@@ %d CALL merge_attribs2 %d %d %d %d \n", _pid, opts.isGlobal, opts.isPriority, opts.semType, opts.LockingProtocol);
+        printf("@@@ %d CALL merge_attribs %d %d %d %d \n", _pid, opts.isGlobal, opts.isPriority, opts.semType, opts.LockingProtocol);
 
-        printf("@@@ %d CALL sema_create2 %d %d %d %d \n", 
-                _pid, SEMAPHORE2_NAME, opts.Count, opts.taskPrio, sem_id);
+        printf("@@@ %d CALL sema_create %d %d %d %d \n", 
+                _pid, SEMAPHORE2_NAME, opts.Count, opts.taskPrio, 2);
                 /*  (name,      count,       max Count,      scope,        rtems_priority,     sem_type,     locking,           task_priority,   id, rc) */
-        sema_create(SEMAPHORE2_NAME, opts.Count, opts.maxCount, opts.isGlobal, opts.isPriority, opts.semType, opts.LockingProtocol, opts.taskPrio, sem_id, rc);
+        sema_create(SEMAPHORE2_NAME, opts.Count, opts.maxCount, opts.isGlobal, opts.isPriority, opts.semType, opts.LockingProtocol, opts.taskPrio, 2, rc);
 
         if
         ::  rc == RC_OK ->
-            printf("@@@ %d SCALAR created2 %d\n", _pid, sem_id);
+            printf("@@@ %d SCALAR created %d\n", _pid, 2);
         :: else -> skip;
         fi
         printf("@@@ %d SCALAR rc %d\n",_pid, rc);
     ::  else -> //ident
-            sem_id=2
-            printf("@@@ %d CALL sema_ident2 %d %d %d\n", _pid, SEMAPHORE2_NAME, nid, sem_id);
+            printf("@@@ %d CALL sema_ident %d %d %d\n", _pid, SEMAPHORE2_NAME, nid, 2);
                                                             /* (name,   node, id,  rc) */
-            sema_ident(SEMAPHORE2_NAME,nid,sem_id,rc);
+            sema_ident(SEMAPHORE2_NAME,nid,2,rc);
             printf("@@@ %d SCALAR rc %d\n",_pid, rc);
     fi
 
@@ -1092,7 +967,6 @@ proctype Worker0 (byte nid, taskid; TaskInputs opts) {
     if
     ::  opts.doAcquire -> 
         atomic{
-            sem_id=1
             Release(task3Sema);
             printf("@@@ %d CALL sema_obtain %d %d %d\n",
                     _pid, sem_id, opts.Wait, opts.timeoutLength);
@@ -1108,11 +982,11 @@ proctype Worker0 (byte nid, taskid; TaskInputs opts) {
     if
     ::  opts.doAcquire2 -> 
         atomic{
-            sem_id=2;
-            printf("@@@ %d CALL sema_obtain2 %d %d %d\n",
-                    _pid, sem_id, opts.Wait, opts.timeoutLength);
+      
+            printf("@@@ %d CALL sema_obtain %d %d %d\n",
+                    _pid, 2, opts.Wait, opts.timeoutLength);
                     /* (self,   sem_id, optionset, timeout,   rc) */
-            sema_obtain(taskid, sem_id, opts.Wait, opts.timeoutLength, rc);
+            sema_obtain(taskid, 2, opts.Wait, opts.timeoutLength, rc);
            
         }
         
@@ -1126,7 +1000,6 @@ proctype Worker0 (byte nid, taskid; TaskInputs opts) {
     if
     ::  opts.doRelease -> 
         atomic{
-            sem_id=1
             printf("@@@ %d CALL sema_release %d\n", _pid, sem_id);
                         /* (self,   sem_id, rc) */
             sema_release(taskid, sem_id, rc);
@@ -1144,13 +1017,12 @@ proctype Worker0 (byte nid, taskid; TaskInputs opts) {
     if
     ::  opts.doRelease2 -> 
         atomic{
-            sem_id=2;
-            printf("@@@ %d CALL sema_release2 %d\n", _pid, sem_id);
+            printf("@@@ %d CALL sema_release %d\n", _pid, 2);
                         /* (self,   sem_id, rc) */
             sema_release(taskid, 2, rc);
             if
             :: rc == RC_OK -> 
-                printf("@@@ %d SCALAR released %d\n", _pid, sem_id);
+                printf("@@@ %d SCALAR released %d\n", _pid, 2);
             :: else -> skip;
             fi
             printf("@@@ %d SCALAR rc %d\n",_pid, rc);
@@ -1158,37 +1030,11 @@ proctype Worker0 (byte nid, taskid; TaskInputs opts) {
            
     ::  else -> skip;
     fi
-
-
-    if 
-    ::  opts.doFlush ->
-        atomic {
-            sem_id=1
-            printf("@@@ %d CALL sema_flush %d\n",_pid, sem_id);
-                                /*  (self,   sem_id, rc) */
-            sema_flush(taskid, sem_id, rc);
-            printf("@@@ %d SCALAR rc %d\n",_pid, rc);
-        }
-    ::  else -> skip
-    fi
-
-    if 
-    ::  opts.doFlush2 ->
-        atomic {
-            sem_id=2
-            printf("@@@ %d CALL sema_flush %d\n",_pid, sem_id);
-                        /*  (self,   sem_id, rc) */
-            sema_flush(taskid, sem_id, rc);
-            printf("@@@ %d SCALAR rc %d\n",_pid, rc);
-        }
-    ::  else -> skip
-    fi
     
 
 
     if 
     ::  opts.doDelete ->
-        sem_id=1
         printf("@@@ %d CALL sema_delete %d\n",_pid, sem_id);
                   /*  (self,   sem_id, rc) */
         sema_delete(taskid, sem_id, rc);
@@ -1198,10 +1044,9 @@ proctype Worker0 (byte nid, taskid; TaskInputs opts) {
 
     if 
     ::  opts.doDelete2 ->
-        sem_id=2;
-        printf("@@@ %d CALL sema_delete2 %d\n",_pid, sem_id);
+        printf("@@@ %d CALL sema_delete %d\n",_pid, 2);
                   /*  (self,   sem_id, rc) */
-        sema_delete(taskid, sem_id, rc);
+        sema_delete(taskid, 2, rc);
         printf("@@@ %d SCALAR rc %d\n",_pid, rc);
     ::  else -> skip
     fi
@@ -1253,7 +1098,6 @@ proctype Worker1 (byte nid, taskid; TaskInputs opts) {
 
     if
     ::  opts.doCreate ->
-        sem_id=1
         printf("@@@ %d CALL merge_attribs %d %d %d %d \n", _pid, opts.isGlobal, opts.isPriority, opts.semType, opts.LockingProtocol);
 
         printf("@@@ %d CALL sema_create %d %d %d %d \n", 
@@ -1268,7 +1112,6 @@ proctype Worker1 (byte nid, taskid; TaskInputs opts) {
         fi
         printf("@@@ %d SCALAR rc %d\n",_pid, rc);
     ::  else -> //ident
-            sem_id=1
             printf("@@@ %d CALL sema_ident %d %d %d\n", _pid, opts.sName, nid, sem_id);
                                                             /* (name,   node, id,  rc) */
             sema_ident(opts.sName,nid,sem_id,rc);
@@ -1277,25 +1120,23 @@ proctype Worker1 (byte nid, taskid; TaskInputs opts) {
 
     if
     ::  opts.doCreate2 ->
-        sem_id=2;
-        printf("@@@ %d CALL merge_attribs2 %d %d %d %d \n", _pid, opts.isGlobal, opts.isPriority, opts.semType, opts.LockingProtocol);
+        printf("@@@ %d CALL merge_attribs %d %d %d %d \n", _pid, opts.isGlobal, opts.isPriority, opts.semType, opts.LockingProtocol);
 
-        printf("@@@ %d CALL sema_create2 %d %d %d %d \n", 
-                _pid, SEMAPHORE2_NAME, opts.Count, opts.taskPrio, sem_id);
+        printf("@@@ %d CALL sema_create %d %d %d %d \n", 
+                _pid, SEMAPHORE2_NAME, opts.Count, opts.taskPrio, 2);
                 /*  (name,      count,       max Count,      scope,        rtems_priority,     sem_type,     locking,           task_priority,   id, rc) */
-        sema_create(SEMAPHORE2_NAME, opts.Count, opts.maxCount, opts.isGlobal, opts.isPriority, opts.semType, opts.LockingProtocol, opts.taskPrio, sem_id, rc);
+        sema_create(SEMAPHORE2_NAME, opts.Count, opts.maxCount, opts.isGlobal, opts.isPriority, opts.semType, opts.LockingProtocol, opts.taskPrio, 2, rc);
 
         if
         ::  rc == RC_OK ->
-            printf("@@@ %d SCALAR created2 %d\n", _pid, sem_id);
+            printf("@@@ %d SCALAR created %d\n", _pid, 2);
         :: else -> skip;
         fi
         printf("@@@ %d SCALAR rc %d\n",_pid, rc);
     ::  else -> //ident
-            sem_id=2;
-            printf("@@@ %d CALL sema_ident2 %d %d %d\n", _pid, SEMAPHORE2_NAME, nid, sem_id);
+            printf("@@@ %d CALL sema_ident %d %d %d\n", _pid, SEMAPHORE2_NAME, nid, 2);
                                                             /* (name,   node, id,  rc) */
-            sema_ident(SEMAPHORE2_NAME,nid,sem_id,rc);
+            sema_ident(SEMAPHORE2_NAME,nid,2,rc);
             printf("@@@ %d SCALAR rc %d\n",_pid, rc);
     fi
     
@@ -1305,7 +1146,7 @@ proctype Worker1 (byte nid, taskid; TaskInputs opts) {
     if
     ::  opts.doAcquire -> 
         atomic{
-            sem_id=1
+            
             Release(task1Sema);
             printf("@@@ %d CALL sema_obtain %d %d %d\n",
                     _pid, sem_id, opts.Wait, opts.timeoutLength);
@@ -1323,12 +1164,11 @@ proctype Worker1 (byte nid, taskid; TaskInputs opts) {
     if
     ::  opts.doAcquire2 -> 
         atomic{
-            sem_id=2;
             
-            printf("@@@ %d CALL sema_obtain2 %d %d %d\n",
-                    _pid, sem_id, opts.Wait, opts.timeoutLength);
+            printf("@@@ %d CALL sema_obtain %d %d %d\n",
+                    _pid, 2, opts.Wait, opts.timeoutLength);
                     /* (self,   sem_id, optionset, timeout,   rc) */
-            sema_obtain(taskid, sem_id, opts.Wait, opts.timeoutLength, rc);
+            sema_obtain(taskid, 2, opts.Wait, opts.timeoutLength, rc);
             
         }
         
@@ -1344,7 +1184,6 @@ proctype Worker1 (byte nid, taskid; TaskInputs opts) {
     if
     ::  opts.doRelease ->
         atomic{
-            sem_id=1
             printf("@@@ %d CALL sema_release %d\n", _pid, sem_id);
                         /* (self,   sem_id, rc) */
             sema_release(taskid, sem_id, rc);
@@ -1363,13 +1202,12 @@ proctype Worker1 (byte nid, taskid; TaskInputs opts) {
     if
     ::  opts.doRelease2 ->
         atomic{
-            sem_id=2;
-            printf("@@@ %d CALL sema_release2 %d\n", _pid, sem_id);
+            printf("@@@ %d CALL sema_release %d\n", _pid, 2);
                         /* (self,   sem_id, rc) */
-            sema_release(taskid, sem_id, rc);
+            sema_release(taskid, 2, rc);
             if
             :: rc == RC_OK -> 
-                printf("@@@ %d SCALAR released %d\n", _pid, sem_id);
+                printf("@@@ %d SCALAR released %d\n", _pid, 2);
             :: else -> skip;
             fi
             printf("@@@ %d SCALAR rc %d\n",_pid, rc);
@@ -1377,35 +1215,10 @@ proctype Worker1 (byte nid, taskid; TaskInputs opts) {
 
     ::  else -> skip;
     fi
-
-    if 
-    ::  opts.doFlush ->
-        atomic {
-            sem_id=1
-            printf("@@@ %d CALL sema_flush %d\n",_pid, sem_id);
-                                /*  (self,   sem_id, rc) */
-            sema_flush(taskid, sem_id, rc);
-            printf("@@@ %d SCALAR rc %d\n",_pid, rc);
-        }
-    ::  else -> skip
-    fi
-
-    if 
-    ::  opts.doFlush2 ->
-        atomic {
-            sem_id=2
-            printf("@@@ %d CALL sema_flush %d\n",_pid, sem_id);
-                        /*  (self,   sem_id, rc) */
-            sema_flush(taskid, sem_id, rc);
-            printf("@@@ %d SCALAR rc %d\n",_pid, rc);
-        }
-    ::  else -> skip
-    fi
     
 
     if 
     ::  opts.doDelete ->
-        sem_id=1
         printf("@@@ %d CALL sema_delete %d\n",_pid, sem_id);
                   /*  (self,   sem_id, rc) */
         sema_delete(taskid, sem_id, rc);
@@ -1413,16 +1226,11 @@ proctype Worker1 (byte nid, taskid; TaskInputs opts) {
     ::  else -> skip
     fi
 
-
-
-
-
     if 
     ::  opts.doDelete2 ->
-        sem_id=2;
-        printf("@@@ %d CALL sema_delete2 %d\n",_pid, sem_id);
+        printf("@@@ %d CALL sema_delete %d\n",_pid, 2);
                   /*  (self,   sem_id, rc) */
-        sema_delete(taskid, sem_id, rc);
+        sema_delete(taskid, 2, rc);
         printf("@@@ %d SCALAR rc %d\n",_pid, rc);
     ::  else -> skip
     fi

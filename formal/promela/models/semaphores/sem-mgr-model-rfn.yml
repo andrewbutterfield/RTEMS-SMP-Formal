@@ -61,6 +61,12 @@ merge_attribs: |
   rtems_attribute attribs;
   attribs = mergeattribs({0},{1},{2},{3});
   T_log(T_NORMAL, "Attribs= 0x%x", attribs );
+  
+merge_attribs2: |
+  T_log(T_NORMAL, "Calling mergeattribs(%d,%d,%d,%d)", {0}, {1}, {2}, {3} );
+  rtems_attribute attribs2;
+  attribs2 = mergeattribs({0},{1},{2},{3});
+  T_log(T_NORMAL, "Attribs= 0x%x", attribs2 );
 
 sema_create: |
   T_log(T_NORMAL, "Calling SemaCreate(%d,%d, %d, %d,%d)", {0}, {1},attribs, {2}, {3} );
@@ -70,6 +76,14 @@ sema_create: |
   rc = rtems_semaphore_create({0}, {1},attribs, {2}, {3} ? &sem_id : NULL);
   T_log(T_NORMAL, "Returned 0x%x from Create", rc );
   
+sema_create2: |
+  T_log(T_NORMAL, "Calling SemaCreate(%d,%d, %d, %d,%d)", {0}, {1},attribs2, {2}, {3} );
+  rtems_id sem_id2;
+  initialise_id(&sem_id2);
+  rc = rtems_semaphore_create({0}, {1},attribs2, {2}, {3} ? &sem_id2 : NULL);
+  T_log(T_NORMAL, "Returned 0x%x from Create", rc );
+
+
 sema_ident: |
   T_log(T_NORMAL, "Calling SemaIdent(%d,%d, %d)", {0}, {1}, {2});
   rtems_id sem_id;
@@ -79,6 +93,14 @@ sema_ident: |
   rc = rtems_semaphore_ident({0} , {1}, {2} ? &sem_id : NULL);
   T_log(T_NORMAL, "Returned 0x%x from Ident", rc );
   
+sema_ident2: |
+  T_log(T_NORMAL, "Calling SemaIdent(%d,%d, %d)", {0}, {1}, {2});
+  rtems_id sem_id2;
+  initialise_id(&sem_id2);
+  T_log(T_NORMAL, "identifying sem %d", {2});
+  rc = rtems_semaphore_ident({0} , {1}, {2} ? &sem_id2 : NULL);
+  T_log(T_NORMAL, "Returned 0x%x from Ident", rc );
+  
 sema_obtain: |
   rtems_interval timeout = {2};
   rtems_option option_set = {1};
@@ -86,14 +108,41 @@ sema_obtain: |
   rc = rtems_semaphore_obtain(sem_id, option_set, timeout);
   T_log(T_NORMAL, "Returned 0x%x from Obtain", rc );
   
+sema_obtain2: |
+  rtems_interval timeout2 = {2};
+  rtems_option option_set2 = {1};
+  T_log(T_NORMAL, "Calling SemaObtain(%d,%d,%d)", sem_id2, option_set2, timeout2 );
+  rc = rtems_semaphore_obtain(sem_id2, option_set2, timeout2);
+  T_log(T_NORMAL, "Returned 0x%x from Obtain", rc );
+  
 sema_release: |
   T_log(T_NORMAL, "Calling SemaRelease(%d)", sem_id);
   rc = rtems_semaphore_release(sem_id);
   T_log(T_NORMAL, "Returned 0x%x from Release", rc );
+  
+sema_release2: |
+  T_log(T_NORMAL, "Calling SemaRelease(%d)", sem_id2);
+  rc = rtems_semaphore_release(sem_id2);
+  T_log(T_NORMAL, "Returned 0x%x from Release", rc );
+  
+sema_flush: |
+  T_log(T_NORMAL, "Calling SemaFlush(%d)", sem_id);
+  rc = rtems_semaphore_flush(sem_id);
+  T_log(T_NORMAL, "Returned 0x%x from Flush", rc );
+  
+sema_flush2: |
+  T_log(T_NORMAL, "Calling SemaFlush(%d)", sem_id2);
+  rc = rtems_semaphore_flush(sem_id2);
+  T_log(T_NORMAL, "Returned 0x%x from Flush", rc );
 
 sema_delete: |
   T_log(T_NORMAL, "Calling SemaDelete(%d)", sem_id);
   rc = rtems_semaphore_delete(sem_id);
+  T_log(T_NORMAL, "Returned 0x%x from Delete", rc );
+  
+sema_delete2: |
+  T_log(T_NORMAL, "Calling SemaDelete(%d)", sem_id2);
+  rc = rtems_semaphore_delete(sem_id2);
   T_log(T_NORMAL, "Returned 0x%x from Delete", rc );
 
 
@@ -104,6 +153,11 @@ rc:
 created:
   /* This is used later for cleanup */
   ctx->sem_id = sem_id;
+
+created2:
+  /* This is used later for cleanup */
+  ctx->sem_id2 = sem_id2;
+
 
 Ready: |
    /* We (Task {0}) must have been recently ready because we are running */
