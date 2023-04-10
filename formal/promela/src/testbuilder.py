@@ -207,7 +207,8 @@ def generate_testcase_file(model, refine_config, no_of_trails):
     else:
         for file in missing_files:
             print(f"File not found: {file}")
-        print(f"tc-{model}.c will not be generated")
+        print(f"tc-{model}{refine_config['testfiletype']} "
+              f"will not be generated")
 
 
 def copy(model, model_path, codedir, rtems, modfile, testsuite_name,
