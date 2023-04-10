@@ -220,7 +220,7 @@ def copy(model, model_path, codedir, rtems, modfile, testsuite_name,
     print(f"Removing old files for model {model}")
     files = glob.glob(f"{codedir}tr-{model}*{test_file_extension}")
     files += glob.glob(f"{codedir}tr-{model}*.h")
-    files += glob.glob(f"{codedir}tc-{model}*{test_file_extension}")
+    files += glob.glob(f"{codedir}tc-{model}{test_file_extension}")
     for file in files:
         os.remove(file)
 
@@ -228,7 +228,7 @@ def copy(model, model_path, codedir, rtems, modfile, testsuite_name,
     print(f"Copying new files for model {model}")
     files = glob.glob(f"tr-{model}*{test_file_extension}")
     files += glob.glob(f"tr-{model}*.h")
-    files += glob.glob(f"tc-{model}*{test_file_extension}")
+    files += glob.glob(f"tc-{model}{test_file_extension}")
     for file in files:
         shutil.copyfile(file, f"{rtems}testsuites/validation/{file}")
 
@@ -239,7 +239,7 @@ def copy(model, model_path, codedir, rtems, modfile, testsuite_name,
     source_list = model_yaml['source']
     source_set = set(source_list)
     files = glob.glob(f"tr-{model}*{test_file_extension}")
-    files += glob.glob(f"tc-{model}*{test_file_extension}")
+    files += glob.glob(f"tc-{model}{test_file_extension}")
     for file in files:
         source_set.add(f"testsuites/validation/{file}")
     new_list = list(source_set)
@@ -270,7 +270,7 @@ def get_generated_files(model, testsuite, test_extension):
     trails = glob.glob(f"{model}*.trail")
     files = trails
     files += glob.glob(f"{model}*.spn")
-    files += glob.glob(f"tc-{model}*{test_extension}")
+    files += glob.glob(f"tc-{model}{test_extension}")
     if len(trails) == 1:
         files += glob.glob(f"tr-{model}-0{test_extension}")
     else:
