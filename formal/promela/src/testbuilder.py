@@ -51,12 +51,13 @@ def catch_subprocess_errors(func):
     return wrapper
 
 
-def all_steps(models, model_to_path, config, source_dir):
+def all_steps(models, model_to_path, source_dir):
     if models == ["allmodels"]:
         models = list(model_to_path.keys())
 
     for model in models:
         path = model_to_path[model]
+        config = get_config(source_dir, model)
         refine_config = get_refine_config(source_dir, model, path)
         clean(model, path, config["testsuite"], refine_config["testfiletype"])
         generate_spin_files(model, path, config["spinallscenarios"],
@@ -418,8 +419,7 @@ def main():
             print(helpfile.read())
 
     if sys.argv[1] == "allsteps":
-        all_steps(sys.argv[2::], model_to_path,
-                  config, source_dir)
+        all_steps(sys.argv[2::], model_to_path, source_dir)
 
     if sys.argv[1] == "spin":
         generate_spin_files(sys.argv[2], model_to_path[sys.argv[2]],
