@@ -30,7 +30,7 @@
 # located in the same directory as testbuilder.py for global settings
 # or in the models directory for local settings
 
-testfiletype: .c #tr-<model><testfiletype>
+testfiletype: .c #tr-<model><testfiletype>, tc-<model><testfiletype>
 runfile: -run.h #<model><runfile>
 preamble: -pre.h #<model><preamble>
 postamble: -post.h #<model><postamble>

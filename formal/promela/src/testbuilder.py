@@ -63,7 +63,8 @@ def all_steps(models, model_to_path, config, source_dir):
                             refine_config)
         generate_test_files(model, path, config["spin2test"], refine_config)
         copy(model, path, config["testcode"], config["rtems"],
-             config["testyaml"], config["testsuite"])
+             config["testyaml"], config["testsuite"],
+             refine_config["testfiletype"])
 
     compile(config["rtems"])
     run_simulator(config["simulator"], config["simulatorargs"],
@@ -192,7 +193,7 @@ def generate_testcase_file(model, refine_config, no_of_trails):
             missing_files.append(refine_config[key])
 
     if not missing_files:
-        file_name = f"tc-{model}.c"
+        file_name = f"tc-{model}{refine_config['testfiletype']}"
         with open(file_name, "w") as f:
             preamble = Path(refine_config["testcase_preamble"]).read_text()
             f.write(preamble)
@@ -208,24 +209,25 @@ def generate_testcase_file(model, refine_config, no_of_trails):
         print(f"tc-{model}.c will not be generated")
 
 
-def copy(model, model_path, codedir, rtems, modfile, testsuite_name):
+def copy(model, model_path, codedir, rtems, modfile, testsuite_name,
+         test_file_extension):
     """Copies C testfiles to test directory and updates the model file """
     cwd = os.getcwd()
     os.chdir(model_path)
 
     # Remove old test files
     print(f"Removing old files for model {model}")
-    files = glob.glob(f"{codedir}tr-{model}*.c")
+    files = glob.glob(f"{codedir}tr-{model}*{test_file_extension}")
     files += glob.glob(f"{codedir}tr-{model}*.h")
-    files += glob.glob(f"{codedir}tc-{model}*.c")
+    files += glob.glob(f"{codedir}tc-{model}*{test_file_extension}")
     for file in files:
         os.remove(file)
 
     # Copy new test files
     print(f"Copying new files for model {model}")
-    files = glob.glob(f"tr-{model}*.c")
+    files = glob.glob(f"tr-{model}*{test_file_extension}")
     files += glob.glob(f"tr-{model}*.h")
-    files += glob.glob(f"tc-{model}*.c")
+    files += glob.glob(f"tc-{model}*{test_file_extension}")
     for file in files:
         shutil.copyfile(file, f"{rtems}testsuites/validation/{file}")
 
@@ -235,8 +237,8 @@ def copy(model, model_path, codedir, rtems, modfile, testsuite_name):
         model_yaml = yaml.load(file, Loader=yaml.FullLoader)
     source_list = model_yaml['source']
     source_set = set(source_list)
-    files = glob.glob(f"tr-{model}*.c")
-    files += glob.glob(f"tc-{model}*.c")
+    files = glob.glob(f"tr-{model}*{test_file_extension}")
+    files += glob.glob(f"tc-{model}*{test_file_extension}")
     for file in files:
         source_set.add(f"testsuites/validation/{file}")
     new_list = list(source_set)
@@ -263,15 +265,15 @@ def run_simulator(simulator_path, simulator_args, testexe, testsuite):
                    check=True, shell=True)
 
 
-def get_generated_files(model, testsuite, test_extenstion):
+def get_generated_files(model, testsuite, test_extension):
     trails = glob.glob(f"{model}*.trail")
     files = trails
     files += glob.glob(f"{model}*.spn")
-    files += glob.glob(f"tc-{model}*.c")
+    files += glob.glob(f"tc-{model}*{test_extension}")
     if len(trails) == 1:
-        files += glob.glob(f"tr-{model}-0{test_extenstion}")
+        files += glob.glob(f"tr-{model}-0{test_extension}")
     else:
-        files += glob.glob(f"tr-{model}-*{test_extenstion}")
+        files += glob.glob(f"tr-{model}-*{test_extension}")
     files += glob.glob(f"{testsuite}-test.log")
     return files
 
@@ -446,7 +448,8 @@ def main():
 
     if sys.argv[1] == "copy":
         copy(sys.argv[2], model_to_path[sys.argv[2]], config["testcode"],
-             config["rtems"], config["testyaml"], config["testsuite"])
+             config["rtems"], config["testyaml"], config["testsuite"],
+             refine_config["testfiletype"])
 
     if sys.argv[1] == "compile":
         compile(config["rtems"])
