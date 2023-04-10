@@ -383,7 +383,7 @@ def main():
             or len(sys.argv) >= 3 and sys.argv[1] == "allsteps"
             or len(sys.argv) == 3 and sys.argv[1] == "clean"
             or len(sys.argv) == 3 and sys.argv[1] == "archive"
-            or len(sys.argv) == 2 and sys.argv[1] == "zero"
+            or 2 <= len(sys.argv) <= 3 and sys.argv[1] == "zero"
             or len(sys.argv) == 3 and sys.argv[1] == "spin"
             or len(sys.argv) == 3 and sys.argv[1] == "gentests"
             or len(sys.argv) == 3 and sys.argv[1] == "copy"

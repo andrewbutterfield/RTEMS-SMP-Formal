@@ -8,7 +8,7 @@ In order to generate test files the following input files are required:
     `<model>-run.h`
 where `<model>` is the name of the model.
 
-`allsteps [<model> | allmodels | <list of models>]` will run clean, spin, gentests, copy, compile and run for desired model(s)
+`allsteps <model> | allmodels | <list of models>` will run clean, spin, gentests, copy, compile and run for desired model(s)
 `spin <model>` will run SPIN to find all scenarios
 `gentests <model>` will produce C tests
 `clean <model>` will remove generated files.
@@ -19,5 +19,5 @@ where `<model>` is the name of the model.
    to the archive sub-directory of the current model directory.
 `compile` rebuilds the RTEMS test executable
 `run` runs the tests in the SIS simulator
-`zero` removes all generated C filenames from the RTEMS configuration yaml file
+`zero [model]` removes all generated C filenames from the RTEMS configuration yaml file. Yaml file based on global config if model not set, local config if model set.
   - it does NOT remove the test sources from the RTEMS test source directory
