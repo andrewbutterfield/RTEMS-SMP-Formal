@@ -379,6 +379,7 @@ def check_models_exist(modelnames, model_to_path, config):
 
 def main():
     """generates and deploys C tests from Promela models"""
+    source_dir = os.path.dirname(os.path.realpath(__file__))
     if not (len(sys.argv) == 2 and sys.argv[1] == "help"
             or len(sys.argv) >= 3 and sys.argv[1] == "allsteps"
             or len(sys.argv) == 3 and sys.argv[1] == "clean"
@@ -389,22 +390,9 @@ def main():
             or len(sys.argv) == 3 and sys.argv[1] == "copy"
             or len(sys.argv) == 2 and sys.argv[1] == "compile"
             or len(sys.argv) == 2 and sys.argv[1] == "run"):
-        print("USAGE:")
-        print("help - more details about usage and commands below")
-        print("allsteps [modelname | allmodels | list of modelnames] - runs "
-              "clean, spin, gentests, copy, compile and run "
-              "for desired model(s)")
-        print("clean modelname - remove spin, test files")
-        print("archive modelname - archives spin, test files")
-        print("zero - remove all testfiles from RTEMS")
-        print("spin modelname - generate spin files")
-        print("gentests modelname - generate test files")
-        print("copy modelname - copy test files and configuration to RTEMS")
-        print("compile - compiles RTEMS tests")
-        print("run - runs RTEMS tests")
+        with open(f"{source_dir}/testbuilder.help") as helpfile:
+            print(helpfile.read())
         sys.exit(1)
-
-    source_dir = os.path.dirname(os.path.realpath(__file__))
 
     if not Path.exists(Path(f"{source_dir}/spin2test.py")) \
             or not Path.exists(Path(f"{source_dir}/env")):
