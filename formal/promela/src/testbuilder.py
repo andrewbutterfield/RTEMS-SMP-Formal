@@ -296,18 +296,22 @@ def get_model_paths(config):
     return model_to_absolute_path
 
 
-def get_config(source_dir):
+def get_config(source_dir, model_name=""):
     config = dict()
     with open(f"{source_dir}/testbuilder.yml") as file:
         global_config = yaml.load(file, Loader=yaml.FullLoader)
         for key, val in global_config.items():
             config[key] = val
-    if Path("testbuilder.yml").exists():
-        with open("testbuilder.yml") as file:
-            local_config = yaml.load(file, Loader=yaml.FullLoader)
-            if local_config:
-                for key, val in local_config.items():
-                    config[key] = val
+    if model_name and model_name != "allmodels":
+        model_to_path = get_model_paths(config)
+        model_path = model_to_path[model_name]
+        local_config_path = Path(model_path / "testbuilder.yml")
+        if Path(local_config_path).exists():
+            with open(local_config_path) as file:
+                local_config = yaml.load(file, Loader=yaml.FullLoader)
+                if local_config:
+                    for key, val in local_config.items():
+                        config[key] = val
     if "testsuite" not in config.keys():
         config["testsuite"] = "model-0"
     missing_keys = {
@@ -392,7 +396,7 @@ def main():
               "for desired model(s)")
         print("clean modelname - remove spin, test files")
         print("archive modelname - archives spin, test files")
-        print("zero  - remove all testfiles from RTEMS")
+        print("zero - remove all testfiles from RTEMS")
         print("spin modelname - generate spin files")
         print("gentests modelname - generate test files")
         print("copy modelname - copy test files and configuration to RTEMS")
@@ -414,6 +418,8 @@ def main():
     model_to_path = get_model_paths(config)
     refine_config = dict()
     if len(sys.argv) >= 3:
+        config = get_config(source_dir, sys.argv[2])
+        model_to_path = get_model_paths(config)
         check_models_exist(sys.argv[2::], model_to_path, config)
         if sys.argv[2] != "allmodels":
             refine_config = get_refine_config(source_dir, sys.argv[2],
