@@ -3,9 +3,13 @@ import glob
 import os
 import sys
 import yaml
+import shutil
+import subprocess
 from dataclasses import dataclass
 from typing import Union, List
 from pathlib import Path
+from datetime import datetime
+
 import testbuilder
 
 
@@ -151,7 +155,7 @@ def write_file(file_name, program):
         f.write(program.__str__())
 
 
-def get_config(source_dir):
+def get_config(source_dir, model_dir=""):
     config = dict()
     required_keys = {"disable_negation_at", "max_trails", "spin_assert",
                      "spin_ltl"}
@@ -159,12 +163,14 @@ def get_config(source_dir):
         global_config = yaml.load(file, Loader=yaml.FullLoader)
         for key, val in global_config.items():
             config[key] = val
-    if Path("automatic_testgen.yml").exists():
-        with open("automatic_testgen.yml") as file:
-            local_config = yaml.load(file, Loader=yaml.FullLoader)
-            if local_config:
-                for key, val in local_config.items():
-                    config[key] = val
+    if model_dir:
+        local_config_path = Path(f"{model_dir}/automatic_testgen.yml")
+        if local_config_path.exists():
+            with open(local_config_path) as file:
+                local_config = yaml.load(file, Loader=yaml.FullLoader)
+                if local_config:
+                    for key, val in local_config.items():
+                        config[key] = val
     missing_keys = required_keys - config.keys()
     if missing_keys:
         print("automatic_testgen.yml configuration is incomplete")
@@ -202,8 +208,7 @@ def get_programs(model_name):
     return get_all_programs(parsed)
 
 
-def write_all_programs(all_programs: List[ProgramWithNegations]):
-    config = get_config(os.getcwd())
+def write_all_programs(config, all_programs: List[ProgramWithNegations]):
     name_to_num = dict()
     for program in all_programs:
         if program.name not in config["disable_negation_at"]:
@@ -219,12 +224,17 @@ def write_all_programs(all_programs: List[ProgramWithNegations]):
                 write_file(file_name, program.program)
 
 
-def generate_pml_files(model_name):
+def generate_pml_files(config, model_name, model_dir):
+    cwd = os.getcwd()
+    os.chdir(model_dir)
     programs = get_programs(model_name)
-    write_all_programs(programs)
+    write_all_programs(config, programs)
+    os.chdir(cwd)
 
 
-def generate_spin_files(model_name, config, source_dir):
+def generate_spin_files(model_dir, config, refine_config):
+    cwd = os.getcwd()
+    os.chdir(model_dir)
     pml_files = get_generated_pml_files()
     for pml_file in pml_files:
         if pml_file.startswith("assert"):
@@ -232,59 +242,145 @@ def generate_spin_files(model_name, config, source_dir):
         elif pml_file.startswith("ltl"):
             ltl_name = pml_file.lstrip("ltl_").rstrip(".pml")
             spinallscenarios = f"{config['spin_assert']}{ltl_name}"
-        refine_config = testbuilder.get_refine_config(source_dir, model_name,
-                                                      os.getcwd())
         pml_name = pml_file.rstrip(".pml")
         testbuilder.generate_spin_files(pml_name, os.getcwd(),
                                         spinallscenarios, refine_config)
+    os.chdir(cwd)
 
 
-def generate_test_files(model_name, source_dir):
-    pml_files = get_generated_pml_files()
-    for pml_file in pml_files:
-        refine_config = testbuilder.get_refine_config(source_dir, model_name,
-                                                      os.getcwd())
-        testbuilder_config = testbuilder.get_config(source_dir)
+@testbuilder.catch_subprocess_errors
+def generate_test_files(model_name, model_dir,
+                        testbuilder_config, refine_config):
+    """Create test files from spin files"""
+    cwd = os.getcwd()
+    os.chdir(model_dir)
+    if not testbuilder.ready_to_generate(model_name, refine_config):
+        sys.exit(1)
+    print(f"Generating test files for {model_name}")
+    for pml_file in get_generated_pml_files():
         pml_name = pml_file.rstrip(".pml")
-        testbuilder.generate_test_files(pml_name, os.getcwd(),
-                                        testbuilder.get_config(testbuilder_config),
-                                        refine_config)
+        no_of_trails = len(glob.glob(f"{pml_name}*.trail"))
+        if no_of_trails == 0:
+            print("no trail files found")
+        elif no_of_trails == 1:
+            test_file = f"tr-{pml_name}{refine_config['testfiletype']}"
+            subprocess.run(
+                f"python {testbuilder_config['spin2test']} "
+                f"{pml_name} {refine_config['preamble']} "
+                f"{refine_config['postamble']} "
+                f"{refine_config['runfile']} "
+                f"{refine_config['refinefile']} "
+                f"{test_file}",
+                check=True, shell=True)
+        else:
+            for i in range(no_of_trails):
+                test_file = f"tr-{pml_name}-{i}{refine_config['testfiletype']}"
+                subprocess.run(f"python {testbuilder_config['spin2test']} "
+                               f"{pml_name} "
+                               f"{refine_config['preamble']} "
+                               f"{refine_config['postamble']} "
+                               f"{refine_config['runfile']} "
+                               f"{refine_config['refinefile']} "
+                               f"{test_file} {i}",
+                               check=True, shell=True)
+    os.chdir(cwd)
 
 
 def clean(model_name, model_dir):
     """Cleans out generated files in current directory"""
+    print(f"Removing spin and test files for {model_name}")
     cwd = os.getcwd()
     os.chdir(model_dir)
-    print(f"Removing spin and test files for {model_name}")
     files = get_generated_files()
     for file in files:
         os.remove(file)
     os.chdir(cwd)
 
 
+def archive(model_name, model_dir):
+    """Archives generated files in current directory"""
+    cwd = os.getcwd()
+    os.chdir(model_dir)
+    print(f"Archiving spin and test files for {model_name}")
+    files = get_generated_files()
+    date = datetime.now().strftime("%Y%m%d-%H%M%S")
+    archive_dir = Path(f"archive/{date}")
+    archive_dir.mkdir(parents=True, exist_ok=True)
+    for file in files:
+        shutil.copy2(file, archive_dir)
+    print(f"Files archived to {archive_dir}")
+    os.chdir(cwd)
+
+
+def copy(model_dir, testbuilder_config):
+    """Copies C testfiles to test directory and updates the model file """
+    for pml_file in get_generated_pml_files():
+        pml_name = pml_file.rstrip(".pml")
+        testbuilder.copy(pml_name, model_dir, testbuilder_config["testcode"],
+                         testbuilder_config["rtems"],
+                         testbuilder_config["testyaml"],
+                         testbuilder_config["testsuite"])
+
+
 def main(args):
+    """generates and deploys C tests from Promela models"""
     source_dir = os.path.dirname(os.path.realpath(__file__))
+    if not (len(args) == 2 and args[1] == "help"
+            or len(args) == 3 and args[1] == "clean"
+            or len(args) == 3 and args[1] == "archive"
+            or len(args) == 3 and args[1] == "genpmls"
+            or len(args) == 3 and args[1] == "spin"
+            or len(args) == 3 and args[1] == "gentests"
+            or len(args) == 3 and args[1] == "copy"):
+        with open(f"{source_dir}/automatic_testgen.help") as helpfile:
+            print(helpfile.read())
+        sys.exit(1)
+
+    if not Path.exists(Path(f"{source_dir}/spin2test.py")) \
+            or not Path.exists(Path(f"{source_dir}/env")):
+        print("Setup incomplete...")
+        print("Please run the following before continuing:")
+        print(f"cd {source_dir} && bash src.sh")
+        print(f". {source_dir}/env/bin/activate")
+        sys.exit(1)
+
     config = get_config(source_dir)
+    testbuilder_config = testbuilder.get_config(source_dir)
+    model_to_path = testbuilder.get_model_paths(testbuilder_config)
+    refine_config = dict()
     command = args[1]
-    if len(args) > 2:
+    model_name = ""
+    if len(args) == 3:
         model_name = args[2]
+        config = get_config(source_dir, model_to_path[model_name])
+        testbuilder.check_models_exist([model_name], model_to_path,
+                                       testbuilder_config)
+        refine_config = testbuilder.get_refine_config(source_dir, model_name,
+                                                      model_to_path[model_name])
+
+    if command == "help":
+        with open(f"{source_dir}/automatic_testgen.help") as helpfile:
+            print(helpfile.read())
+
     if command == "genpmls":
-        generate_pml_files(model_name)
-    elif command == "spin":
-        generate_spin_files(model_name, config, source_dir)
-    elif command == "gentests":
-        generate_test_files(model_name, source_dir)
-    elif command == "clean":
-        clean(model_name, os.getcwd())
-    elif command == "compile":
-        testbuilder_config = testbuilder.get_config(source_dir)
-        testbuilder.compile(testbuilder_config["rtems"])
-    elif command == "run":
-        testbuilder_config = testbuilder.get_config(source_dir)
-        testbuilder.run_simulator(testbuilder_config["simulator"],
-                                  testbuilder_config["simulatorargs"],
-                                  testbuilder_config["testexe"],
-                                  testbuilder_config["testsuite"])
+        generate_pml_files(config, model_name, model_to_path[model_name])
+
+    if command == "spin":
+        generate_spin_files(model_to_path[model_name], config,
+                            refine_config)
+
+    if command == "gentests":
+        generate_test_files(model_name, model_to_path[model_name],
+                            testbuilder_config, refine_config)
+
+    if command == "clean":
+        clean(args[2], model_to_path[args[2]])
+
+    if command == "archive":
+        archive(model_name, model_to_path[model_name])
+
+    if command == "copy":
+        copy(model_to_path[model_name], testbuilder_config)
 
 
 if __name__ == "__main__":
