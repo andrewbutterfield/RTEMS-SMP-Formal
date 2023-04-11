@@ -16,7 +16,7 @@ import testbuilder
 @dataclass
 class ProgramWithNegations:
     expression: Union[ast.Assert, ast.LTL]
-    node: Union[ast.InlineDef, ast.Proctype, ast.TypeDef,
+    node: Union[ast.InlineDef, ast.Proctype, ast.TypeDef, ast.Init,
                 ast.Sequence, ast.LTL, ast.Assert]
     name: str = ""
     program: ast.Program = None
@@ -47,7 +47,7 @@ def get_negations_top_level_node(node, node_partial_constructor) -> List[Program
     return nodes_with_negations
 
 
-def get_negations_inline_and_proctype(node: Union[ast.InlineDef, ast.Proctype],
+def get_negations_inline_and_proctype(node: Union[ast.InlineDef, ast.Proctype, ast.Init],
                                       node_partial_constructor) -> List[ProgramWithNegations]:
     nodes_with_negation = get_negations_top_level_node(
                     [node.body],
@@ -108,6 +108,19 @@ def get_negations_in_node(node) -> List[ProgramWithNegations]:
             lambda node0: ast.Options(
                 node.type,
                 node0
+            )
+        )
+    elif isinstance(node, ast.Init) and not node.disable_negation:
+        return get_negations_inline_and_proctype(
+            node,
+            lambda node0: ast.Init(
+                node.name,
+                node0[0],
+                node.args,
+                node.active,
+                node.d_proc,
+                node.priority,
+                node.provided
             )
         )
     elif isinstance(node, ast.Proctype) and not node.disable_negation:
