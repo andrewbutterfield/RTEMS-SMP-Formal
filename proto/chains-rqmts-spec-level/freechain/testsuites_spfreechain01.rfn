@@ -37,9 +37,6 @@ no_printf_at \<open>init_simple\<close>
 */
 
 // ltl progress_one_exec_in_history {(! history_op?[op_del] && ! history_op?[op_add]) U (history_op?[op_del] || history_op?[op_add])}
-init {
-  assert (0 == 0);
-}
 ltl progress_one_elem_in_queue {true U (q_size_current != 0)}
 // ltl max_filling_then_never_del {(q_size_current != 4) W (q_size_current == 4)}
 
