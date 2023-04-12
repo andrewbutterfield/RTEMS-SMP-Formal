@@ -1,9 +1,8 @@
 # SPDX-License-Identifier: BSD-2-Clause
 # Runs SPIN to generate test code for all defined scenarios
 
-# Copyright (C) 2021 Trinity College Dublin (www.tcd.ie)
-#               Robert Jennings
-#               Andrew Butterfield
+# Copyright (C) 2023 Trinity College Dublin (www.tcd.ie)
+#               James Gooding Hunt
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions

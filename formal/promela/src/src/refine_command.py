@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: BSD-2-Clause
 """Refines Annotated SPIN output to test program code"""
 
-# Copyright (C) 2019-2021 Trinity College Dublin (www.tcd.ie)
+# Copyright (C) 2019-2023 Trinity College Dublin (www.tcd.ie)
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
