@@ -1,9 +1,8 @@
 # SPDX-License-Identifier: BSD-2-Clause
 # Runs SPIN to generate test code for all defined scenarios
 
-# Copyright (C) 2021 Trinity College Dublin (www.tcd.ie)
-#               Robert Jennings
-#               Andrew Butterfield
+# Copyright (C) 2023 Trinity College Dublin (www.tcd.ie)
+#               James Gooding Hunt
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -30,7 +29,7 @@
 # located in the same directory as testbuilder.py for global settings
 # or in the models directory for local settings
 
-testfiletype: .c #tr-<model><testfiletype>
+testfiletype: .c #tr-<model><test number><testfiletype>, tc-<model><testfiletype>
 runfile: -run.h #<model><runfile>
 preamble: -pre.h #<model><preamble>
 postamble: -post.h #<model><postamble>

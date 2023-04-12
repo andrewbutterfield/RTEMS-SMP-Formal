@@ -2,10 +2,10 @@
 # SPDX-License-Identifier: BSD-2-Clause
 """Runs SPIN to generate test code for all defined scenarios"""
 
-# Copyright (C) 2021-22 Trinity College Dublin (www.tcd.ie)
+# Copyright (C) 2021-23 Trinity College Dublin (www.tcd.ie)
+#               James Gooding Hunt
 #               Robert Jennings
 #               Andrew Butterfield
-#               James Gooding Hunt
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -51,19 +51,21 @@ def catch_subprocess_errors(func):
     return wrapper
 
 
-def all_steps(models, model_to_path, config, source_dir):
+def all_steps(models, model_to_path, source_dir):
     if models == ["allmodels"]:
         models = list(model_to_path.keys())
 
     for model in models:
         path = model_to_path[model]
+        config = get_config(source_dir, model)
         refine_config = get_refine_config(source_dir, model, path)
         clean(model, path, config["testsuite"], refine_config["testfiletype"])
         generate_spin_files(model, path, config["spinallscenarios"],
                             refine_config)
         generate_test_files(model, path, config["spin2test"], refine_config)
         copy(model, path, config["testcode"], config["rtems"],
-             config["testyaml"], config["testsuite"])
+             config["testyaml"], config["testsuite"],
+             refine_config["testfiletype"])
 
     compile(config["rtems"])
     run_simulator(config["simulator"], config["simulatorargs"],
@@ -192,7 +194,7 @@ def generate_testcase_file(model, refine_config, no_of_trails):
             missing_files.append(refine_config[key])
 
     if not missing_files:
-        file_name = f"tc-{model}.c"
+        file_name = f"tc-{model}{refine_config['testfiletype']}"
         with open(file_name, "w") as f:
             preamble = Path(refine_config["testcase_preamble"]).read_text()
             f.write(preamble)
@@ -205,27 +207,29 @@ def generate_testcase_file(model, refine_config, no_of_trails):
     else:
         for file in missing_files:
             print(f"File not found: {file}")
-        print(f"tc-{model}.c will not be generated")
+        print(f"tc-{model}{refine_config['testfiletype']} "
+              f"will not be generated")
 
 
-def copy(model, model_path, codedir, rtems, modfile, testsuite_name):
+def copy(model, model_path, codedir, rtems, modfile, testsuite_name,
+         test_file_extension):
     """Copies C testfiles to test directory and updates the model file """
     cwd = os.getcwd()
     os.chdir(model_path)
 
     # Remove old test files
     print(f"Removing old files for model {model}")
-    files = glob.glob(f"{codedir}tr-{model}*.c")
+    files = glob.glob(f"{codedir}tr-{model}*{test_file_extension}")
     files += glob.glob(f"{codedir}tr-{model}*.h")
-    files += glob.glob(f"{codedir}tc-{model}*.c")
+    files += glob.glob(f"{codedir}tc-{model}{test_file_extension}")
     for file in files:
         os.remove(file)
 
     # Copy new test files
     print(f"Copying new files for model {model}")
-    files = glob.glob(f"tr-{model}*.c")
+    files = glob.glob(f"tr-{model}*{test_file_extension}")
     files += glob.glob(f"tr-{model}*.h")
-    files += glob.glob(f"tc-{model}*.c")
+    files += glob.glob(f"tc-{model}{test_file_extension}")
     for file in files:
         shutil.copyfile(file, f"{rtems}testsuites/validation/{file}")
 
@@ -235,8 +239,8 @@ def copy(model, model_path, codedir, rtems, modfile, testsuite_name):
         model_yaml = yaml.load(file, Loader=yaml.FullLoader)
     source_list = model_yaml['source']
     source_set = set(source_list)
-    files = glob.glob(f"tr-{model}*.c")
-    files += glob.glob(f"tc-{model}*.c")
+    files = glob.glob(f"tr-{model}*{test_file_extension}")
+    files += glob.glob(f"tc-{model}{test_file_extension}")
     for file in files:
         source_set.add(f"testsuites/validation/{file}")
     new_list = list(source_set)
@@ -263,15 +267,15 @@ def run_simulator(simulator_path, simulator_args, testexe, testsuite):
                    check=True, shell=True)
 
 
-def get_generated_files(model, testsuite, test_extenstion):
+def get_generated_files(model, testsuite, test_extension):
     trails = glob.glob(f"{model}*.trail")
     files = trails
     files += glob.glob(f"{model}*.spn")
-    files += glob.glob(f"tc-{model}*.c")
+    files += glob.glob(f"tc-{model}{test_extension}")
     if len(trails) == 1:
-        files += glob.glob(f"tr-{model}-0{test_extenstion}")
+        files += glob.glob(f"tr-{model}-0{test_extension}")
     else:
-        files += glob.glob(f"tr-{model}-*{test_extenstion}")
+        files += glob.glob(f"tr-{model}-*{test_extension}")
     files += glob.glob(f"{testsuite}-test.log")
     return files
 
@@ -294,18 +298,22 @@ def get_model_paths(config):
     return model_to_absolute_path
 
 
-def get_config(source_dir):
+def get_config(source_dir, model_name=""):
     config = dict()
     with open(f"{source_dir}/testbuilder.yml") as file:
         global_config = yaml.load(file, Loader=yaml.FullLoader)
         for key, val in global_config.items():
             config[key] = val
-    if Path("testbuilder.yml").exists():
-        with open("testbuilder.yml") as file:
-            local_config = yaml.load(file, Loader=yaml.FullLoader)
-            if local_config:
-                for key, val in local_config.items():
-                    config[key] = val
+    if model_name and model_name != "allmodels":
+        model_to_path = get_model_paths(config)
+        model_path = model_to_path[model_name]
+        local_config_path = Path(model_path / "testbuilder.yml")
+        if Path(local_config_path).exists():
+            with open(local_config_path) as file:
+                local_config = yaml.load(file, Loader=yaml.FullLoader)
+                if local_config:
+                    for key, val in local_config.items():
+                        config[key] = val
     if "testsuite" not in config.keys():
         config["testsuite"] = "model-0"
     missing_keys = {
@@ -373,32 +381,20 @@ def check_models_exist(modelnames, model_to_path, config):
 
 def main():
     """generates and deploys C tests from Promela models"""
+    source_dir = os.path.dirname(os.path.realpath(__file__))
     if not (len(sys.argv) == 2 and sys.argv[1] == "help"
             or len(sys.argv) >= 3 and sys.argv[1] == "allsteps"
             or len(sys.argv) == 3 and sys.argv[1] == "clean"
             or len(sys.argv) == 3 and sys.argv[1] == "archive"
-            or len(sys.argv) == 2 and sys.argv[1] == "zero"
+            or 2 <= len(sys.argv) <= 3 and sys.argv[1] == "zero"
             or len(sys.argv) == 3 and sys.argv[1] == "spin"
             or len(sys.argv) == 3 and sys.argv[1] == "gentests"
             or len(sys.argv) == 3 and sys.argv[1] == "copy"
             or len(sys.argv) == 2 and sys.argv[1] == "compile"
             or len(sys.argv) == 2 and sys.argv[1] == "run"):
-        print("USAGE:")
-        print("help - more details about usage and commands below")
-        print("allsteps [modelname | allmodels | list of modelnames] - runs "
-              "clean, spin, gentests, copy, compile and run "
-              "for desired model(s)")
-        print("clean modelname - remove spin, test files")
-        print("archive modelname - archives spin, test files")
-        print("zero  - remove all testfiles from RTEMS")
-        print("spin modelname - generate spin files")
-        print("gentests modelname - generate test files")
-        print("copy modelname - copy test files and configuration to RTEMS")
-        print("compile - compiles RTEMS tests")
-        print("run - runs RTEMS tests")
+        with open(f"{source_dir}/testbuilder.help") as helpfile:
+            print(helpfile.read())
         sys.exit(1)
-
-    source_dir = os.path.dirname(os.path.realpath(__file__))
 
     if not Path.exists(Path(f"{source_dir}/spin2test.py")) \
             or not Path.exists(Path(f"{source_dir}/env")):
@@ -412,6 +408,8 @@ def main():
     model_to_path = get_model_paths(config)
     refine_config = dict()
     if len(sys.argv) >= 3:
+        config = get_config(source_dir, sys.argv[2])
+        model_to_path = get_model_paths(config)
         check_models_exist(sys.argv[2::], model_to_path, config)
         if sys.argv[2] != "allmodels":
             refine_config = get_refine_config(source_dir, sys.argv[2],
@@ -422,8 +420,7 @@ def main():
             print(helpfile.read())
 
     if sys.argv[1] == "allsteps":
-        all_steps(sys.argv[2::], model_to_path,
-                  config, source_dir)
+        all_steps(sys.argv[2::], model_to_path, source_dir)
 
     if sys.argv[1] == "spin":
         generate_spin_files(sys.argv[2], model_to_path[sys.argv[2]],
@@ -446,7 +443,8 @@ def main():
 
     if sys.argv[1] == "copy":
         copy(sys.argv[2], model_to_path[sys.argv[2]], config["testcode"],
-             config["rtems"], config["testyaml"], config["testsuite"])
+             config["rtems"], config["testyaml"], config["testsuite"],
+             refine_config["testfiletype"])
 
     if sys.argv[1] == "compile":
         compile(config["rtems"])
