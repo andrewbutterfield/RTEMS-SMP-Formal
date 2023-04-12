@@ -172,12 +172,12 @@ def get_config(source_dir, model_dir=""):
     config = dict()
     required_keys = {"disable_negation_at", "max_trails", "spin_assert",
                      "spin_ltl"}
-    with open(f"{source_dir}/automatic_testgen.yml") as file:
+    with open(f"{source_dir}/automatic-testgen.yml") as file:
         global_config = yaml.load(file, Loader=yaml.FullLoader)
         for key, val in global_config.items():
             config[key] = val
     if model_dir:
-        local_config_path = Path(f"{model_dir}/automatic_testgen.yml")
+        local_config_path = Path(f"{model_dir}/automatic-testgen.yml")
         if local_config_path.exists():
             with open(local_config_path) as file:
                 local_config = yaml.load(file, Loader=yaml.FullLoader)
@@ -186,7 +186,7 @@ def get_config(source_dir, model_dir=""):
                         config[key] = val
     missing_keys = required_keys - config.keys()
     if missing_keys:
-        print("automatic_testgen.yml configuration is incomplete")
+        print("automatic-testgen.yml configuration is incomplete")
         print("The following configuration items are missing:")
         for key in missing_keys:
             print(key)
@@ -345,7 +345,7 @@ def main(args):
             or len(args) == 3 and args[1] == "spin"
             or len(args) == 3 and args[1] == "gentests"
             or len(args) == 3 and args[1] == "copy"):
-        with open(f"{source_dir}/automatic_testgen.help") as helpfile:
+        with open(f"{source_dir}/automatic-testgen.help") as helpfile:
             print(helpfile.read())
         sys.exit(1)
 

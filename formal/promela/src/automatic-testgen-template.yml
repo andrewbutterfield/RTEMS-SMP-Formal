@@ -27,7 +27,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 # This should be specialised for your setup, as automatic_testgen.yml,
-# located in the same directory as automatic_testgen.py
+# located in the same directory as automatic-testgen.py
 # All pathnames should be absolute
 
 disable_negation_at: [] # list of node names containing assertions not to negate
