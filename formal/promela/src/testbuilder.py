@@ -59,7 +59,7 @@ def all_steps(models, model_to_path, source_dir):
         path = model_to_path[model]
         config = get_config(source_dir, model)
         refine_config = get_refine_config(source_dir, model, path)
-        clean(model, path, config["testsuite"], refine_config["testfiletype"])
+        clean(model, path, source_dir)
         generate_spin_files(model, path, config["spinallscenarios"],
                             refine_config)
         generate_test_files(model, path, config["spin2test"], refine_config)
@@ -72,14 +72,23 @@ def all_steps(models, model_to_path, source_dir):
                   config["testexe"], config["testsuite"])
 
 
-def clean(model, model_dir, testsuite, test_extension):
-    """Cleans out generated files in current directory"""
+def clean(model, model_to_path, source_dir):
+    """Cleans out generated files in models directory"""
     cwd = os.getcwd()
-    os.chdir(model_dir)
-    print(f"Removing spin and test files for {model}")
-    files = get_generated_files(model, testsuite, test_extension)
-    for file in files:
-        os.remove(file)
+    if model == "allmodels":
+        models = list(model_to_path.keys())
+    else:
+        models = [model]
+    for model_name in models:
+        model_dir = model_to_path[model_name]
+        config = get_config(source_dir, model_name)
+        refine_config = get_refine_config(source_dir, model_name, model_dir)
+        os.chdir(model_dir)
+        print(f"Removing spin and test files for {model_name}")
+        files = get_generated_files(model_name, config["testsuite"],
+                                    refine_config["testfiletype"])
+        for file in files:
+            os.remove(file)
     os.chdir(cwd)
 
 
@@ -431,8 +440,7 @@ def main():
                             config["spin2test"], refine_config)
 
     if sys.argv[1] == "clean":
-        clean(sys.argv[2], model_to_path[sys.argv[2]], config["testsuite"],
-              refine_config["testfiletype"])
+        clean(sys.argv[2], model_to_path, source_dir)
 
     if sys.argv[1] == "archive":
         archive(sys.argv[2], model_to_path[sys.argv[2]], config["testsuite"],
