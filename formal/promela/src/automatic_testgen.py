@@ -352,14 +352,15 @@ def archive(model_name, model_dir):
     os.chdir(cwd)
 
 
-def copy(model_dir, testbuilder_config):
+def copy(model_dir, testbuilder_config, refine_config):
     """Copies C testfiles to test directory and updates the model file """
     for pml_file in get_generated_pml_files():
         pml_name = pml_file.rstrip(".pml")
         testbuilder.copy(pml_name, model_dir, testbuilder_config["testcode"],
                          testbuilder_config["rtems"],
                          testbuilder_config["testyaml"],
-                         testbuilder_config["testsuite"])
+                         testbuilder_config["testsuite"],
+                         refine_config["testfiletype"])
 
 
 def main(args):
@@ -372,7 +373,7 @@ def main(args):
             or len(args) == 3 and args[1] == "spin"
             or len(args) == 3 and args[1] == "gentests"
             or len(args) == 3 and args[1] == "copy"):
-        with open(f"{source_dir}/automatic-testgen.help") as helpfile:
+        with open(f"{source_dir}/automatic_testgen.help") as helpfile:
             print(helpfile.read())
         sys.exit(1)
 
@@ -420,7 +421,7 @@ def main(args):
         archive(model_name, model_to_path[model_name])
 
     if command == "copy":
-        copy(model_to_path[model_name], testbuilder_config)
+        copy(model_to_path[model_name], testbuilder_config, refine_config)
 
 
 if __name__ == "__main__":
