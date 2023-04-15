@@ -49,7 +49,7 @@ Another configuration file `refine-config.yml` defines file names for files used
 To simplify matters, it helps to create a short alias for the full pathname to `testbuilder.py`. This should be defined in `.bashrc` or similar.
 
 ```
-alias tb=path-to-formal/formal/promela/src/testbuilder.py
+alias tb=python3 path-to-formal/formal/promela/src/testbuilder.py
 ```
 
 If all this is setup, then a quick test is simply to run the program without command line arguments, which will then issue a help statement:
@@ -57,16 +57,19 @@ If all this is setup, then a quick test is simply to run the program without com
 ```
 :- tb
 USAGE:
-help - these instructions
-all modelname - runs clean, spin, gentests, copy, compile and run
-clean modelname - remove spin, test files
-archive modelname - archives spin, test files
-zero  - remove all tesfiles from RTEMS
-spin modelname - generate spin files
-gentests modelname - generate test files
-copy modelname - copy test files and configuration to RTEMS
-compile - compiles RTEMS tests
-run - runs RTEMS tests
+`allsteps <model> | allmodels | <list of models>` will run clean, spin, gentests, copy, compile and run for desired model(s)
+`spin <model>` will run SPIN to find all scenarios
+`gentests <model>` will produce C tests
+`clean <model> | allmodels` will remove generated files.
+`copy <model>`
+   - copies the generated  C files to the relevant RTEMS test source directory
+   - updates the relevant RTEMS configuration yaml file
+`archive <model>`` will copy generated spn, trail, C, and test log files
+   to the archive sub-directory of the current model directory.
+`compile` rebuilds the RTEMS test executable
+`run` runs the tests in the SIS simulator
+`zero [model]` removes all generated C filenames from the RTEMS configuration yaml file. Yaml file based on global config if model not set, local config if model set.
+  - it does NOT remove the test sources from the RTEMS test source directory
 ```
 
 If there are obvious problems with `testbuilder.yml`, it will report an error.
@@ -75,6 +78,46 @@ Note: Both `testbuilder.yml` and `refine-config.yml` can be configured globally 
 Model specific configuration can be created in the models' directory, eg `path-to-formal/formal/promela/models/chains/testbuilder.yml`.
 
 Local configuration items will take precedence over their global counterparts.
+
+### Automatic Test Generation
+
+Automatic test generation is an extension of the test builder system that allows generation of tests based on models with multiple assertions and/or multiple LTL operations.
+
+The top-level program is `automatic_testgen.py`.
+
+It relies on `automatic-testgen.yml` which contains configuration items relating to SPIN arguments and other SPIN/Promela related items for Promela file and SPIN file creation. A template file `automatic-testgen-template.yml` is provided. This should be edited to reflect your setup, and then saved as `automatic-testgen.yml`.
+
+It also relies on `testbuilder.yml` and `refine-config.yml` as above for information about RTEMS paths, and test file generation.
+
+To simplify matters, it helps to create a short alias for the full pathname to `automatic_testgen.py`. This should be defined in `.bashrc` or similar.
+
+```
+alias au=python3 path-to-formal/formal/promela/src/automatic_testgen.py
+```
+
+If all this is setup, then a quick test is simply to run the program without command line arguments, which will then issue a help statement:
+
+```
+`genpmls <model>` will generate a promela file for each assertion or ltl
+`spin <model>` will run SPIN to find all scenarios
+`gentests <model>` will produce C tests
+`clean <model>` will remove generated files.
+`copy <model>`
+   - copies the generated  C files to the relevant RTEMS test source directory
+   - updates the relevant RTEMS configuration yaml file
+`archive <model>` will copy generated spn, trail, C, and test log files
+   to the archive sub-directory of the current model directory.
+```
+
+Note: `automatic-testgen.yml` can be configured globally and on a per-model basis.
+Model specific configuration can be created in the models' directory, eg `path-to-formal/formal/promela/models/chains/automatic-testgen.yml`.
+
+Local configuration items will take precedence over their global counterparts.
+
+There are currently limitations to the automatic test generation framework.
+It will not work with `tb allsteps allmodels` or `tb clean allmodels` as the systems have not yet been linked in that way.
+The Promela parser will reject some valid Promela for Syntax errors.
+This issue requires further investigation.
 
 ### Test Language Configuration
 
