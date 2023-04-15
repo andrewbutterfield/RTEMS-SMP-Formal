@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # SPDX-License-Identifier: BSD-2-Clause
 # Runs SPIN to generate test code for all defined scenarios
 
