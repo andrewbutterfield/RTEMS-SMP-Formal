@@ -198,8 +198,7 @@ def write_file(file_name, program):
 
 def get_config(source_dir, model_dir=""):
     config = dict()
-    required_keys = {"disable_negation_at", "max_trails", "spin_assert",
-                     "spin_ltl"}
+    required_keys = {"disable_negation_at", "spin_assert", "spin_ltl"}
     with open(f"{source_dir}/automatic-testgen.yml") as file:
         global_config = yaml.load(file, Loader=yaml.FullLoader)
         for key, val in global_config.items():
