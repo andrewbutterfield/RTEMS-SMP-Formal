@@ -63,9 +63,9 @@
  *
  * @ingroup RTEMSTestSuiteTestsuitesValidation0
  *
- * @brief Tests the rtems_semaphore_create, rtems_semaphore_ident, 
+ * @brief Tests the rtems_semaphore_create, rtems_semaphore_ident,
  * rtems_semaphore_delete, rtems_semaphore_obtain, rtems_semaphore_release,
- * rtems_semaphore_flush and rtems_semaphore_set_priority 
+ * rtems_semaphore_flush and rtems_semaphore_set_priority
  * directives.
  *
  * This test case performs the following actions:
@@ -78,97 +78,3 @@
 /**
  * @fn void T_case_body_RtemsSemVal void )
  */
-T_TEST_CASE( RtemsModelSemMgr0 )
-{
-  RtemsModelSemMgr_Run0();
-}
-
-T_TEST_CASE( RtemsModelSemMgr1 )
-{
-  RtemsModelSemMgr_Run1();
-}
-
-T_TEST_CASE( RtemsModelSemMgr2 )
-{
-  RtemsModelSemMgr_Run2();
-}
-
-T_TEST_CASE( RtemsModelSemMgr3 )
-{
-  RtemsModelSemMgr_Run3();
-}
-
-T_TEST_CASE( RtemsModelSemMgr4 )
-{
-  RtemsModelSemMgr_Run4();
-}
-
-T_TEST_CASE( RtemsModelSemMgr5 )
-{
-  RtemsModelSemMgr_Run5();
-}
-
-T_TEST_CASE( RtemsModelSemMgr6 )
-{
-  RtemsModelSemMgr_Run6();
-}
-
-T_TEST_CASE( RtemsModelSemMgr7 )
-{
-  RtemsModelSemMgr_Run7();
-}
-
-T_TEST_CASE( RtemsModelSemMgr8 )
-{
-  RtemsModelSemMgr_Run8();
-}
-
-T_TEST_CASE( RtemsModelSemMgr9 )
-{
-  RtemsModelSemMgr_Run9();
-}
-
-
-T_TEST_CASE( RtemsModelSemMgr10 )
-{
-  RtemsModelSemMgr_Run10();
-}
-
-T_TEST_CASE( RtemsModelSemMgr11 )
-{
-  RtemsModelSemMgr_Run11();
-}
-
-T_TEST_CASE( RtemsModelSemMgr12 )
-{
-  RtemsModelSemMgr_Run12();
-}
-
-T_TEST_CASE( RtemsModelSemMgr13 )
-{
-  RtemsModelSemMgr_Run13();
-}
-
-T_TEST_CASE( RtemsModelSemMgr14 )
-{
-  RtemsModelSemMgr_Run14();
-}
-
-T_TEST_CASE( RtemsModelSemMgr15 )
-{
-  RtemsModelSemMgr_Run15();
-}
-
-T_TEST_CASE( RtemsModelSemMgr16 )
-{
-  RtemsModelSemMgr_Run16();
-}
-
-
-
-
-
-
-
-
-/** @} */
