@@ -59,7 +59,7 @@ def all_steps(models, model_to_path, source_dir):
         path = model_to_path[model]
         config = get_config(source_dir, model)
         refine_config = get_refine_config(source_dir, model, path)
-        clean(model, path, source_dir)
+        clean(model, model_to_path, source_dir)
         generate_spin_files(model, path, config["spinallscenarios"],
                             refine_config)
         generate_test_files(model, path, config["spin2test"], refine_config)
@@ -151,9 +151,6 @@ def generate_spin_files(model, model_dir, spinallscenarios, refine_config):
     no_of_trails = len(glob.glob(f"{model}*.trail"))
     if no_of_trails == 0:
         print("no trail files generated")
-    elif no_of_trails == 1:
-        subprocess.run(f"spin -T -t {model}.pml > {model}.spn",
-                       check=True, shell=True)
     else:
         for i in range(no_of_trails):
             subprocess.run(f"spin -T -t{i + 1} {model}.pml > {model}-{i}.spn",
@@ -173,14 +170,6 @@ def generate_test_files(model, model_dir, testgen, refine_config):
     no_of_trails = len(glob.glob(f"{model}*.trail"))
     if no_of_trails == 0:
         print("no trail files found")
-    elif no_of_trails == 1:
-        test_file = f"tr-{model}{refine_config['testfiletype']}"
-        subprocess.run(f"python {testgen} {model} {refine_config['preamble']} "
-                       f"{refine_config['postamble']} "
-                       f"{refine_config['runfile']} "
-                       f"{refine_config['refinefile']} "
-                       f"{test_file}",
-                       check=True, shell=True)
     else:
         for i in range(no_of_trails):
             test_file = f"tr-{model}-{i}{refine_config['testfiletype']}"
@@ -440,6 +429,7 @@ def main():
                             config["spin2test"], refine_config)
 
     if sys.argv[1] == "clean":
+        print(f"sys.argv clean model_to_path :: {type(model_to_path)}")
         clean(sys.argv[2], model_to_path, source_dir)
 
     if sys.argv[1] == "archive":
