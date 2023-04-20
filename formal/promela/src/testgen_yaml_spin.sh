@@ -16,4 +16,4 @@ source src.sh
 cd -
 
 # exec in the virtual environment
-exec python3 "$HOME0/testgen_yaml.py" "$HOME0/../examples/model_checker/spin.pml" "$@"
+exec python3 "$HOME0/testgen_yaml.py" "$HOME0/examples/model_checker/spin.yml" "$@"

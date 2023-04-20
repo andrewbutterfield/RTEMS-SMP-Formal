@@ -54,6 +54,9 @@ import shutil
 import subprocess
 import tempfile
 import traceback
+import yaml
+
+data arg_yml_file
 
 ##
 # parse
@@ -92,7 +95,7 @@ def get_forest_ass (node):
                 ts_succ = tl ts_succ
             return list (flatten (reversed ts_res))
         def get_forest_ass0 (node, cons_node):
-            return get_forest_ass00 ((t_t -> t_t[0]), (t_t -> (t_t, None)), node, cons_node)
+            return get_forest_ass00((t_t -> t_t[0]), (t_t -> (t_t, None)), node, cons_node)
         def get_forest_ass0_proc_inl (cons_node):
             return list (map ((msg_t_ass -> ((node.name, msg_t_ass[0]), msg_t_ass[1])), get_forest_ass0 ([node.body], cons_node <.. (node -> node[0]))))
 
@@ -240,14 +243,26 @@ class read_eval_print:
         options_pml = ['-p', '--promela']
         options0 = ['-a', '--annotation'] + options_pml
         options_annotation_file = ['-af', '--annotation_file']
-        options = options_annotation_file + options0
+        options_pml_file = ['--pf']
+        options = options_annotation_file + options0 + options_pml_file
         def map_arg (l):
             match l:
-                case [option, cts] + xs if option in options0 or option in options_annotation_file:
-                    yield (  arg_pml () if option in options_pml else
-                             arg_annotation () if option in options0 else
-                             arg_annotation_file ()
-                           , cts)
+                case [option, cts] + xs if option in options:
+                    print(f"option: {option}, cts: {cts}, xs: {xs}")
+                    if option in options_pml_file:
+                        if os.path.isfile cts:
+                            yield (arg_pml_file(), cts)
+                        else:
+                            input_continue (f'Expecting an existing file: {cts}')
+                    elif option in options_pml:
+                        yield (arg_pml(), cts)
+                    elif option in options_annotation_file:
+                        if os.path.isfile cts:
+                            yield (arg_annotation_file(), cts)
+                        else:
+                            input_continue (f'Expecting an existing file: {cts}')
+                    elif option in options0:
+                        yield (arg_annotation(), cts)
                     yield from map_arg xs
                 case [fic] + xs:
                     if fic.find ('-') == 0:
@@ -256,7 +271,7 @@ class read_eval_print:
                         else:
                             input_continue (f'Unknown option: {fic} {xs}')
                     elif os.path.isfile fic:
-                        yield (arg_pml_file (), fic)
+                        yield (arg_yml_file(), fic)
                     else:
                         input_continue (f'Expecting an existing file: {fic}')
                     yield from map_arg xs
@@ -303,14 +318,50 @@ class read_eval_print:
     ##
     #
 
+    def parse_configurations(self, parse_commands, hash_cmd_generic, lines, pos_file, pos_dir):
+        config_items = list()
+        arg_type = lines[0]
+        if arg_type == arg_yml_file():
+            file_path = lines[1]
+            with open(file_path) as file:
+                config_dict = yaml.load(file, Loader=yaml.FullLoader)
+            index_offset = 0
+            for index, (key, values) in enumerate(config_dict.items()):
+                if index_offset > 0:
+                    index_offset -= 1
+                if key == "dict":
+                    for dictionary in values:
+                        for subkey, subvalues in dictionary.items():
+                            next_list = list()
+                            if type(subvalues) == list:
+                                for value in subvalues:
+                                    next_list.append(tuple((pos_dir, value)))
+                            else:
+                                next_list.append(tuple((pos_dir, subvalues)))
+                            config_items.append(((pos_file, 0 , index + index_offset), tuple((subkey, next_list))))
+                            index_offset += 1
+                else:
+                    next_list = list()
+                    if type(values) == list:
+                        for value in values:
+                            next_list.append(tuple((pos_dir, value)))
+                    else:
+                        next_list.append(tuple((pos_dir, values)))
+                    config_items.append(((pos_file, 0, index + index_offset), tuple((key, next_list))))
+            annot_equiv = {(pos_file, 0): config_items}
+            return {(pos_file, 0): config_items}
+        else:
+            return syntax_pml.parse_annotations(parse_commands, hash_cmd_generic,
+                                                lines, pos_file, pos_dir)
+
     def init_top_elems (self, programs, sys_args, l_check_unparse_parse = False):
-        annots = [ syntax_pml.parse_annotations
-                     (self.parse_commands,
+        annots = [self.parse_configurations(self.parse_commands,
                       self.hash_cmd_generic,
                       (arg_ty, arg_cts),
                       pos_file,
-                      os.path.dirname (os.path.abspath arg_cts) if arg_ty == arg_pml_file () or arg_ty == arg_annotation_file () else self.cwd)
+                      os.path.dirname (os.path.abspath arg_cts) if arg_ty == arg_pml_file () or arg_ty == arg_annotation_file () or arg_ty == arg_yml_file() else self.cwd)
                   for (pos_file, (arg_ty, arg_cts)) in mapi (args -> args, sys_args) ]
+        print(f"annots:\n{annots}")
         dict_top_elem = {}
 
         for (node_file, (node, node_line)) in programs:
@@ -443,7 +494,7 @@ class read_eval_print:
                 else:
                     input_continue (f'Empty command: {binding}')
         
-        promelas_no_ltl_str, promelas_no_ltl, promelas_ltl = partition_pml_ast ((promela -> type(promela) == ast.LTL), promelas)
+        promelas_no_ltl_str, promelas_no_ltl, promelas_ltl = partition_pml_ast((lambda promela: type(promela) == ast.LTL), promelas)
         l_refine_uniform_log = find_annot_bool (annots, 'refine_uniform_log')
         l_enclose = find_annot_list1 (annots, 'enclose') |> map $ (args -> (args[0], args[1])) |> list
         l_enclose_uniform = find_annot_list1 (annots, 'enclose_uniform') |> map $ (args -> (args[0], args[1])) |> list
