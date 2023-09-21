@@ -1,0 +1,136 @@
+From 20b01cd57bb4ae37e9f6b49e298f6338ad0d3cf6 Mon Sep 17 00:00:00 2001
+From: Andrew Butterfield <andrew.butterfield@scss.tcd.ie>
+Date: Fri, 4 Aug 2023 16:48:10 +0100
+Subject: [PATCH 04/10] patch 2 warning fixes (partial)
+
+currently declares all variables in every scenario, even if not used
+---
+ formal/promela/models/chains/chains-api-model-rfn.yml | 3 ---
+ formal/promela/models/chains/chains-api-model-run.h   | 3 +--
+ formal/promela/models/chains/chains-api-model.pml     | 1 -
+ formal/promela/models/chains/tr-chains-api-model.h    | 1 +
+ formal/promela/models/events/event-mgr-model-rfn.yml  | 4 ++--
+ formal/promela/models/events/event-mgr-model.pml      | 3 ---
+ formal/promela/models/events/tr-event-mgr-model.h     | 7 -------
+ 7 files changed, 4 insertions(+), 18 deletions(-)
+
+diff --git a/formal/promela/models/chains/chains-api-model-rfn.yml b/formal/promela/models/chains/chains-api-model-rfn.yml
+index 441b8ceb..33d3e551 100644
+--- a/formal/promela/models/chains/chains-api-model-rfn.yml
++++ b/formal/promela/models/chains/chains-api-model-rfn.yml
+@@ -27,9 +27,6 @@
+ # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ # POSSIBILITY OF SUCH DAMAGE.
+ 
+-NAME: |
+-  const char rtems_test_name[] = "Model_Chain_API";
+-
+ memory_DCL: item {0}[{1}];
+ 
+ nptr_DCL: item *
+diff --git a/formal/promela/models/chains/chains-api-model-run.h b/formal/promela/models/chains/chains-api-model-run.h
+index 6320e503..688a2b16 100644
+--- a/formal/promela/models/chains/chains-api-model-run.h
++++ b/formal/promela/models/chains/chains-api-model-run.h
+@@ -1,7 +1,6 @@
+ /* SPDX-License-Identifier: BSD-3-Clause */
+ 
+-void RtemsModelChainsAPI_Run{0}(
+-)
++static void RtemsModelChainsAPI_Run{0}(void)
+ {{
+   Context ctx;
+ 
+diff --git a/formal/promela/models/chains/chains-api-model.pml b/formal/promela/models/chains/chains-api-model.pml
+index b4ae38e2..a90f04c3 100644
+--- a/formal/promela/models/chains/chains-api-model.pml
++++ b/formal/promela/models/chains/chains-api-model.pml
+@@ -169,7 +169,6 @@ init {
+   pid nr;
+   atomic{
+     printf("\n\n Chain Model running.\n");
+-    printf("@@@ 0 NAME Chain_AutoGen\n")
+     printf("@@@ 0 DEF MAX_SIZE 8\n");
+     printf("@@@ 0 DCLARRAY Node memory MAX_SIZE\n");
+     printf("@@@ 0 DECL unsigned nptr NULL\n")
+diff --git a/formal/promela/models/chains/tr-chains-api-model.h b/formal/promela/models/chains/tr-chains-api-model.h
+index a6c3858b..6d15b3ca 100644
+--- a/formal/promela/models/chains/tr-chains-api-model.h
++++ b/formal/promela/models/chains/tr-chains-api-model.h
+@@ -44,6 +44,7 @@
+  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  ******************************************************************************/
+ 
++#include "tx-support.h"
+ 
+ typedef struct item
+ {
+diff --git a/formal/promela/models/events/event-mgr-model-rfn.yml b/formal/promela/models/events/event-mgr-model-rfn.yml
+index 96727b88..e9a8e301 100644
+--- a/formal/promela/models/events/event-mgr-model-rfn.yml
++++ b/formal/promela/models/events/event-mgr-model-rfn.yml
+@@ -133,13 +133,13 @@ StartLog: |
+   log = T_thread_switch_record_4( &ctx->thread_switch_log );
+ 
+ CheckPreemption: |
+-  log = &ctx->thread_switch_log;
++  log = (T_thread_switch_log *) &ctx->thread_switch_log;
+   T_eq_sz( log->header.recorded, 2 );
+   T_eq_u32( log->events[ 0 ].heir, ctx->runner_id );
+   T_eq_u32( log->events[ 1 ].heir, ctx->worker_id );
+ 
+ CheckNoPreemption: |
+-  log = &ctx->thread_switch_log;
++  log = (T_thread_switch_log *) &ctx->thread_switch_log;
+   T_le_sz( log->header.recorded, 1 );
+   for ( size_t i = 0; i < log->header.recorded; ++i ) {
+     T_ne_u32( log->events[ i ].executing, ctx->worker_id );
+diff --git a/formal/promela/models/events/event-mgr-model.pml b/formal/promela/models/events/event-mgr-model.pml
+index 01ef9f58..1057d139 100644
+--- a/formal/promela/models/events/event-mgr-model.pml
++++ b/formal/promela/models/events/event-mgr-model.pml
+@@ -754,7 +754,6 @@ proctype System () {
+          if
+          ::  tasks[taskid].state == OtherWait
+              -> tasks[taskid].state = Ready
+-                printf("@@@ %d STATE %d Ready\n",_pid,taskid)
+          ::  else -> skip
+          fi
+          liveSeen = true;
+@@ -801,7 +800,6 @@ proctype Clock () {
+               ::  tix == 0
+                   tasks[tid].tout = true
+                   tasks[tid].state = Ready
+-                  printf("@@@ %d STATE %d Ready\n",_pid,tid)
+               ::  else
+                   tasks[tid].ticks = tix
+               fi
+@@ -821,7 +819,6 @@ init {
+   printf("Event Manager Model running.\n");
+   printf("Setup...\n");
+ 
+-  printf("@@@ %d NAME Event_Manager_TestGen\n",_pid)
+   outputDefines();
+   outputDeclarations();
+ 
+diff --git a/formal/promela/models/events/tr-event-mgr-model.h b/formal/promela/models/events/tr-event-mgr-model.h
+index 4cb781cf..6a814344 100644
+--- a/formal/promela/models/events/tr-event-mgr-model.h
++++ b/formal/promela/models/events/tr-event-mgr-model.h
+@@ -98,13 +98,6 @@ typedef struct {
+   T_thread_switch_log_4 thread_switch_log; // thread switch log
+ } RtemsModelEventsMgr_Context;
+ 
+-typedef enum {
+-  PRIO_HIGH = 1,
+-  PRIO_NORMAL,
+-  PRIO_LOW,
+-  PRIO_OTHER
+-} Priorities;
+-
+ #define POWER_OF_10 100
+ 
+ #define WORKER_ATTRIBUTES RTEMS_DEFAULT_ATTRIBUTES
+-- 
+2.37.1 (Apple Git-137.1)
+

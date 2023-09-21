@@ -1,0 +1,55 @@
+From f6f497bad3d2275ba96d9a2fe6cc661720a65d75 Mon Sep 17 00:00:00 2001
+From: Andrew Butterfield <andrew.butterfield@scss.tcd.ie>
+Date: Fri, 4 Aug 2023 17:08:41 +0100
+Subject: [PATCH 06/10] patch2 warning fix now complete
+
+---
+ .../promela/models/events/event-mgr-model.pml | 21 +++++++++++--------
+ 1 file changed, 12 insertions(+), 9 deletions(-)
+
+diff --git a/formal/promela/models/events/event-mgr-model.pml b/formal/promela/models/events/event-mgr-model.pml
+index 1057d139..e0c0f66c 100644
+--- a/formal/promela/models/events/event-mgr-model.pml
++++ b/formal/promela/models/events/event-mgr-model.pml
+@@ -137,12 +137,18 @@ byte recout[TASK_MAX] ; // models receive 'out' location.
+  */
+ bool semaphore[SEMA_MAX]; // Semaphore
+ 
+-inline outputDeclarations () {
+-  printf("@@@ %d DECL byte sendrc 0\n",_pid);
+-  printf("@@@ %d DECL byte recrc 0\n",_pid);
++inline outputDeclarations () { 
++  if
++  :: doSend -> printf("@@@ %d DECL byte sendrc 0\n",_pid);
++  :: else
++  fi
++  if 
++  :: doReceive -> printf("@@@ %d DECL byte recrc 0\n",_pid);
++                  printf("@@@ %d DCLARRAY byte recout TASK_MAX\n",_pid);
++  :: else
++  fi
+   // Rather than refine an entire Task array, we refine array 'slices'
+   printf("@@@ %d DCLARRAY EvtSet pending TASK_MAX\n",_pid);
+-  printf("@@@ %d DCLARRAY byte recout TASK_MAX\n",_pid);
+   printf("@@@ %d DCLARRAY Semaphore semaphore SEMA_MAX\n",_pid);
+ }
+ 
+@@ -820,13 +826,10 @@ init {
+   printf("Setup...\n");
+ 
+   outputDefines();
++  chooseScenario();
+   outputDeclarations();
+-
+   printf("@@@ %d INIT\n",_pid);
+-  chooseScenario();
+-
+-
+-
++  
+   printf("Run...\n");
+ 
+   run System();
+-- 
+2.37.1 (Apple Git-137.1)
+

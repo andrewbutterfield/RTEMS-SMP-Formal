@@ -1,0 +1,24 @@
+From f3121105d170e7482028e42775c7397c2a5a0dd8 Mon Sep 17 00:00:00 2001
+From: Andrew Butterfield <andrew.butterfield@scss.tcd.ie>
+Date: Fri, 4 Aug 2023 17:12:05 +0100
+Subject: [PATCH 10/10] ignore python tests
+
+---
+ .gitignore | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/.gitignore b/.gitignore
+index 0576cfdd..1a68eecd 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -12,3 +12,7 @@ formal/promela/src/src/syntax_yaml.py
+ formal/promela/src/src/testgen.py
+ formal/promela/src/testgen_ml.py
+ formal/promela/src/testgen_yaml.py
++formal/promela/src/src/tests/library.py
++formal/promela/src/src/tests/test_coverage_spin2test.py
++formal/promela/src/src/tests/test_coverage_testgen.py
++formal/promela/src/src/tests/test_optional.py
+-- 
+2.37.1 (Apple Git-137.1)
+

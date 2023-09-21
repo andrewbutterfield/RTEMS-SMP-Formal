@@ -1,0 +1,29 @@
+From e1180a0c020d14519ed0633eb77d6d01b2f37965 Mon Sep 17 00:00:00 2001
+From: Andrew Butterfield <andrew.butterfield@scss.tcd.ie>
+Date: Fri, 4 Aug 2023 17:11:28 +0100
+Subject: [PATCH 09/10] ignore generated python
+
+---
+ .gitignore | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/.gitignore b/.gitignore
+index b4bd5187..0576cfdd 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -3,3 +3,12 @@ env
+ .mypy_cache
+ __pycache__
+ spec.pickle
++formal/promela/src/src/library.py
++formal/promela/src/src/refine_command.py
++formal/promela/src/src/spin2test.py
++formal/promela/src/src/syntax_ml.py
++formal/promela/src/src/syntax_pml.py
++formal/promela/src/src/syntax_yaml.py
++formal/promela/src/src/testgen.py
++formal/promela/src/testgen_ml.py
++formal/promela/src/testgen_yaml.py
+-- 
+2.37.1 (Apple Git-137.1)
+
