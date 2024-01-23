@@ -1,0 +1,190 @@
+From cc1e67fbf01db3f90ff090d14d0885adf19c500a Mon Sep 17 00:00:00 2001
+From: Andrew Butterfield <andrew.butterfield@scss.tcd.ie>
+Date: Fri, 4 Aug 2023 15:18:03 +0100
+Subject: [PATCH 02/10] patch 1 Doxygen fixes
+
+---
+ .../models/chains/chains-api-model-pre.h      |  9 ++++
+ .../models/chains/tr-chains-api-model.c       |  8 ++++
+ .../models/chains/tr-chains-api-model.h       |  8 ++++
+ .../models/events/event-mgr-model-pre.h       |  4 +-
+ .../models/events/tc-event-mgr-model.c        | 42 +------------------
+ .../models/events/tr-event-mgr-model.c        |  4 +-
+ .../models/events/tr-event-mgr-model.h        |  4 +-
+ 7 files changed, 36 insertions(+), 43 deletions(-)
+
+diff --git a/formal/promela/models/chains/chains-api-model-pre.h b/formal/promela/models/chains/chains-api-model-pre.h
+index 7227c32b..cf8a3481 100644
+--- a/formal/promela/models/chains/chains-api-model-pre.h
++++ b/formal/promela/models/chains/chains-api-model-pre.h
+@@ -1,5 +1,14 @@
+ /* SPDX-License-Identifier: BSD-3-Clause */
+ 
++/**
++ * @file
++ *
++ * @ingroup TestsuitesModel0
++ *
++ * @brief This source file contains test cases related to a formal model.
++ */
++
++
+ /******************************************************************************
+  * Chains API Model
+  *
+diff --git a/formal/promela/models/chains/tr-chains-api-model.c b/formal/promela/models/chains/tr-chains-api-model.c
+index be79d61e..bd833e49 100644
+--- a/formal/promela/models/chains/tr-chains-api-model.c
++++ b/formal/promela/models/chains/tr-chains-api-model.c
+@@ -1,5 +1,13 @@
+ /* SPDX-License-Identifier: BSD-3-Clause */
+ 
++/**
++ * @file
++ *
++ * @ingroup TestsuitesModel0
++ *
++ * @brief This source file contains test cases related to a formal model.
++ */
++
+ /******************************************************************************
+  * Chains API Model
+  *
+diff --git a/formal/promela/models/chains/tr-chains-api-model.h b/formal/promela/models/chains/tr-chains-api-model.h
+index 72250cd6..a6c3858b 100644
+--- a/formal/promela/models/chains/tr-chains-api-model.h
++++ b/formal/promela/models/chains/tr-chains-api-model.h
+@@ -1,5 +1,13 @@
+ /* SPDX-License-Identifier: BSD-3-Clause */
+ 
++/**
++ * @file
++ *
++ * @ingroup TestsuitesModel0
++ *
++ * @brief This source file contains test cases related to a formal model.
++ */
++
+ /******************************************************************************
+  * Chains API model
+  *
+diff --git a/formal/promela/models/events/event-mgr-model-pre.h b/formal/promela/models/events/event-mgr-model-pre.h
+index 9a764a82..06396d10 100644
+--- a/formal/promela/models/events/event-mgr-model-pre.h
++++ b/formal/promela/models/events/event-mgr-model-pre.h
+@@ -3,7 +3,9 @@
+ /**
+  * @file
+  *
+- * @ingroup RTEMSTestCaseRtemsModelEventsMgr
++ * @ingroup TestsuitesModel0
++ *
++ * @brief This source file contains test cases related to a formal model.
+  */
+ 
+ /*
+diff --git a/formal/promela/models/events/tc-event-mgr-model.c b/formal/promela/models/events/tc-event-mgr-model.c
+index 3c16b360..6998ae36 100644
+--- a/formal/promela/models/events/tc-event-mgr-model.c
++++ b/formal/promela/models/events/tc-event-mgr-model.c
+@@ -3,8 +3,7 @@
+ /**
+  * @file
+  *
+- * @ingroup RTEMSTestCaseRtemsEventValSendReceive
+- * @ingroup RTEMSTestCaseRtemsEventValSystemSendReceive
++ * @ingroup TestsuitesModel0
+  */
+ 
+ /*
+@@ -59,22 +58,6 @@
+ 
+ #include <rtems/test.h>
+ 
+-/**
+- * @defgroup RTEMSTestCaseRtemsEventValSendReceive \
+- *   spec:/rtems/event/val/send-receive
+- *
+- * @ingroup RTEMSTestSuiteTestsuitesValidation0
+- *
+- * @brief Tests the rtems_event_send and rtems_event_receive directives.
+- *
+- * This test case performs the following actions:
+- *
+- * - Run the event send and receive tests for the application event set defined
+- *   by /rtems/event/req/send-receive.
+- *
+- * @{
+- */
+-
+ static rtems_status_code EventSend(
+   rtems_id        id,
+   rtems_event_set event_in
+@@ -203,25 +186,6 @@ T_TEST_CASE( RtemsModelEventsMgr8 )
+   );
+ }
+ 
+-/** @} */
+-
+-/**
+- * @defgroup RTEMSTestCaseRtemsEventValSystemSendReceive \
+- *   spec:/rtems/event/val/system-send-receive
+- *
+- * @ingroup RTEMSTestSuiteTestsuitesValidation0
+- *
+- * @brief Tests the rtems_event_system_send and rtems_event_system_receive
+- *   directives.
+- *
+- * This test case performs the following actions:
+- *
+- * - Run the event send and receive tests for the system event set defined by
+- *   /rtems/event/req/send-receive.
+- *
+- * @{
+- */
+-
+ static rtems_status_code EventSystemSend(
+   rtems_id        id,
+   rtems_event_set event_in
+@@ -353,6 +317,4 @@ T_TEST_CASE( RtemsModelSystemEventsMgr8 )
+     THREAD_WAIT_CLASS_SYSTEM_EVENT,
+     STATES_WAITING_FOR_SYSTEM_EVENT
+   );
+-}
+-
+-/** @} */
++}
+\ No newline at end of file
+diff --git a/formal/promela/models/events/tr-event-mgr-model.c b/formal/promela/models/events/tr-event-mgr-model.c
+index 59d0ef4d..65fdec99 100644
+--- a/formal/promela/models/events/tr-event-mgr-model.c
++++ b/formal/promela/models/events/tr-event-mgr-model.c
+@@ -3,7 +3,9 @@
+ /**
+  * @file
+  *
+- * @ingroup RTEMSTestCaseRtemsModelEventsMgr
++ * @ingroup TestsuitesModel0
++ *
++ * @brief This source file contains test cases related to a formal model.
+  */
+ 
+ /*
+diff --git a/formal/promela/models/events/tr-event-mgr-model.h b/formal/promela/models/events/tr-event-mgr-model.h
+index de986f70..4cb781cf 100644
+--- a/formal/promela/models/events/tr-event-mgr-model.h
++++ b/formal/promela/models/events/tr-event-mgr-model.h
+@@ -3,7 +3,9 @@
+ /**
+  * @file
+  *
+- * @ingroup RTEMSTestCaseRtemsModelEventsMgr_Run
++ * @ingroup TestsuitesModel0
++ *
++ * @brief This source file contains test cases related to a formal model.
+  */
+ 
+ /*
+-- 
+2.37.1 (Apple Git-137.1)
+

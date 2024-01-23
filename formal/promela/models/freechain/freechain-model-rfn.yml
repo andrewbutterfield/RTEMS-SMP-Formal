@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: BSD-2-Clause
-"""Converts an Annotated SPIN counter-example to program test code"""
+# Event Manager: Promela to RTEMS Refinement
 
 # Copyright (C) 2019-2021 Trinity College Dublin (www.tcd.ie)
 #
@@ -24,26 +24,41 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-import src.spin2test
+NAME: |
+  const char rtems_test_name[] = "Model_Chain_API";
 
-#
+memory_DCL: item {0}[{1}];
 
-import argparse
+nptr_DCL: item *
 
-#
+chain_DCL: rtems_chain_control
 
-if __name__ == '__main__':
-    claparser = argparse.ArgumentParser(
-        description="Promela to Program Test Generator")
-    claparser.add_argument("root", help="Model filename root")
-    claparser.add_argument("pre_amble", help="Model pre-amble file")
-    claparser.add_argument("post_amble", help="Model post-amble file")
-    claparser.add_argument("run", help="Model test run file")
-    claparser.add_argument("refine", help="Model test refine file")
-    claparser.add_argument("testfile", help="Model helper file")
-    claparser.add_argument("tstno", help="Model test number")
+INIT: rtems_chain_initialize_empty( &chain );
 
-    cl_args = claparser.parse_args()
-    src.spin2test.main(cl_args.tstno, '', cl_args.root, cl_args.pre_amble,
-                       cl_args.post_amble, cl_args.run, cl_args.refine,
-                       cl_args.testfile)
+append: |
+  memory[{1}].val = {0};
+  rtems_chain_append_unprotected( &chain, (rtems_chain_node*)&memory[{1}] );
+
+getNonNull: |
+  nptr = get_item( &chain );
+  T_eq_ptr( nptr, &memory[{0}] );
+
+nptr: T_eq_ptr( nptr, &memory[{0}] );
+
+nptr_PTR: |
+  T_eq_ptr( nptr, NULL );
+  T_eq_ptr( nptr, &memory[{0}] );
+
+itm_FSCALAR:   T_eq_int( {0}->val, {1} );
+
+nxt_FPTR: |
+  T_eq_ptr( {0}->node.next->next, NULL );
+  T_eq_ptr( {0}->node.next, &memory[{1}] );
+
+prv_FPTR: |
+  T_eq_ptr( {0}->node.previous->previous, NULL );
+  T_eq_ptr( {0}->node.previous, &memory[{1}] );
+
+chain_SEQ: |
+  show_chain( &chain, ctx->buffer );
+  T_eq_str( ctx->buffer, "{0} 0" );

@@ -376,12 +376,10 @@ class read_eval_print:
         check_no_printf = check_binding binding_no_printf
         binding_no_atomic = 'no_atomic'
         check_no_atomic = check_binding binding_no_atomic
-        print(f"check_no_atomic: {check_no_atomic}")
         binding_print_first = 'print_first'
         check_print_first = check_binding binding_print_first
         binding_disable_negation = 'disable_negation'
         check_disable_negation = check_binding binding_disable_negation
-        print(f"check_disable_negation: {check_disable_negation}")
 
         l_refine_uniform_strip = find_annot_bool ((annots, dict_top_elem), 'refine_uniform_strip')
         def strip (s):
@@ -618,9 +616,6 @@ class read_eval_print:
                                             def expand_directive (cvar_pvar):
                                                 # note: cvar_pvar[1] is in dict_args
                                                 ty_val = dict_args[cvar_pvar[1]]
-                                                print(f"expand_directive\n"
-                                                      f"ty_val: {ty_val}\n"
-                                                      f"dict_args: {dict_args}")
                                                 if ty_val[0] == None:
                                                     input_continue (f'Not serializable type: printing the content of {cvar_pvar[1]} with a default value')
                                                 pos = 'pos'
@@ -644,7 +639,6 @@ class read_eval_print:
 
                                 if l_refine_generic:
                                     def refine_line (find_annot_l, write_nl, write_nl_dic):
-                                        print(f"dic_refine_generic: {dic_refine_generic}")
                                         cmd = refine_command.command dic_refine_generic
                                         for spin_atomic in find_annot_l self.hash_cmd_generic:
                                             cmd.refineSPINLine_main (list spin_atomic)
@@ -673,6 +667,5 @@ class read_eval_print:
             os.chdir self.cwd
 
 def main (*args):
-    args = [args[0], args[1:3], args[4]]
     st = read_eval_print (*args)
     st.write_promela (st.init_top_elems (list (fold_prog st.argv), st.argv))

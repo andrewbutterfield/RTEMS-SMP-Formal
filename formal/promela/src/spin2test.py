@@ -1,10 +1,7 @@
 # SPDX-License-Identifier: BSD-2-Clause
-# Runs SPIN to generate test code for all defined scenarios
+"""Converts an Annotated SPIN counter-example to program test code"""
 
-# Copyright (C) 2021-2023 Trinity College Dublin (www.tcd.ie)
-#               James Gooding Hunt
-#               Robert Jennings
-#               Andrew Butterfield
+# Copyright (C) 2019-2023 Trinity College Dublin (www.tcd.ie)
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -27,18 +24,26 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-# This should be specialised for your setup, as testbuilder.yml,
-# located in the same directory as testbuilder.py
-# All pathnames should be absolute
+import src.spin2test
 
-spin2test: <spin2test_directory>/spin2test.py
-modelsfile: <formal_directory>/promela/models/models.yml
-rtems: <path-to-main-rtems-directory>  # rtems.git, or ..../modules/rtems/
-rsb: <rsb-build_directory>/rtems/6/bin/
-simulator: <path-to>/sparc-rtems6-sis
-testyamldir: <rtems>/spec/build/testsuites/validation/ # directory containing <modelname>.yml
-testcode: <rtems>/testsuites/validation/
-testexedir:  <rtems>/build/.../testsuites/validation/ # directory containing ts-<modelname>.exe
-testsuite: model-0
-simulatorargs: -leon3 -r s -m 2  # run command executes "<simulator> <simargs> <testexedir>/ts-<testsuite>.exe"
-spinallscenarios: -DTEST_GEN -run -E -c0 -e # trail generation "spin <spinallscenarios> <model>.pml"
+#
+
+import argparse
+
+#
+
+if __name__ == '__main__':
+    claparser = argparse.ArgumentParser(
+        description="Promela to Program Test Generator")
+    claparser.add_argument("root", help="Model filename root")
+    claparser.add_argument("pre_amble", help="Model pre-amble file")
+    claparser.add_argument("post_amble", help="Model post-amble file")
+    claparser.add_argument("run", help="Model test run file")
+    claparser.add_argument("refine", help="Model test refine file")
+    claparser.add_argument("testfile", help="Model helper file")
+    claparser.add_argument("tstno", help="Model test number")
+
+    cl_args = claparser.parse_args()
+    src.spin2test.main(cl_args.tstno, '', cl_args.root, cl_args.pre_amble,
+                       cl_args.post_amble, cl_args.run, cl_args.refine,
+                       cl_args.testfile)
