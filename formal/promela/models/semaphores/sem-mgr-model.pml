@@ -645,7 +645,7 @@ int task2Sema;
 int task3Sema;
 
 
-mtype = {onesema, twosemas};
+mtype = {onesema, twosemas, dfferent_sema_counts};
 mtype scenario;
 
 inline chooseScenario() {
@@ -704,6 +704,7 @@ inline chooseScenario() {
     if
     ::  scenario = onesema;
     ::  scenario = twosemas;
+    ::  scenario = dfferent_sema_counts;
     fi
     atomic{printf("@@@ %d LOG scenario ",_pid); printm(scenario); nl()}
     
@@ -784,6 +785,37 @@ inline chooseScenario() {
 
 
         fi
+
+    // Counting semaphores with different counts 
+    :: scenario == dfferent_sema_counts ->
+        if
+        :: task_in[TASK1_ID].Count = 0 ->
+            printf("@@@ %d LOG sub-senario created, sema_count = 0\n", _pid);
+        :: task_in[TASK1_ID].Count = 1 ->
+            printf("@@@ %d LOG sub-senario created, sema_count = 1\n", _pid);
+            task_in[TASK1_ID].maxCount = 1;
+            task_in[TASK1_ID].doCreate = true;
+            task_in[TASK1_ID].doAcquire = true;
+            task_in[TASK1_ID].doRelease = true;
+        :: task_in[TASK1_ID].Count = 2 ->
+            printf("@@@ %d LOG sub-senario created, sema_count = 2\n", _pid);
+            task_in[TASK1_ID].maxCount = 2;
+            task_in[TASK1_ID].doCreate = true;
+            task_in[TASK1_ID].doAcquire = true;
+            task_in[TASK2_ID].doAcquire = true;
+            task_in[TASK1_ID].doRelease = true;
+            task_in[TASK2_ID].doRelease = true;
+        :: task_in[TASK1_ID].Count = 3 ->
+            printf("@@@ %d LOG sub-senario created, sema_count = 3\n", _pid);
+            task_in[TASK1_ID].maxCount = 3;
+            task_in[TASK1_ID].doCreate = true;
+            task_in[TASK1_ID].doAcquire = true;
+            task_in[TASK2_ID].doAcquire = true;
+            task_in[TASK3_ID].doAcquire = true;
+            task_in[TASK1_ID].doRelease = true;
+            task_in[TASK2_ID].doRelease = true;
+            task_in[TASK3_ID].doRelease = true;
+         fi
 
     fi
 
