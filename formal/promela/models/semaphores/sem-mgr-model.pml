@@ -245,13 +245,28 @@ inline sema_create(name,count, maxcount, scope,rtems_priority,sem_type,locking,t
                         
                 
                     ::  sem_type == BINARY_S ->
+                       
+                       
+                        model_semaphores[id].maxCount = maxcount;
+                        model_semaphores[id].LockingProtocol = locking;
+                        model_semaphores[id].s_name = name;
+                        model_semaphores[id].semType = sem_type;
+                        model_semaphores[id].isGlobal = scope; //if local can only be used by node that created it
+                        model_semaphores[id].Priority = rtems_priority;
+                        model_semaphores[id].isInitialised = true;
+                        model_semaphores[id].taskPriority = task_priority;
+                        rc = RC_OK;
+
                         if
                         ::  count ==1 -> model_semaphores[id].Count = count;
                         ::  count ==0 -> model_semaphores[id].Count = count; // make task the owner
                         ::  else -> rc = RC_InvNum;
                         fi
 
+                        printf("@@@ %d LOG %d Created {n: %d, count: %d, global: %d, RTEMS_Priority:%d, sem_type: binary, locking protocol: None, task_priority:%d}\n", _pid, id, name, count, scope, rtems_priority, task_priority);
+
                     ::  sem_type == SIMPLE_BINARY_S ->
+                        printf("@@@ %d LOG =dfasdfjia;sdkfahnsbndfgjasdffa=sd==sd=fasdasdfa===================asdfasdfasdf", _pid)
                         if
                         ::  count != 1 -> rc = RC_InvNum;
                         ::  else -> model_semaphores[id].Count = count; 
@@ -373,6 +388,7 @@ inline sema_obtain(self, sem_id, optionset, interval,rc) {
     atomic{
         if
         ::  sem_id >= MAX_MODEL_SEMAS || sem_id <= 0 || !model_semaphores[sem_id].isInitialised ->
+            printf("@@@ %d LOG in ob, max models: %d, sem id: %d, model_semaphores[sem_id].isInitialised: %d\n", _pid, MAX_MODEL_SEMAS, sem_id, model_semaphores[sem_id].isInitialised );
             rc = RC_InvId;
         ::  else -> // id is correct
             if
@@ -419,6 +435,21 @@ inline sema_obtain(self, sem_id, optionset, interval,rc) {
                         fi
                     fi
                 fi
+            :: model_semaphores[sem_id].semType == BINARY_S ->
+                // if
+                // :: model_semaphores[sem_id].Count == 0 ->
+                //     rc = RC_Unsatisfied; // Binary semaphore is already acquired
+                // :: else ->
+                //     if
+                //     :: model_semaphores[sem_id].Count == 1 ->
+                    model_semaphores[sem_id].Count = 0; // Acquire the binary semaphore
+                    rc = RC_OK;
+                    printf("@@@ %d LOG Binary Semaphore %d obtained\n", _pid, sem_id);
+                    // Change global variable or perform other actions as needed
+            //     fi
+                // fi
+            
+            
             fi
         fi
     }
@@ -443,9 +474,11 @@ inline sema_release(self,sem_id,rc) {
     atomic{
         if
         ::  sem_id >= MAX_MODEL_SEMAS || sem_id <= 0 || !model_semaphores[sem_id].isInitialised ->
+            printf("@@@ %d LOG rel inva, max models: %d, sem id: %d, model_semaphores[sem_id].isInitialised: %d\n", _pid, MAX_MODEL_SEMAS, sem_id, model_semaphores[sem_id].isInitialised );
             rc = RC_InvId
-        ::  model_semaphores[sem_id].maxCount == model_semaphores[sem_id].Count ->
-            rc = RC_Unsatisfied;
+        // ::  model_semaphores[sem_id].maxCount == model_semaphores[sem_id].Count ->
+        //     printf("@@@ %d LOG rel unsat, max mocount: %d, count: %d\n", _pid, model_semaphores[sem_id].maxCount, model_semaphores[sem_id].Count);
+        //     rc = RC_Unsatisfied;
         ::  else -> 
             model_semaphores[sem_id].Count++;
 
@@ -500,6 +533,7 @@ inline sema_delete(self,sem_id,rc) {
     atomic{
         if
         ::  sem_id >= MAX_MODEL_SEMAS || sem_id <= 0 || !model_semaphores[sem_id].isInitialised ->
+            printf("@@@ %d LOG del, max models: %d, sem id: %d, model_semaphores[sem_id].isInitialised: %d\n", _pid, MAX_MODEL_SEMAS, sem_id, model_semaphores[sem_id].isInitialised );
             rc = RC_InvId
         ::  else -> 
             model_semaphores[sem_id].isInitialised = false;
@@ -563,6 +597,31 @@ inline sema_flush(self, sem_id, rc) {
 
 }
 
+
+// inline sema_set_priority(self, semaphore_id, new_priority, old_priority, rc) {
+//     atomic {
+//         // Check if old_priority is a valid address
+//         if
+//         :: old_priority == 0 ->
+//             rc = RC_InvPrio; // make RTEMS_INVALIDE_ADDRESS
+//         :: else ->
+//             old_priority = tasks[self].prio;
+//             // Get the semaphore
+//             sema_obtain(self, semaphore_id, RTEMS_WAIT, NO_TIMEOUT, rc);
+//             if
+//             :: rc == RC_OK ->
+//                 // Set the new priority
+//                 tasks[self].prio = new_priority;
+//                 rc = RC_OK;
+//             :: else ->
+//                 // Failed to obtain semaphore
+//                 rc = RC_NotDefined; // ???
+//             fi
+//             // Release the semaphore
+//             sema_release(self, semaphore_id, rc);
+//         fi
+//     }
+// }
 
 
 /*
@@ -645,7 +704,8 @@ int task2Sema;
 int task3Sema;
 
 
-mtype = {onesema, twosemas};
+// mtype = {onesema, twosemas};//, threesemas, foursemas};
+mtype = {threesemas, foursemas};
 mtype scenario;
 
 inline chooseScenario() {
@@ -658,15 +718,15 @@ inline chooseScenario() {
     defaults.Count=1;
     defaults.maxCount = 1;
     defaults.isGlobal = false;
-    defaults.semType = COUNTING_S;
+    defaults.semType = COUNTING_S; //BINARY_S; //
     defaults.isPriority = false;
-    defaults.LockingProtocol = NO_LOCKING;
+    defaults.LockingProtocol = NO_LOCKING; //CEILING_LOCKING; //NO_LOCKING;
     defaults.doAcquire2 = false;
     defaults.doAcquire = false;
     defaults.doRelease = false;
     defaults.doRelease2 = false;
     defaults.Wait = false;
-    defaults.timeoutLength = NO_TIMEOUT;
+    defaults.timeoutLength = NO_TIMEOUT; //32;
     defaults.doDelete = false;
     defaults.doDelete2 = false;
     defaults.doFlush=false;
@@ -702,88 +762,176 @@ inline chooseScenario() {
     task3Core = THIS_CORE;
 
     if
-    ::  scenario = onesema;
-    ::  scenario = twosemas;
+    // ::  scenario = onesema;
+    // ::  scenario = twosemas;
+    // ::  scenario = threesemas;
+    ::  scenario = foursemas;
     fi
     atomic{printf("@@@ %d LOG scenario ",_pid); printm(scenario); nl()}
     
     if
-    ::  scenario==onesema->
+    // ::  scenario==onesema->
     
-        if
-        ::  task_in[TASK1_ID].sName = 0;
-            printf( "@@@ %d LOG sub-senario bad create, invalid name\n", _pid); //RTEMS_INVALID_NAME
-        ::  task_in[TASK1_ID].idNull = true;
-            printf( "@@@ %d LOG sub-senario bad create, passed id null\n", _pid); //RTEMS_INVALID_ADDRESS
-        ::  task_in[TASK1_ID].Count = 0;
-            printf( "@@@ %d LOG sub-senario bad create, passed invalid initial count\n", _pid); //RTEMS_INVALID_NUMBER
-        ::  task_in[TASK1_ID].LockingProtocol = INHERIT_LOCKING;
-            printf( "@@@ %d LOG sub-senario bad create, passed invalid locking protocol\n", _pid); //RTEMS_INVALID_PRIORITY
-        ::  task_in[TASK1_ID].doDelete = true;
-            printf( "@@@ %d LOG sub-senario created and deleted\n", _pid); //RTEMS_SUCCESSFUL    
-        ::  task_in[TASK2_ID].doAcquire = true;
-            task_in[TASK3_ID].doAcquire = true;
-            task_in[TASK2_ID].doRelease = true;
-            task_in[TASK3_ID].doRelease = false;
-            //no wait 
+    //     if
+    //     ::  task_in[TASK1_ID].sName = 0;
+    //         printf( "@@@ %d LOG sub-senario bad create, invalid name\n", _pid); //RTEMS_INVALID_NAME
+    //     ::  task_in[TASK1_ID].idNull = true;
+    //         printf( "@@@ %d LOG sub-senario bad create, passed id null\n", _pid); //RTEMS_INVALID_ADDRESS
+    //     ::  task_in[TASK1_ID].Count = 0;
+    //         printf( "@@@ %d LOG sub-senario bad create, passed invalid initial count\n", _pid); //RTEMS_INVALID_NUMBER
+    //     ::  task_in[TASK1_ID].LockingProtocol = INHERIT_LOCKING;
+    //         printf( "@@@ %d LOG sub-senario bad create, passed invalid locking protocol\n", _pid); //RTEMS_INVALID_PRIORITY
+    //     ::  task_in[TASK1_ID].doDelete = true;
+    //         printf( "@@@ %d LOG sub-senario created and deleted\n", _pid); //RTEMS_SUCCESSFUL    
+    //     ::  task_in[TASK2_ID].doAcquire = true;
+    //         task_in[TASK3_ID].doAcquire = true;
+    //         task_in[TASK2_ID].doRelease = true;
+    //         task_in[TASK3_ID].doRelease = false;
+    //         //no wait 
 
-        ::  task_in[TASK2_ID].doAcquire = true;
-            task_in[TASK3_ID].doAcquire = true;
-            task_in[TASK3_ID].Wait = true;
-            task_in[TASK2_ID].doRelease=true;
-            task_in[TASK3_ID].doRelease = false;
-            printf( "@@@ %d LOG sub-senario WAIT no timeout\n", _pid);   
-            //wait with no timeout scenario
+    //     ::  task_in[TASK2_ID].doAcquire = true;
+    //         task_in[TASK3_ID].doAcquire = true;
+    //         task_in[TASK3_ID].Wait = true;
+    //         task_in[TASK2_ID].doRelease=true;
+    //         task_in[TASK3_ID].doRelease = false;
+    //         printf( "@@@ %d LOG sub-senario WAIT no timeout\n", _pid);   
+    //         //wait with no timeout scenario
 
-        ::  task_in[TASK2_ID].doAcquire = true;
-            task_in[TASK3_ID].doAcquire = true;
-            task_in[TASK3_ID].Wait = true;
-            task_in[TASK3_ID].timeoutLength = 2;
-            task_in[TASK2_ID].doRelease=true;
-            task_in[TASK3_ID].doRelease = true;
-            //timeout scenario
+    //     ::  task_in[TASK2_ID].doAcquire = true;
+    //         task_in[TASK3_ID].doAcquire = true;
+    //         task_in[TASK3_ID].Wait = true;
+    //         task_in[TASK3_ID].timeoutLength = 2;
+    //         task_in[TASK2_ID].doRelease=true;
+    //         task_in[TASK3_ID].doRelease = true;
+    //         //timeout scenario
 
-        ::  task_in[TASK2_ID].doAcquire= true;
-            task_in[TASK3_ID].doAcquire = true;
-            task_in[TASK3_ID].Wait = true;
-            task_in[TASK2_ID].doRelease= false;
-            task_in[TASK3_ID].doRelease = false;
-            task_in[TASK2_ID].doFlush= true;
-            task_in[TASK2_ID].doRelease = false;
+    //     ::  task_in[TASK2_ID].doAcquire= true;
+    //         task_in[TASK3_ID].doAcquire = true;
+    //         task_in[TASK3_ID].Wait = true;
+    //         task_in[TASK2_ID].doRelease= false;
+    //         task_in[TASK3_ID].doRelease = false;
+    //         task_in[TASK2_ID].doFlush= true;
+    //         task_in[TASK2_ID].doRelease = false;
 
-            printf( "@@@ %d LOG sub-senario FLUSH\n", _pid);  
-            //fush on waiting task scenario
+    //         printf( "@@@ %d LOG sub-senario FLUSH\n", _pid);  
+    //         //fush on waiting task scenario
 
-        fi
-
-
-    ::  scenario == twosemas->
-        if
-        ::  task_in[TASK1_ID].doCreate2 = true;
-            task_in[TASK2_ID].doAcquire = true;
-            task_in[TASK3_ID].doAcquire = true;
-            task_in[TASK2_ID].doRelease = true;
-            task_in[TASK3_ID].doRelease = true;
-            task_in[TASK2_ID].doAcquire2 = true;
-            task_in[TASK3_ID].doAcquire2 = true;
-            task_in[TASK2_ID].doRelease2 = true;
-            task_in[TASK3_ID].doRelease2 = true;
-            //no wait 
-
-        ::  task_in[TASK1_ID].doCreate2 = true;
-            task_in[TASK2_ID].doAcquire = true;
-            task_in[TASK3_ID].doAcquire = true;
-            task_in[TASK3_ID].Wait = true;
-            task_in[TASK2_ID].doRelease=true;
-            task_in[TASK3_ID].doRelease = false;
-            task_in[TASK2_ID].doAcquire2 = true;
-            task_in[TASK3_ID].doAcquire2 = true;
-            task_in[TASK2_ID].doRelease2=true;
-            task_in[TASK3_ID].doRelease2 = false;
-            //wait with no timeout  
+    //     fi
 
 
-        fi
+    // ::  scenario == twosemas->
+    //     if
+    //     ::  task_in[TASK1_ID].doCreate2 = true;
+    //         task_in[TASK2_ID].doAcquire = true;
+    //         task_in[TASK3_ID].doAcquire = true;
+    //         task_in[TASK2_ID].doRelease = true;
+    //         task_in[TASK3_ID].doRelease = true;
+    //         task_in[TASK2_ID].doAcquire2 = true;
+    //         task_in[TASK3_ID].doAcquire2 = true;
+    //         task_in[TASK2_ID].doRelease2 = true;
+    //         task_in[TASK3_ID].doRelease2 = true;
+    //         //no wait 
+
+    //     ::  task_in[TASK1_ID].doCreate2 = true;
+    //         task_in[TASK2_ID].doAcquire = true;
+    //         task_in[TASK3_ID].doAcquire = true;
+    //         task_in[TASK3_ID].Wait = true;
+    //         task_in[TASK2_ID].doRelease=true;
+    //         task_in[TASK3_ID].doRelease = false;
+    //         task_in[TASK2_ID].doAcquire2 = true;
+    //         task_in[TASK3_ID].doAcquire2 = true;
+    //         task_in[TASK2_ID].doRelease2=true;
+    //         task_in[TASK3_ID].doRelease2 = false;
+    //         //wait with no timeout  
+
+
+    //     fi
+
+
+    // // Counting semaphores with different counts 
+    // :: scenario == threesemas ->
+    //     if
+    //     :: task_in[TASK1_ID].Count = 0 ->
+    //         printf("@@@ %d LOG sub-senario created, sema_count = 0\n", _pid);
+    //     :: task_in[TASK1_ID].Count = 1 ->
+    //         printf("@@@ %d LOG sub-senario created, sema_count = 1\n", _pid);
+    //         task_in[TASK1_ID].maxCount = 1;
+    //         task_in[TASK1_ID].doCreate = true;
+    //         task_in[TASK1_ID].doAcquire = true;
+    //         task_in[TASK1_ID].doRelease = true;
+    //     :: task_in[TASK1_ID].Count = 2 ->
+    //         printf("@@@ %d LOG sub-senario created, sema_count = 2\n", _pid);
+    //         task_in[TASK1_ID].maxCount = 2;
+    //         task_in[TASK1_ID].doCreate = true;
+    //         task_in[TASK1_ID].doAcquire = true;
+    //         task_in[TASK2_ID].doAcquire = true;
+    //         task_in[TASK1_ID].doRelease = true;
+    //         task_in[TASK2_ID].doRelease = true;
+    //     :: task_in[TASK1_ID].Count = 3 ->
+    //         printf("@@@ %d LOG sub-senario created, sema_count = 3\n", _pid);
+    //         task_in[TASK1_ID].maxCount = 3;
+    //         task_in[TASK1_ID].doCreate = true;
+    //         task_in[TASK1_ID].doAcquire = true;
+    //         task_in[TASK2_ID].doAcquire = true;
+    //         task_in[TASK3_ID].doAcquire = true;
+    //         task_in[TASK1_ID].doRelease = true;
+    //         task_in[TASK2_ID].doRelease = true;
+    //         task_in[TASK3_ID].doRelease = true;
+    //     fi
+
+
+    ::  scenario == foursemas ->
+        // Set up a simple binary semaphore
+        task_in[TASK1_ID].doCreate = true;
+        task_in[TASK1_ID].semType = BINARY_S;
+
+        // Task 1 acquires the semaphore
+        task_in[TASK1_ID].doAcquire = true;
+        
+        // // Task 2 tries to acquire the semaphore, but it should be blocked
+        // task_in[TASK2_ID].doAcquire = true;
+        // Task 1 releases the semaphore
+        task_in[TASK1_ID].doRelease = true;
+
+        // // // create task2 ???
+        // task_in[TASK2_ID].doCreate = true;
+        // task_in[TASK2_ID].semType = BINARY_S;
+    
+
+
+        // Now, Task 2 should be able to acquire the semaphore
+        task_in[TASK2_ID].doAcquire = true;
+
+        // release ???
+        task_in[TASK2_ID].doRelease = true;
+
+        // // Clean up: delete the semaphore
+        // task_in[TASK1_ID].doDelete = true;
+        // task_in[TASK2_ID].doDelete = true;
+        printf("@@@ %d LOG sub-senario testing simple binary semaphore\n", _pid);
+    
+
+
+
+
+    // :: scenario == fivesemas ->
+    //     if
+    //     :: task_in[TASK1_ID].doCreate = true ->
+    //         // Create counting semaphore with initial count = 2
+    //         task_in[TASK1_ID].Count = 2;
+    //         task_in[TASK1_ID].doAcquire = true;
+    //         task_in[TASK1_ID].doRelease = true;
+    //     :: task_in[TASK2_ID].doCreate2 = true ->
+    //         // Create binary semaphore
+    //         task_in[TASK2_ID].semType = BINARY_S;
+    //         task_in[TASK2_ID].doAcquire = true;
+    //         task_in[TASK2_ID].doRelease = true;
+    //     :: task_in[TASK3_ID].doCreate2 = true ->
+    //         // Create counting semaphore with initial count = 1
+    //         task_in[TASK3_ID].Count = 1;
+    //         task_in[TASK3_ID].doAcquire = true;
+    //         task_in[TASK3_ID].doRelease = true;
+    //     fi
 
     fi
 
@@ -831,6 +979,7 @@ proctype Runner (byte nid, taskid; TaskInputs opts) {
                 _pid, opts.sName, opts.Count, opts.taskPrio, sem_id);
                 /*  (name,      count,       max Count,      scope,        rtems_priority,     sem_type,     locking,           task_priority,   id, rc) */
         sema_create(opts.sName, opts.Count, opts.maxCount, opts.isGlobal, opts.isPriority, opts.semType, opts.LockingProtocol, opts.taskPrio, sem_id, rc);
+        printf("@@@ %d LOG opts.count: %d, opts.maxcount: %d\n", _pid, opts.Count, opts.maxCount);
 
         if
         ::  rc == RC_OK ->
@@ -838,6 +987,20 @@ proctype Runner (byte nid, taskid; TaskInputs opts) {
         :: else -> skip;
         fi
         printf("@@@ %d SCALAR rc %d\n",_pid, rc);
+
+
+        // printf("@@@ %d CALL sema_set_priority %d %d %d %d \n", _pid, taskid, sem_id, 1, opts.taskPrio);
+        // sema_set_priority(taskid, sem_id, 1, opts.taskPrio, rc);
+
+        // if
+        // ::  rc == RC_OK ->
+        //     printf("@@@ %d SCALAR created %d\n", _pid, sem_id);
+        // :: else -> skip;
+        // fi
+        // printf("@@@ %d SCALAR rc %d\n",_pid, rc);
+
+
+
     ::  else -> //ident
             sem_id=1
             printf("@@@ %d CALL sema_ident %d %d %d\n", _pid, opts.sName, nid, sem_id);
