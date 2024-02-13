@@ -53,7 +53,9 @@
 #define RC_InvNum  10 // RTEMS_INVALID_NUMBER 
 #define RC_InvPrio 19 // RTEMS_INVALID_PRIORITY
 #define RC_NotDefined  11 // RTEMS_NOT_DEFINED item has not been initialised
+#define RC_ResourceInUse 12 // RTEMS_RESOURCE_IN_USE
 #define RC_Unsatisfied  13 // RTEMS_UNSATISFIED This is the status to indicate that the request was not satisfied.
+#define RC_NotOwner 23 // RTEMS_NOT_OWNER_OF_RESOURCE
 
 /* 
  * Multicore setup
@@ -98,6 +100,7 @@ typedef Semaphore_model {
     int taskPriority; // relevant for binary sem, 0 otherwise
     bool isFlushed; //if true all tasks waiting must be flushed.
     int waiters[TASK_MAX]; // waiters on the semaphore indicated by position in queue ( 1 is next in queue)
+    int ownerPid; // set to pid of the task that obtained the binary semaphore
     //bool isFIFO; // true for tasks wait by FIFO (default)
     //bool isPriority // true for tasks wait by priority
     //bool isBinary; // true if binary semaphore
@@ -245,11 +248,22 @@ inline sema_create(name,count, maxcount, scope,rtems_priority,sem_type,locking,t
                         
                 
                     ::  sem_type == BINARY_S ->
+
+                        model_semaphores[id].maxCount = 1;
+                        model_semaphores[id].s_name = name;
+                        model_semaphores[id].semType = sem_type;
+                        model_semaphores[id].isGlobal = scope; //if local can only be used by node that created it
+                        model_semaphores[id].Priority = rtems_priority;
+                        model_semaphores[id].isInitialised = true;
+                        model_semaphores[id].taskPriority = task_priority;
+                        rc = RC_OK;
                         if
                         ::  count ==1 -> model_semaphores[id].Count = count;
                         ::  count ==0 -> model_semaphores[id].Count = count; // make task the owner
+                            model_semaphores[id].ownerPid = _pid;
                         ::  else -> rc = RC_InvNum;
                         fi
+                        printf("@@@ %d LOG %d Created {n: %d, count: %d, global: %d, RTEMS_Priority:%d, sem_type: binary, locking protocol: None, task_priority:%d}\n", _pid, id, name, count, scope, rtems_priority, task_priority);
 
                     ::  sem_type == SIMPLE_BINARY_S ->
                         if
@@ -419,6 +433,20 @@ inline sema_obtain(self, sem_id, optionset, interval,rc) {
                         fi
                     fi
                 fi
+            :: model_semaphores[sem_id].semType == BINARY_S ->
+                if
+                :: model_semaphores[sem_id].Count == 1 -> // Binary semaphore is available
+                    model_semaphores[sem_id].Count = 0; // Acquire the binary semaphore
+                    model_semaphores[sem_id].ownerPid = _pid; // Set the current pid as owner
+                    rc = RC_OK;
+                    printf("@@@ %d LOG Binary Semaphore %d obtained\n", _pid, sem_id);
+                :: else ->
+                    if
+                    :: model_semaphores[sem_id].Count == 0 && optionset == RTEMS_NO_WAIT ->
+                        rc = RC_Unsatisfied; // The semaphore could not be immediately obtained  
+                        printf("@@@ %d LOG Semaphore %d could not be immediately obtained\n", _pid, sem_id);
+                    fi
+                fi
             fi
         fi
     }
@@ -444,6 +472,8 @@ inline sema_release(self,sem_id,rc) {
         if
         ::  sem_id >= MAX_MODEL_SEMAS || sem_id <= 0 || !model_semaphores[sem_id].isInitialised ->
             rc = RC_InvId
+        ::  model_semaphores[sem_id].semType == BINARY_S && model_semaphores[sem_id].ownerPid != _pid ->
+            rc = RC_NotOwner; // The calling task was not the owner of the semaphore
         ::  model_semaphores[sem_id].maxCount == model_semaphores[sem_id].Count ->
             rc = RC_Unsatisfied;
         ::  else -> 
@@ -501,6 +531,8 @@ inline sema_delete(self,sem_id,rc) {
         if
         ::  sem_id >= MAX_MODEL_SEMAS || sem_id <= 0 || !model_semaphores[sem_id].isInitialised ->
             rc = RC_InvId
+        ::  model_semaphores[sem_id].semType == BINARY_S && model_semaphores[sem_id].ownerPid != _pid ->
+            rc = RC_ResourceInUse; // The binary semaphore had an owner
         ::  else -> 
             model_semaphores[sem_id].isInitialised = false;
             int tid=1;
@@ -645,7 +677,7 @@ int task2Sema;
 int task3Sema;
 
 
-mtype = {onesema, twosemas, dfferent_sema_counts};
+mtype = {onesema, twosemas, dfferent_sema_counts, one_binary_sema};
 mtype scenario;
 
 inline chooseScenario() {
@@ -705,6 +737,7 @@ inline chooseScenario() {
     ::  scenario = onesema;
     ::  scenario = twosemas;
     ::  scenario = dfferent_sema_counts;
+    ::  scenario = one_binary_sema;
     fi
     atomic{printf("@@@ %d LOG scenario ",_pid); printm(scenario); nl()}
     
@@ -727,6 +760,12 @@ inline chooseScenario() {
             task_in[TASK2_ID].doRelease = true;
             task_in[TASK3_ID].doRelease = false;
             //no wait 
+
+        ::  task_in[TASK1_ID].doAcquire = true;
+            task_in[TASK2_ID].doAcquire = true;
+            task_in[TASK1_ID].doRelease = true;
+            task_in[TASK2_ID].doRelease = false;
+            // alternate no wait
 
         ::  task_in[TASK2_ID].doAcquire = true;
             task_in[TASK3_ID].doAcquire = true;
@@ -816,6 +855,31 @@ inline chooseScenario() {
             task_in[TASK2_ID].doRelease = true;
             task_in[TASK3_ID].doRelease = true;
          fi
+
+    ::  scenario == one_binary_sema ->
+
+        // Set up a binary semaphore
+        task_in[TASK1_ID].semType = BINARY_S;
+        task_in[TASK1_ID].doCreate = true;
+
+        // Task 1 acquires the semaphore
+        task_in[TASK1_ID].doAcquire = true;
+
+        // Task 2 tries to acquire the semaphore, but it SHOULD be blocked
+        task_in[TASK2_ID].doAcquire = true;
+     
+        // Task 2 tries to release the semaphore that it does not have/own, it SHOULD be unsatisfied
+        task_in[TASK2_ID].doRelease = true;
+
+        // Task 1 releases the semaphore
+        task_in[TASK1_ID].doRelease = true;
+
+        // Delete the semaphore
+        task_in[TASK1_ID].doDelete = true;
+
+        printf("@@@ %d LOG sub-senario created, testing binary semaphore\n", _pid);
+        // fi
+
 
     fi
 
