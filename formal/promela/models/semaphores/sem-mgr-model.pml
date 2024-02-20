@@ -37,7 +37,7 @@
 #define CEILING_LOCKING 2
 #define MRSP_LOCKING 3
 
-
+#define UINT32_MAX 4294967295
 
 
 
@@ -474,7 +474,7 @@ inline sema_release(self,sem_id,rc) {
             rc = RC_InvId
         ::  model_semaphores[sem_id].semType == BINARY_S && model_semaphores[sem_id].ownerPid != _pid ->
             rc = RC_NotOwner; // The calling task was not the owner of the semaphore
-        ::  model_semaphores[sem_id].maxCount == model_semaphores[sem_id].Count ->
+        ::  model_semaphores[sem_id].Count == UINT32_MAX ->
             rc = RC_Unsatisfied;
         ::  else -> 
             model_semaphores[sem_id].Count++;
@@ -809,6 +809,17 @@ inline chooseScenario() {
             task_in[TASK2_ID].doRelease2 = true;
             task_in[TASK3_ID].doRelease2 = true;
             //no wait 
+
+        ::  task_in[TASK2_ID].doCreate2 = true;
+            task_in[TASK1_ID].doAcquire = true;
+            task_in[TASK2_ID].doAcquire = true;
+            task_in[TASK1_ID].doRelease = true;
+            task_in[TASK2_ID].doRelease = true;
+            task_in[TASK1_ID].doAcquire2 = true;
+            task_in[TASK2_ID].doAcquire2 = true;
+            task_in[TASK1_ID].doRelease2 = true;
+            task_in[TASK2_ID].doRelease2 = true;
+            //no wait alt
 
         ::  task_in[TASK1_ID].doCreate2 = true;
             task_in[TASK2_ID].doAcquire = true;
