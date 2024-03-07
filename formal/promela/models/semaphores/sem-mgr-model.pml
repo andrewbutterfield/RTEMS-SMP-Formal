@@ -688,7 +688,7 @@ inline chooseScenario() {
     defaults.doCreate = false;
     defaults.doCreate2 = false;
     defaults.Count=1;
-    defaults.maxCount = 1;
+    defaults.maxCount = UINT32_MAX;
     defaults.isGlobal = false;
     defaults.semType = COUNTING_S;
     defaults.isPriority = false;
@@ -755,6 +755,10 @@ inline chooseScenario() {
             printf( "@@@ %d LOG sub-senario bad create, passed invalid locking protocol\n", _pid); //RTEMS_INVALID_PRIORITY
         ::  task_in[TASK1_ID].doDelete = true;
             printf( "@@@ %d LOG sub-senario created and deleted\n", _pid); //RTEMS_SUCCESSFUL    
+        ::  task_in[TASK1_ID].Count = UINT32_MAX - 1;
+            task_in[TASK1_ID].doRelease = true;
+            task_in[TASK2_ID].doRelease = true;
+            printf( "@@@ %d LOG sub-senario created, release at max count\n", _pid); // RTEMS_UNSATISFIED   
         ::  task_in[TASK2_ID].doAcquire = true;
             task_in[TASK3_ID].doAcquire = true;
             task_in[TASK2_ID].doRelease = true;
@@ -821,6 +825,11 @@ inline chooseScenario() {
             task_in[TASK2_ID].doRelease2 = true;
             //no wait alt
 
+        ::  task_in[TASK1_ID].doCreate = true;
+            task_in[TASK3_ID].doAcquire = true;
+            task_in[TASK2_ID].doAcquire = true;
+            // no wait simplified
+                                         
         ::  task_in[TASK1_ID].doCreate2 = true;
             task_in[TASK2_ID].doAcquire = true;
             task_in[TASK3_ID].doAcquire = true;
@@ -1008,7 +1017,7 @@ proctype Runner (byte nid, taskid; TaskInputs opts) {
     
     
     Release(task2Sema);
-   
+    Obtain(task1Sema);
     
     if
     ::  opts.doRelease -> 
@@ -1211,7 +1220,7 @@ proctype Worker0 (byte nid, taskid; TaskInputs opts) {
         printf("@@@ %d SCALAR rc %d\n",_pid, rc);
     ::  else -> Release(task3Sema);
     fi
-
+    Obtain(task2Sema);
     if
     ::  opts.doAcquire2 -> 
         atomic{
@@ -1313,7 +1322,7 @@ proctype Worker0 (byte nid, taskid; TaskInputs opts) {
     ::  else -> skip
     fi
 
-    
+    Release(task1Sema);
     atomic{
         Release(task2Sema);
         printf("@@@ %d LOG Task %d finished\n",_pid,taskid);
@@ -1534,7 +1543,7 @@ proctype Worker1 (byte nid, taskid; TaskInputs opts) {
     ::  else -> skip
     fi
     
-  
+    Release(task2Sema);
     
     atomic {
         Release(task3Sema);
