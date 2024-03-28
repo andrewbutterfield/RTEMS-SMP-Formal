@@ -100,7 +100,10 @@ sema_ident2: |
   T_log(T_NORMAL, "identifying sem %d", {2});
   rc = rtems_semaphore_ident({0} , {1}, {2} ? &sem_id2 : NULL);
   T_log(T_NORMAL, "Returned 0x%x from Ident", rc );
-  
+
+sema_busy_work: |
+  T_log(T_NORMAL, "Start of busy work...\n...\n...\n...\n...\nEnd");
+
 sema_obtain: |
   rtems_interval timeout = {2};
   rtems_option option_set = mergeopts( {1} );
@@ -124,7 +127,22 @@ sema_release2: |
   T_log(T_NORMAL, "Calling SemaRelease(%d)", sem_id2);
   rc = rtems_semaphore_release(sem_id2);
   T_log(T_NORMAL, "Returned 0x%x from Release", rc );
+
+sema_set_priority: |
+  T_log(T_NORMAL, "Calling SemaSetPrio(%d)", sem_id);
+  rtems_task_priority new_prio;
+  new_prio = 0;
+  //sc = rtems_task_set_priority( RTEMS_SELF, SM_PRIO_HIGH, &new_prio );  new_prio = 0;
   
+    rc = rtems_semaphore_set_priority(
+      sem_id, ctx->runner_sched, 0, &new_prio
+      //sem_id, ctx->other_sched, 0, &new_prio
+    );
+
+  T_log(T_NORMAL, "Returned 0x%x from Priority", rc );
+
+
+
 sema_flush: |
   T_log(T_NORMAL, "Calling SemaFlush(%d)", sem_id);
   rc = rtems_semaphore_flush(sem_id);
