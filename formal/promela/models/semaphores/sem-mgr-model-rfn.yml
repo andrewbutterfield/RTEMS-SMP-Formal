@@ -107,42 +107,38 @@ sema_busy_work: |
 sema_obtain: |
   rtems_interval timeout = {2};
   rtems_option option_set = mergeopts( {1} );
-  T_log(T_NORMAL, "Calling SemaObtain(%d,%d,%d)", sem_id, option_set, timeout );
-  rc = rtems_semaphore_obtain(sem_id, option_set, timeout);
+  T_log(T_NORMAL, "Calling SemaObtain(%d,%d,%d)", ctx->sem_id, option_set, timeout );
+  rc = rtems_semaphore_obtain(ctx->sem_id, option_set, timeout);
   T_log(T_NORMAL, "Returned 0x%x from Obtain", rc );
   
 sema_obtain2: |
   rtems_interval timeout2 = {2};
   rtems_option option_set2 = mergeopts( {1} );
-  T_log(T_NORMAL, "Calling SemaObtain(%d,%d,%d)", sem_id2, option_set2, timeout2 );
-  rc = rtems_semaphore_obtain(sem_id2, option_set2, timeout2);
+  T_log(T_NORMAL, "Calling SemaObtain(%d,%d,%d)", ctx->sem_id2, option_set2, timeout2 );
+  rc = rtems_semaphore_obtain(ctx->sem_id2, option_set2, timeout2);
   T_log(T_NORMAL, "Returned 0x%x from Obtain", rc );
   
 sema_release: |
-  T_log(T_NORMAL, "Calling SemaRelease(%d)", sem_id);
-  rc = rtems_semaphore_release(sem_id);
+  T_log(T_NORMAL, "Calling SemaRelease(%d)", ctx->sem_id);
+  rc = rtems_semaphore_release(ctx->sem_id);
   T_log(T_NORMAL, "Returned 0x%x from Release", rc );
   
 sema_release2: |
-  T_log(T_NORMAL, "Calling SemaRelease(%d)", sem_id2);
-  rc = rtems_semaphore_release(sem_id2);
+  T_log(T_NORMAL, "Calling SemaRelease(%d)", ctx->sem_id2);
+  rc = rtems_semaphore_release(ctx->sem_id2);
   T_log(T_NORMAL, "Returned 0x%x from Release", rc );
 
 sema_set_priority: |
-  T_log(T_NORMAL, "Calling SemaSetPrio(%d)", sem_id);
-  rtems_task_priority new_prio;
-  new_prio = 0;
-  //sc = rtems_task_set_priority( RTEMS_SELF, SM_PRIO_HIGH, &new_prio );  new_prio = 0;
-  
-    rc = rtems_semaphore_set_priority(
-      sem_id, ctx->runner_sched, 0, &new_prio
-      //sem_id, ctx->other_sched, 0, &new_prio
-    );
-
-  T_log(T_NORMAL, "Returned 0x%x from Priority", rc );
-
-
-
+  sem_id = {0};
+  rtems_task_priority new_priority = {1};
+  rtems_id scheduler_id;
+  rtems_task_priority old_priority;
+  rtems_status_code sc1;    
+  sc1 = rtems_task_get_scheduler( RTEMS_SELF, &scheduler_id );
+  T_quiet_rsc( sc1, RTEMS_SUCCESSFUL );
+  rc = rtems_semaphore_set_priority(ctx->sem_id, scheduler_id, new_priority, &old_priority);
+  T_log(T_NORMAL, "Returned 0x%x from setPrio", rc );
+    
 sema_flush: |
   T_log(T_NORMAL, "Calling SemaFlush(%d)", sem_id);
   rc = rtems_semaphore_flush(sem_id);
