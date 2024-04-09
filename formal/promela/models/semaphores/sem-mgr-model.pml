@@ -1152,60 +1152,60 @@ inline chooseScenario() {
     ::  scenario == test_priority_ceiling ->
         if
 
-        // // Priority Inversion
-        // :: task_in[TASK1_ID].semType = BINARY_S ->
-        //     task_in[TASK2_ID].semType = BINARY_S;
-        //     task_in[TASK3_ID].semType = BINARY_S;
+        // Priority Inversion
+        :: task_in[TASK1_ID].semType = BINARY_S ->
+            task_in[TASK2_ID].semType = BINARY_S;
+            task_in[TASK3_ID].semType = BINARY_S;
 
-        //     //task_in[TASK1_ID].doSetPriority = true;
+            //task_in[TASK1_ID].doSetPriority = true;
 
-        //     task_in[TASK1_ID].Wait = true;
-        //     task_in[TASK2_ID].Wait = true;
-        //     task_in[TASK3_ID].Wait = true;
+            task_in[TASK1_ID].Wait = true;
+            task_in[TASK2_ID].Wait = true;
+            task_in[TASK3_ID].Wait = true;
 
-        //     task_in[TASK1_ID].taskPreempt = true;
-        //     task_in[TASK2_ID].taskPreempt = true;
-        //     task_in[TASK3_ID].taskPreempt = true;
+            task_in[TASK1_ID].taskPreempt = true;
+            task_in[TASK2_ID].taskPreempt = true;
+            task_in[TASK3_ID].taskPreempt = true;
 
-        //     task_in[TASK1_ID].doPriorityInversion = true;
-        //     task_in[TASK2_ID].doPriorityInversion = true;
-        //     task_in[TASK3_ID].doPriorityInversion = true;
+            task_in[TASK1_ID].doPriorityInversion = true;
+            task_in[TASK2_ID].doPriorityInversion = true;
+            task_in[TASK3_ID].doPriorityInversion = true;
 
-        //     task_in[TASK1_ID].isPriority = PRIORITY;
-        //     task_in[TASK2_ID].isPriority = PRIORITY;
-        //     task_in[TASK3_ID].isPriority = PRIORITY;
+            task_in[TASK1_ID].isPriority = PRIORITY;
+            task_in[TASK2_ID].isPriority = PRIORITY;
+            task_in[TASK3_ID].isPriority = PRIORITY;
 
-        //     task_in[TASK1_ID].LockingProtocol = NO_LOCKING;
-        //     task_in[TASK1_ID].LockingProtocol = NO_LOCKING;
-        //     task_in[TASK1_ID].LockingProtocol = NO_LOCKING;
+            task_in[TASK1_ID].LockingProtocol = NO_LOCKING;
+            task_in[TASK1_ID].LockingProtocol = NO_LOCKING;
+            task_in[TASK1_ID].LockingProtocol = NO_LOCKING;
 
 
-        //     // Set the priority ceiling of each of the tasks
-        //     task_in[TASK1_ID].taskPrio = PRIORITY_CEILING;
-        //     task_in[TASK2_ID].taskPrio = PRIORITY_CEILING;
-        //     task_in[TASK3_ID].taskPrio = PRIORITY_CEILING;
+            // Set the priority ceiling of each of the tasks
+            task_in[TASK1_ID].taskPrio = PRIORITY_CEILING;
+            task_in[TASK2_ID].taskPrio = PRIORITY_CEILING;
+            task_in[TASK3_ID].taskPrio = PRIORITY_CEILING;
 
-        //     // Set the initial priority of each of the tasks
-        //     task_in[TASK1_ID].taskInitialPriority = LOW_PRIORITY;
-        //     task_in[TASK2_ID].taskInitialPriority = HIGH_PRIORITY;
-        //     task_in[TASK3_ID].taskInitialPriority = MED_PRIORITY;
+            // Set the initial priority of each of the tasks
+            task_in[TASK1_ID].taskInitialPriority = LOW_PRIORITY;
+            task_in[TASK2_ID].taskInitialPriority = HIGH_PRIORITY;
+            task_in[TASK3_ID].taskInitialPriority = MED_PRIORITY;
 
-        //     task_in[TASK1_ID].doCreate = true;
+            task_in[TASK1_ID].doCreate = true;
 
-        //     // 1 Lower prio task runs and acquires lock
-        //     task_in[TASK1_ID].doAcquire = true; 
-        //     // 2 Higher prio task attempts to acquire lock - is blocked
-        //     task_in[TASK2_ID].doAcquire = true;
+            // 1 Lower prio task runs and acquires lock
+            task_in[TASK1_ID].doAcquire = true; 
+            // 2 Higher prio task attempts to acquire lock - is blocked
+            task_in[TASK2_ID].doAcquire = true;
             
-        //     // 3 Medium prio task performs its logic with preference over lower
+            // 3 Medium prio task performs its logic with preference over lower
 
-        //     // 4 Lower finishes and releases
-        //     task_in[TASK1_ID].doRelease = true;
+            // 4 Lower finishes and releases
+            task_in[TASK1_ID].doRelease = true;
 
-        //     // 5 Higher is now able to obtain
-        //     task_in[TASK2_ID].doRelease = true;
+            // 5 Higher is now able to obtain
+            task_in[TASK2_ID].doRelease = true;
 
-        //     printf("@@@ %d LOG sub-senario created, testing priority inversion \n", _pid);
+            printf("@@@ %d LOG sub-senario created, testing priority inversion \n", _pid);
 
 
         // Priority Ceiling
