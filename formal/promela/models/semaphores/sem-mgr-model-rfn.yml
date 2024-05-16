@@ -101,9 +101,6 @@ sema_ident2: |
   rc = rtems_semaphore_ident({0} , {1}, {2} ? &sem_id2 : NULL);
   T_log(T_NORMAL, "Returned 0x%x from Ident", rc );
 
-sema_busy_work: |
-  T_log(T_NORMAL, "Start of busy work...\n...\n...\n...\n...\nEnd");
-
 sema_obtain: |
   rtems_interval timeout = {2};
   rtems_option option_set = mergeopts( {1} );
