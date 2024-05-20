@@ -173,6 +173,15 @@ rtems_attribute mergeattribs( bool scope, bool priority, int semtype, int lockin
   return attribs;
 }
 
+rtems_option mergeopts( bool wait )
+{
+  rtems_option opts;
+
+  if ( wait ) { opts = RTEMS_WAIT; }
+  else { opts = RTEMS_NO_WAIT; } ;
+  return opts;
+}
+
 void checkTaskIs( rtems_id expected_id )
 {
   rtems_id own_id;
