@@ -31,3 +31,4 @@ proto/Haskell/rtems-spec/rtems-spec.cabal
 tr-*-*[0-9].c
 tc-*.c
 
+model-0-test.log
