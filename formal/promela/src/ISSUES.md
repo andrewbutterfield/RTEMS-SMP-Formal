@@ -20,6 +20,9 @@ They report `3 == 2`.
 
 This is inside `RtemsModelSemMgr_Teardown`
 
+Non-failing runs: 0 .. 13
+Failing runs: 14 .. 49
+
 ```
   prio = 0;
   sc = rtems_task_set_priority( RTEMS_SELF, SM_PRIO_HIGH, &prio );

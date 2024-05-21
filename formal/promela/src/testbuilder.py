@@ -284,10 +284,15 @@ def get_model_paths(config):
     if models_file.exists():
         with open(models_file) as file:
             model_to_relative_path = yaml.load(file, Loader=yaml.FullLoader)
+        print(f"GMP.M2RP {model_to_relative_path}")
         for model_path in model_to_relative_path.values():
+            print(f"GMP.MP {model_path}")
             relative_path = Path(model_path)
+            print(f"GMP.RP {relative_path}")
             absolute_path = Path(models_file.parent / relative_path.parent)
+            print(f"GMP.AP {absolute_path}")
             model_name = relative_path.name
+            print(f"GMP.MN {model_name}")
             model_to_absolute_path[model_name] = absolute_path
     else:
         print(f"modelsfile not found {models_file}")
@@ -304,6 +309,8 @@ def get_config(source_dir, model_name=""):
             config[key] = val
     if model_name and model_name != "allmodels":
         model_to_path = get_model_paths(config)
+        print(f"GC.MN {model_name}")
+        print(f"GC.M2P {model_to_path}")
         model_path = model_to_path[model_name]
         local_config_path = Path(model_path / "testbuilder.yml")
         if Path(local_config_path).exists():
