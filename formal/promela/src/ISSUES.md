@@ -11,6 +11,7 @@ clean takes a `model` parameter as typed by the user
 
 spin and gentests invoke `get_model_paths`.
 
+
 ## Test Outcomes
 
 ### Semaphores
@@ -120,5 +121,62 @@ Failing runs: 14 .. 49
 7029:Z:TestsuitesModel0:C:50:N:1793:F:36:D:1.128172
 ```
 
+## Model Scenarios
 
+Spin file number to sub-scenario mapping:
+
+```
+0 : onesema | bad create, invalid name
+1 : onesema | bad create, passed id null
+2 : onesema | bad create, passed invalid initial count
+3 : onesema | created and deleted
+4 : onesema | created, release at max count
+5 : onesema
+6 : onesema
+7 : onesema
+8 : twosemas
+9 : twosemas
+10 : different_sema_counts | created, sema_count = 0
+11 : different_sema_counts | created, sema_count = 1
+12 : different_sema_counts | created, sema_count = 2
+13 : different_sema_counts | created, sema_count = 3
+14 : test_priority | created, testing no locking - priority inversion 
+15 : test_priority | created, testing no locking - priority inversion 
+16 : test_priority | created, testing no locking - priority inversion 
+17 : test_priority | created, testing no locking - priority inversion 
+18 : test_priority | created, testing no locking - priority inversion 
+19 : test_priority | created, testing no locking - priority inversion 
+20 : test_priority | created, testing no locking - priority inversion 
+21 : test_priority | created, testing no locking - priority inversion 
+22 : test_priority | created, testing no locking - priority inversion 
+23 : test_priority | created, testing no locking - priority inversion 
+24 : test_priority | created, testing priority ceiling protocol 
+25 : test_priority | created, testing priority ceiling protocol 
+26 : test_priority | created, testing priority inheritance protocol 
+27 : test_priority | created, testing priority inheritance protocol 
+28 : test_priority | created, testing priority inheritance protocol 
+29 : test_priority | created, testing priority inheritance protocol 
+30 : test_priority | created, testing priority inheritance protocol 
+31 : test_priority | created, testing priority inheritance protocol 
+32 : test_priority | created, testing priority inheritance protocol 
+33 : test_priority | created, testing priority inheritance protocol 
+34 : test_priority | created, testing priority inheritance protocol 
+35 : test_priority | created, testing priority inheritance protocol 
+36 : test_set_priority | set priority, no locking protocol, not defined
+37 : test_set_priority | set priority, no locking protocol, not defined
+38 : test_set_priority | set priority, no locking protocol, not defined
+39 : test_set_priority | set priority, no locking protocol, not defined
+40 : test_set_priority | set priority, no locking protocol, not defined
+41 : test_set_priority | set priority, no locking protocol, not defined
+42 : test_set_priority | set priority, no locking protocol, not defined
+43 : test_set_priority | set priority, no locking protocol, not defined
+44 : test_set_priority | set priority, no locking protocol, not defined
+45 : test_set_priority | set priority, no locking protocol, not defined
+46 : test_set_priority | set priority, ceiling locking protocol, successful
+47 : test_set_priority | set priority, ceiling locking protocol, successful
+48 : test_set_priority | set priority, invalid new priority
+49 : test_set_priority | set priority, invalid new priority
+```
+
+It is clear that the priority scenarios induce the 2==3 test fail.
 
