@@ -1286,7 +1286,6 @@ inline chooseScenario() {
 
 }
 
-//proctype Worker
 proctype Runner (byte nid, taskid; TaskInputs opts) {
 
     tasks[taskid].nodeid = nid;
