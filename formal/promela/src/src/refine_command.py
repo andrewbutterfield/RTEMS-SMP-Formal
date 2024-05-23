@@ -178,7 +178,11 @@ class command:
             if ln[1] in ['NAME','DEF']:
                 self.defCode = self.defCode + [self.EOLC+" @@@ {}".format(str)]
             elif ln[1] in ['DECL','DCLARRAY'] :
-                self.declCode = self.declCode + [self.EOLC+" @@@ {}".format(str)]
+                if pid == 0:
+                    self.declCode = ( self.declCode 
+                                      + [self.EOLC+" @@@ {}".format(str)] )
+                else:
+                    self.addCode(pid,[self.EOLC+" @@@ {}".format(str)])
             elif ln[1] == 'LOG' :
                 pass
             else:
