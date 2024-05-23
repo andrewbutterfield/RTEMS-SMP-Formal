@@ -49,84 +49,7 @@
 
 #include "tr-msg-mgr-model.h"
 
-static const char PromelaModelMessageMgr[] = "/PML-MessageMgr";
 
-rtems_id CreateWakeupSema( void )
-{
-  rtems_status_code sc;
-  rtems_id id;
-
-  sc = rtems_semaphore_create(
-    rtems_build_name( 'W', 'K', 'U', 'P' ),
-    0,
-    RTEMS_SIMPLE_BINARY_SEMAPHORE,
-    0,
-    &id
-  );
-  T_assert_rsc_success( sc );
-
-  return id;
-}
-
-void DeleteWakeupSema( rtems_id id )
-{
-  if ( id != 0 ) {
-    rtems_status_code sc;
-
-    sc = rtems_semaphore_delete( id );
-    T_rsc_success( sc );
-  }
-}
-
-void Wait( rtems_id id )
-{
-  rtems_status_code sc;
-
-  sc = rtems_semaphore_obtain( id, RTEMS_WAIT, RTEMS_NO_TIMEOUT );
-  T_quiet_rsc_success( sc );
-}
-
-void Wakeup( rtems_id id )
-{
-  rtems_status_code sc;
-
-  sc = rtems_semaphore_release( id );
-  T_quiet_rsc_success( sc );
-}
-
-rtems_option mergeopts( bool wait )
-{
-  rtems_option opts;
-
-  if ( wait ) { opts = RTEMS_WAIT; }
-  else { opts = RTEMS_NO_WAIT; } ;
-  return opts;
-}
-
-rtems_interval getTimeout( int timeout )
-{
-  rtems_interval tout;
-
-  if ( timeout == 0 ) { tout = RTEMS_NO_TIMEOUT; }
-  else { tout = timeout; } ;
-  return tout;
-}
-
-rtems_id idNull( Context *ctx, bool passedid )
-{
-  rtems_id id;
-
-  if ( passedid ) { return ctx->queue_id; }
-  else { return NULL; }
-}
-
-void checkTaskIs( rtems_id expected_id )
-{
-  rtems_id own_id;
-
-  own_id = _Thread_Get_executing()->Object.id;
-  T_eq_u32( own_id, expected_id );
-}
 
 void initialise_pending( rtems_event_set pending[], int max )
 {
@@ -135,22 +58,6 @@ void initialise_pending( rtems_event_set pending[], int max )
   for( i=0; i < max; i++ ) {
     pending[i] = 0;
   }
-}
-
-void initialise_semaphore( Context *ctx, rtems_id semaphore[] )
-{
-  semaphore[0] = ctx->runner_wakeup;
-  semaphore[1] = ctx->worker1_wakeup;
-  semaphore[2] = ctx->worker2_wakeup;
-}
-
-void ShowWorkerSemaId( Context *ctx ) {
-  T_printf( "L:ctx->worker1_wakeup = %d\n", ctx->worker1_wakeup );
-  T_printf( "L:ctx->worker2_wakeup = %d\n", ctx->worker2_wakeup );
-}
-
-void ShowRunnerSemaId( Context *ctx ) {
-  T_printf( "L:ctx->runner_wakeup = %d\n", ctx->runner_wakeup );
 }
 
 static void RtemsModelMessageMgr_Teardown(

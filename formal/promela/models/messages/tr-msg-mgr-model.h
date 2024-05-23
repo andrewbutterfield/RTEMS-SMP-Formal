@@ -1,12 +1,9 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
-#ifndef _TR_MODEL_EVENTS_MGR_H
-#define _TR_MODEL_EVENTS_MGR_H
+#ifndef _TR_MODEL_MESSAGE_MGR_H
+#define _TR_MODEL_MESSAGE_MGR_H
 
-#include <rtems.h>
-#include <rtems/score/thread.h>
-
-#include <rtems/test.h>
+#include "../common/tr-model-0.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -43,13 +40,6 @@ typedef struct {
   T_thread_switch_log_4 thread_switch_log; // thread switch log
 } RtemsModelMessageMgr_Context;
 
-typedef enum {
-  PRIO_HIGH = 1,
-  PRIO_NORMAL,
-  PRIO_LOW,
-  PRIO_OTHER
-} Priorities;
-
 #define POWER_OF_10 100
 
 #define WORKER_ATTRIBUTES RTEMS_DEFAULT_ATTRIBUTES
@@ -58,34 +48,7 @@ typedef enum {
 
 typedef RtemsModelMessageMgr_Context Context;
 
-rtems_id CreateWakeupSema( void );
-
-void DeleteWakeupSema( rtems_id id );
-
-void Wait( rtems_id id );
-
-void Wakeup( rtems_id id ) ;
-
-rtems_event_set GetPending( Context *ctx );
-
-rtems_option mergeopts( bool wait );
-
-rtems_interval getTimeout( int timeout ) ;
-
-rtems_id idNull( Context *ctx, bool passedid ) ;
-
-rtems_id mapid( Context *ctx, int pid ) ;
-
-void checkTaskIs( rtems_id expected_id ) ;
-
-void ShowWorkerSemaId( Context *ctx ) ;
-
-void ShowRunnerSemaId( Context *ctx ) ;
-
-void initialise_semaphore( Context *ctx, rtems_id semaphore[] );
-
 void RtemsModelMessageMgr_Setup_Wrap( void *arg ) ;
-
 
 void RtemsModelMessageMgr_Teardown_Wrap( void *arg ) ;
 
@@ -122,6 +85,35 @@ void RtemsModelMessageMgr_Run6(void);
 void RtemsModelMessageMgr_Run7(void);
 
 void RtemsModelMessageMgr_Run8(void);
+
+void RtemsModelMessageMgr_Run9(void);
+
+void RtemsModelMessageMgr_Run10(void);
+
+void RtemsModelMessageMgr_Run11(void);
+
+void RtemsModelMessageMgr_Run12(void);
+
+void RtemsModelMessageMgr_Run13(void);
+
+void RtemsModelMessageMgr_Run14(void);
+
+void RtemsModelMessageMgr_Run15(void);
+
+void RtemsModelMessageMgr_Run16(void);
+
+void RtemsModelMessageMgr_Run17(void);
+
+void RtemsModelMessageMgr_Run18(void);
+
+void RtemsModelMessageMgr_Run19(void);
+
+void RtemsModelMessageMgr_Run20(void);
+
+void RtemsModelMessageMgr_Run21(void);
+
+void RtemsModelMessageMgr_Run22(void);
+
 
 /** @} */
 
