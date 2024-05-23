@@ -1288,6 +1288,12 @@ inline chooseScenario() {
 
 proctype Runner (byte nid, taskid; TaskInputs opts) {
 
+    byte sc;
+    printf( "@@@ %d DECL byte sc\n", _pid );
+    byte prio ;
+    printf( "@@@ %d DECL byte prio\n", _pid );
+
+
     tasks[taskid].nodeid = nid;
     tasks[taskid].pmlid = _pid;
     tasks[taskid].taskCeilingPriority = opts.taskPrio;
@@ -1299,9 +1305,12 @@ proctype Runner (byte nid, taskid; TaskInputs opts) {
 
     printf("@@@ %d TASK Runner\n",_pid);
     if 
-    :: tasks[taskid].initialPriority == HIGH_PRIORITY -> printf("@@@ %d CALL HighPriority\n", _pid);
-    :: tasks[taskid].initialPriority == MED_PRIORITY -> printf("@@@ %d CALL NormalPriority\n", _pid);
-    :: tasks[taskid].initialPriority == LOW_PRIORITY -> printf("@@@ %d CALL LowPriority\n", _pid);
+    :: tasks[taskid].initialPriority == HIGH_PRIORITY 
+         -> printf("@@@ %d CALL HighPriority\n", _pid);
+    :: tasks[taskid].initialPriority == MED_PRIORITY 
+         -> printf("@@@ %d CALL NormalPriority\n", _pid);
+    :: tasks[taskid].initialPriority == LOW_PRIORITY 
+         -> printf("@@@ %d CALL LowPriority\n", _pid);
     fi
 
     byte rc;
@@ -1570,6 +1579,15 @@ proctype Runner (byte nid, taskid; TaskInputs opts) {
     Obtain(task2Sema);
     Obtain(task3Sema);
 
+    // If Runner at low priority, now set to medium for teardown.
+    if 
+    :: tasks[taskid].initialPriority == LOW_PRIORITY 
+         -> printf( "@@@ %d LOG Setting Task %d to Normal priority\n"
+                   , _pid, taskid );
+            printf( "@@@ %d CALL NormalPriority\n", _pid );
+    :: else -> skip
+    fi
+
     printf("@@@ %d LOG Task %d finished\n",_pid,taskid);
     tasks[taskid].state = Zombie;
     printf("@@@ %d STATE %d Zombie\n",_pid,taskid)    
@@ -1579,6 +1597,10 @@ proctype Runner (byte nid, taskid; TaskInputs opts) {
 
 proctype Worker0 (byte nid, taskid; TaskInputs opts) {
 
+    byte sc;
+    printf( "@@@ %d DECL byte sc\n", _pid );
+    byte prio ;
+    printf( "@@@ %d DECL byte prio\n", _pid );
 
     tasks[taskid].nodeid = nid;
     tasks[taskid].pmlid = _pid;
@@ -1825,9 +1847,11 @@ proctype Worker0 (byte nid, taskid; TaskInputs opts) {
 
 proctype Worker1 (byte nid, taskid; TaskInputs opts) {
    
-
-
-    
+    byte sc;
+    printf( "@@@ %d DECL byte sc\n", _pid );
+    byte prio ;
+    printf( "@@@ %d DECL byte prio\n", _pid );
+  
     
     tasks[taskid].nodeid = nid;
     tasks[taskid].pmlid = _pid;
