@@ -29,8 +29,6 @@ void Wait( rtems_id id );
 
 void Wakeup( rtems_id id ) ;
 
-rtems_event_set GetPending( Context *ctx );
-
 rtems_option mergeopts( bool wait );
 
 rtems_interval getTimeout( int timeout ) ;

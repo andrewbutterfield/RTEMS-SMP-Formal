@@ -25,9 +25,36 @@ mergeattribs  -- DIFFERENT between {barrier}, {sem}
 ShowSemaId 
 ```
 
+DONE SO FAR
 
+* created `models/common` with `tr-model-0.h` and `tr-model-0.c`.
+* moved common stuff from message manager into `common/tr*`.
 
+NOTE: `GetPending` is only used in the events manager.
 
+Issue is now something like `rtems_id idNull( Context *ctx, bool passedid )` 
+with implementation:
+
+```
+rtems_id idNull( Context *ctx, bool passedid )
+{
+  rtems_id id;
+
+  if ( passedid ) { return ctx->queue_id; }
+  else { return NULL; }
+}
+```
+
+Also `Context` is used widely in `score` for task context handling.
+
+In the Semaphore manager we have:
+
+```
+typedef RtemsModelSemMgr_Context Context;
+```
+
+So, we have either to decide that every test context has a field `queue_id`,
+of we have to have manager-local contexts with names like `msgMgrIdNull`.
 
 ## Testbuilder
 
@@ -44,7 +71,15 @@ spin and gentests invoke `get_model_paths`.
 
 Need a consistent approach here, using the contents of `model.yml` (`models.yml`?).
 
-## Using tx-support.h
+### Model.h files
+
+File `tr-<model>.h` currently defines test helpers 
+(like `mergeopts`,`ObtainSema`).
+It also has a fixed list declaring the `RtemsModel<Mgr>_RunN` functions.
+This part should be auto-generated, in the way that `tc-<model>.c` is.
+
+
+### Using tx-support.h
 
 We do something strange here:
 
