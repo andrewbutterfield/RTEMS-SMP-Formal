@@ -3,7 +3,7 @@
 #ifndef _TR_MODEL_MESSAGE_MGR_H
 #define _TR_MODEL_MESSAGE_MGR_H
 
-#include "../common/tr-model-0.h"
+#include "tr-model-0.h" -- will deployed at same level
 
 #ifdef __cplusplus
 extern "C" {
