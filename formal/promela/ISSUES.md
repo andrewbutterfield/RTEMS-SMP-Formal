@@ -1,6 +1,37 @@
 # ISSUES
 
-## Model Naming
+## Link Failure
+
+Cannot build more than one manager model at a time, because of multiple/conflicting definitions.
+
+Duplicates in `tr-*-mgr-model.h` and `tr-*-mgr-model.c` 
+where `*` is `msg` | `barrier` | `event` | `sem`.
+
+```
+checkTaskIs
+initialise_semaphore
+CreateWakeupSema
+DeleteWakeupSema
+Wait
+Wakeup
+mergeopts -- DIFFERENT between {event}, {msg,sem}  event has 'wantall'
+initialise_pending
+initialise_semaphore
+ShowWorkerSemaId
+ShowRunnerSemaId
+CreateSema
+DeleteSema
+mergeattribs  -- DIFFERENT between {barrier}, {sem}
+ShowSemaId 
+```
+
+
+
+
+
+## Testbuilder
+
+### Model Naming
 
 This is broken
 
@@ -11,9 +42,12 @@ clean takes a `model` parameter as typed by the user
 
 spin and gentests invoke `get_model_paths`.
 
+Need a consistent approach here, using the contents of `model.yml` (`models.yml`?).
+
 ## Using tx-support.h
 
 We do something strange here:
+
 ```
 LowerPriority: |
   SetSelfPriority( PRIO_LOW );
@@ -31,6 +65,7 @@ and check its previous value was low.
 This is done everywhere, even in the Event Manager.
 
 Two uses in `tr-event-send-receive.c` :
+
 ```
 case PRIO_HIGH:
         prio = SetSelfPriority( ctx->sender_prio );
@@ -43,15 +78,35 @@ case PRIO_HIGH:
 ```
 
 
-
 ## Test Outcomes
 
+###  Barriers
+
+30 tests failing 
+
+```
+BM8:F:3 BM6:F:3 BM4:3 BM2:3 BM18:3 BM16:3 BM14:3 BM12:3 BM10:3 BM0:3
+```
+
+* 1st error is always line 94
+* 2nd error jumps around lines: 147 153 158 172 177 182
+* 3rd  error is invisible (no "F:0...." line)
+
+### Messages
+
+MessageMgr22:
+```
+F:0.17:0:@#/PML-MessageMgr022:tr-msg-mgr-model-22.c:192:RTEMS_SUCCESSFUL == RTEMS_TIMEOUT
+```
+
+
 ### Semaphores
+
+NOW FIXED.
 
 All failures occurred at tr-sem-mgr-model.c:223 
 They reported `3 == 2`.
 
-NOW FIXED.
 
 The PML Runner proctype checks its initial priority just before finishing.
 If low, it raises its priority to normal, to satisfy the test teardown.
