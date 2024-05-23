@@ -8,16 +8,38 @@ In order to generate test files the following input files are required:
     `<model>-run.h`
 where `<model>` is the name of the model.
 
-`allsteps <model> | allmodels | <list of models>` will run clean, spin, gentests, copy, compile and run for desired model(s)
+The tool is invoked as follows:
+
+`testbuilder <command>`
+
+A `<command>` is one of the following:
+
+`zero [model]` 
+  - removes all generated C filenames from the RTEMS configuration yaml file. 
+  - does NOT remove the test sources from the RTEMS test source directory
+
+`clean <model> | allmodels` 
+  - removes generated files from the relevant model source directories
+
 `spin <model>` will run SPIN to find all scenarios
-`gentests <model>` will produce C tests
-`clean <model> | allmodels` will remove generated files.
+
+`gentests <model>` will produce C test code from the `spin` outcome.
+
 `copy <model>`
    - copies the generated  C files to the relevant RTEMS test source directory
    - updates the relevant RTEMS configuration yaml file
-`archive <model>`` will copy generated spn, trail, C, and test log files
-   to the archive sub-directory of the current model directory.
+
 `compile` rebuilds the RTEMS test executable
-`run` runs the tests in the SIS simulator
-`zero [model]` removes all generated C filenames from the RTEMS configuration yaml file. Yaml file based on global config if model not set, local config if model set.
-  - it does NOT remove the test sources from the RTEMS test source directory
+
+`run`
+    - runs the tests in the SIS simulator
+    - saves results to `model-0-test.log` in the current directory
+
+
+`allsteps <model> | allmodels | <list of models>` 
+   - runs `clean`, `spin`, `gentests`, `copy`, `compile` and `run` 
+     for desired model(s)
+
+`archive <model>`` 
+  copies generated spn, trail, C, and test log files
+  to the archive sub-directory of the current model directory.
