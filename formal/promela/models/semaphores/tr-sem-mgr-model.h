@@ -81,7 +81,6 @@ typedef struct {
   T_thread_switch_log_4 thread_switch_log; // thread switch log
 } RtemsModelSemMgr_Context;
 
-
 typedef enum {
   SM_PRIO_HIGH = 1,
   SM_PRIO_NORMAL,
@@ -167,9 +166,27 @@ void RtemsModelSemMgr_Run16(void);
 void RtemsModelSemMgr_Run17(void);
 void RtemsModelSemMgr_Run18(void);
 void RtemsModelSemMgr_Run19(void);
-void RtemsModelSemMgr_Run20(void);
-void RtemsModelSemMgr_Run21(void);
-void RtemsModelSemMgr_Run22(void);
+void RtemsModelSemMgr_Run30(void);
+void RtemsModelSemMgr_Run31(void);
+void RtemsModelSemMgr_Run32(void);
+void RtemsModelSemMgr_Run33(void);
+void RtemsModelSemMgr_Run34(void);
+void RtemsModelSemMgr_Run35(void);
+void RtemsModelSemMgr_Run36(void);
+void RtemsModelSemMgr_Run37(void);
+void RtemsModelSemMgr_Run38(void);
+void RtemsModelSemMgr_Run39(void);
+void RtemsModelSemMgr_Run40(void);
+void RtemsModelSemMgr_Run41(void);
+void RtemsModelSemMgr_Run42(void);
+void RtemsModelSemMgr_Run43(void);
+void RtemsModelSemMgr_Run44(void);
+void RtemsModelSemMgr_Run45(void);
+void RtemsModelSemMgr_Run46(void);
+void RtemsModelSemMgr_Run47(void);
+void RtemsModelSemMgr_Run48(void);
+void RtemsModelSemMgr_Run49(void);
+void RtemsModelSemMgr_Run40(void);
 
 
 

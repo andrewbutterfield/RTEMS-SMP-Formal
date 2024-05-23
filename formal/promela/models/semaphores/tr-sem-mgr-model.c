@@ -99,58 +99,6 @@ void ReleaseSema( rtems_id id )
   T_log(T_NORMAL, "Returned 0x%x from release", sc );
 }
 
-//rtems_task_priority SetPriority( rtems_id id, rtems_task_priority priority )
-//{
-//  rtems_status_code   sc;
-//  rtems_task_priority previous;
-//
-//  sc = rtems_task_set_priority( id, priority, &previous );
-//  T_rsc_success( sc );
-//
-//  return previous;
-//}
-
-//rtems_task_priority SetSelfPriority( rtems_task_priority priority )
-//{
-//  return SetPriority( RTEMS_SELF, priority );
-//}
-
-//rtems_id DoCreateTask( rtems_name name, rtems_task_priority priority )
-//{
-//  rtems_status_code sc;
-//  rtems_id          id;
-//
-//  sc = rtems_task_create(
-//    name,
-//    priority,
-//    RTEMS_MINIMUM_STACK_SIZE,
-//    RTEMS_DEFAULT_MODES,
-//    RTEMS_DEFAULT_ATTRIBUTES,
-//    &id
-//  );
-//  T_assert_rsc_success( sc );
-
-//  return id;
-//}
-
-//void StartTask( rtems_id id, rtems_task_entry entry, void *arg )
-//{
-//  rtems_status_code sc;
-//
-//  sc = rtems_task_start( id, entry, (rtems_task_argument) arg);
-//  T_assert_rsc_success( sc );
-//}
-
-//void DeleteTask( rtems_id id )
-//{
-//  if ( id != 0 ) {
-//    rtems_status_code sc;
-//    T_printf( "L:Deleting Task id : %d\n", id );
-//    sc = rtems_task_delete( id );
-//    T_rsc_success( sc );
-//  }
-//}
-
 rtems_attribute mergeattribs( bool scope, bool priority, int semtype, int locking )
 {
   rtems_attribute attribs;
@@ -232,7 +180,6 @@ void RtemsModelSemMgr_Teardown( void *arg )
   T_log( T_NORMAL, "Deleting Worker1 Semaphore" );
   DeleteSema( ctx->worker1_sema );
 }
-
 
 size_t RtemsModelSemMgr_Scope( void *arg, char *buf, size_t n )
 {
