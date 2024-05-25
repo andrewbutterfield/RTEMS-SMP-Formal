@@ -112,11 +112,11 @@ rtems_interval getTimeout( int timeout )
   return tout;
 }
 
-rtems_id idNull( Context *ctx, bool passedid )
+rtems_id idNull( rtems_id queue_id, bool passedid  )
 {
   rtems_id id;
 
-  if ( passedid ) { return ctx->queue_id; }
+  if ( passedid ) { return queue_id; }
   else { return NULL; }
 }
 

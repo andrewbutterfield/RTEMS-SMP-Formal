@@ -33,7 +33,7 @@ rtems_option mergeopts( bool wait );
 
 rtems_interval getTimeout( int timeout ) ;
 
-rtems_id idNull( Context *ctx, bool passedid ) ;
+rtems_id idNull( rtems_id queue_id, bool passedid ) ;
 
 rtems_id mapid( Context *ctx, int pid ) ;
 

@@ -72,7 +72,7 @@ message_queue_send: |
   memset( send_buffer, {2}, {3} );
   
   {4} = rtems_message_queue_send(
-    idNull(ctx, {1}),
+    idNull(ctx->queue_id, {1}),
     {2} ? send_buffer : NULL,
     {3}
   );
@@ -83,7 +83,7 @@ message_queue_receive: |
   T_log( T_NORMAL, "Calling Receive(%d,%d)");
   size_t receive_size;
   {4} = rtems_message_queue_receive(
-  idNull(ctx, {1}),
+  idNull(ctx->queue_id, {1}),
   receive_buffer,
   &receive_size,
   mergeopts({2}),
