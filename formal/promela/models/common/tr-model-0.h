@@ -14,10 +14,10 @@ extern "C" {
 
 
 typedef enum {
-  PRIO_HIGH = 1,
-  PRIO_NORMAL,
-  PRIO_LOW,
-  PRIO_OTHER
+  M_PRIO_HIGH = 1,
+  M_PRIO_NORMAL,
+  M_PRIO_LOW,
+  M_PRIO_OTHER
 } Priorities;
 
 

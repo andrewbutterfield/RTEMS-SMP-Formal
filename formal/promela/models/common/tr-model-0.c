@@ -49,8 +49,6 @@
 
 #include "tr-model-0.h"
 
-static const char PromelaModelMessageMgr[] = "/PML-MessageMgr";
-
 rtems_id CreateWakeupSema( void )
 {
   rtems_status_code sc;
@@ -114,10 +112,8 @@ rtems_interval getTimeout( int timeout )
 
 rtems_id idNull( rtems_id queue_id, bool passedid  )
 {
-  rtems_id id;
-
   if ( passedid ) { return queue_id; }
-  else { return NULL; }
+  else { return 0xffffffff; }
 }
 
 void checkTaskIs( rtems_id expected_id )
@@ -139,7 +135,9 @@ void ShowWorkerSemaId( int worker_num, rtems_id work_wake ) {
   T_printf( "L:Worker%d wakeup semaphore = %d\n", worker_num, work_wake );
 }
 
-void ShowRunnerSemaId(  ) {
+void ShowRunnerSemaId( rtems_id run_wake ) {
   T_printf( "L:runner wakeup sema = %d\n", run_wake );
 }
+
+
 

@@ -41,7 +41,9 @@ sc_DCL: rtems_status_code
 prio_DCL: rtems_task_priority
 
 INIT: |
-  initialise_semaphore( ctx, semaphore );
+  initialise_semaphore( 0, ctx->runner_sema, semaphore );
+  initialise_semaphore( 1, ctx->worker0_sema, semaphore );
+  initialise_semaphore( 2, ctx->worker1_sema, semaphore );
 
 Runner: |
   checkTaskIs( ctx->runner_id );
@@ -196,22 +198,22 @@ WAKEUP:
   /* SWITCH[{0}] Wakeup of proc{1} (sometime) after proc{2} */
 
 LowPriority: |
-  SetSelfPriority( SM_PRIO_LOW );
+  SetSelfPriority( M_PRIO_LOW );
   sc = rtems_task_set_priority( RTEMS_SELF, RTEMS_CURRENT_PRIORITY, &prio );
   T_rsc_success( sc );
-  T_eq_u32( prio, SM_PRIO_LOW );
+  T_eq_u32( prio, M_PRIO_LOW );
 
 NormalPriority: |
-  SetSelfPriority( SM_PRIO_NORMAL );
+  SetSelfPriority( M_PRIO_NORMAL );
   sc = rtems_task_set_priority( RTEMS_SELF, RTEMS_CURRENT_PRIORITY, &prio );
   T_rsc_success( sc );
-  T_eq_u32( prio, SM_PRIO_NORMAL );
+  T_eq_u32( prio, M_PRIO_NORMAL );
 
 HighPriority: |
-  SetSelfPriority( SM_PRIO_HIGH );
+  SetSelfPriority( M_PRIO_HIGH );
   sc = rtems_task_set_priority( RTEMS_SELF, RTEMS_CURRENT_PRIORITY, &prio );
   T_rsc_success( sc );
-  T_eq_u32( prio, SM_PRIO_HIGH );
+  T_eq_u32( prio, M_PRIO_HIGH );
 
 StartLog: |
   T_thread_switch_log *log;

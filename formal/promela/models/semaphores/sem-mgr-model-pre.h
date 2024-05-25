@@ -46,6 +46,6 @@
 #endif
 
 #include <rtems/score/threadimpl.h>
-
-
+#include "tx-support.h"
+#include "tr-model-0.h"
 #include "tr-sem-mgr-model.h"

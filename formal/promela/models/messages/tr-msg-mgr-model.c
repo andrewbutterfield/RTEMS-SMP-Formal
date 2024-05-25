@@ -47,13 +47,18 @@
 
 #include <rtems/score/threadimpl.h>
 
+#include "tx-support.h"
+
+#include "tr-model-0.h"
+
 #include "tr-msg-mgr-model.h"
+
 
 static const char PromelaModelMessageMgr[] = "/PML-MessageMgr";
 
 
-void initialise_pending( rtems_event_set pending[], int max )
-{
+static void initialise_pending( rtems_event_set pending[], int max ) {
+
   int i;
 
   for( i=0; i < max; i++ ) {

@@ -112,7 +112,8 @@ def zero(model_file, testsuite_name):
     print(f"Zeroing {testsuite_name}.yml")
     with open(model_file) as file:
         model_yaml = yaml.load(file, Loader=yaml.FullLoader)
-    model_yaml['source'] = [f"testsuites/validation/ts-{testsuite_name}.c"]
+    model_yaml['source'] = [f"testsuites/validation/tr-{testsuite_name}.c"
+                           ,f"testsuites/validation/ts-{testsuite_name}.c"]
     with open(model_file, 'w') as file:
         yaml.dump(model_yaml, file)
 
@@ -228,6 +229,7 @@ def copy(model, model_path, codedir, rtems, modfile, testsuite_name,
     files = glob.glob(f"tr-{model}*{test_file_extension}")
     files += glob.glob(f"tr-{model}*.h")
     files += glob.glob(f"tc-{model}{test_file_extension}")
+    files += glob.glob(f"../common/tr-{model}{test_file_extension}")
     for file in files:
         shutil.copyfile(file, f"{rtems}testsuites/validation/{file}")
 

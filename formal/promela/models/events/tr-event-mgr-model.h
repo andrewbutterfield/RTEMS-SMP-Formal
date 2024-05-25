@@ -48,6 +48,9 @@
 #ifndef _TR_MODEL_EVENTS_MGR_H
 #define _TR_MODEL_EVENTS_MGR_H
 
+#include "tr-model-0.h"
+
+
 #include <rtems.h>
 #include <rtems/score/thread.h>
 
@@ -96,13 +99,6 @@ typedef struct {
   T_thread_switch_log_4 thread_switch_log; // thread switch log
 } RtemsModelEventsMgr_Context;
 
-typedef enum {
-  PRIO_HIGH = 1,
-  PRIO_NORMAL,
-  PRIO_LOW,
-  PRIO_OTHER
-} Priorities;
-
 #define POWER_OF_10 100
 
 #define WORKER_ATTRIBUTES RTEMS_DEFAULT_ATTRIBUTES
@@ -111,13 +107,6 @@ typedef enum {
 
 typedef RtemsModelEventsMgr_Context Context;
 
-rtems_id CreateWakeupSema( void );
-
-void DeleteWakeupSema( rtems_id id );
-
-void Wait( rtems_id id );
-
-void Wakeup( rtems_id id ) ;
 
 rtems_event_set GetPending( Context *ctx );
 
@@ -125,15 +114,7 @@ rtems_option mergeopts( bool wait, bool wantall );
 
 rtems_id mapid( Context *ctx, int pid ) ;
 
-void checkTaskIs( rtems_id expected_id ) ;
-
 void initialise_pending( rtems_event_set pending[], int max );
-
-void ShowWorkerSemaId( Context *ctx ) ;
-
-void ShowRunnerSemaId( Context *ctx ) ;
-
-void initialise_semaphore( Context *ctx, rtems_id semaphore[] );
 
 void RtemsModelEventsMgr_Setup_Wrap( void *arg ) ;
 

@@ -81,24 +81,9 @@ typedef struct {
   T_thread_switch_log_4 thread_switch_log; // thread switch log
 } RtemsModelBarrierMgr_Context;
 
-typedef enum {
-  BM_PRIO_HIGH = 1,
-  BM_PRIO_NORMAL,
-  BM_PRIO_LOW,
-  BM_PRIO_OTHER
-} Priorities;
-
 #define POWER_OF_10 100
 
-#define CreateTask( name, priority ) \
-  DoCreateTask( \
-    rtems_build_name( name[ 0 ], name[ 1 ], name[ 2 ], name[ 3 ] ), \
-    priority \
-  )
-
 typedef RtemsModelBarrierMgr_Context Context;
-
-rtems_id DoCreateTask( rtems_name name, rtems_task_priority priority );
 
 void StartTask( rtems_id id, rtems_task_entry entry, void *arg );
 

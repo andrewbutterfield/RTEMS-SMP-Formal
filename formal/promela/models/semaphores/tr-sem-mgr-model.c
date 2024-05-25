@@ -47,9 +47,12 @@
 
 #include <rtems/score/threadimpl.h>
 
+#include "tx-support.h"
+
+#include "tr-model-0.h"
+
 #include "tr-sem-mgr-model.h"
 
-#include "tx-support.h"
 
 static const char PromelaModelSemMgr[] = "/PML-SemMgr";
 
@@ -121,29 +124,6 @@ rtems_attribute mergeattribs( bool scope, bool priority, int semtype, int lockin
   return attribs;
 }
 
-rtems_option mergeopts( bool wait )
-{
-  rtems_option opts;
-
-  if ( wait ) { opts = RTEMS_WAIT; }
-  else { opts = RTEMS_NO_WAIT; } ;
-  return opts;
-}
-
-void checkTaskIs( rtems_id expected_id )
-{
-  rtems_id own_id;
-
-  own_id = _Thread_Get_executing()->Object.id;
-  T_eq_u32( own_id, expected_id );
-}
-
-void initialise_semaphore( Context *ctx, rtems_id semaphore[] ) {
-  semaphore[0] = ctx->runner_sema;
-  semaphore[1] = ctx->worker0_sema;
-  semaphore[2] = ctx->worker1_sema;
-}
-
 void ShowSemaId( Context *ctx ) {
   T_printf( "L:ctx->runner_sema = %d\n", ctx->runner_sema );
   T_printf( "L:ctx->worker0_sema = %d\n", ctx->worker0_sema );
@@ -166,9 +146,9 @@ void RtemsModelSemMgr_Teardown( void *arg )
   T_log( T_NORMAL, "Teardown" );
 
   prio = 0;
-  sc = rtems_task_set_priority( RTEMS_SELF, SM_PRIO_HIGH, &prio );
+  sc = rtems_task_set_priority( RTEMS_SELF, M_PRIO_HIGH, &prio );
   T_rsc_success( sc );
-  T_eq_u32( prio, SM_PRIO_NORMAL );
+  T_eq_u32( prio, M_PRIO_NORMAL );
 
   DeleteTask(ctx->worker0_id);
   DeleteTask(ctx->worker1_id);

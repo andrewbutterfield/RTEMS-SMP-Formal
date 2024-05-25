@@ -127,28 +127,28 @@ WAKEUP:
   /* SWITCH[{0}] Wakeup of proc{1} (sometime) after proc{2} */
   
 LowerPriority: |
-  SetSelfPriority( PRIO_LOW );
+  SetSelfPriority( M_PRIO_LOW );
   rtems_task_priority prio;
   rtems_status_code sc;
   sc = rtems_task_set_priority( RTEMS_SELF, RTEMS_CURRENT_PRIORITY, &prio );
   T_rsc_success( sc );
-  T_eq_u32( prio, PRIO_LOW );
+  T_eq_u32( prio, M_PRIO_LOW );
 
 EqualPriority: |
-  SetSelfPriority( PRIO_NORMAL );
+  SetSelfPriority( M_PRIO_NORMAL );
   rtems_task_priority prio;
   rtems_status_code sc;
   sc = rtems_task_set_priority( RTEMS_SELF, RTEMS_CURRENT_PRIORITY, &prio );
   T_rsc_success( sc );
-  T_eq_u32( prio, PRIO_NORMAL );
+  T_eq_u32( prio, M_PRIO_NORMAL );
 
 HigherPriority: |
-  SetSelfPriority( PRIO_HIGH );
+  SetSelfPriority( M_PRIO_HIGH );
   rtems_task_priority prio;
   rtems_status_code sc;
   sc = rtems_task_set_priority( RTEMS_SELF, RTEMS_CURRENT_PRIORITY, &prio );
   T_rsc_success( sc );
-  T_eq_u32( prio, PRIO_HIGH );
+  T_eq_u32( prio, M_PRIO_HIGH );
 
   StartLog: |
   T_thread_switch_log *log;

@@ -53,9 +53,8 @@
 #include <rtems/rtems/tasksdata.h>
 #include <rtems/score/statesimpl.h>
 #include <rtems/score/threadimpl.h>
-
+#include "tx-support.h"
 #include "tr-sem-mgr-model.h"
-
 #include <rtems/test.h>
 
 /**

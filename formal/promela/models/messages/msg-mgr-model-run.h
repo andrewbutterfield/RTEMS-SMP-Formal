@@ -25,7 +25,7 @@ RTEMS_ALIGNED( RTEMS_TASK_STORAGE_ALIGNMENT ) static char WorkerStorage{0}[
 
 static const rtems_task_config WorkerConfig{0} = {{
   .name = rtems_build_name( 'W', 'O', 'R', 'K' ),
-  .initial_priority = PRIO_LOW,
+  .initial_priority = M_PRIO_LOW,
   .storage_area = WorkerStorage{0},
   .storage_size = sizeof( WorkerStorage{0} ),
   .maximum_thread_local_storage_size = MAX_TLS_SIZE,
@@ -88,9 +88,9 @@ static void RtemsModelMessageMgr_Setup{0}(
   #endif
 
   prio = 0;
-  sc = rtems_task_set_priority( RTEMS_SELF, PRIO_NORMAL, &prio );
+  sc = rtems_task_set_priority( RTEMS_SELF, M_PRIO_NORMAL, &prio );
   T_rsc_success( sc );
-  T_eq_u32( prio, PRIO_HIGH );
+  T_eq_u32( prio, M_PRIO_HIGH );
 
   //sc = rtems_task_construct( &WorkerConfig{0}, &ctx->worker_id );
   //T_log( T_NORMAL, "Construct Worker, sc = %x", sc );
@@ -102,7 +102,7 @@ static void RtemsModelMessageMgr_Setup{0}(
   //T_assert_rsc_success( sc );
 
   sc = rtems_task_create("WRKR",
-                          PRIO_NORMAL,
+                          M_PRIO_NORMAL,
                           RTEMS_MINIMUM_STACK_SIZE,
                           RTEMS_DEFAULT_MODES,
                           RTEMS_DEFAULT_ATTRIBUTES,
@@ -115,7 +115,7 @@ static void RtemsModelMessageMgr_Setup{0}(
   T_assert_rsc_success( sc );
 
   sc = rtems_task_create("WRKR",
-                          PRIO_NORMAL,
+                          M_PRIO_NORMAL,
                           RTEMS_MINIMUM_STACK_SIZE,
                           RTEMS_DEFAULT_MODES,
                           RTEMS_DEFAULT_ATTRIBUTES,

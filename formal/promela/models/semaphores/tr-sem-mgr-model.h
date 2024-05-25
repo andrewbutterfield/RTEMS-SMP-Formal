@@ -49,6 +49,8 @@
 #ifndef _TR_MODEL_SEM_MGR_H
 #define _TR_MODEL_SEM_MGR_H
 
+#include "tr-model-0.h"
+
 #include <rtems.h>
 #include <rtems/score/thread.h>
 
@@ -81,28 +83,9 @@ typedef struct {
   T_thread_switch_log_4 thread_switch_log; // thread switch log
 } RtemsModelSemMgr_Context;
 
-typedef enum {
-  SM_PRIO_HIGH = 1,
-  SM_PRIO_NORMAL,
-  SM_PRIO_LOW,
-  SM_PRIO_OTHER
-} Priorities;
-
 #define POWER_OF_10 100
 
-#define CreateTask( name, priority ) \
-  DoCreateTask( \
-    rtems_build_name( name[ 0 ], name[ 1 ], name[ 2 ], name[ 3 ] ), \
-    priority \
-  )
-
 typedef RtemsModelSemMgr_Context Context;
-
-rtems_id DoCreateTask( rtems_name name, rtems_task_priority priority );
-
-void StartTask( rtems_id id, rtems_task_entry entry, void *arg );
-
-void DeleteTask( rtems_id id );
 
 rtems_id CreateSema( char * name);
 
@@ -120,13 +103,9 @@ rtems_option mergeattribs( bool scope, bool priority, int semtype, int locking )
 
 rtems_option mergeopts( bool wait );
 
-void checkTaskIs( rtems_id expected_id ) ;
-
 void ShowSemaId( Context *ctx ) ;
 
 void initialise_id ( rtems_id * id );
-
-void initialise_semaphore( Context *ctx, rtems_id semaphore[] );
 
 void RtemsModelSemMgr_Setup( void *arg ) ;
 
@@ -166,6 +145,16 @@ void RtemsModelSemMgr_Run16(void);
 void RtemsModelSemMgr_Run17(void);
 void RtemsModelSemMgr_Run18(void);
 void RtemsModelSemMgr_Run19(void);
+void RtemsModelSemMgr_Run20(void);
+void RtemsModelSemMgr_Run21(void);
+void RtemsModelSemMgr_Run22(void);
+void RtemsModelSemMgr_Run23(void);
+void RtemsModelSemMgr_Run24(void);
+void RtemsModelSemMgr_Run25(void);
+void RtemsModelSemMgr_Run26(void);
+void RtemsModelSemMgr_Run27(void);
+void RtemsModelSemMgr_Run28(void);
+void RtemsModelSemMgr_Run29(void);
 void RtemsModelSemMgr_Run30(void);
 void RtemsModelSemMgr_Run31(void);
 void RtemsModelSemMgr_Run32(void);
