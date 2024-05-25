@@ -194,4 +194,4 @@ void RtemsModelBarrierMgr_Run21(void);
 }
 #endif
 
-#endif /* _TR_BARRIER_H */
+#endif /* _TR_MODEL_BARRIER_MGR_H */

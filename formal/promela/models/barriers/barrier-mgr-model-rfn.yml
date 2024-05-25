@@ -34,7 +34,9 @@ NAME: |
 semaphore_DCL: rtems_id {0}[{1}];
 
 INIT: |
-  initialise_semaphore( ctx, semaphore );
+  initialise_semaphore( 0, ctx->runner_sema,  semaphore );
+  initialise_semaphore( 1, ctx->worker0_sema, semaphore );
+  initialise_semaphore( 2, ctx->worker1_sema, semaphore );
 
 Runner: |
   checkTaskIs( ctx->runner_id );

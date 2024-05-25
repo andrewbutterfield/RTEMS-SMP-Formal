@@ -49,6 +49,7 @@
 
 #include "tr-msg-mgr-model.h"
 
+static const char PromelaModelMessageMgr[] = "/PML-MessageMgr";
 
 
 void initialise_pending( rtems_event_set pending[], int max )

@@ -46,7 +46,8 @@ recout_DCL: rtems_event_set {0}[TASK_MAX];
 
 INIT: |
   initialise_pending( pending, TASK_MAX );
-  initialise_semaphore( ctx, semaphore );
+  initialise_semaphore( 0, ctx->runner_wakeup, semaphore );
+  initialise_semaphore( 1, ctx->worker_wakeup, semaphore );
 
 Runner: |
   checkTaskIs( ctx->runner_id );

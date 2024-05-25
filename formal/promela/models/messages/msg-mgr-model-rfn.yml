@@ -28,7 +28,9 @@ send_buffer_DCL: uint8_t {0} [ MAX_MESSAGE_SIZE ];
 send_counter_DCL: uint8_t
 
 INIT: |
-  initialise_semaphore( ctx, semaphore );
+  initialise_semaphore( 0, ctx->runner_wakeup,  semaphore );
+  initialise_semaphore( 1, ctx->worker1_wakeup, semaphore );
+  initialise_semaphore( 2, ctx->worker2_wakeup, semaphore );
 
 Runner: |
   checkTaskIs( ctx->runner_id );

@@ -242,4 +242,4 @@ void RtemsModelEventsMgr_Run8(
 }
 #endif
 
-#endif /* _TR_EVENT_SEND_RECEIVE_H */
+#endif /* _TR_MODEL_EVENTS_MGR_H */

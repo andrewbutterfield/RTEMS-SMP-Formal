@@ -128,28 +128,18 @@ void checkTaskIs( rtems_id expected_id )
   T_eq_u32( own_id, expected_id );
 }
 
-void initialise_pending( rtems_event_set pending[], int max )
+void initialise_semaphore( int sema_no,
+                           rtems_id semaphore_id, 
+                           rtems_id semaphore[] )
 {
-  int i;
-
-  for( i=0; i < max; i++ ) {
-    pending[i] = 0;
-  }
+  semaphore[sema_no] = semaphore_id;
 }
 
-void initialise_semaphore( Context *ctx, rtems_id semaphore[] )
-{
-  semaphore[0] = ctx->runner_wakeup;
-  semaphore[1] = ctx->worker1_wakeup;
-  semaphore[2] = ctx->worker2_wakeup;
+void ShowWorkerSemaId( int worker_num, rtems_id work_wake ) {
+  T_printf( "L:Worker%d wakeup semaphore = %d\n", worker_num, work_wake );
 }
 
-void ShowWorkerSemaId( Context *ctx ) {
-  T_printf( "L:ctx->worker1_wakeup = %d\n", ctx->worker1_wakeup );
-  T_printf( "L:ctx->worker2_wakeup = %d\n", ctx->worker2_wakeup );
-}
-
-void ShowRunnerSemaId( Context *ctx ) {
-  T_printf( "L:ctx->runner_wakeup = %d\n", ctx->runner_wakeup );
+void ShowRunnerSemaId(  ) {
+  T_printf( "L:runner wakeup sema = %d\n", run_wake );
 }
 

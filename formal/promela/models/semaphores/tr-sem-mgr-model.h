@@ -188,17 +188,10 @@ void RtemsModelSemMgr_Run48(void);
 void RtemsModelSemMgr_Run49(void);
 void RtemsModelSemMgr_Run40(void);
 
-
-
-
-
-
-
-
 /** @} */
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* _TR_SEM_H */
+#endif /* _TR_MODEL_SEM_MGR_H */

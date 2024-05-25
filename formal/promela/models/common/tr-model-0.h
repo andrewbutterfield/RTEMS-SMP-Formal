@@ -35,12 +35,14 @@ rtems_interval getTimeout( int timeout ) ;
 
 rtems_id idNull( rtems_id queue_id, bool passedid ) ;
 
-rtems_id mapid( Context *ctx, int pid ) ;
-
 void checkTaskIs( rtems_id expected_id ) ;
 
-void ShowWorkerSemaId( Context *ctx ) ;
+void initialise_semaphore( int sema_no,
+                           rtems_id semaphore_id, 
+                           rtems_id semaphore[] );
 
-void ShowRunnerSemaId( Context *ctx ) ;
+void ShowRunnerSemaId( rtems_id run_wake ) ;
 
-void initialise_semaphore( Context *ctx, rtems_id semaphore[] );
+void ShowWorkerSemaId( int worker_num, rtems_id work_wake ) ;
+
+#endif
