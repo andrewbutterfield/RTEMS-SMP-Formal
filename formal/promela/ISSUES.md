@@ -30,6 +30,10 @@ DONE SO FAR
 * created `models/common` with `tr-model-0.h` and `tr-model-0.c`.
 * moved common stuff from message manager into `common/tr*`.
 
+TO DO
+
+* replace `Context` arguments with field components.
+
 NOTE: `GetPending` is only used in the events manager.
 
 Issue is now something like `rtems_id idNull( Context *ctx, bool passedid )` 
@@ -53,8 +57,8 @@ In the Semaphore manager we have:
 typedef RtemsModelSemMgr_Context Context;
 ```
 
-So, we have either to decide that every test context has a field `queue_id`,
-of we have to have manager-local contexts with names like `msgMgrIdNull`.
+So, we have to pass in the relevant fields, 
+rather than the whole context, to these functions.
 
 ## Testbuilder
 
