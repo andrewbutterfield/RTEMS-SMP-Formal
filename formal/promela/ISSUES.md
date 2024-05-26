@@ -27,38 +27,23 @@ ShowSemaId
 
 DONE SO FAR
 
+* working on message and semaphore managers
 * created `models/common` with `tr-model-0.h` and `tr-model-0.c`.
 * moved common stuff from message manager into `common/tr*`.
+* replace `Context` arguments with field components.
 
 TO DO
 
-* replace `Context` arguments with field components.
+* `tr-model-0` should be `tx-model-0`.
+* integrate the event manager
+* integrate the barrier manager
+* move the following declarations to `tx-model-0`:
+  -  return values
+  -  task states
 
 NOTE: `GetPending` is only used in the events manager.
-
-Issue is now something like `rtems_id idNull( Context *ctx, bool passedid )` 
-with implementation:
-
-```
-rtems_id idNull( Context *ctx, bool passedid )
-{
-  rtems_id id;
-
-  if ( passedid ) { return ctx->queue_id; }
-  else { return NULL; }
-}
-```
-
-Also `Context` is used widely in `score` for task context handling.
-
-In the Semaphore manager we have:
-
-```
-typedef RtemsModelSemMgr_Context Context;
-```
-
-So, we have to pass in the relevant fields, 
-rather than the whole context, to these functions.
+Note also that this and other stuff was defined 
+in SH's `tr-event-send-receive.c`.
 
 ## Testbuilder
 
