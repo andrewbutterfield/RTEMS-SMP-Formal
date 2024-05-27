@@ -501,13 +501,15 @@ Priority_queue queueList[SEMA_MAX];
  *     `new_priority` models `rtems_task_priority` for the new priority level
  *     `old_priority` models pointer to `rtems_task_priority` where the old priority is stored upon success
  */
- #define NULL -1
-inline sema_set_priority(sem_id, scheduler_id, new_priority, old_priority, rc) {
+ #define INV_PRIO -1
+
+inline sema_set_priority(sem_id, scheduler_id, new_priority, old_priority, rc) 
+{
     atomic {
         if
         :: sem_id == 0 ->
             rc = RC_InvId;
-        :: old_priority == NULL ->
+        :: old_priority == INV_PRIO ->
             rc = RC_InvAddr;
         :: new_priority < 0 ->
             rc = RC_InvPrio;
@@ -1274,7 +1276,7 @@ inline chooseScenario() {
         
         // Invalid priority
         :: task_in[TASK1_ID].LockingProtocol = CEILING_LOCKING ->
-            task_in[TASK1_ID].newTaskPrio = -1;
+            task_in[TASK1_ID].newTaskPrio = INV_PRIO;
             printf( "@@@ %d LOG sub-scenario set priority, invalid new priority\n", _pid); //RTEMS_INVALID_PRIORITY
         
         
