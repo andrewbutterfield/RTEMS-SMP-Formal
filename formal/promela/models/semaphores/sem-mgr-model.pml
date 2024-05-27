@@ -504,35 +504,29 @@ Priority_queue queueList[SEMA_MAX];
  #define INV_PRIO -1
 
 inline sema_set_priority(sem_id, scheduler_id, new_priority, old_priority, rc) 
-{
-    atomic {
+{ atomic {
+    if
+    :: sem_id == 0       -> rc = RC_InvId;
+    :: old_priority == 0 -> rc = RC_InvAddr;
+    :: new_priority < 0  -> rc = RC_InvPrio;
+    :: model_semaphores[sem_id].LockingProtocol == NO_LOCKING ->
+        rc = RC_NotDefined;
+    :: else ->
         if
-        :: sem_id == 0 ->
-            rc = RC_InvId;
-        :: old_priority == INV_PRIO ->
-            rc = RC_InvAddr;
-        :: new_priority < 0 ->
-            rc = RC_InvPrio;
-        :: model_semaphores[sem_id].LockingProtocol == NO_LOCKING ->
-            rc = RC_NotDefined;
-        :: else ->
-            if
-            :: model_semaphores[sem_id].Priority == PRIORITY &&
-                model_semaphores[sem_id].LockingProtocol == CEILING_LOCKING ->
-                old_priority = model_semaphores[sem_id].priorityCeiling;
-            :: else ->
-                rc = RC_NotDefined;
-            fi
-            if
-            :: model_semaphores[sem_id].Priority == PRIORITY &&
-                model_semaphores[sem_id].LockingProtocol == CEILING_LOCKING ->
-                model_semaphores[sem_id].priorityCeiling = new_priority;
-                rc = RC_OK;
-            :: else ->
-                rc = RC_InvPrio;
-            fi
+        :: model_semaphores[sem_id].Priority == PRIORITY &&
+            model_semaphores[sem_id].LockingProtocol == CEILING_LOCKING ->
+            old_priority = model_semaphores[sem_id].priorityCeiling;
+        :: else -> rc = RC_NotDefined;
         fi
-    }
+        if
+        :: model_semaphores[sem_id].Priority == PRIORITY &&
+            model_semaphores[sem_id].LockingProtocol == CEILING_LOCKING ->
+            model_semaphores[sem_id].priorityCeiling = new_priority;
+            rc = RC_OK;
+        :: else -> rc = RC_InvPrio;
+        fi
+    fi 
+  } 
 }
 
 
