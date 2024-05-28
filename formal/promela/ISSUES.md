@@ -51,6 +51,17 @@ in SH's `tr-event-send-receive.c`.
 
 This is broken
 
+Current command behaviour:
+ 
+ * `zero`,`clean`,`spin`,`gentests`, `copy`, `allsteps` require `xxx-mgr-model`
+
+ * `allsteps` fails with a lookup error if first model is not `xx-model`,
+    but fails with an informative error message if first is OK, 
+    but subsequent are bad.
+
+ * `models.yml` is used when `alltests` is specified
+ 
+
 For test build we need to specify the semaphore model as `sem-mgr-model`,
 and not as `semaphores`, so what is `model.yml` for?
 

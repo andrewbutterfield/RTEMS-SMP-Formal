@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: BSD-2-Clause
 """Runs SPIN to generate test code for all defined scenarios"""
 
-# Copyright (C) 2021-23 Trinity College Dublin (www.tcd.ie)
+# Copyright (C) 2021-24 Trinity College Dublin (www.tcd.ie)
 #               James Gooding Hunt
 #               Robert Jennings
 #               Andrew Butterfield
