@@ -455,11 +455,13 @@ inline preemptIfRequired(tid, preempting_tid, rc) {
       tasks[preempting_tid].effectivePriority < tasks[tid].effectivePriority &&
       tasks[preempting_tid].state == Ready ->
         tasks[tid].state = OtherWait;
-        printf("@@@ %d LOG preemptIfRequired current task %d was preempted by task %d\n", _pid, tid, preempting_tid);
+        printf( "@@@ %d LOG task %d preempted by task %d\n", 
+                _pid, tid, preempting_tid );
         printf("@@@ %d STATE %d OtherWait\n",_pid,tid);
         rc = true;
   ::  else -> 
-        printf("@@@ %d LOG preemptIfRequired current task %d was NOT preempted by task %d\n", _pid, tid, preempting_tid);
+        printf( "@@@ %d LOG task %d NOT preempted by task %d\n"
+              , _pid, tid, preempting_tid );
         rc = false;
   fi
 }
@@ -1037,7 +1039,8 @@ int task2Sema;
 int task3Sema;
 
 
-mtype = {onesema, twosemas, different_sema_counts, test_priority, test_set_priority};
+mtype = { onesema, twosemas, different_sema_counts
+        , test_priority, test_set_priority };
 mtype scenario;
 
 inline chooseScenario() {
