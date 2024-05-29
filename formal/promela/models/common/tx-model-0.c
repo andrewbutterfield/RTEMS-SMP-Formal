@@ -47,7 +47,7 @@
 
 #include <rtems/score/threadimpl.h>
 
-#include "tr-model-0.h"
+#include "tx-model-0.h"
 
 rtems_id CreateWakeupSema( void )
 {

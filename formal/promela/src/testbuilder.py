@@ -107,12 +107,12 @@ def archive(model, model_dir, testsuite, test_extension):
 
 
 def zero(model_file, testsuite_name):
-    """Modifies model file to refer only to the top-level testcase source"""
+    """Modifies model file to refer only to the top-level testcase sources"""
     # Update {model_file}.yml
     print(f"Zeroing {testsuite_name}.yml")
     with open(model_file) as file:
         model_yaml = yaml.load(file, Loader=yaml.FullLoader)
-    model_yaml['source'] = [f"testsuites/validation/tr-{testsuite_name}.c"
+    model_yaml['source'] = [f"testsuites/validation/tx-{testsuite_name}.c"
                            ,f"testsuites/validation/ts-{testsuite_name}.c"]
     with open(model_file, 'w') as file:
         yaml.dump(model_yaml, file)

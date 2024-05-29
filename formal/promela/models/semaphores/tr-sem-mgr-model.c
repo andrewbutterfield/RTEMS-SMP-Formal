@@ -49,7 +49,7 @@
 
 #include "tx-support.h"
 
-#include "tr-model-0.h"
+#include "tx-model-0.h"
 
 #include "tr-sem-mgr-model.h"
 

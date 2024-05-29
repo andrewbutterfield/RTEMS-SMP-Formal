@@ -48,7 +48,7 @@
 #ifndef _TR_MODEL_EVENTS_MGR_H
 #define _TR_MODEL_EVENTS_MGR_H
 
-#include "tr-model-0.h"
+#include "tx-model-0.h"
 
 
 #include <rtems.h>
