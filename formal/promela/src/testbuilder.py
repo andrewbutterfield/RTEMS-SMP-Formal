@@ -3,9 +3,9 @@
 """Runs SPIN to generate test code for all defined scenarios"""
 
 # Copyright (C) 2021-24 Trinity College Dublin (www.tcd.ie)
+#               Andrew Butterfield
 #               James Gooding Hunt
 #               Robert Jennings
-#               Andrew Butterfield
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -50,7 +50,6 @@ def catch_subprocess_errors(func):
         return result
     return wrapper
 
-
 def all_steps(models, model_to_path, source_dir):
     if models == ["allmodels"]:
         models = list(model_to_path.keys())
@@ -59,10 +58,14 @@ def all_steps(models, model_to_path, source_dir):
         path = model_to_path[model]
         config = get_config(source_dir, model)
         refine_config = get_refine_config(source_dir, model, path)
+        # TODO: work from <model>, and accessing <model>/gen
         clean(model, model_to_path, source_dir)
+        # TODO: runs in <model> but puts .trail/.spn into <model>/gen
         generate_spin_files(model, path, config["spinallscenarios"],
                             refine_config)
+        # TODO:  runs in <model>/gen - do this by changing path in call
         generate_test_files(model, path, config["spin2test"], refine_config)
+        # TODO: runs in <model>/gen - do this by changing path in call
         copy(model, path, config["testcode"], config["rtems"],
              config["testyaml"], config["testsuite"],
              refine_config["testfiletype"])
@@ -71,9 +74,9 @@ def all_steps(models, model_to_path, source_dir):
     run_simulator(config["simulator"], config["simulatorargs"],
                   config["testexe"], config["testsuite"])
 
-
+# TODO: work from <model>, and accessing <model>/gen
 def clean(model, model_to_path, source_dir):
-    """Cleans out generated files in models directory"""
+    """Cleans out generated files in <model> directory"""
     cwd = os.getcwd()
     if model == "allmodels":
         models = list(model_to_path.keys())
@@ -91,7 +94,7 @@ def clean(model, model_to_path, source_dir):
             os.remove(file)
     os.chdir(cwd)
 
-
+#TODO: work from <model>/gen, by calling with 2nd arg being <model>/gen
 def archive(model, model_dir, testsuite, test_extension):
     cwd = os.getcwd()
     os.chdir(model_dir)
@@ -138,7 +141,7 @@ def ready_to_generate(model, refine_config):
         ready = False
     return ready
 
-
+# TODO: runs in <model> but puts .trail/.spn into <model>/gen
 @catch_subprocess_errors
 def generate_spin_files(model, model_dir, spinallscenarios, refine_config):
     """Create spin files from model"""
@@ -159,7 +162,7 @@ def generate_spin_files(model, model_dir, spinallscenarios, refine_config):
     os.remove('pan')
     os.chdir(cwd)
 
-
+# TODO:  runs in <model>/gen - do this by changing model_dir in call
 @catch_subprocess_errors
 def generate_test_files(model, model_dir, testgen, refine_config):
     """Create test files from spin files"""
@@ -209,7 +212,7 @@ def generate_testcase_file(model, refine_config, no_of_trails):
         print(f"tc-{model}{refine_config['testfiletype']} "
               f"will not be generated")
 
-
+# TODO:  runs in <model>/gen - do this by changing model_path in call
 def copy(model, model_path, codedir, rtems, modfile, testsuite_name,
          test_file_extension):
     """Copies C testfiles to test directory and updates the model file """
@@ -430,18 +433,22 @@ def main():
         all_steps(sys.argv[2::], model_to_path, source_dir)
 
     if sys.argv[1] == "spin":
+        # TODO: runs in <model> but puts .trail/.spn into <model>/gen
         generate_spin_files(sys.argv[2], model_to_path[sys.argv[2]],
                             config["spinallscenarios"], refine_config)
 
     if sys.argv[1] == "gentests":
+        # TODO:  runs in <model>/gen - do this by changing 2nd arg in call
         generate_test_files(sys.argv[2], model_to_path[sys.argv[2]],
                             config["spin2test"], refine_config)
 
     if sys.argv[1] == "clean":
         print(f"sys.argv clean model_to_path :: {type(model_to_path)}")
+        # TODO: work from <model>, and accessing <model>/gen
         clean(sys.argv[2], model_to_path, source_dir)
 
     if sys.argv[1] == "archive":
+        #TODO: work from <model>/gen, by calling with 2nd arg being <model>/gen
         archive(sys.argv[2], model_to_path[sys.argv[2]], config["testsuite"],
                 refine_config["testfiletype"])
 
@@ -449,6 +456,7 @@ def main():
         zero(config["testyaml"], config["testsuite"])
 
     if sys.argv[1] == "copy":
+        # TODO: runs in <model>/gen - do this by changing 2nd arg in call
         copy(sys.argv[2], model_to_path[sys.argv[2]], config["testcode"],
              config["rtems"], config["testyaml"], config["testsuite"],
              refine_config["testfiletype"])
