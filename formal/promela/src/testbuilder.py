@@ -229,7 +229,7 @@ def copy(model, model_path, codedir, rtems, modfile, testsuite_name,
     files = glob.glob(f"tr-{model}*{test_file_extension}")
     files += glob.glob(f"tr-{model}*.h")
     files += glob.glob(f"tc-{model}{test_file_extension}")
-    files += glob.glob(f"../common/tr-{model}{test_file_extension}")
+    files += glob.glob(f"../common/tx-{model}{test_file_extension}")
     for file in files:
         shutil.copyfile(file, f"{rtems}testsuites/validation/{file}")
 
