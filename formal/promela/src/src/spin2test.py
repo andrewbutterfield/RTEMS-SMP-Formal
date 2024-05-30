@@ -49,14 +49,12 @@ def main(testNumber, dir0, fileRoot, preFile, postFile, runFile, refFile, testFi
     else:
         num = "-{}".format(testNumber)
 
-    spinFile = dir0 + fileRoot + num + ".spn"
+    spinFile = dir0 + "gen/" + fileRoot + num + ".spn"
 
     summaryFormat = "!{} --({}`)-> [{};_;{};{}] >> {}\n"
     refine.logger.debug(
         summaryFormat.format(spinFile, refFile, preFile, postFile, runFile,
                              testFile))
-
-    print(summaryFormat)
 
     annote_lines = []
     with open(spinFile) as spinfile:
@@ -86,7 +84,7 @@ def main(testNumber, dir0, fileRoot, preFile, postFile, runFile, refFile, testFi
     refine.logger.debug("\n\tRefinement Complete; No of processes = {}".format(
         len(cmd.procIds)))
 
-    with open(testFile, 'w') as tstfile:
+    with open("gen/"+testFile, 'w') as tstfile:
 
         with open(preFile) as prefile:
             tstfile.write(prefile.read())
