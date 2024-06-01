@@ -582,6 +582,11 @@ inline chooseScenario() {
 
 proctype Sender (byte nid, taskid) {
 
+  byte sc;
+  printf( "@@@ %d DECL byte sc\n", _pid );
+  byte prio ;
+  printf( "@@@ %d DECL byte prio\n", _pid );
+
   tasks[taskid].nodeid = nid;
   tasks[taskid].pmlid = _pid;
   tasks[taskid].prio = sendPrio;
@@ -646,6 +651,11 @@ repeat:
 
 
 proctype Receiver (byte nid, taskid) {
+
+  byte sc;
+  printf( "@@@ %d DECL byte sc\n", _pid );
+  byte prio ;
+  printf( "@@@ %d DECL byte prio\n", _pid );
 
   tasks[taskid].nodeid = nid;
   tasks[taskid].pmlid = _pid;

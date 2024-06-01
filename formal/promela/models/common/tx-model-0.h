@@ -29,7 +29,7 @@ void Wait( rtems_id id );
 
 void Wakeup( rtems_id id ) ;
 
-rtems_option mergeopts( bool wait );
+rtems_option mergeopts( bool wait, bool wantall );
 
 rtems_interval getTimeout( int timeout ) ;
 

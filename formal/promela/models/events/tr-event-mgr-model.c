@@ -53,49 +53,6 @@ static const char PromelaModelEventsMgr[] = "/PML-EventsMgr";
 
 #define INPUT_EVENTS ( RTEMS_EVENT_5 | RTEMS_EVENT_23 )
 
-rtems_id CreateWakeupSema( void )
-{
-  rtems_status_code sc;
-  rtems_id id;
-
-  sc = rtems_semaphore_create(
-    rtems_build_name( 'W', 'K', 'U', 'P' ),
-    0,
-    RTEMS_SIMPLE_BINARY_SEMAPHORE,
-    0,
-    &id
-  );
-  T_assert_rsc_success( sc );
-
-  return id;
-}
-
-void DeleteWakeupSema( rtems_id id )
-{
-  if ( id != 0 ) {
-    rtems_status_code sc;
-
-    sc = rtems_semaphore_delete( id );
-    T_rsc_success( sc );
-  }
-}
-
-void Wait( rtems_id id )
-{
-  rtems_status_code sc;
-
-  sc = rtems_semaphore_obtain( id, RTEMS_WAIT, RTEMS_NO_TIMEOUT );
-  T_quiet_rsc_success( sc );
-}
-
-void Wakeup( rtems_id id )
-{
-  rtems_status_code sc;
-
-  sc = rtems_semaphore_release( id );
-  T_quiet_rsc_success( sc );
-}
-
 rtems_event_set GetPending( Context *ctx )
 {
   rtems_event_set pending;
@@ -113,16 +70,6 @@ rtems_event_set GetPending( Context *ctx )
 }
 
 
-rtems_option mergeopts( bool wait, bool wantall )
-{
-  rtems_option opts;
-
-  if ( wait ) { opts = RTEMS_WAIT; }
-  else { opts = RTEMS_NO_WAIT; } ;
-  if ( wantall ) { opts |= RTEMS_EVENT_ALL; }
-  else { opts |= RTEMS_EVENT_ANY; } ;
-  return opts;
-}
 
 
 /*
@@ -142,14 +89,6 @@ rtems_id mapid( Context *ctx, int pid )
   return mapped_id;
 }
 
-void checkTaskIs( rtems_id expected_id )
-{
-  rtems_id own_id;
-
-  own_id = _Thread_Get_executing()->Object.id;
-  T_eq_u32( own_id, expected_id );
-}
-
 void initialise_pending( rtems_event_set pending[], int max )
 {
   int i;
@@ -159,19 +98,6 @@ void initialise_pending( rtems_event_set pending[], int max )
   }
 }
 
-void initialise_semaphore( Context *ctx, rtems_id semaphore[] )
-{
-  semaphore[0] = ctx->worker_wakeup;
-  semaphore[1] = ctx->runner_wakeup;
-}
-
-void ShowWorkerSemaId( Context *ctx ) {
-  T_printf( "L:ctx->worker_wakeup = %d\n", ctx->worker_wakeup );
-}
-
-void ShowRunnerSemaId( Context *ctx ) {
-  T_printf( "L:ctx->runner_wakeup = %d\n", ctx->runner_wakeup );
-}
 
 static void RtemsModelEventsMgr_Teardown(
   RtemsModelEventsMgr_Context *ctx
@@ -183,9 +109,9 @@ static void RtemsModelEventsMgr_Teardown(
   T_log( T_NORMAL, "Runner Teardown" );
 
   prio = 0;
-  sc = rtems_task_set_priority( RTEMS_SELF, PRIO_HIGH, &prio );
+  sc = rtems_task_set_priority( RTEMS_SELF, M_PRIO_HIGH, &prio );
   T_rsc_success( sc );
-  T_eq_u32( prio, PRIO_NORMAL );
+  T_eq_u32( prio, M_PRIO_NORMAL );
 
   if ( ctx->worker_id != 0 ) {
     T_printf( "L:Deleting Task id : %d\n", ctx->worker_id );

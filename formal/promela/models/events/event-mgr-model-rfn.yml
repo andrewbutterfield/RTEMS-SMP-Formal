@@ -38,6 +38,10 @@ pending_DCL: rtems_event_set {0}[TASK_MAX];
 
 semaphore_DCL: rtems_id {0}[SEMA_MAX];
 
+sc_DCL: rtems_status_code
+
+prio_DCL: rtems_task_priority
+
 sendrc_DCL: rtems_status_code
 
 recrc_DCL: rtems_status_code
@@ -107,24 +111,18 @@ WAKEUP:
 
 LowerPriority: |
   SetSelfPriority( M_PRIO_LOW );
-  rtems_task_priority prio;
-  rtems_status_code sc;
   sc = rtems_task_set_priority( RTEMS_SELF, RTEMS_CURRENT_PRIORITY, &prio );
   T_rsc_success( sc );
   T_eq_u32( prio, M_PRIO_LOW );
 
 EqualPriority: |
   SetSelfPriority( M_PRIO_NORMAL );
-  rtems_task_priority prio;
-  rtems_status_code sc;
   sc = rtems_task_set_priority( RTEMS_SELF, RTEMS_CURRENT_PRIORITY, &prio );
   T_rsc_success( sc );
   T_eq_u32( prio, M_PRIO_NORMAL );
 
 HigherPriority: |
   SetSelfPriority( M_PRIO_HIGH );
-  rtems_task_priority prio;
-  rtems_status_code sc;
   sc = rtems_task_set_priority( RTEMS_SELF, RTEMS_CURRENT_PRIORITY, &prio );
   T_rsc_success( sc );
   T_eq_u32( prio, M_PRIO_HIGH );

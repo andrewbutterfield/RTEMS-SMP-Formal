@@ -110,7 +110,7 @@ typedef RtemsModelEventsMgr_Context Context;
 
 rtems_event_set GetPending( Context *ctx );
 
-rtems_option mergeopts( bool wait, bool wantall );
+
 
 rtems_id mapid( Context *ctx, int pid ) ;
 
@@ -210,6 +210,22 @@ void RtemsModelEventsMgr_Run7(
 );
 
 void RtemsModelEventsMgr_Run8(
+  rtems_status_code ( *send )( rtems_id, rtems_event_set ),
+  rtems_status_code ( *receive )( rtems_event_set, rtems_option, rtems_interval, rtems_event_set * ),
+  rtems_event_set (   *get_pending_events )( Thread_Control * ),
+  unsigned int         wait_class,
+  int                  waiting_for_event
+);
+
+void RtemsModelEventsMgr_Run9(
+  rtems_status_code ( *send )( rtems_id, rtems_event_set ),
+  rtems_status_code ( *receive )( rtems_event_set, rtems_option, rtems_interval, rtems_event_set * ),
+  rtems_event_set (   *get_pending_events )( Thread_Control * ),
+  unsigned int         wait_class,
+  int                  waiting_for_event
+);
+
+void RtemsModelEventsMgr_Run10(
   rtems_status_code ( *send )( rtems_id, rtems_event_set ),
   rtems_status_code ( *receive )( rtems_event_set, rtems_option, rtems_interval, rtems_event_set * ),
   rtems_event_set (   *get_pending_events )( Thread_Control * ),

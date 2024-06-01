@@ -92,12 +92,14 @@ void Wakeup( rtems_id id )
   T_quiet_rsc_success( sc );
 }
 
-rtems_option mergeopts( bool wait )
+rtems_option mergeopts( bool wait, bool wantall )
 {
   rtems_option opts;
 
   if ( wait ) { opts = RTEMS_WAIT; }
   else { opts = RTEMS_NO_WAIT; } ;
+  if ( wantall ) { opts |= RTEMS_EVENT_ALL; }
+  else { opts |= RTEMS_EVENT_ANY; } ;
   return opts;
 }
 
