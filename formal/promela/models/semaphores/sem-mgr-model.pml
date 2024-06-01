@@ -510,7 +510,7 @@ inline sema_set_priority(sem_id, scheduler_id, new_priority, old_priority, rc)
     if
     :: sem_id == 0       -> rc = RC_InvId;
     :: old_priority == 0 -> rc = RC_InvAddr;
-    :: new_priority < 0  -> rc = RC_InvPrio;
+    :: new_priority < 0  -> rc = RC_NotDefined;
     :: model_semaphores[sem_id].LockingProtocol == NO_LOCKING ->
         rc = RC_NotDefined;
     :: else ->

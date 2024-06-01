@@ -101,8 +101,6 @@ rtems_task_priority SetSelfPriority( rtems_task_priority priority );
 
 rtems_option mergeattribs( bool scope, bool priority, int semtype, int locking );
 
-rtems_option mergeopts( bool wait );
-
 void ShowSemaId( Context *ctx ) ;
 
 void initialise_id ( rtems_id * id );
