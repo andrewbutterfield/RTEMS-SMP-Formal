@@ -31,12 +31,13 @@ DONE SO FAR
 * created `models/common` with `tr-model-0.h` and `tr-model-0.c`.
 * moved common stuff from message manager into `common/tr*`.
 * replace `Context` arguments with field components.
+* `tr-model-0` is now `tx-model-0`.
+* integrate the event manager
 
 TO DO
 
-* `tr-model-0` should be `tx-model-0`.
-* integrate the event manager
 * integrate the barrier manager
+* redo the sema_set_priority model - it is failing with error returns
 * move the following declarations to `tx-model-0`:
   -  return values
   -  task states
