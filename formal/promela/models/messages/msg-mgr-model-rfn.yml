@@ -88,7 +88,7 @@ message_queue_receive: |
   idNull(ctx->queue_id, {1}),
   receive_buffer,
   &receive_size,
-  mergeopts({2}),
+  mergeopts({2}, 0),
   getTimeout({3})
   );
   T_log( T_NORMAL, "Returned 0x%x from receive", {4} );
