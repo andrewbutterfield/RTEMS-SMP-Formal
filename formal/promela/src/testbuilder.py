@@ -57,10 +57,14 @@ def all_steps(models, model_to_path, source_dir):
     for model_name in models:
         path = model_to_path[model_name]
         config = get_config(source_dir, model_name)
-        model_root = ""
-        refine_config = get_refine_config(source_dir, model_name, path)
+        model_to_roots = get_model_roots(config)
+        print(f"model_to_roots:\n{model_to_roots}")
+        model_root = model_to_roots[model_name]
+        print(f"MODEL_ROOT: {model_root}")
+        refine_config = get_refine_config(source_dir, 
+                                          model_name, path, model_root)
         # TODO: work from <model_name>, and accessing <model_name>/gen
-        clean(model_name, model_to_path, source_dir)
+        clean(model_name, model_to_roots, source_dir)
         # TODO: runs in <model_name> but puts .trail/.spn into <model_name>/gen
         generate_spin_files(model_name, path, model_root,
                             config["spinallscenarios"],
@@ -89,8 +93,10 @@ def clean(model_name, model_to_path, source_dir):
         models = [model_name]
     for model_name in models:
         model_dir = model_to_path[model_name]
+        model_root = "X"
         config = get_config(source_dir, model_name)
-        refine_config = get_refine_config(source_dir, model_name, model_dir)
+        refine_config = get_refine_config(source_dir, 
+                                          model_name, model_dir, model_root)
         os.chdir(Path(model_dir,"gen"))
         print(f"Removing spin and test files for {model_name}")
         files = get_generated_files(model_name, config["testsuite"],
@@ -159,22 +165,22 @@ def generate_spin_files( model_name, model_dir, model_root
     cwd = os.getcwd()
     print(f"model_name={model_name}; model_dir:\n{model_dir}")
     os.chdir(model_dir)
-    model_root = os.path.relpath(model_name)
-    print(f"model_root={model_root}")
+    print(f"GSF:model_root={model_root}")
+    print(f"GSF:refine_config:\n{refine_config}")
     if not ready_to_generate(model_root, refine_config):
         sys.exit(1)
     print(f"Generating spin files for {model_name}")
-    subprocess.run(f"spin {spinallscenarios} {model_name}.pml",
+    subprocess.run(f"spin {spinallscenarios} {model_root}.pml",
                    check=True, shell=True)
-    no_of_trails = len(glob.glob(f"{model_name}*.trail"))
+    no_of_trails = len(glob.glob(f"{model_root}*.trail"))
     if no_of_trails == 0:
         print("no trail files generated")
     else:
         for i in range(no_of_trails):
-            subprocess.run(f"spin -T -t{i + 1} {model_name}.pml > gen/{model_name}-{i}.spn",
+            subprocess.run(f"spin -T -t{i + 1} {model_root}.pml > gen/{model_root}-{i}.spn",
                            check=True, shell=True)
             subprocess.run( 
-                f"mv {model_name}.pml{i+1}.trail gen/{model_name}.pml{i+1}.trail",
+                f"mv {model_root}.pml{i+1}.trail gen/{model_root}.pml{i+1}.trail",
                 check=True, shell=True )
     os.remove('pan')
     os.chdir(cwd)
@@ -349,6 +355,24 @@ def get_model_paths(config):
 
     return model_to_absolute_path
 
+def get_model_roots(config):
+    models_file = Path(config["modelsfile"])
+    model_to_roots = dict()
+    if models_file.exists():
+        with open(models_file) as file:
+            model_to_relative_path = yaml.load(file, Loader=yaml.FullLoader)
+        for model_name, model_path in model_to_relative_path.items():
+            relative_path = Path(model_path)
+            pathsplit = os.path.split(relative_path)
+            root = pathsplit[1]
+            print(f"pathsplit={pathsplit}, root={root}")
+            model_to_roots[model_name] = root
+    else:
+        print(f"modelsfile not found {models_file}")
+        raise SystemExit()
+
+    return model_to_roots
+
 
 def get_config(source_dir, model_name=""):
     config = dict()
@@ -384,7 +408,7 @@ def get_config(source_dir, model_name=""):
     return config
 
 
-def get_refine_config(source_dir, model_name, model_dir):
+def get_refine_config(source_dir, model_name, model_dir, model_root):
     refine_config = dict()
     with open(f"{source_dir}/refine-config.yml") as file:
         global_config = yaml.load(file, Loader=yaml.FullLoader)
@@ -408,9 +432,9 @@ def get_refine_config(source_dir, model_name, model_dir):
             print(key)
         sys.exit(1)
     for key in ["preamble", "postamble", "refinefile", "runfile"]:
-        refine_config[key] = f"{model_name}{refine_config[key]}"
+        refine_config[key] = f"{model_root}{refine_config[key]}"
     for key in ["testcase_preamble", "testcase_postamble", "testcase_runfile"]:
-        refine_config[key] = f"tc-{model_name}{refine_config[key]}"
+        refine_config[key] = f"tc-{model_root}{refine_config[key]}"
     return refine_config
 
 
@@ -458,14 +482,18 @@ def main():
 
     config = get_config(source_dir)
     model_to_path = get_model_paths(config)
+    print(f"MAIN: model_to_path:\n{model_to_path}")
+    model_to_roots = get_model_roots(config)
+    print(f"MAIN:model_to_roots:\n{model_to_roots}")
     refine_config = dict()
     if len(sys.argv) >= 3:
         config = get_config(source_dir, sys.argv[2])
         # model_to_path = get_model_paths(config)
-        check_models_exist(sys.argv[2::], model_to_path, config)
+        check_models_exist(sys.argv[2::], model_to_roots, config)
         if sys.argv[2] != "allmodels":
             refine_config = get_refine_config(source_dir, sys.argv[2],
-                                              model_to_path[sys.argv[2]])
+                                              model_to_path[sys.argv[2]],
+                                              model_to_roots[sys.argv[2]])
 
     if sys.argv[1] == "help":
         with open(f"{source_dir}/testbuilder.help") as helpfile:
@@ -474,7 +502,10 @@ def main():
     if sys.argv[1] == "allsteps":
         all_steps(sys.argv[2::], model_to_path, source_dir)
 
-    model_root = ""   # only one model from here onwards
+    model_name = sys.argv[2]  # only one model from here onwards
+
+    model_root = model_to_roots[model_name]
+    print(f"MODEL_ROOT: {model_root}")
 
     if sys.argv[1] == "spin":
         # TODO: runs in <model_name> but puts .trail/.spn into <model_name>/gen
