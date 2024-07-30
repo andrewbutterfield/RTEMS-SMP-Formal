@@ -1,5 +1,14 @@
 # ISSUES
 
+## What's in a name?
+
+The disconnect between `model_name` (e.g. `barriers`)
+and the model filename root (`barrier-mgr-model`) is a problem.
+
+We have (typically) `XXXs` pointing to `models/XXXs` 
+folders with filenames based on `XXX-WWW-model` (note missing `s`), where `WWW` is `mgr` or `api`
+(except for `freechain` which is found at `models/freechain/..freechain-model...)
+
 ## Link Failure
 
 Cannot build more than one manager model at a time, because of multiple/conflicting definitions.
@@ -49,6 +58,34 @@ in SH's `tr-event-send-receive.c`.
 ## Testbuilder
 
 ### Model Naming
+
+#### State of Play July 2024
+
+There are three "names" in play here:
+
+ * A general model-name  
+ * The name of the folder containing the model files
+ * A root-name used to name the files.
+
+ At present, the general name and the folder name are the same.
+ The root-name is different, 
+ tends to reflect the terminology used in the Classic API Manual,
+ and ends with "-model".
+
+### Proposal
+
+ * We only add "-model" to C test code filenames (`*.h`,`*.c`).
+ * We use the same name for model, folder and root,
+   based on Manual terminology, with "mgr" used to abbreviate "Manager". 
+ * Names should be kept short
+
+The names to be used are:
+
+ * Barrier Manager: `barrier-mgr`
+ * Chains: `chains`
+ * Event Manager: `event-mgr`
+ * Message Manager: `msg-mgr`
+ * Semaphore Manager: `sema-mgr`
 
 This is broken
 
