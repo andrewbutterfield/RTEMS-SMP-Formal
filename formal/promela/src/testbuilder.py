@@ -64,7 +64,7 @@ def all_steps(models, model_to_path, source_dir):
         refine_config = get_refine_config(source_dir, 
                                           model_name, path, model_root)
         # TODO: work from <model_name>, and accessing <model_name>/gen
-        clean(model_name, model_to_roots, source_dir)
+        clean(model_name, model_to_path, model_to_roots, source_dir)
         # TODO: runs in <model_name> but puts .trail/.spn into <model_name>/gen
         generate_spin_files(model_name, path, model_root,
                             config["spinallscenarios"],
@@ -75,7 +75,7 @@ def all_steps(models, model_to_path, source_dir):
         generate_test_files(model_name, genpath, model_root, 
                             config["spin2test"], refine_config)
         # TODO: runs in <model_name>/gen - do this by changing path in call
-        copy(model_name, genpath, config["testcode"], config["rtems"],
+        copy(model_root, genpath, config["testcode"], config["rtems"],
              config["testyaml"], config["testsuite"],
              refine_config["testfiletype"])
 
@@ -84,7 +84,7 @@ def all_steps(models, model_to_path, source_dir):
                   config["testexe"], config["testsuite"])
 
 # TODO: work from <model_name>, and accessing <model_name>/gen
-def clean(model_name, model_to_path, source_dir):
+def clean(model_name, model_to_path, model_to_roots, source_dir):
     """Cleans out generated files in <model_name> directory"""
     cwd = os.getcwd()
     if model_name == "allmodels":
@@ -93,7 +93,7 @@ def clean(model_name, model_to_path, source_dir):
         models = [model_name]
     for model_name in models:
         model_dir = model_to_path[model_name]
-        model_root = "X"
+        model_root = model_to_roots[model_name]
         config = get_config(source_dir, model_name)
         refine_config = get_refine_config(source_dir, 
                                           model_name, model_dir, model_root)
@@ -192,7 +192,6 @@ def generate_test_files(model_name, model_dir, model_root, testgen, refine_confi
     cwd = os.getcwd()
     print(f"model_dir is {model_dir}.")
     os.chdir(model_dir)
-    model_root = model_name
     if not ready_to_generate(model_root, refine_config):
         sys.exit(1)
     print(f"Generating test files for {model_name}")
@@ -202,7 +201,7 @@ def generate_test_files(model_name, model_dir, model_root, testgen, refine_confi
     else:
         for i in range(no_of_trails):
             test_file = f"tr-{model_name}-{i}{refine_config['testfiletype']}"
-            subprocess.run(f"python {testgen} {model_name} "
+            subprocess.run(f"python {testgen} {model_root} "
                            f"{refine_config['preamble']} "
                            f"{refine_config['postamble']} "
                            f"{refine_config['runfile']} "
@@ -210,18 +209,18 @@ def generate_test_files(model_name, model_dir, model_root, testgen, refine_confi
                            f"{test_file} {i}",
                            check=True, shell=True)
 
-    generate_testcase_file(model_name, refine_config, no_of_trails)
+    generate_testcase_file(model_root, refine_config, no_of_trails)
     os.chdir(cwd)
 
 
-def generate_testcase_file(model_name, refine_config, no_of_trails):
+def generate_testcase_file(model_root, refine_config, no_of_trails):
     missing_files = list()
     for key in ["testcase_preamble", "testcase_runfile", "testcase_postamble"]:
         if not Path(refine_config[key]).exists():
             missing_files.append(refine_config[key])
 
     if not missing_files:
-        file_name = f"tc-{model_name}{refine_config['testfiletype']}"
+        file_name = f"tc-{model_root}{refine_config['testfiletype']}"
         with open(file_name, "w") as f:
             preamble = Path(refine_config["testcase_preamble"]).read_text()
             f.write(preamble)
@@ -234,36 +233,36 @@ def generate_testcase_file(model_name, refine_config, no_of_trails):
     else:
         for file in missing_files:
             print(f"File not found: {file}")
-        print(f"tc-{model_name}{refine_config['testfiletype']} "
+        print(f"tc-{model_root}{refine_config['testfiletype']} "
               f"will not be generated")
 
 # TODO:  runs in <model_name> making use of gen/ 
-def copy(model_name, model_path, codedir, rtems, modfile, testsuite_name,
+def copy(model_root, model_path, codedir, rtems, modfile, testsuite_name,
          test_file_extension):
-    """Copies C testfiles to test directory and updates the model_name file """
+    """Copies C testfiles to test directory and updates the model_root file """
 
     print(f"Copy from {model_path} to RTEMS at {rtems} with Code Dir. {codedir}")
     cwd = os.getcwd()
     os.chdir(model_path)
 
     # Remove old test files
-    print(f"Removing old files for model_name {model_name}")
-    files = glob.glob(f"{codedir}tr-{model_name}*{test_file_extension}")
-    files += glob.glob(f"{codedir}tr-{model_name}*.h")
-    files += glob.glob(f"{codedir}tc-{model_name}{test_file_extension}")
+    print(f"Removing old files for model_root {model_root}")
+    files = glob.glob(f"{codedir}tr-{model_root}*{test_file_extension}")
+    files += glob.glob(f"{codedir}tr-{model_root}*.h")
+    files += glob.glob(f"{codedir}tc-{model_root}{test_file_extension}")
     print(f"Old Files: {files}")
     for file in files:
         os.remove(file)
 
     # Copy new test files
-    print(f"Copying new files for model_name {model_name}")
+    print(f"Copying new files for model_root {model_root}")
 
-    # Copy fixed model_name top-level files
-    fixedhfiles = glob.glob(f"tr-{model_name}.h")
-    fixedhfiles += glob.glob(f"../common/tx-{model_name}.h")
-    fixedcfiles = glob.glob(f"tc-{model_name}{test_file_extension}")
-    fixedcfiles += glob.glob(f"tr-{model_name}{test_file_extension}")
-    fixedcfiles += glob.glob(f"../common/tx-{model_name}{test_file_extension}")
+    # Copy fixed model_root top-level files
+    fixedhfiles = glob.glob(f"tr-{model_root}.h")
+    fixedhfiles += glob.glob(f"../common/tx-{model_root}.h")
+    fixedcfiles = glob.glob(f"tc-{model_root}{test_file_extension}")
+    fixedcfiles += glob.glob(f"tr-{model_root}{test_file_extension}")
+    fixedcfiles += glob.glob(f"../common/tx-{model_root}{test_file_extension}")
     fixedfiles = fixedhfiles + fixedcfiles
     print(f"New Fixed Files: {fixedfiles}")
     for file in fixedfiles:
@@ -283,14 +282,14 @@ def copy(model_name, model_path, codedir, rtems, modfile, testsuite_name,
 
     # Copy per-scenario test runners
     os.chdir("gen")
-    genfiles = glob.glob(f"tr-{model_name}-*{test_file_extension}")
+    genfiles = glob.glob(f"tr-{model_root}-*{test_file_extension}")
     print(f"New Gen Files: {genfiles}")
     os.chdir("..")
     for file in genfiles:
         shutil.copyfile(f"gen/{file}", f"{rtems}testsuites/validation/{file}")
 
     # Update {testsuite name}.yml
-    print(f"Updating {testsuite_name}.yml for model_name {model_name}")
+    print(f"Updating {testsuite_name}.yml for model_root {model_root}")
     with open(modfile) as file:
         model_yaml = yaml.load(file, Loader=yaml.FullLoader)
     source_list = model_yaml['source']
@@ -325,15 +324,15 @@ def run_simulator(simulator_path, simulator_args, testexe, testsuite):
                    check=True, shell=True)
 
 
-def get_generated_files(model_name, testsuite, test_extension):
-    trails = glob.glob(f"{model_name}*.trail")
+def get_generated_files(model_root, testsuite, test_extension):
+    trails = glob.glob(f"{model_root}*.trail")
     files = trails
-    files += glob.glob(f"{model_name}*.spn")
-    files += glob.glob(f"tc-{model_name}{test_extension}")
+    files += glob.glob(f"{model_root}*.spn")
+    files += glob.glob(f"tc-{model_root}{test_extension}")
     if len(trails) == 1:
-        files += glob.glob(f"tr-{model_name}-0{test_extension}")
+        files += glob.glob(f"tr-{model_root}-0{test_extension}")
     else:
-        files += glob.glob(f"tr-{model_name}-*{test_extension}")
+        files += glob.glob(f"tr-{model_root}-*{test_extension}")
     files += glob.glob(f"{testsuite}-test.log")
     return files
 
@@ -468,6 +467,7 @@ def main():
             or len(sys.argv) == 3 and sys.argv[1] == "copy"
             or len(sys.argv) == 2 and sys.argv[1] == "compile"
             or len(sys.argv) == 2 and sys.argv[1] == "run"):
+        print("*** Invalid command-line arguments\n")
         with open(f"{source_dir}/testbuilder.help") as helpfile:
             print(helpfile.read())
         sys.exit(1)
@@ -501,15 +501,12 @@ def main():
 
     if sys.argv[1] == "allsteps":
         all_steps(sys.argv[2::], model_to_path, source_dir)
-
-    model_name = sys.argv[2]  # only one model from here onwards
-
-    model_root = model_to_roots[model_name]
-    print(f"MODEL_ROOT: {model_root}")
+        sys.exit(None)
 
     if sys.argv[1] == "spin":
         # TODO: runs in <model_name> but puts .trail/.spn into <model_name>/gen
-        generate_spin_files(sys.argv[2], model_to_path[sys.argv[2]], model_root,
+        generate_spin_files(sys.argv[2], model_to_path[sys.argv[2]], 
+                            model_to_root[sys.argv[2]],
                             config["spinallscenarios"], refine_config)
 
     if sys.argv[1] == "gentests":
@@ -522,7 +519,7 @@ def main():
     if sys.argv[1] == "clean":
         print(f"sys.argv clean model_to_path :: {type(model_to_path)}")
         # TODO: work from <model_name>, and accessing <model_name>/gen
-        clean(sys.argv[2], model_to_path, source_dir)
+        clean(sys.argv[2], model_to_path, model_to_roots, source_dir)
 
     if sys.argv[1] == "archive":
         #TODO: work from <model_name>/gen, by calling with 2nd arg being <model_name>/gen
