@@ -1,5 +1,41 @@
 # ISSUES
 
+## Barrier deadlocks
+
+Running manually
+`validation% sparc-rtems6-sis -leon3 -r s -m 2 ts-model-0.exe`
+
+```
+B:RtemsModelBarrierMgr17
+L:Pushing Test Fixture...
+L:Runner Setup
+L:Creating Runner Semaphore
+L:Creating Worker0 Semaphore
+L:Creating Worker1 Semaphore
+L:Created Worker 0
+L:Started Worker 0
+L:Created Worker 1
+L:Started Worker 1
+L:Test Fixture Pushed
+L:@@@ 0 INIT
+L:Runner(Task 0) running
+L:@@@ 3 TASK Runner
+L:@@@ 3 CALL NormalPriority
+L:@@@ 3 CALL barrier_create 1 1 3 1
+L:Calling BarrierCreate(1,1,3,1)
+L:Returned 0x0 from Create
+L:@@@ 3 SCALAR created 1
+L:@@@ 3 SCALAR rc 0
+L:@@@ 3 SIGNAL 1
+L:semaphore release id = 436273157
+L:semaphore release
+L:Returned 0x0 from release
+L:@@@ 3 CALL barrier_wait 1 0
+L:Calling BarrierWait(1375797250,0)
+
+
+```
+
 ## What's in a name?
 
 For now we have model names, paths and roots.
