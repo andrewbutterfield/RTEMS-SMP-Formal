@@ -53,47 +53,47 @@
 
 static const char PromelaModelBarrierMgr[] = "/PML-BarrierMgr";
 
-rtems_id CreateSema( char * name )
-{
-  rtems_status_code sc;
-  rtems_id id;
+// rtems_id CreateSema( char * name )
+// {
+//   rtems_status_code sc;
+//   rtems_id id;
 
-  sc = rtems_semaphore_create(
-    rtems_build_name( name[ 0 ], name[ 1 ], name[ 2 ], name[ 3 ] ),
-    0,
-    RTEMS_SIMPLE_BINARY_SEMAPHORE,
-    0,
-    &id
-  );
-  T_assert_rsc_success( sc );
+//   sc = rtems_semaphore_create(
+//     rtems_build_name( name[ 0 ], name[ 1 ], name[ 2 ], name[ 3 ] ),
+//     0,
+//     RTEMS_SIMPLE_BINARY_SEMAPHORE,
+//     0,
+//     &id
+//   );
+//   T_assert_rsc_success( sc );
 
-  return id;
-}
+//   return id;
+// }
 
-void DeleteSema( rtems_id id )
-{
-  if ( id != 0 ) {
-    rtems_status_code sc;
+// void DeleteSema( rtems_id id )
+// {
+//   if ( id != 0 ) {
+//     rtems_status_code sc;
 
-    sc = rtems_semaphore_delete( id );
-    T_rsc_success( sc );
-  }
-}
+//     sc = rtems_semaphore_delete( id );
+//     T_rsc_success( sc );
+//   }
+// }
 
-void ObtainSema( rtems_id id )
-{
-  rtems_status_code sc;
-  sc = rtems_semaphore_obtain( id, RTEMS_WAIT, RTEMS_NO_TIMEOUT );
-  T_quiet_rsc_success( sc );
-}
+// void ObtainSema( rtems_id id )
+// {
+//   rtems_status_code sc;
+//   sc = rtems_semaphore_obtain( id, RTEMS_WAIT, RTEMS_NO_TIMEOUT );
+//   T_quiet_rsc_success( sc );
+// }
 
-void ReleaseSema( rtems_id id )
-{
-  rtems_status_code sc;
+// void ReleaseSema( rtems_id id )
+// {
+//   rtems_status_code sc;
 
-  sc = rtems_semaphore_release( id );
-  T_quiet_rsc_success( sc );
-}
+//   sc = rtems_semaphore_release( id );
+//   T_quiet_rsc_success( sc );
+// }
 
 // rtems_task_priority SetPriority( rtems_id id, rtems_task_priority priority )
 // {
@@ -147,39 +147,39 @@ void ReleaseSema( rtems_id id )
 //   }
 // }
 
-rtems_attribute mergeattribs( bool automatic )
-{
-  rtems_attribute attribs;
+// rtems_attribute mergeattribs( bool automatic )
+// {
+//   rtems_attribute attribs;
 
-  if ( automatic ) { attribs = RTEMS_BARRIER_AUTOMATIC_RELEASE; }
-  else { attribs = RTEMS_BARRIER_MANUAL_RELEASE; }
+//   if ( automatic ) { attribs = RTEMS_BARRIER_AUTOMATIC_RELEASE; }
+//   else { attribs = RTEMS_BARRIER_MANUAL_RELEASE; }
 
-  return attribs;
-}
+//   return attribs;
+// }
 
-void checkTaskIs( rtems_id expected_id )
-{
-  rtems_id own_id;
+// void checkTaskIs( rtems_id expected_id )
+// {
+//   rtems_id own_id;
 
-  own_id = _Thread_Get_executing()->Object.id;
-  T_eq_u32( own_id, expected_id );
-}
+//   own_id = _Thread_Get_executing()->Object.id;
+//   T_eq_u32( own_id, expected_id );
+// }
 
-void initialise_semaphore( Context *ctx, rtems_id semaphore[] ) {
-  semaphore[0] = ctx->runner_sema;
-  semaphore[1] = ctx->worker0_sema;
-  semaphore[2] = ctx->worker1_sema;
-}
+// void initialise_semaphore( Context *ctx, rtems_id semaphore[] ) {
+//   semaphore[0] = ctx->runner_sema;
+//   semaphore[1] = ctx->worker0_sema;
+//   semaphore[2] = ctx->worker1_sema;
+// }
 
-void ShowSemaId( Context *ctx ) {
-  T_printf( "L:ctx->runner_sema = %d\n", ctx->runner_sema );
-  T_printf( "L:ctx->worker0_sema = %d\n", ctx->worker0_sema );
-  T_printf( "L:ctx->worker1_sema = %d\n", ctx->worker1_sema );
-}
+// void ShowSemaId( Context *ctx ) {
+//   T_printf( "L:ctx->runner_sema = %d\n", ctx->runner_sema );
+//   T_printf( "L:ctx->worker0_sema = %d\n", ctx->worker0_sema );
+//   T_printf( "L:ctx->worker1_sema = %d\n", ctx->worker1_sema );
+// }
 
-void initialise_id ( rtems_id * id ) {
-  *id = 0;
-}
+// void initialise_id ( rtems_id * id ) {
+//   *id = 0;
+// }
 
 void RtemsModelBarrierMgr_Teardown( void *arg )
 {

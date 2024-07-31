@@ -187,7 +187,8 @@ def generate_spin_files( model_name, model_dir, model_root
 
 # TODO:  runs in <model_name>/gen - do this by changing model_dir in call
 @catch_subprocess_errors
-def generate_test_files(model_name, model_dir, model_root, testgen, refine_config):
+def generate_test_files(model_name, model_dir, model_root, 
+                        testgen, refine_config):
     """Create test files from spin files"""
     cwd = os.getcwd()
     print(f"model_dir is {model_dir}.")
@@ -195,7 +196,7 @@ def generate_test_files(model_name, model_dir, model_root, testgen, refine_confi
     if not ready_to_generate(model_root, refine_config):
         sys.exit(1)
     print(f"Generating test files for {model_name}")
-    no_of_trails = len(glob.glob(f"gen/{model_name}*.trail"))
+    no_of_trails = len(glob.glob(f"gen/{model_root}*.trail"))
     if no_of_trails == 0:
         print("no trail files found")
     else:
@@ -241,7 +242,7 @@ def copy(model_root, model_path, codedir, rtems, modfile, testsuite_name,
          test_file_extension):
     """Copies C testfiles to test directory and updates the model_root file """
 
-    print(f"Copy from {model_path} to RTEMS at {rtems} with Code Dir. {codedir}")
+    print(f"Copy from {model_path}\nto RTEMS Code Dir. {codedir}")
     cwd = os.getcwd()
     os.chdir(model_path)
 
@@ -513,7 +514,7 @@ def main():
         # TODO:  runs in <model_name>/gen - do this by changing 2nd arg in call
         genpath = Path("gen",model_to_path[sys.argv[2]])
         print(f"genpath is {genpath}.")
-        generate_test_files(sys.argv[2], genpath,
+        generate_test_files(sys.argv[2], genpath, model_to_roots[sys.argv[2]],
                             config["spin2test"], refine_config)
 
     if sys.argv[1] == "clean":

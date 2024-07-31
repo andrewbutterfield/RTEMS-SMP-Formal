@@ -1,39 +1,8 @@
 [4765/4817] Compiling testsuites/validation/tc-barriers.c
-
-In file included from ../../../testsuites/validation/tc-barriers.c:57:
-../../../testsuites/validation/tr-barrier-mgr-model.h:110:6: error: conflicting types for 'initialise_semaphore'; have 'void(Context *, rtems_id *)' {aka 'void(RtemsModelBarrierMgr_Context *, unsigned int *)'}
-  110 | void initialise_semaphore( Context *ctx, rtems_id semaphore[] );
-      |      ^~~~~~~~~~~~~~~~~~~~
-In file included from ../../../testsuites/validation/tr-barrier-mgr-model.h:54:
-../../../testsuites/validation/tx-model-0.h:40:6: note: previous declaration of 'initialise_semaphore' with type 'void(int,  rtems_id,  rtems_id *)' {aka 'void(int,  unsigned int,  unsigned int *)'}
-   40 | void initialise_semaphore( int sema_no,
-      |      ^~~~~~~~~~~~~~~~~~~~
-
-In file included from ../../../testsuites/validation/tc-barrier-mgr-model.c:57:
-../../../testsuites/validation/tr-barrier-mgr-model.h:110:6: error: conflicting types for 'initialise_semaphore'; have 'void(Context *, rtems_id *)' {aka 'void(RtemsModelBarrierMgr_Context *, unsigned int *)'}
-  110 | void initialise_semaphore( Context *ctx, rtems_id semaphore[] );
-      |      ^~~~~~~~~~~~~~~~~~~~
-In file included from ../../../testsuites/validation/tr-barrier-mgr-model.h:54:
-../../../testsuites/validation/tx-model-0.h:40:6: note: previous declaration of 'initialise_semaphore' with type 'void(int,  rtems_id,  rtems_id *)' {aka 'void(int,  unsigned int,  unsigned int *)'}
-   40 | void initialise_semaphore( int sema_no,
-      |      ^~~~~~~~~~~~~~~~~~~~
-
-In file included from ../../../testsuites/validation/tr-barrier-mgr-model.c:52:
-../../../testsuites/validation/tr-barrier-mgr-model.h:110:6: error: conflicting types for 'initialise_semaphore'; have 'void(Context *, rtems_id *)' {aka 'void(RtemsModelBarrierMgr_Context *, unsigned int *)'}
-  110 | void initialise_semaphore( Context *ctx, rtems_id semaphore[] );
+../../../testsuites/validation/tr-barrier-mgr-model.c:168:6: error: conflicting types for 'initialise_semaphore'; have 'void(Context *, rtems_id *)' {aka 'void(RtemsModelBarrierMgr_Context *, unsigned int *)'}
+  168 | void initialise_semaphore( Context *ctx, rtems_id semaphore[] ) {
       |      ^~~~~~~~~~~~~~~~~~~~
 In file included from ../../../testsuites/validation/tr-barrier-mgr-model.c:51:
 ../../../testsuites/validation/tx-model-0.h:40:6: note: previous declaration of 'initialise_semaphore' with type 'void(int,  rtems_id,  rtems_id *)' {aka 'void(int,  unsigned int,  unsigned int *)'}
    40 | void initialise_semaphore( int sema_no,
       |      ^~~~~~~~~~~~~~~~~~~~
-../../../testsuites/validation/tr-barrier-mgr-model.c:168:6: error: conflicting types for 'initialise_semaphore'; have 'void(Context *, rtems_id *)' {aka 'void(RtemsModelBarrierMgr_Context *, unsigned int *)'}
-  168 | void initialise_semaphore( Context *ctx, rtems_id semaphore[] ) {
-      |      ^~~~~~~~~~~~~~~~~~~~
-../../../testsuites/validation/tx-model-0.h:40:6: note: previous declaration of 'initialise_semaphore' with type 'void(int,  rtems_id,  rtems_id *)' {aka 'void(int,  unsigned int,  unsigned int *)'}
-   40 | void initialise_semaphore( int sema_no,
-      |      ^~~~~~~~~~~~~~~~~~~~
-
-../../../testsuites/validation/tr-msg-mgr-model.c:58:13: warning: 'initialise_pending' defined but not used [-Wunused-function]
-   58 | static void initialise_pending( rtems_event_set pending[], int max ) {
-      |             ^~~~~~~~~~~~~~~~~~
-
