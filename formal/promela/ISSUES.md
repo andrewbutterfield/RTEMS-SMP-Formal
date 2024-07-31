@@ -2,12 +2,7 @@
 
 ## What's in a name?
 
-The disconnect between `model_name` (e.g. `barriers`)
-and the model filename root (`barrier-mgr-model`) is a problem.
-
-We have (typically) `XXXs` pointing to `models/XXXs` 
-folders with filenames based on `XXX-WWW-model` (note missing `s`), where `WWW` is `mgr` or `api`
-(except for `freechain` which is found at `models/freechain/..freechain-model...)
+For now we have model names, paths and roots.
 
 ## Link Failure
 
@@ -72,6 +67,8 @@ There are three "names" in play here:
  tends to reflect the terminology used in the Classic API Manual,
  and ends with "-model".
 
+ This now works properly
+
 ### Proposal
 
  * We only add "-model" to C test code filenames (`*.h`,`*.c`).
@@ -87,7 +84,7 @@ The names to be used are:
  * Message Manager: `msg-mgr`
  * Semaphore Manager: `sema-mgr`
 
-This is broken
+
 
 Current command behaviour:
  
