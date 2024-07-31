@@ -4,7 +4,10 @@
 
 For now we have model names, paths and roots.
 
-## Link Failure
+## Linking
+
+
+It now links
 
 Cannot build more than one manager model at a time, because of multiple/conflicting definitions.
 
@@ -12,21 +15,8 @@ Duplicates in `tr-*-mgr-model.h` and `tr-*-mgr-model.c`
 where `*` is `msg` | `barrier` | `event` | `sem`.
 
 ```
-checkTaskIs
-initialise_semaphore
-CreateWakeupSema
-DeleteWakeupSema
-Wait
-Wakeup
 mergeopts -- DIFFERENT between {event}, {msg,sem}  event has 'wantall'
-initialise_pending
-initialise_semaphore
-ShowWorkerSemaId
-ShowRunnerSemaId
-CreateSema
-DeleteSema
 mergeattribs  -- DIFFERENT between {barrier}, {sem}
-ShowSemaId 
 ```
 
 DONE SO FAR
