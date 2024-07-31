@@ -1,0 +1,12 @@
+../../../testsuites/validation/tr-barrier-mgr-model.c: In function 'RtemsModelBarrierMgr_Teardown':
+../../../testsuites/validation/tr-barrier-mgr-model.c:195:45: error: 'BM_PRIO_HIGH' undeclared (first use in this function); did you mean 'PRIO_HIGH'?
+  195 |   sc = rtems_task_set_priority( RTEMS_SELF, BM_PRIO_HIGH, &prio );
+      |                                             ^~~~~~~~~~~~
+      |                                             PRIO_HIGH
+
+../../../testsuites/validation/tr-barrier-mgr-model.c:195:45: note: each undeclared identifier is reported only once for each function it appears in
+In file included from ../../../testsuites/validation/tr-barrier-mgr-model.h:55,
+                 from ../../../testsuites/validation/tr-barrier-mgr-model.c:50:
+../../../testsuites/validation/tr-barrier-mgr-model.c:197:19: error: 'BM_PRIO_NORMAL' undeclared (first use in this function); did you mean 'PRIO_NORMAL'?
+  197 |   T_eq_u32( prio, BM_PRIO_NORMAL );
+      |                   ^~~~~~~~~~~~~~

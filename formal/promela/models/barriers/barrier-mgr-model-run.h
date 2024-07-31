@@ -32,16 +32,16 @@ static void RtemsModelBarrierMgr_Setup{0}( void *arg )
   #endif
 
   prio = 0;
-  sc = rtems_task_set_priority( RTEMS_SELF, BM_PRIO_NORMAL, &prio );
+  sc = rtems_task_set_priority( RTEMS_SELF, M_PRIO_NORMAL, &prio );
   T_rsc_success( sc );
-  T_eq_u32( prio, BM_PRIO_HIGH );
+  T_eq_u32( prio, M_PRIO_HIGH );
 
-  ctx->worker0_id = CreateTask( "WRK0", BM_PRIO_NORMAL );
+  ctx->worker0_id = CreateTask( "WRK0", M_PRIO_NORMAL );
   T_log( T_NORMAL, "Created Worker 0");
   StartTask( ctx->worker0_id, Worker0, ctx );
   T_log( T_NORMAL, "Started Worker 0");
 
-  ctx->worker1_id = CreateTask( "WRK1", BM_PRIO_NORMAL );
+  ctx->worker1_id = CreateTask( "WRK1", M_PRIO_NORMAL );
   T_log( T_NORMAL, "Created Worker 1");
   StartTask( ctx->worker1_id, Worker1, ctx );
   T_log( T_NORMAL, "Started Worker 1");

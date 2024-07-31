@@ -49,11 +49,9 @@
 #ifndef _TR_MODEL_BARRIER_MGR_H
 #define _TR_MODEL_BARRIER_MGR_H
 
-#include <rtems.h>
-#include <rtems/score/thread.h>
 
-#include <rtems/test.h>
 #include "tx-support.h"
+#include "tx-model-0.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -108,8 +106,6 @@ void checkTaskIs( rtems_id expected_id ) ;
 void ShowSemaId( Context *ctx ) ;
 
 void initialise_id ( rtems_id * id );
-
-void initialise_semaphore( Context *ctx, rtems_id semaphore[] );
 
 void RtemsModelBarrierMgr_Setup( void *arg ) ;
 

@@ -48,9 +48,7 @@
 #include <rtems/score/threadimpl.h>
 
 #include "tx-support.h"
-
 #include "tx-model-0.h"
-
 #include "tr-msg-mgr-model.h"
 
 
