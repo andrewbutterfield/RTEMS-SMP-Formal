@@ -1,10 +1,43 @@
 # ISSUES
 
+
+**THERE IS INCONSISTENT USE OF FILENAMES**
+
+We have `tr-<model_name>-<NN>.c` 
+being generated when they should be `tr-<model_root>-<NN>.c`.
+
+Note that `clean` does not remove `<model-root>-<NN>.(spn/trail/c)`
+
+
+## Models one-by-one
+
+Doing `tb zero ; tb allsteps <model>` :
+
+ * `chains` : no tests run
+ * `events` : 22 tests run successfully, as expected
+ * `messages` : 23 tests run, fails: 22:4 21-10:3 9:2 8-0:3 
+ * `barriers` : linking fails for `<N>` in 0..19 with  
+
+```
+/Users/butrfeld/rtems/6/lib/gcc/sparc-rtems6/13.2.1/../../../../sparc-rtems6/bin/ld: 
+    testsuites/validation/tc-barrier-mgr-model.c.937.o: 
+    in function `T_case_body_RtemsModelBarrierMgr0':
+/Users/butrfeld/rtems/src/rtems/testsuites/validation/tc-barrier-mgr-model.c:82:
+    (.text.T_case_body_RtemsModelBarrierMgr0+0x4): 
+    undefined reference to `RtemsModelBarrierMgr_Run0'
+```
+
+## All Models
+ 
+Doing `tb zero ; tb allsteps allmodels` :
+
+Fails in barrier manager (!)
+
+
 ## Barrier deadlocks
 
 Running manually
 `validation% sparc-rtems6-sis -leon3 -r s -m 2 ts-model-0.exe`
-
 ```
 B:RtemsModelBarrierMgr17
 L:Pushing Test Fixture...
