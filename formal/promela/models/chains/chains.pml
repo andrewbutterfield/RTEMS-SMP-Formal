@@ -1,7 +1,7 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /******************************************************************************
- * chains-api-model.pml
+ * chains-model.pml
  *
  * Copyright (C) 2019-2021 Trinity College Dublin (www.tcd.ie)
  *

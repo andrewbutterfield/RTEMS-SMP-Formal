@@ -40,4 +40,4 @@
 #include <rtems.h>
 #include <rtems/test.h>
 #include <rtems/chain.h>
-#include "tr-chains-api-model.h"
+#include "tr-chains-model.h"
