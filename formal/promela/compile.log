@@ -1,8 +1,0 @@
-[4765/4817] Compiling testsuites/validation/tc-barriers.c
-../../../testsuites/validation/tr-barrier-mgr-model.c:168:6: error: conflicting types for 'initialise_semaphore'; have 'void(Context *, rtems_id *)' {aka 'void(RtemsModelBarrierMgr_Context *, unsigned int *)'}
-  168 | void initialise_semaphore( Context *ctx, rtems_id semaphore[] ) {
-      |      ^~~~~~~~~~~~~~~~~~~~
-In file included from ../../../testsuites/validation/tr-barrier-mgr-model.c:51:
-../../../testsuites/validation/tx-model-0.h:40:6: note: previous declaration of 'initialise_semaphore' with type 'void(int,  rtems_id,  rtems_id *)' {aka 'void(int,  unsigned int,  unsigned int *)'}
-   40 | void initialise_semaphore( int sema_no,
-      |      ^~~~~~~~~~~~~~~~~~~~
