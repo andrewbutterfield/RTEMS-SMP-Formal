@@ -143,7 +143,7 @@ The names to be used are:
  * Message Manager: `msg-mgr`
  * Semaphore Manager: `sem-mgr`
 
-This makes the models.yml file redundant.
+The role of `models.yml` is now simply to list all the currently available models.
 
 
 

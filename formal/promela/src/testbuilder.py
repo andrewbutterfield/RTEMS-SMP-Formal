@@ -201,7 +201,7 @@ def generate_test_files(model_name, model_dir, model_root,
         print("no trail files found")
     else:
         for i in range(no_of_trails):
-            test_file = f"tr-{model_name}-{i}{refine_config['testfiletype']}"
+            test_file = f"tr-{model_name}-model-{i}{refine_config['testfiletype']}"
             subprocess.run(f"python {testgen} {model_root} "
                            f"{refine_config['preamble']} "
                            f"{refine_config['postamble']} "
@@ -221,7 +221,7 @@ def generate_testcase_file(model_root, refine_config, no_of_trails):
             missing_files.append(refine_config[key])
 
     if not missing_files:
-        file_name = f"tc-{model_root}{refine_config['testfiletype']}"
+        file_name = f"tc-{model_root}-model{refine_config['testfiletype']}"
         with open(file_name, "w") as f:
             preamble = Path(refine_config["testcase_preamble"]).read_text()
             f.write(preamble)
@@ -248,9 +248,9 @@ def copy(model_root, model_path, codedir, rtems, modfile, testsuite_name,
 
     # Remove old test files
     print(f"Removing old files for model_root {model_root}")
-    files = glob.glob(f"{codedir}tr-{model_root}*{test_file_extension}")
+    files = glob.glob(f"{codedir}tr-{model_root}-model*{test_file_extension}")
     files += glob.glob(f"{codedir}tr-{model_root}*.h")
-    files += glob.glob(f"{codedir}tc-{model_root}{test_file_extension}")
+    files += glob.glob(f"{codedir}tc-{model_root}-model{test_file_extension}")
     print(f"Old Files: {files}")
     for file in files:
         os.remove(file)
@@ -259,11 +259,11 @@ def copy(model_root, model_path, codedir, rtems, modfile, testsuite_name,
     print(f"Copying new files for model_root {model_root}")
 
     # Copy fixed model_root top-level files
-    fixedhfiles = glob.glob(f"tr-{model_root}.h")
-    fixedhfiles += glob.glob(f"../common/tx-{model_root}.h")
-    fixedcfiles = glob.glob(f"tc-{model_root}{test_file_extension}")
-    fixedcfiles += glob.glob(f"tr-{model_root}{test_file_extension}")
-    fixedcfiles += glob.glob(f"../common/tx-{model_root}{test_file_extension}")
+    fixedhfiles = glob.glob(f"tr-{model_root}-model.h")
+    # fixedhfiles += glob.glob(f"../common/tx-{model_root}.h")
+    fixedcfiles = glob.glob(f"tc-{model_root}-model{test_file_extension}")
+    fixedcfiles += glob.glob(f"tr-{model_root}-model{test_file_extension}")
+    # fixedcfiles += glob.glob(f"../common/tx-{model_root}{test_file_extension}")
     fixedfiles = fixedhfiles + fixedcfiles
     print(f"New Fixed Files: {fixedfiles}")
     for file in fixedfiles:
@@ -507,7 +507,7 @@ def main():
     if sys.argv[1] == "spin":
         # TODO: runs in <model_name> but puts .trail/.spn into <model_name>/gen
         generate_spin_files(sys.argv[2], model_to_path[sys.argv[2]], 
-                            model_to_root[sys.argv[2]],
+                            model_to_roots[sys.argv[2]],
                             config["spinallscenarios"], refine_config)
 
     if sys.argv[1] == "gentests":
