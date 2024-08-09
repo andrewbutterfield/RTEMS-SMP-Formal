@@ -1,39 +1,5 @@
 # ISSUES
 
-
-**THERE IS INCONSISTENT USE OF FILENAMES**
-
-We have `tr-<model_name>-<NN>.c` 
-being generated when they should be `tr-<model_root>-<NN>.c`.
-
-Note that `clean` does not remove `<model-root>-<NN>.(spn/trail/c)`
-
-
-## Models one-by-one
-
-Doing `tb zero ; tb allsteps <model>` :
-
- * `chains` : no tests run
- * `events` : 22 tests run successfully, as expected
- * `messages` : 23 tests run, fails: 22:4 21-10:3 9:2 8-0:3 
- * `barriers` : linking fails for `<N>` in 0..19 with  
-
-```
-/Users/butrfeld/rtems/6/lib/gcc/sparc-rtems6/13.2.1/../../../../sparc-rtems6/bin/ld: 
-    testsuites/validation/tc-barrier-mgr-model.c.937.o: 
-    in function `T_case_body_RtemsModelBarrierMgr0':
-/Users/butrfeld/rtems/src/rtems/testsuites/validation/tc-barrier-mgr-model.c:82:
-    (.text.T_case_body_RtemsModelBarrierMgr0+0x4): 
-    undefined reference to `RtemsModelBarrierMgr_Run0'
-```
-
-## All Models
- 
-Doing `tb zero ; tb allsteps allmodels` :
-
-Fails in barrier manager (!)
-
-
 ## Barrier deadlocks
 
 Running manually
@@ -65,39 +31,11 @@ L:semaphore release
 L:Returned 0x0 from release
 L:@@@ 3 CALL barrier_wait 1 0
 L:Calling BarrierWait(1375797250,0)
-
-
 ```
 
-## What's in a name?
+Can run all other models together (`chains`,`event-mgr`,`msg-mgr`,`sem-mgr`).
 
-For now we have model names, paths and roots.
-
-## Linking
-
-
-It now links
-
-Cannot build more than one manager model at a time, because of multiple/conflicting definitions.
-
-Duplicates in `tr-*-mgr-model.h` and `tr-*-mgr-model.c` 
-where `*` is `msg` | `barrier` | `event` | `sem`.
-
-```
-mergeopts -- DIFFERENT between {event}, {msg,sem}  event has 'wantall'
-mergeattribs  -- DIFFERENT between {barrier}, {sem}
-```
-
-DONE SO FAR
-
-* working on message and semaphore managers
-* created `models/common` with `tr-model-0.h` and `tr-model-0.c`.
-* moved common stuff from message manager into `common/tr*`.
-* replace `Context` arguments with field components.
-* `tr-model-0` is now `tx-model-0`.
-* integrate the event manager
-
-TO DO
+## TO DO
 
 * integrate the barrier manager
 * redo the sema_set_priority model - it is failing with error returns
@@ -113,22 +51,6 @@ in SH's `tr-event-send-receive.c`.
 
 ### Model Naming
 
-#### State of Play July 2024
-
-There are three "names" in play here:
-
- * A general model-name  
- * The name of the folder containing the model files
- * A root-name used to name the files.
-
- At present, the general name and the folder name are the same.
- The root-name is different, 
- tends to reflect the terminology used in the Classic API Manual,
- and ends with "-model".
-
- 
-
-### Proposal
 
  * We use the same name for model, folder and root,
    based on Manual terminology, with "mgr" used to abbreviate "Manager". 
@@ -145,9 +67,7 @@ The names to be used are:
 
 The role of `models.yml` is now simply to list all the currently available models.
 
-
-
-Current command behaviour:
+### Current command behaviour:
  
  * `zero`,`clean`,`spin`,`gentests`, `copy`, `allsteps` require `xxx-mgr-model`
 
@@ -169,7 +89,7 @@ Need a consistent approach here, using the contents of `model.yml` (`models.yml`
 
 ### Model.h files
 
-File `tr-<model>.h` currently defines test helpers 
+File `tr-<modelname>-model.h` currently defines test helpers 
 (like `mergeopts`,`ObtainSema`).
 It also has a fixed list declaring the `RtemsModel<Mgr>_RunN` functions.
 This part should be auto-generated, in the way that `tc-<model>.c` is.
@@ -207,42 +127,4 @@ case PRIO_HIGH:
   ctx->worker_id = CreateTask( "WORK", PRIO_LOW );
   StartTask( ctx->worker_id, Worker, ctx );        
 ```
-
-
-## Test Outcomes
-
-###  Barriers
-
-30 tests failing 
-
-```
-BM8:F:3 BM6:F:3 BM4:3 BM2:3 BM18:3 BM16:3 BM14:3 BM12:3 BM10:3 BM0:3
-```
-
-* 1st error is always line 94
-* 2nd error jumps around lines: 147 153 158 172 177 182
-* 3rd  error is invisible (no "F:0...." line)
-
-### Messages
-
-MessageMgr22:
-```
-F:0.17:0:@#/PML-MessageMgr022:tr-msg-mgr-model-22.c:192:RTEMS_SUCCESSFUL == RTEMS_TIMEOUT
-```
-
-
-### Semaphores
-
-NOW FIXED.
-
-All failures occurred at tr-sem-mgr-model.c:223 
-They reported `3 == 2`.
-
-
-The PML Runner proctype checks its initial priority just before finishing.
-If low, it raises its priority to normal, to satisfy the test teardown.
-
-This is inside `RtemsModelSemMgr_Teardown`.
-
-Perhaps the test teardown should not care about this?
 
