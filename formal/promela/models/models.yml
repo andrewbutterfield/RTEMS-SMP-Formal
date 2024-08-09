@@ -1,6 +1,7 @@
-barriers: barriers/barrier-mgr-model
-chains: chains/chains-api-model
-events: events/event-mgr-model
-messages: messages/msg-mgr-model
-# freechain: freechain/freechain-model
-semaphores: semaphores/sem-mgr-model
+barrier-mgr: barrier-mgr/barrier-mgr
+chains: chains/chains
+event-mgr: event-mgr/event-mgr
+msg-mgr: msg-mgr/msg-mgr
+sem-mgr: sem-mgr/sem-mgr
+# freechain: freechain/freechain
+

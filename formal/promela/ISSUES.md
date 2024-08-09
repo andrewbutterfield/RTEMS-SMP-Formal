@@ -126,22 +126,24 @@ There are three "names" in play here:
  tends to reflect the terminology used in the Classic API Manual,
  and ends with "-model".
 
- This now works properly
+ 
 
 ### Proposal
 
- * We only add "-model" to C test code filenames (`*.h`,`*.c`).
  * We use the same name for model, folder and root,
    based on Manual terminology, with "mgr" used to abbreviate "Manager". 
  * Names should be kept short
-
+ * We only add "-model" to C sources placed into RTEMS test folders.
+ 
 The names to be used are:
 
  * Barrier Manager: `barrier-mgr`
  * Chains: `chains`
  * Event Manager: `event-mgr`
  * Message Manager: `msg-mgr`
- * Semaphore Manager: `sema-mgr`
+ * Semaphore Manager: `sem-mgr`
+
+This makes the models.yml file redundant.
 
 
 
