@@ -58,9 +58,7 @@ def all_steps(models, model_to_path, source_dir):
         path = model_to_path[model_name]
         config = get_config(source_dir, model_name)
         model_to_roots = get_model_roots(config)
-        print(f"model_to_roots:\n{model_to_roots}")
         model_root = model_to_roots[model_name]
-        print(f"MODEL_ROOT: {model_root}")
         refine_config = get_refine_config(source_dir, 
                                           model_name, path, model_root)
         # TODO: work from <model_name>, and accessing <model_name>/gen
@@ -71,7 +69,6 @@ def all_steps(models, model_to_path, source_dir):
                             refine_config)
         # TODO:  runs in <model_name>/gen - do this by changing path in call
         genpath = Path("gen",path)
-        print(f"GenPath is {genpath}.")
         generate_test_files(model_name, genpath, model_root, 
                             config["spin2test"], refine_config)
         # TODO: runs in <model_name>/gen - do this by changing path in call
@@ -163,10 +160,7 @@ def generate_spin_files( model_name, model_dir, model_root
                        , spinallscenarios, refine_config):
     """Create spin files from model_name"""
     cwd = os.getcwd()
-    print(f"model_name={model_name}; model_dir:\n{model_dir}")
     os.chdir(model_dir)
-    print(f"GSF:model_root={model_root}")
-    print(f"GSF:refine_config:\n{refine_config}")
     if not ready_to_generate(model_root, refine_config):
         sys.exit(1)
     print(f"Generating spin files for {model_name}")
@@ -242,21 +236,19 @@ def copy(model_root, model_path, codedir, rtems, modfile, testsuite_name,
          test_file_extension):
     """Copies C testfiles to test directory and updates the model_root file """
 
-    print(f"Copy from {model_path}\nto RTEMS Code Dir. {codedir}")
     cwd = os.getcwd()
     os.chdir(model_path)
 
     # Remove old test files
-    print(f"Removing old files for model_root {model_root}")
+    print(f"Removing old files for {model_root}")
     files = glob.glob(f"{codedir}tr-{model_root}-model*{test_file_extension}")
     files += glob.glob(f"{codedir}tr-{model_root}-model*.h")
     files += glob.glob(f"{codedir}tc-{model_root}-model{test_file_extension}")
-    print(f"Old Files: {files}")
     for file in files:
         os.remove(file)
 
     # Copy new test files
-    print(f"Copying new files for model_root {model_root}")
+    print(f"Copying new files for {model_root}")
 
     # Copy fixed model_root top-level files
     fixedhfiles = glob.glob(f"tr-{model_root}-model.h")
@@ -265,18 +257,15 @@ def copy(model_root, model_path, codedir, rtems, modfile, testsuite_name,
     fixedcfiles += glob.glob(f"tr-{model_root}-model{test_file_extension}")
     # fixedcfiles += glob.glob(f"../common/tx-{model_root}{test_file_extension}")
     fixedfiles = fixedhfiles + fixedcfiles
-    print(f"New Fixed Files: {fixedfiles}")
     for file in fixedfiles:
         shutil.copyfile(file, f"{rtems}testsuites/validation/{file}")
 
     # Copy files common to all models
     os.chdir("../common")
     cmdir = os.getcwd()
-    print(f"common {cmdir}")
     commoncfiles = glob.glob(f"tx*{test_file_extension}")
     commonhfiles = glob.glob(f"tx*.h")
     commonfiles = commonhfiles + commoncfiles 
-    print(f"New common files {commonfiles}")
     for file in (commonhfiles+commoncfiles):
         shutil.copyfile(file, f"{rtems}testsuites/validation/{file}")
     os.chdir(model_path)
@@ -284,13 +273,12 @@ def copy(model_root, model_path, codedir, rtems, modfile, testsuite_name,
     # Copy per-scenario test runners
     os.chdir("gen")
     genfiles = glob.glob(f"tr-{model_root}-*{test_file_extension}")
-    print(f"New Gen Files: {genfiles}")
     os.chdir("..")
     for file in genfiles:
         shutil.copyfile(f"gen/{file}", f"{rtems}testsuites/validation/{file}")
 
     # Update {testsuite name}.yml
-    print(f"Updating {testsuite_name}.yml for model_root {model_root}")
+    print(f"Updating {testsuite_name}.yml for {model_root}")
     with open(modfile) as file:
         model_yaml = yaml.load(file, Loader=yaml.FullLoader)
     source_list = model_yaml['source']
@@ -365,7 +353,6 @@ def get_model_roots(config):
             relative_path = Path(model_path)
             pathsplit = os.path.split(relative_path)
             root = pathsplit[1]
-            print(f"pathsplit={pathsplit}, root={root}")
             model_to_roots[model_name] = root
     else:
         print(f"modelsfile not found {models_file}")
@@ -483,9 +470,7 @@ def main():
 
     config = get_config(source_dir)
     model_to_path = get_model_paths(config)
-    print(f"MAIN: model_to_path:\n{model_to_path}")
     model_to_roots = get_model_roots(config)
-    print(f"MAIN:model_to_roots:\n{model_to_roots}")
     refine_config = dict()
     if len(sys.argv) >= 3:
         config = get_config(source_dir, sys.argv[2])
@@ -511,19 +496,14 @@ def main():
                             config["spinallscenarios"], refine_config)
 
     if sys.argv[1] == "gentests":
-        # TODO:  runs in <model_name>/gen - do this by changing 2nd arg in call
         genpath = Path("gen",model_to_path[sys.argv[2]])
-        print(f"genpath is {genpath}.")
         generate_test_files(sys.argv[2], genpath, model_to_roots[sys.argv[2]],
                             config["spin2test"], refine_config)
 
     if sys.argv[1] == "clean":
-        print(f"sys.argv clean model_to_path :: {type(model_to_path)}")
-        # TODO: work from <model_name>, and accessing <model_name>/gen
         clean(sys.argv[2], model_to_path, model_to_roots, source_dir)
 
     if sys.argv[1] == "archive":
-        #TODO: work from <model_name>/gen, by calling with 2nd arg being <model_name>/gen
         archive(sys.argv[2], model_to_path[sys.argv[2]], "", config["testsuite"],
                 refine_config["testfiletype"])
 
@@ -531,7 +511,6 @@ def main():
         zero(config["testyaml"], config["testsuite"])
 
     if sys.argv[1] == "copy":
-        # TODO: runs in <model_name>/gen - do this by changing 2nd arg in call
         copy(sys.argv[2], model_to_path[sys.argv[2]], config["testcode"],
              config["rtems"], config["testyaml"], config["testsuite"],
              refine_config["testfiletype"])
