@@ -1,5 +1,30 @@
 # ISSUES
 
+## tx-model overlaps
+
+We have (in tx-model)
+
+```
+rtems_id CreateWakeupSema( void );
+void DeleteWakeupSema( rtems_id id );
+void Wait( rtems_id id );
+void Wakeup( rtems_id id ) ;
+...
+```
+
+We have (in tr-sem-mgr-model and tr-barrier-mgr-model)
+
+```
+rtems_id CreateSema( char * name);
+void DeleteSema( rtems_id id );
+void ObtainSema( rtems_id id );
+void ReleaseSema( rtems_id id );
+...
+```
+
+NEED TO TIDY THE ABOVE UP
+
+
 ## Barrier deadlocks
 
 Running manually
@@ -69,7 +94,7 @@ The role of `models.yml` is now simply to list all the currently available model
 
 ### Current command behaviour:
  
- * `zero`,`clean`,`spin`,`gentests`, `copy`, `allsteps` require `xxx-mgr-model`
+ * `zero`,`clean`,`spin`,`gentests`, `copy`, `allsteps` require `xxx-mgr`
 
  * `allsteps` fails with a lookup error if first model is not `xx-model`,
     but fails with an informative error message if first is OK, 
