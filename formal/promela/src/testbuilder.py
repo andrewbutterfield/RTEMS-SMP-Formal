@@ -249,7 +249,7 @@ def copy(model_root, model_path, codedir, rtems, modfile, testsuite_name,
     # Remove old test files
     print(f"Removing old files for model_root {model_root}")
     files = glob.glob(f"{codedir}tr-{model_root}-model*{test_file_extension}")
-    files += glob.glob(f"{codedir}tr-{model_root}*.h")
+    files += glob.glob(f"{codedir}tr-{model_root}-model*.h")
     files += glob.glob(f"{codedir}tc-{model_root}-model{test_file_extension}")
     print(f"Old Files: {files}")
     for file in files:
