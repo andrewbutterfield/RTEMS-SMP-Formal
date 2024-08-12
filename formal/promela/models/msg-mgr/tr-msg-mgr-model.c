@@ -84,8 +84,8 @@ static void RtemsModelMessageMgr_Teardown(
     T_rsc_success( sc );
   }
 
-  T_log( T_NORMAL, "Deleting Worker1 Wakeup Semaphore" );
-  DeleteWakeupSema( ctx->worker1_wakeup );
+  T_log( T_NORMAL, "Deleting Worker1 ReleaseTestSyncSema Semaphore" );
+  DeleteTestSyncSema( ctx->worker1_wakeup );
 
 
   if ( ctx->worker2_id != 0 ) {
@@ -94,11 +94,11 @@ static void RtemsModelMessageMgr_Teardown(
     T_rsc_success( sc );
   }
 
-  T_log( T_NORMAL, "Deleting Worker2 Wakeup Semaphore" );
-  DeleteWakeupSema( ctx->worker2_wakeup );
+  T_log( T_NORMAL, "Deleting Worker2 ReleaseTestSyncSema Semaphore" );
+  DeleteTestSyncSema( ctx->worker2_wakeup );
 
-  T_log( T_NORMAL, "Deleting Runner Wakeup Semaphore" );
-  DeleteWakeupSema( ctx->runner_wakeup );
+  T_log( T_NORMAL, "Deleting Runner ReleaseTestSyncSema Semaphore" );
+  DeleteTestSyncSema( ctx->runner_wakeup );
 }
 
 void RtemsModelMessageMgr_Teardown_Wrap( void *arg )

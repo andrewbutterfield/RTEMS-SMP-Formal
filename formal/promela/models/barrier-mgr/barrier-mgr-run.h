@@ -14,13 +14,13 @@ static void RtemsModelBarrierMgr_Setup{0}( void *arg )
   ctx->runner_id = ctx->runner_thread->Object.id;
 
   T_log( T_NORMAL, "Creating Runner Semaphore" );
-  ctx->runner_sema = CreateSema("RUNR");
+  ctx->runner_sema = CreateTestSyncSema("RUNR");
 
   T_log( T_NORMAL, "Creating Worker0 Semaphore" );
-  ctx->worker0_sema = CreateSema("WRS0");
+  ctx->worker0_sema = CreateTestSyncSema("WRS0");
 
   T_log( T_NORMAL, "Creating Worker1 Semaphore" );
-  ctx->worker1_sema = CreateSema("WRS1");
+  ctx->worker1_sema = CreateTestSyncSema("WRS1");
 
   sc = rtems_task_get_scheduler( RTEMS_SELF, &ctx->runner_sched );
   T_rsc_success( sc );

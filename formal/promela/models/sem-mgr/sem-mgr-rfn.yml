@@ -55,11 +55,11 @@ Worker1: |
   checkTaskIs( ctx->worker1_id );
 
 SIGNAL: |
-  ReleaseSema( semaphore[{}] );
+  ReleaseTestSyncSema( semaphore[{}] );
 
 
 WAIT: |
-  ObtainSema( semaphore[{0}] );
+  ObtainTestSyncSema( semaphore[{0}] );
 
   
 merge_attribs: |

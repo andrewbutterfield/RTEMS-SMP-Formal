@@ -53,134 +53,6 @@
 
 static const char PromelaModelBarrierMgr[] = "/PML-BarrierMgr";
 
-// rtems_id CreateSema( char * name )
-// {
-//   rtems_status_code sc;
-//   rtems_id id;
-
-//   sc = rtems_semaphore_create(
-//     rtems_build_name( name[ 0 ], name[ 1 ], name[ 2 ], name[ 3 ] ),
-//     0,
-//     RTEMS_SIMPLE_BINARY_SEMAPHORE,
-//     0,
-//     &id
-//   );
-//   T_assert_rsc_success( sc );
-
-//   return id;
-// }
-
-// void DeleteSema( rtems_id id )
-// {
-//   if ( id != 0 ) {
-//     rtems_status_code sc;
-
-//     sc = rtems_semaphore_delete( id );
-//     T_rsc_success( sc );
-//   }
-// }
-
-// void ObtainSema( rtems_id id )
-// {
-//   rtems_status_code sc;
-//   sc = rtems_semaphore_obtain( id, RTEMS_WAIT, RTEMS_NO_TIMEOUT );
-//   T_quiet_rsc_success( sc );
-// }
-
-// void ReleaseSema( rtems_id id )
-// {
-//   rtems_status_code sc;
-
-//   sc = rtems_semaphore_release( id );
-//   T_quiet_rsc_success( sc );
-// }
-
-// rtems_task_priority SetPriority( rtems_id id, rtems_task_priority priority )
-// {
-//   rtems_status_code   sc;
-//   rtems_task_priority previous;
-//
-//   sc = rtems_task_set_priority( id, priority, &previous );
-//   T_rsc_success( sc );
-//
-//   return previous;
-// }
-
-// rtems_task_priority SetSelfPriority( rtems_task_priority priority )
-// {
-//   return SetPriority( RTEMS_SELF, priority );
-// }
-
-// rtems_id DoCreateTask( rtems_name name, rtems_task_priority priority )
-// {
-//   rtems_status_code sc;
-//   rtems_id          id;
-//
-//   sc = rtems_task_create(
-//     name,
-//     priority,
-//     RTEMS_MINIMUM_STACK_SIZE,
-//     RTEMS_DEFAULT_MODES,
-//     RTEMS_DEFAULT_ATTRIBUTES,
-//     &id
-//   );
-//   T_assert_rsc_success( sc );
-//
-//   return id;
-// }
-
-// void StartTask( rtems_id id, rtems_task_entry entry, void *arg )
-// {
-//   rtems_status_code sc;
-//
-//   sc = rtems_task_start( id, entry, (rtems_task_argument) arg);
-//   T_assert_rsc_success( sc );
-// }
-
-// void DeleteTask( rtems_id id )
-// {
-//   if ( id != 0 ) {
-//     rtems_status_code sc;
-//     T_printf( "L:Deleting Task id : %d\n", id );
-//     sc = rtems_task_delete( id );
-//     T_rsc_success( sc );
-//   }
-// }
-
-// rtems_attribute mergeattribs( bool automatic )
-// {
-//   rtems_attribute attribs;
-
-//   if ( automatic ) { attribs = RTEMS_BARRIER_AUTOMATIC_RELEASE; }
-//   else { attribs = RTEMS_BARRIER_MANUAL_RELEASE; }
-
-//   return attribs;
-// }
-
-// void checkTaskIs( rtems_id expected_id )
-// {
-//   rtems_id own_id;
-
-//   own_id = _Thread_Get_executing()->Object.id;
-//   T_eq_u32( own_id, expected_id );
-// }
-
-// void initialise_semaphore( Context *ctx, rtems_id semaphore[] ) {
-//   semaphore[0] = ctx->runner_sema;
-//   semaphore[1] = ctx->worker0_sema;
-//   semaphore[2] = ctx->worker1_sema;
-// }
-
-// void ShowSemaId( Context *ctx ) {
-//   T_printf( "L:ctx->runner_sema = %d\n", ctx->runner_sema );
-//   T_printf( "L:ctx->worker0_sema = %d\n", ctx->worker0_sema );
-//   T_printf( "L:ctx->worker1_sema = %d\n", ctx->worker1_sema );
-// }
-
-// void initialise_id ( rtems_id * id ) {
-//   *id = 0;
-// }
-
 void RtemsModelBarrierMgr_Teardown( void *arg )
 {
   RtemsModelBarrierMgr_Context *ctx;
@@ -201,11 +73,11 @@ void RtemsModelBarrierMgr_Teardown( void *arg )
   DeleteTask(ctx->worker1_id);
 
   T_log( T_NORMAL, "Deleting Runner Semaphore" );
-  DeleteSema( ctx->runner_sema );
+  DeleteTestSyncSema( ctx->runner_sema );
   T_log( T_NORMAL, "Deleting Worker0 Semaphore" );
-  DeleteSema( ctx->worker0_sema );
+  DeleteTestSyncSema( ctx->worker0_sema );
   T_log( T_NORMAL, "Deleting Worker1 Semaphore" );
-  DeleteSema( ctx->worker1_sema );
+  DeleteTestSyncSema( ctx->worker1_sema );
 }
 
 

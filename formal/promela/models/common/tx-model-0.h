@@ -21,13 +21,13 @@ typedef enum {
 } Priorities;
 
 
-rtems_id CreateWakeupSema( void );
+rtems_id CreateTestSyncSema( char * name );
 
-void DeleteWakeupSema( rtems_id id );
+void DeleteTestSyncSema( rtems_id id );
 
-void Wait( rtems_id id );
+void ObtainTestSyncSema( rtems_id id );
 
-void Wakeup( rtems_id id ) ;
+void ReleaseTestSyncSema( rtems_id id ) ;
 
 rtems_option mergeopts( bool wait, bool wantall );
 

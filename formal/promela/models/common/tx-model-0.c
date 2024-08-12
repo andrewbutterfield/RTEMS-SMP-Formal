@@ -49,13 +49,13 @@
 
 #include "tx-model-0.h"
 
-rtems_id CreateWakeupSema( void )
+rtems_id CreateTestSyncSema( char * name )
 {
   rtems_status_code sc;
   rtems_id id;
 
   sc = rtems_semaphore_create(
-    rtems_build_name( 'W', 'K', 'U', 'P' ),
+    rtems_build_name( name[ 0 ], name[ 1 ], name[ 2 ], name[ 3 ] ),
     0,
     RTEMS_SIMPLE_BINARY_SEMAPHORE,
     0,
@@ -66,7 +66,7 @@ rtems_id CreateWakeupSema( void )
   return id;
 }
 
-void DeleteWakeupSema( rtems_id id )
+void DeleteTestSyncSema( rtems_id id )
 {
   if ( id != 0 ) {
     rtems_status_code sc;
@@ -76,7 +76,7 @@ void DeleteWakeupSema( rtems_id id )
   }
 }
 
-void Wait( rtems_id id )
+void ObtainTestSyncSema( rtems_id id )
 {
   rtems_status_code sc;
 
@@ -84,7 +84,7 @@ void Wait( rtems_id id )
   T_quiet_rsc_success( sc );
 }
 
-void Wakeup( rtems_id id )
+void ReleaseTestSyncSema( rtems_id id )
 {
   rtems_status_code sc;
 

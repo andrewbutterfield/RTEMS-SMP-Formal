@@ -74,9 +74,9 @@ static void RtemsModelMessageMgr_Setup{0}(
   memset( ctx, 0, sizeof( *ctx ) );
   ctx->runner_thread = _Thread_Get_executing();
   ctx->runner_id = ctx->runner_thread->Object.id;
-  ctx->worker1_wakeup = CreateWakeupSema();
-  ctx->worker2_wakeup = CreateWakeupSema();
-  ctx->runner_wakeup = CreateWakeupSema();
+  ctx->worker1_wakeup = CreateTestSyncSema( "WRK1" );
+  ctx->worker2_wakeup = CreateTestSyncSema( "WRK2" );
+  ctx->runner_wakeup  = CreateTestSyncSema( "RUNR" );
 
   sc = rtems_task_get_scheduler( RTEMS_SELF, &ctx->runner_sched );
   T_rsc_success( sc );

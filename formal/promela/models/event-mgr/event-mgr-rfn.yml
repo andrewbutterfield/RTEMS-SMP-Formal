@@ -60,10 +60,10 @@ Worker: |
   checkTaskIs( ctx->worker_id );
 
 SIGNAL: |
-  Wakeup( semaphore[{}] );
+  ReleaseTestSyncSema( semaphore[{}] );
 
 WAIT: |
-  Wait( semaphore[{}] );
+  ObtainTestSyncSema( semaphore[{}] );
 
 event_send: |
   T_log( T_NORMAL, "Calling Send(%d,%d)", mapid( ctx, {1}), {2} );
@@ -107,7 +107,7 @@ SUSPEND:
   /* SWITCH[{0}] Suspension of proc{1} in favour of proc{2} */
 
 WAKEUP:
-  /* SWITCH[{0}] Wakeup of proc{1} (sometime) after proc{2} */
+  /* SWITCH[{0}] ReleaseTestSyncSema of proc{1} (sometime) after proc{2} */
 
 LowerPriority: |
   SetSelfPriority( M_PRIO_LOW );

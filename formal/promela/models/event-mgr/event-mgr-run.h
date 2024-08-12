@@ -13,8 +13,8 @@ static void Worker{0}( rtems_task_argument arg )
 
   // (void) rtems_task_suspend( RTEMS_SELF );
   // Ensure we hold no semaphores
-  Wakeup( ctx->worker_wakeup );
-  Wakeup( ctx->runner_wakeup );
+  ReleaseTestSyncSema( ctx->worker_wakeup );
+  ReleaseTestSyncSema( ctx->runner_wakeup );
   // Wait for events so we don't terminate
   rtems_event_receive( RTEMS_ALL_EVENTS, RTEMS_DEFAULT_OPTIONS, 0, &events );
 
@@ -51,10 +51,10 @@ static void RtemsModelEventsMgr_Setup{0}(
   ctx->runner_thread = _Thread_Get_executing();
   ctx->runner_id = ctx->runner_thread->Object.id;
 
-  T_log( T_NORMAL, "Creating Worker Wakeup Semaphore" );
-  ctx->worker_wakeup = CreateWakeupSema();
-  T_log( T_NORMAL, "Creating Runner Wakeup Semaphore" );
-  ctx->runner_wakeup = CreateWakeupSema();
+  T_log( T_NORMAL, "Creating Worker TestSync Semaphore" );
+  ctx->worker_wakeup = CreateTestSyncSema( "WRKR" );
+  T_log( T_NORMAL, "Creating Runner TestSync Semaphore" );
+  ctx->runner_wakeup = CreateTestSyncSema( "RUNR" );
 
   sc = rtems_task_get_scheduler( RTEMS_SELF, &ctx->runner_sched );
   T_rsc_success( sc );

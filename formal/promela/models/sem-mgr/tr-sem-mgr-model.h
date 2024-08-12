@@ -87,14 +87,6 @@ typedef struct {
 
 typedef RtemsModelSemMgr_Context Context;
 
-rtems_id CreateSema( char * name);
-
-void DeleteSema( rtems_id id );
-
-void ObtainSema( rtems_id id );
-
-void ReleaseSema( rtems_id id );
-
 rtems_task_priority SetPriority( rtems_id id, rtems_task_priority priority );
 
 rtems_task_priority SetSelfPriority( rtems_task_priority priority );

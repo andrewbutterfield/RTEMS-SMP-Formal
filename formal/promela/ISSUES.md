@@ -1,34 +1,5 @@
 # ISSUES
 
-## tx-model overlaps
-
-We have (in tx-model, used by event-mgr and msg-mgr)
-
-```
-rtems_id CreateWakeupSema( void );
-void DeleteWakeupSema( rtems_id id );
-void Wait( rtems_id id );
-void Wakeup( rtems_id id ) ;
-...
-```
-
-We have (used by sem-mgr and barrier-mgr)
-
-```
-rtems_id CreateSema( char * name);
-void DeleteSema( rtems_id id );
-void ObtainSema( rtems_id id );
-void ReleaseSema( rtems_id id );
-...
-```
-
-NEED TO TIDY THE ABOVE UP!
-They manage simple binary semaphores for synchronising test code.
-
-Map `[Wakeup]Sema` to `TestSyncSema` ?
-
-
-
 ## Barrier deadlocks
 
 Running manually

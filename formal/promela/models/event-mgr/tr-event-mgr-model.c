@@ -119,10 +119,10 @@ static void RtemsModelEventsMgr_Teardown(
     T_rsc_success( sc );
   }
 
-  T_log( T_NORMAL, "Deleting Worker Wakeup Semaphore" );
-  DeleteWakeupSema( ctx->worker_wakeup );
-  T_log( T_NORMAL, "Deleting Runner Wakeup Semaphore" );
-  DeleteWakeupSema( ctx->runner_wakeup );
+  T_log( T_NORMAL, "Deleting Worker ReleaseTestSyncSema Semaphore" );
+  DeleteTestSyncSema( ctx->worker_wakeup );
+  T_log( T_NORMAL, "Deleting Runner ReleaseTestSyncSema Semaphore" );
+  DeleteTestSyncSema( ctx->runner_wakeup );
 }
 
 void RtemsModelEventsMgr_Teardown_Wrap( void *arg )
