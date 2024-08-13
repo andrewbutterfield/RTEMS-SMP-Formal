@@ -1,9 +1,6 @@
 # ISSUES
 
-
-Deadlock caused by barrier using mergeattribs design for semaphores
-
-## STATUS
+### STATUS
 
  * `allmodels` - 114 tests fail
  * `barrier-mgr` - 30 tests fail  
@@ -12,9 +9,8 @@ Deadlock caused by barrier using mergeattribs design for semaphores
  * `msg-mgr` - 69 tests fail
  * `sem-mgr` - 14 tests fail
  
-## TO DO
+### TO DO
 
-* integrate the barrier manager
 * redo the sema_set_priority model - it is failing with error returns
 * move the following declarations to `tx-model-0`:
   -  return values
@@ -27,7 +23,6 @@ in SH's `tr-event-send-receive.c`.
 ## Testbuilder
 
 ### Model Naming
-
 
  * We use the same name for model, folder and root,
    based on Manual terminology, with "mgr" used to abbreviate "Manager". 
