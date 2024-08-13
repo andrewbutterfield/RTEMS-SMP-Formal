@@ -1,5 +1,24 @@
 # ISSUES
 
+## Barrier not standalone
+
+```
+tr-barrier-mgr-model-0.c.937.o: in function `TestSegment3':
+/Users/butrfeld/rtems/src/rtems/build/sparc/leon3/../../../testsuites/validation/tr-barrier-mgr-model-0.c:109:(.text.RtemsModelBarrierMgr_Run0+0x17c): undefined reference to `mergeattribs'
+tr-barrier-mgr-model-1.c.937.o: in function `TestSegment3':
+/Users/butrfeld/rtems/src/rtems/build/sparc/leon3/../../../testsuites/validation/tr-barrier-mgr-model-1.c:100:(.text.RtemsModelBarrierMgr_Run1+0x158): undefined reference to `mergeattribs'
+tr-barrier-mgr-model-10.c.937.o: in function `TestSegment3':
+/Users/butrfeld/rtems/src/rtems/build/sparc/leon3/../../../testsuites/validation/tr-barrier-mgr-model-10.c:109:(.text.RtemsModelBarrierMgr_Run10+0x180): undefined reference to `mergeattribs'
+tr-barrier-mgr-model-11.c.937.o: in function `TestSegment3':
+/Users/butrfeld/rtems/src/rtems/build/sparc/leon3/../../../testsuites/validation/tr-barrier-mgr-model-11.c:100:(.text.RtemsModelBarrierMgr_Run11+0x158): undefined reference to `mergeattribs'
+tr-barrier-mgr-model-12.c.937.o: in function `TestSegment3':
+/Users/butrfeld/rtems/src/rtems/build/sparc/leon3/../../../testsuites/validation/tr-barrier-mgr-model-12.c:109:(.text.RtemsModelBarrierMgr_Run12+0x180): undefined reference to `mergeattribs'
+tr-barrier-mgr-model-13.c.937.o:/Users/butrfeld/rtems/src/rtems/build/sparc/leon3/../../../testsuites/validation/tr-barrier-mgr-model-13.c:100: more undefined references to `mergeattribs' follow
+```
+
+We need to split `mergeattribs` into several, 
+because different managers use different attributes.
+
 ## Barrier deadlocks
 
 Running manually
@@ -33,8 +52,19 @@ L:@@@ 3 CALL barrier_wait 1 0
 L:Calling BarrierWait(1375797250,0)
 ```
 
+Deadlock caused by barrier using mergeattribs design for semaphores
+
 Can run all other models together (`chains`,`event-mgr`,`msg-mgr`,`sem-mgr`).
 
+## STATUS
+
+ * `allmodels` - 114 tests fail
+ * `barrier-mgr` - 30 tests fail  
+ * `chains` - all tests pass 
+ * `event-mgr` - all tests pass
+ * `msg-mgr` - 69 tests fail
+ * `sem-mgr` - 14 tests fail
+ 
 ## TO DO
 
 * integrate the barrier manager

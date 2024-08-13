@@ -84,10 +84,6 @@ void ShowSemaId( Context *ctx ) {
   T_printf( "L:ctx->worker1_sema = %d\n", ctx->worker1_sema );
 }
 
-void initialise_id ( rtems_id * id ) {
-  *id = 0;
-}
-
 void RtemsModelSemMgr_Teardown( void *arg )
 {
   RtemsModelSemMgr_Context *ctx;

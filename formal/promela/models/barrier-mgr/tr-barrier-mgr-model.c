@@ -53,6 +53,18 @@
 
 static const char PromelaModelBarrierMgr[] = "/PML-BarrierMgr";
 
+
+rtems_attribute setBarrierAttribute( bool automatic )
+{
+  rtems_attribute attribs;
+
+  if ( automatic ) { attribs = RTEMS_BARRIER_AUTOMATIC_RELEASE ; }
+  else             { attribs = RTEMS_BARRIER_MANUAL_RELEASE; }
+    
+  return attribs;
+}
+
+
 void RtemsModelBarrierMgr_Teardown( void *arg )
 {
   RtemsModelBarrierMgr_Context *ctx;

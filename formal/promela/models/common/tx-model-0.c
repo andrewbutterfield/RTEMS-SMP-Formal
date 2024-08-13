@@ -92,6 +92,11 @@ void ReleaseTestSyncSema( rtems_id id )
   T_quiet_rsc_success( sc );
 }
 
+void initialise_id ( rtems_id * id ) {
+  *id = 0;
+}
+
+
 rtems_option mergeopts( bool wait, bool wantall )
 {
   rtems_option opts;

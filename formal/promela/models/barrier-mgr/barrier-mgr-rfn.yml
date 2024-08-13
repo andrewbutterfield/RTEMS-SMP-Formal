@@ -59,7 +59,7 @@ barrier_create: |
   initialise_id(&bid);
   rtems_status_code rc;
   rtems_attribute attribs;
-  attribs = mergeattribs({1});
+  attribs = setBarrierAttribute({1});
   rc = rtems_barrier_create({0}, attribs, {2}, {3} ? &bid : NULL);
   T_log(T_NORMAL, "Returned 0x%x from Create", rc );
 

@@ -29,6 +29,10 @@ void ObtainTestSyncSema( rtems_id id );
 
 void ReleaseTestSyncSema( rtems_id id ) ;
 
+void initialise_id ( rtems_id * id );
+
+
+
 rtems_option mergeopts( bool wait, bool wantall );
 
 rtems_interval getTimeout( int timeout ) ;

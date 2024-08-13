@@ -91,13 +91,11 @@ rtems_task_priority SetPriority( rtems_id id, rtems_task_priority priority );
 
 rtems_task_priority SetSelfPriority( rtems_task_priority priority );
 
-rtems_option mergeattribs( bool automatic );
+rtems_option setBarrierAttribute( bool automatic );
 
 void checkTaskIs( rtems_id expected_id ) ;
 
 void ShowSemaId( Context *ctx ) ;
-
-void initialise_id ( rtems_id * id );
 
 void RtemsModelBarrierMgr_Setup( void *arg ) ;
 

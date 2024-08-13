@@ -95,8 +95,6 @@ rtems_option mergeattribs( bool scope, bool priority, int semtype, int locking )
 
 void ShowSemaId( Context *ctx ) ;
 
-void initialise_id ( rtems_id * id );
-
 void RtemsModelSemMgr_Setup( void *arg ) ;
 
 void RtemsModelSemMgr_Teardown( void *arg ) ;
