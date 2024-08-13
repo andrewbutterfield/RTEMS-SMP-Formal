@@ -1,60 +1,7 @@
 # ISSUES
 
-## Barrier not standalone
-
-```
-tr-barrier-mgr-model-0.c.937.o: in function `TestSegment3':
-/Users/butrfeld/rtems/src/rtems/build/sparc/leon3/../../../testsuites/validation/tr-barrier-mgr-model-0.c:109:(.text.RtemsModelBarrierMgr_Run0+0x17c): undefined reference to `mergeattribs'
-tr-barrier-mgr-model-1.c.937.o: in function `TestSegment3':
-/Users/butrfeld/rtems/src/rtems/build/sparc/leon3/../../../testsuites/validation/tr-barrier-mgr-model-1.c:100:(.text.RtemsModelBarrierMgr_Run1+0x158): undefined reference to `mergeattribs'
-tr-barrier-mgr-model-10.c.937.o: in function `TestSegment3':
-/Users/butrfeld/rtems/src/rtems/build/sparc/leon3/../../../testsuites/validation/tr-barrier-mgr-model-10.c:109:(.text.RtemsModelBarrierMgr_Run10+0x180): undefined reference to `mergeattribs'
-tr-barrier-mgr-model-11.c.937.o: in function `TestSegment3':
-/Users/butrfeld/rtems/src/rtems/build/sparc/leon3/../../../testsuites/validation/tr-barrier-mgr-model-11.c:100:(.text.RtemsModelBarrierMgr_Run11+0x158): undefined reference to `mergeattribs'
-tr-barrier-mgr-model-12.c.937.o: in function `TestSegment3':
-/Users/butrfeld/rtems/src/rtems/build/sparc/leon3/../../../testsuites/validation/tr-barrier-mgr-model-12.c:109:(.text.RtemsModelBarrierMgr_Run12+0x180): undefined reference to `mergeattribs'
-tr-barrier-mgr-model-13.c.937.o:/Users/butrfeld/rtems/src/rtems/build/sparc/leon3/../../../testsuites/validation/tr-barrier-mgr-model-13.c:100: more undefined references to `mergeattribs' follow
-```
-
-We need to split `mergeattribs` into several, 
-because different managers use different attributes.
-
-## Barrier deadlocks
-
-Running manually
-`validation% sparc-rtems6-sis -leon3 -r s -m 2 ts-model-0.exe`
-```
-B:RtemsModelBarrierMgr17
-L:Pushing Test Fixture...
-L:Runner Setup
-L:Creating Runner Semaphore
-L:Creating Worker0 Semaphore
-L:Creating Worker1 Semaphore
-L:Created Worker 0
-L:Started Worker 0
-L:Created Worker 1
-L:Started Worker 1
-L:Test Fixture Pushed
-L:@@@ 0 INIT
-L:Runner(Task 0) running
-L:@@@ 3 TASK Runner
-L:@@@ 3 CALL NormalPriority
-L:@@@ 3 CALL barrier_create 1 1 3 1
-L:Calling BarrierCreate(1,1,3,1)
-L:Returned 0x0 from Create
-L:@@@ 3 SCALAR created 1
-L:@@@ 3 SCALAR rc 0
-L:@@@ 3 SIGNAL 1
-L:semaphore release id = 436273157
-L:semaphore release
-L:Returned 0x0 from release
-L:@@@ 3 CALL barrier_wait 1 0
-L:Calling BarrierWait(1375797250,0)
-```
 
 Deadlock caused by barrier using mergeattribs design for semaphores
-
-Can run all other models together (`chains`,`event-mgr`,`msg-mgr`,`sem-mgr`).
 
 ## STATUS
 
