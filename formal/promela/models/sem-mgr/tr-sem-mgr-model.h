@@ -91,7 +91,8 @@ rtems_task_priority SetPriority( rtems_id id, rtems_task_priority priority );
 
 rtems_task_priority SetSelfPriority( rtems_task_priority priority );
 
-rtems_option mergeattribs( bool scope, bool priority, int semtype, int locking );
+rtems_option setSemaphoreAttributes( bool scope, bool priority
+                                   , int semtype, int locking );
 
 void ShowSemaId( Context *ctx ) ;
 

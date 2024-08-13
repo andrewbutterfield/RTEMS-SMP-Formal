@@ -56,10 +56,10 @@
 
 static const char PromelaModelSemMgr[] = "/PML-SemMgr";
 
-rtems_attribute mergeattribs( bool scope, bool priority, int semtype, int locking )
+rtems_attribute setSemaphoreAttributes( bool scope, bool priority
+                                      , int semtype, int locking )
 {
   rtems_attribute attribs;
-
 
   if ( scope ) { attribs = RTEMS_GLOBAL;}
   else {attribs = RTEMS_LOCAL; }

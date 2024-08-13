@@ -63,15 +63,15 @@ WAIT: |
 
   
 merge_attribs: |
-  T_log(T_NORMAL, "Calling mergeattribs(%d,%d,%d,%d)", {0}, {1}, {2}, {3} );
+  T_log(T_NORMAL, "Calling setSemaphoreAttributes(%d,%d,%d,%d)", {0}, {1}, {2}, {3} );
   rtems_attribute attribs;
-  attribs = mergeattribs({0},{1},{2},{3});
+  attribs = setSemaphoreAttributes({0},{1},{2},{3});
   T_log(T_NORMAL, "Attribs= 0x%x", attribs );
   
 merge_attribs2: |
-  T_log(T_NORMAL, "Calling mergeattribs(%d,%d,%d,%d)", {0}, {1}, {2}, {3} );
+  T_log(T_NORMAL, "Calling setSemaphoreAttributes(%d,%d,%d,%d)", {0}, {1}, {2}, {3} );
   rtems_attribute attribs2;
-  attribs2 = mergeattribs({0},{1},{2},{3});
+  attribs2 = setSemaphoreAttributes({0},{1},{2},{3});
   T_log(T_NORMAL, "Attribs= 0x%x", attribs2 );
 
 sema_create: |
