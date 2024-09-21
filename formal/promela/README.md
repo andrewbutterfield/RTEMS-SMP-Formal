@@ -25,3 +25,23 @@ The  Promela models and supporting material can be found in the `models` subdire
 
 The tools, written in Python3, are in the `src` directory.
 
+## Testbuilder
+
+### Model Naming
+
+ * We use the same name for model, folder and root,
+   based on Manual terminology, with "mgr" used to abbreviate "Manager". 
+ * Names should be kept short
+ * We only add "-model" to C sources placed into RTEMS test folders.
+ 
+The names to be used are:
+
+ * Barrier Manager: `barrier-mgr`
+ * Chains: `chains`
+ * Event Manager: `event-mgr`
+ * Message Manager: `msg-mgr`
+ * Semaphore Manager: `sem-mgr`
+
+The role of `models.yml` is now simply to list all the currently available models.
+
+

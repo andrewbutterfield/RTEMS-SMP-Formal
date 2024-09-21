@@ -20,24 +20,6 @@ NOTE: `GetPending` is only used in the events manager.
 Note also that this and other stuff was defined 
 in SH's `tr-event-send-receive.c`.
 
-## Testbuilder
-
-### Model Naming
-
- * We use the same name for model, folder and root,
-   based on Manual terminology, with "mgr" used to abbreviate "Manager". 
- * Names should be kept short
- * We only add "-model" to C sources placed into RTEMS test folders.
- 
-The names to be used are:
-
- * Barrier Manager: `barrier-mgr`
- * Chains: `chains`
- * Event Manager: `event-mgr`
- * Message Manager: `msg-mgr`
- * Semaphore Manager: `sem-mgr`
-
-The role of `models.yml` is now simply to list all the currently available models.
 
 ### Current command behaviour:
  
@@ -49,15 +31,6 @@ The role of `models.yml` is now simply to list all the currently available model
 
  * `models.yml` is used when `alltests` is specified
  
-
-For test build we need to specify the semaphore model as `sem-mgr-model`,
-and not as `semaphores`, so what is `model.yml` for?
-
-clean takes a `model` parameter as typed by the user
-
-spin and gentests invoke `get_model_paths`.
-
-Need a consistent approach here, using the contents of `model.yml` (`models.yml`?).
 
 ### Model.h files
 
