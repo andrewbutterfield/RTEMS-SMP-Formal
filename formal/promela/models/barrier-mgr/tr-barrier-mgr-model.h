@@ -79,7 +79,7 @@ typedef struct {
   T_thread_switch_log_4 thread_switch_log; // thread switch log
 } RtemsModelBarrierMgr_Context;
 
-#define POWER_OF_10 100
+#define POWER_OF_10 100 // defined here as it depends on scenario count
 
 typedef RtemsModelBarrierMgr_Context Context;
 

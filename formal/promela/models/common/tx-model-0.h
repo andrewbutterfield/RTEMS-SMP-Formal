@@ -12,6 +12,7 @@
 extern "C" {
 #endif
 
+// #define POWER_OF_10 ... - not defined here, model-specific
 
 typedef enum {
   M_PRIO_HIGH = 1,
@@ -30,8 +31,6 @@ void ObtainTestSyncSema( rtems_id id );
 void ReleaseTestSyncSema( rtems_id id ) ;
 
 void initialise_id ( rtems_id * id );
-
-
 
 rtems_option mergeopts( bool wait, bool wantall );
 

@@ -83,7 +83,7 @@ typedef struct {
   T_thread_switch_log_4 thread_switch_log; // thread switch log
 } RtemsModelSemMgr_Context;
 
-#define POWER_OF_10 100
+#define POWER_OF_10 100 // defined here as it depends on scenario count
 
 typedef RtemsModelSemMgr_Context Context;
 
