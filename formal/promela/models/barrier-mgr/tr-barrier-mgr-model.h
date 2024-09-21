@@ -95,8 +95,6 @@ rtems_option setBarrierAttribute( bool automatic );
 
 void checkTaskIs( rtems_id expected_id ) ;
 
-void ShowSemaId( Context *ctx ) ;
-
 void RtemsModelBarrierMgr_Setup( void *arg ) ;
 
 void RtemsModelBarrierMgr_Teardown( void *arg ) ;

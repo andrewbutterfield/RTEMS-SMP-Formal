@@ -94,8 +94,6 @@ rtems_task_priority SetSelfPriority( rtems_task_priority priority );
 rtems_option setSemaphoreAttributes( bool scope, bool priority
                                    , int semtype, int locking );
 
-void ShowSemaId( Context *ctx ) ;
-
 void RtemsModelSemMgr_Setup( void *arg ) ;
 
 void RtemsModelSemMgr_Teardown( void *arg ) ;

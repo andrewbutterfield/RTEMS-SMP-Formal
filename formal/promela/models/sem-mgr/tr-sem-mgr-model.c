@@ -78,12 +78,6 @@ rtems_attribute setSemaphoreAttributes( bool scope, bool priority
   return attribs;
 }
 
-void ShowSemaId( Context *ctx ) {
-  T_printf( "L:ctx->runner_sema = %d\n", ctx->runner_sema );
-  T_printf( "L:ctx->worker0_sema = %d\n", ctx->worker0_sema );
-  T_printf( "L:ctx->worker1_sema = %d\n", ctx->worker1_sema );
-}
-
 void RtemsModelSemMgr_Teardown( void *arg )
 {
   RtemsModelSemMgr_Context *ctx;
