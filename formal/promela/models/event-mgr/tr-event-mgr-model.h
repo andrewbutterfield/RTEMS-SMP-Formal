@@ -107,17 +107,13 @@ typedef struct {
 
 typedef RtemsModelEventsMgr_Context Context;
 
-
 rtems_event_set GetPending( Context *ctx );
-
-
 
 rtems_id mapid( Context *ctx, int pid ) ;
 
 void initialise_pending( rtems_event_set pending[], int max );
 
 void RtemsModelEventsMgr_Setup_Wrap( void *arg ) ;
-
 
 void RtemsModelEventsMgr_Teardown_Wrap( void *arg ) ;
 

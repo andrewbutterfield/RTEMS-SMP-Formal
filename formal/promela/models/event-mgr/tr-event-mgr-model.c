@@ -53,6 +53,7 @@ static const char PromelaModelEventsMgr[] = "/PML-EventsMgr";
 
 #define INPUT_EVENTS ( RTEMS_EVENT_5 | RTEMS_EVENT_23 )
 
+// this is GetPendingEvents from tr-event-send-receive.c
 rtems_event_set GetPending( Context *ctx )
 {
   rtems_event_set pending;

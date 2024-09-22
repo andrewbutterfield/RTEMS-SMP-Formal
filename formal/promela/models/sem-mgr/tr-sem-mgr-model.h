@@ -87,9 +87,9 @@ typedef struct {
 
 typedef RtemsModelSemMgr_Context Context;
 
-rtems_task_priority SetPriority( rtems_id id, rtems_task_priority priority );
+// rtems_task_priority SetPriority( rtems_id id, rtems_task_priority priority );
 
-rtems_task_priority SetSelfPriority( rtems_task_priority priority );
+// rtems_task_priority SetSelfPriority( rtems_task_priority priority );
 
 rtems_option setSemaphoreAttributes( bool scope, bool priority
                                    , int semtype, int locking );

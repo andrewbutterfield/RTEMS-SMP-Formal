@@ -83,17 +83,17 @@ typedef struct {
 
 typedef RtemsModelBarrierMgr_Context Context;
 
-void StartTask( rtems_id id, rtems_task_entry entry, void *arg );
+// void StartTask( rtems_id id, rtems_task_entry entry, void *arg );
 
-void DeleteTask( rtems_id id );
+// void DeleteTask( rtems_id id );
 
-rtems_task_priority SetPriority( rtems_id id, rtems_task_priority priority );
+// rtems_task_priority SetPriority( rtems_id id, rtems_task_priority priority );
 
-rtems_task_priority SetSelfPriority( rtems_task_priority priority );
+// tems_task_priority SetSelfPriority( rtems_task_priority priority );
 
 rtems_option setBarrierAttribute( bool automatic );
 
-void checkTaskIs( rtems_id expected_id ) ;
+// void checkTaskIs( rtems_id expected_id ) ;
 
 void RtemsModelBarrierMgr_Setup( void *arg ) ;
 
