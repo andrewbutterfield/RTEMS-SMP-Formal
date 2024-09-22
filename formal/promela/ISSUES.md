@@ -3,11 +3,15 @@
 ### STATUS
 
  * `allmodels` - 114 tests fail
- * `barrier-mgr` - 30 tests fail  
+ * `barrier-mgr` - 30 tests fail  - it checks for 4 processors but finds 2
  * `chains` - all tests pass 
  * `event-mgr` - all tests pass
  * `msg-mgr` - 69 tests fail
  * `sem-mgr` - 14 tests fail
+
+ * `barrier-mgr` fixed by changing sis core argument from `-m 2` to `-m 4`.
+
+
  
 ### TO DO
 
@@ -16,9 +20,8 @@
   -  return values
   -  task states
 
-NOTE: `GetPending` is only used in the events manager.
-Note also that this and other stuff was defined 
-in SH's `tr-event-send-receive.c`.
+NOTE: `GetPending` is only used here in the events manager.
+There is a `GetPendingEvents` in SH's `tr-event-send-receive.c`.
 
 
 ### Current command behaviour:
