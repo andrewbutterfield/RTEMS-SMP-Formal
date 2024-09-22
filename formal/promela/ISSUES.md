@@ -10,8 +10,10 @@
  * `sem-mgr` - 14 tests fail
 
  * `barrier-mgr` fixed by changing sis core argument from `-m 2` to `-m 4`.
+ * `msg-mgr` now has only one test-fail: 
+    `F:0.17:0:@)/PML-MessageMgr022:tr-msg-mgr-model-22.c:194:RTEMS_SUCCESSFUL == RTEMS_TIMEOUT`
 
-
+msg 
  
 ### TO DO
 
