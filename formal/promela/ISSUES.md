@@ -4,6 +4,8 @@
 
 Test code (sem-mgr:49)
 
+Not puzzling as  `0x13` = `19` !!!
+
 ```
 T_log(T_NORMAL,"@@@ 3 CALL sema_set_priority 1 -1 0");
   sem_id = 1;
@@ -14,7 +16,7 @@ T_log(T_NORMAL,"@@@ 3 CALL sema_set_priority 1 -1 0");
   sc1 = rtems_task_get_scheduler( RTEMS_SELF, &scheduler_id );
   T_quiet_rsc( sc1, RTEMS_SUCCESSFUL );
   rc = rtems_semaphore_set_priority(ctx->sem_id, scheduler_id, new_priority, &old_priority);
-  T_log(T_NORMAL, "Returned 0x%x from setPrio", rc );
+  T_log(T_NORMAL, "Returned %d from setPrio", rc );
   T_log(T_NORMAL,"@@@ 3 SCALAR rc 9");
   T_rsc( rc, 9 );
 ```
