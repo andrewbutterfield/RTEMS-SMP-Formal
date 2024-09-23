@@ -1,12 +1,47 @@
 # ISSUES
 
+## PUZZLING
+
+Test code (sem-mgr:49)
+
+```
+T_log(T_NORMAL,"@@@ 3 CALL sema_set_priority 1 -1 0");
+  sem_id = 1;
+  rtems_task_priority new_priority = -1;
+  rtems_id scheduler_id;
+  rtems_task_priority old_priority;
+  rtems_status_code sc1;    
+  sc1 = rtems_task_get_scheduler( RTEMS_SELF, &scheduler_id );
+  T_quiet_rsc( sc1, RTEMS_SUCCESSFUL );
+  rc = rtems_semaphore_set_priority(ctx->sem_id, scheduler_id, new_priority, &old_priority);
+  T_log(T_NORMAL, "Returned 0x%x from setPrio", rc );
+  T_log(T_NORMAL,"@@@ 3 SCALAR rc 9");
+  T_rsc( rc, 9 );
+```
+
+Corresponding test output:
+
+```
+L:@@@ 3 CALL sema_set_priority 1 -1 0
+L:Returned 0x13 from setPrio
+L:@@@ 3 SCALAR rc 9
+F:0.23:0:RUN/PML-SemMgr049:tr-sem-mgr-model-49.c:153:RTEMS_INVALID_PRIORITY == RTEMS_INVALID_ADDRESS
+```
+
+Relevant codes:
+
+RTEMS_INVALID_ADDRESS = 9  a specified address was invalid
+RTEMS_UNSATISFIED = 13     the request was not satisfied
+RTEMS_INVALID_PRIORITY = 19 an invalid thread priority was provided
+
+
 ### STATUS
 
- * `allmodels` - 114 tests fail
- * `barrier-mgr` - 30 tests fail  - it checks for 4 processors but finds 2
+ * `allmodels` - 15 tests fail
+ * `barrier-mgr` - all tests pass  
  * `chains` - all tests pass 
  * `event-mgr` - all tests pass
- * `msg-mgr` - 69 tests fail
+ * `msg-mgr` - 1 test fails
  * `sem-mgr` - 14 tests fail
 
  * `barrier-mgr` fixed by changing sis core argument from `-m 2` to `-m 4`.
