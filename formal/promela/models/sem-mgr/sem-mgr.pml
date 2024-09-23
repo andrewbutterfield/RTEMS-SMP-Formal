@@ -1,3 +1,5 @@
+#include "../common/rtems.pml"
+
 #define MAX_MODEL_SEMAS 3 // 0 for NULL pointers
 #define NO_TIMEOUT 0
 
@@ -49,19 +51,19 @@
 
 // Return Values
 // Defined in cpukit/include/rtems/rtems/status.h
-#define RC_OK      0  // RTEMS_SUCCESSFUL 
-#define RC_InvName 3  // RTEMS_INVALID_NAME 
-#define RC_InvId   4  // RTEMS_INVALID_ID 
-#define RC_TooMany 5  // RTEMS_TOO_MANY 
-#define RC_Timeout 6  // RTEMS_TIMEOUT 
-#define RC_Deleted 7  // RTEMS_OBJECT_WAS_DELETED 
-#define RC_InvAddr 9  // RTEMS_INVALID_ADDRESS 
-#define RC_InvNum  10 // RTEMS_INVALID_NUMBER 
-#define RC_InvPrio 19 // RTEMS_INVALID_PRIORITY
-#define RC_NotDefined  11 // RTEMS_NOT_DEFINED
-#define RC_ResourceInUse 12 // RTEMS_RESOURCE_IN_USE
-#define RC_Unsatisfied  13 // RTEMS_UNSATISFIED 
-#define RC_NotOwner 23 // RTEMS_NOT_OWNER_OF_RESOURCE
+// #define RC_OK      0  // RTEMS_SUCCESSFUL 
+// #define RC_InvName 3  // RTEMS_INVALID_NAME 
+// #define RC_InvId   4  // RTEMS_INVALID_ID 
+// #define RC_TooMany 5  // RTEMS_TOO_MANY 
+// #define RC_Timeout 6  // RTEMS_TIMEOUT 
+// #define RC_Deleted 7  // RTEMS_OBJECT_WAS_DELETED 
+// #define RC_InvAddr 9  // RTEMS_INVALID_ADDRESS 
+// #define RC_InvNum  10 // RTEMS_INVALID_NUMBER 
+// #define RC_InvPrio 19 // RTEMS_INVALID_PRIORITY
+// #define RC_NotDefined  11 // RTEMS_NOT_DEFINED
+// #define RC_ResourceInUse 12 // RTEMS_RESOURCE_IN_USE
+// #define RC_Unsatisfied  13 // RTEMS_UNSATISFIED 
+// #define RC_NotOwner 23 // RTEMS_NOT_OWNER_OF_RESOURCE
 
 /* 
  * Multicore setup
@@ -507,10 +509,11 @@ Priority_queue queueList[SEMA_MAX];
 
 inline sema_set_priority(sem_id, scheduler_id, new_priority, old_priority, rc) 
 { atomic {
+    printf("@@@ %d LOG SSP(id=%d, newp=%d, oldp=%d)\n",_pid,sem_id,new_priority,old_priority);
     if
     :: sem_id == 0       -> rc = RC_InvId;
     :: old_priority == 0 -> rc = RC_InvAddr;
-    :: new_priority < 0  -> rc = RC_InvPrio;
+    :: new_priority < 1  -> rc = RC_InvPrio;
     :: model_semaphores[sem_id].LockingProtocol == NO_LOCKING ->
         rc = RC_NotDefined;
     :: else ->
