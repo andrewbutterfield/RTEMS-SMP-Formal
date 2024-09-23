@@ -133,14 +133,16 @@ sema_release2: |
 
 sema_set_priority: |
   sem_id = {0};
+  T_log(T_NORMAL,"set-priority sem_id = %d",sem_id);
   rtems_task_priority new_priority = {1};
   rtems_id scheduler_id;
   rtems_task_priority old_priority;
   rtems_status_code sc1;    
   sc1 = rtems_task_get_scheduler( RTEMS_SELF, &scheduler_id );
   T_quiet_rsc( sc1, RTEMS_SUCCESSFUL );
+  T_log(T_NORMAL,"Calling SetPrio(%d,%d,%d,%d)", ctx->sem_id, scheduler_id, new_priority, &old_priority);
   rc = rtems_semaphore_set_priority(ctx->sem_id, scheduler_id, new_priority, &old_priority);
-  T_log(T_NORMAL, "Returned 0x%x from setPrio", rc );
+  T_log(T_NORMAL, "Returned %d from setPrio", rc );
     
 sema_flush: |
   T_log(T_NORMAL, "Calling SemaFlush(%d)", sem_id);

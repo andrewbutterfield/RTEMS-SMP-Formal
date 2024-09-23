@@ -60,7 +60,7 @@
 #define RC_InvPrio 19 // RTEMS_INVALID_PRIORITY
 #define RC_NotDefined  11 // RTEMS_NOT_DEFINED
 #define RC_ResourceInUse 12 // RTEMS_RESOURCE_IN_USE
-#define RC_Unsatisfied  13 // RTEMS_UNSATISFIED This is the status to indicate that the request was not satisfied.
+#define RC_Unsatisfied  13 // RTEMS_UNSATISFIED 
 #define RC_NotOwner 23 // RTEMS_NOT_OWNER_OF_RESOURCE
 
 /* 
@@ -510,7 +510,7 @@ inline sema_set_priority(sem_id, scheduler_id, new_priority, old_priority, rc)
     if
     :: sem_id == 0       -> rc = RC_InvId;
     :: old_priority == 0 -> rc = RC_InvAddr;
-    :: new_priority < 0  -> rc = RC_NotDefined;
+    :: new_priority < 0  -> rc = RC_InvPrio;
     :: model_semaphores[sem_id].LockingProtocol == NO_LOCKING ->
         rc = RC_NotDefined;
     :: else ->
@@ -518,22 +518,20 @@ inline sema_set_priority(sem_id, scheduler_id, new_priority, old_priority, rc)
         :: model_semaphores[sem_id].Priority == PRIORITY &&
             model_semaphores[sem_id].LockingProtocol == CEILING_LOCKING ->
             old_priority = model_semaphores[sem_id].priorityCeiling;
-        :: else -> rc = RC_NotDefined;
-        fi
-        if
-        :: model_semaphores[sem_id].Priority == PRIORITY &&
-            model_semaphores[sem_id].LockingProtocol == CEILING_LOCKING ->
             model_semaphores[sem_id].priorityCeiling = new_priority;
             rc = RC_OK;
-        :: else -> rc = RC_InvPrio;
+        :: else -> rc = RC_NotDefined;
         fi
+        // if
+        // :: model_semaphores[sem_id].Priority == PRIORITY &&
+        //     model_semaphores[sem_id].LockingProtocol == CEILING_LOCKING ->
+        //     model_semaphores[sem_id].priorityCeiling = new_priority;
+        //     rc = RC_OK;
+        // :: else -> rc = RC_InvPrio;
+        // fi
     fi 
   } 
 }
-
-
-
-
 
 /*
  * sema_obtain(self,sem_id, optionset, timeout, rc)
