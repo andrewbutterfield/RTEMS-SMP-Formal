@@ -36,6 +36,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  ******************************************************************************/
 
+#include "../common/rtems.pml"
+
 // Sizings, MEM_SIZE = 2 ** PTR_SIZE
 #define PTR_SIZE 3
 #define MEM_SIZE 8

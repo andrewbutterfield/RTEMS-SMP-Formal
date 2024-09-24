@@ -1,7 +1,7 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /*
- * event-mgr-model.pml
+ * event-mgr.pml
  *
  * Copyright (C) 2019-2021 Trinity College Dublin (www.tcd.ie)
  *
@@ -50,6 +50,8 @@
  * and use an inline to output them.
  */
 
+#include "../common/rtems.pml"
+
 // Event Sets - we only support 4 events, rather than 32
 #define NO_OF_EVENTS 4
 #define EVTS_NONE 0
@@ -70,14 +72,6 @@
 
 // IDs here index an array, so we use the largest bad index as a bad id
 #define BAD_ID TASK_MAX
-
-// Return Values - ultimately, we should #include these
-// Defined in cpukit/include/rtems/rtems/status.h
-#define RC_OK      0  // RTEMS_SUCCESSFUL
-#define RC_InvId   4  // RTEMS_INVALID_ID
-#define RC_InvAddr 9  // RTEMS_INVALID_ADDRESS
-#define RC_Unsat   13 // RTEMS_UNSATISFIED
-#define RC_Timeout 6  // RTEMS_TIMEOUT
 
 
 inline outputDefines () {

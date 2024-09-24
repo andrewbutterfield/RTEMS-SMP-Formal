@@ -1,7 +1,7 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /*
- * barrier-mgr-model.pml
+ * barrier-mgr.pml
  *
  * Copyright (C) 2022 Trinity College Dublin (www.tcd.ie)
  *
@@ -50,6 +50,8 @@
  * and use an inline to output them.
  */
 
+#include "../common/rtems.pml"
+
 // Barriers - we will test Automatic and Manual Barriers 
 #define MAX_BARRIERS 2 // Max amount of barriers available to be created
                        // 0 reserved for NULL pointers
@@ -65,17 +67,6 @@
 
 // We use semaphores to synchronise the tasks
 #define SEMA_MAX 3
-
-// Return Values
-// Defined in cpukit/include/rtems/rtems/status.h
-#define RC_OK      0  // RTEMS_SUCCESSFUL 
-#define RC_InvName 3  // RTEMS_INVALID_NAME 
-#define RC_InvId   4  // RTEMS_INVALID_ID 
-#define RC_TooMany 5  // RTEMS_TOO_MANY 
-#define RC_Timeout 6  // RTEMS_TIMEOUT 
-#define RC_Deleted 7  // RTEMS_OBJECT_WAS_DELETED 
-#define RC_InvAddr 9  // RTEMS_INVALID_ADDRESS 
-#define RC_InvNum  10 // RTEMS_INVALID_NUMBER 
 
 // Output configuration
 inline outputDefines () {

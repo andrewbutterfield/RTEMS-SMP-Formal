@@ -1,3 +1,41 @@
+/* SPDX-License-Identifier: BSD-2-Clause */
+
+/*
+ * sem-mgr.pml
+ *
+ * Copyright (C) 2022-2024 Trinity College Dublin (www.tcd.ie)
+ *
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met:
+ *
+ *     * Redistributions of source code must retain the above copyright
+ *       notice, this list of conditions and the following disclaimer.
+ *
+ *     * Redistributions in binary form must reproduce the above
+ *       copyright notice, this list of conditions and the following
+ *       disclaimer in the documentation and/or other materials provided
+ *       with the distribution.
+ *
+ *     * Neither the name of the copyright holders nor the names of its
+ *       contributors may be used to endorse or promote products derived
+ *       from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
 #include "../common/rtems.pml"
 
 #define MAX_MODEL_SEMAS 3 // 0 for NULL pointers
@@ -47,23 +85,6 @@
 #define MY_SCHEDULER 1
 
 #define UINT32_MAX 4294967295
-
-
-// Return Values
-// Defined in cpukit/include/rtems/rtems/status.h
-// #define RC_OK      0  // RTEMS_SUCCESSFUL 
-// #define RC_InvName 3  // RTEMS_INVALID_NAME 
-// #define RC_InvId   4  // RTEMS_INVALID_ID 
-// #define RC_TooMany 5  // RTEMS_TOO_MANY 
-// #define RC_Timeout 6  // RTEMS_TIMEOUT 
-// #define RC_Deleted 7  // RTEMS_OBJECT_WAS_DELETED 
-// #define RC_InvAddr 9  // RTEMS_INVALID_ADDRESS 
-// #define RC_InvNum  10 // RTEMS_INVALID_NUMBER 
-// #define RC_InvPrio 19 // RTEMS_INVALID_PRIORITY
-// #define RC_NotDefined  11 // RTEMS_NOT_DEFINED
-// #define RC_ResourceInUse 12 // RTEMS_RESOURCE_IN_USE
-// #define RC_Unsatisfied  13 // RTEMS_UNSATISFIED 
-// #define RC_NotOwner 23 // RTEMS_NOT_OWNER_OF_RESOURCE
 
 /* 
  * Multicore setup
@@ -418,7 +439,7 @@ inline WaitForSemaphore(tid,sem_id, optionset, interval, rc){
         rc = RC_Deleted;
     ::  model_semaphores[sem_id].isFlushed ->
         model_semaphores[sem_id].waiters[tid] = false;
-        rc = RC_Unsatisfied;
+        rc = RC_Unsat;
         printf("@@@ %d LOG task %d flushed from Semaphore %d \n", _pid, tid, sem_id); //semaphore obtained
     ::  else -> model_semaphores[sem_id].Count = model_semaphores[sem_id].Count -1;
                 rc = RC_OK;
@@ -515,7 +536,7 @@ inline sema_set_priority(sem_id, scheduler_id, new_priority, old_priority, rc)
     :: old_priority == 0 -> rc = RC_InvAddr;
     :: new_priority < 1  -> rc = RC_InvPrio;
     :: model_semaphores[sem_id].LockingProtocol == NO_LOCKING ->
-        rc = RC_NotDefined;
+        rc = RC_NotDefd;
     :: else ->
         if
         :: model_semaphores[sem_id].Priority == PRIORITY &&
@@ -523,7 +544,7 @@ inline sema_set_priority(sem_id, scheduler_id, new_priority, old_priority, rc)
             old_priority = model_semaphores[sem_id].priorityCeiling;
             model_semaphores[sem_id].priorityCeiling = new_priority;
             rc = RC_OK;
-        :: else -> rc = RC_NotDefined;
+        :: else -> rc = RC_NotDefd;
         fi
         // if
         // :: model_semaphores[sem_id].Priority == PRIORITY &&
@@ -572,7 +593,7 @@ inline sema_obtain(self, sem_id, optionset, interval,rc) {
                 :: else -> //semaphore already in use add task to wait queue if FIFO
                     if
                     ::  optionset == RTEMS_NO_WAIT ->
-                        rc = RC_Unsatisfied;
+                        rc = RC_Unsat;
                     ::  else -> // RTEMS_WAIT
                         // check if semaphore is FIFO
                         if
@@ -609,7 +630,7 @@ inline sema_obtain(self, sem_id, optionset, interval,rc) {
                 :: model_semaphores[sem_id].Count == 0 ->
                     if
                     :: optionset == RTEMS_NO_WAIT ->
-                        rc = RC_Unsatisfied; // The semaphore could not be immediately obtained  
+                        rc = RC_Unsat; // The semaphore could not be immediately obtained  
                         printf("@@@ %d LOG Semaphore %d could not be immediately obtained\n", _pid, sem_id);
                     :: else -> // RTMES_WAIT
                         if
@@ -686,7 +707,7 @@ inline sema_release(self,sem_id,rc) {
         ::  sem_id >= MAX_MODEL_SEMAS || sem_id <= 0 || !model_semaphores[sem_id].isInitialised ->
             rc = RC_InvId
         ::  model_semaphores[sem_id].Count == UINT32_MAX ->
-            rc = RC_Unsatisfied;
+            rc = RC_Unsat;
         ::  else -> 
             
             if
@@ -882,7 +903,7 @@ inline sema_delete(self,sem_id,rc) {
         ::  sem_id >= MAX_MODEL_SEMAS || sem_id <= 0 || !model_semaphores[sem_id].isInitialised ->
             rc = RC_InvId
         ::  model_semaphores[sem_id].semType == BINARY_S && model_semaphores[sem_id].ownerPid != _pid ->
-            rc = RC_ResourceInUse; // The binary semaphore had an owner
+            rc = RC_RsrcInUse; // The binary semaphore had an owner
         ::  else -> 
             model_semaphores[sem_id].isInitialised = false;
             int tid=1;
