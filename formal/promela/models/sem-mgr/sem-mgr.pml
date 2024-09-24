@@ -185,7 +185,7 @@ typedef Semaphore_model {
     int waiters[TASK_MAX]; // waiters on the semaphore indicated by position in queue ( 1 is next in queue)
     byte ownerPid; // set to pid of the task that obtained the binary semaphore
     int currPriority; // tracks the current elevated priority of the semaphore's task holder
-
+    byte prevPriority; // records priority before last change
     byte holder; // Task ID of the current holder
     byte queue[TASK_MAX]; // Priority queue of waiting tasks
     byte task_queue_count; // Number of tasks in the queue
@@ -338,6 +338,7 @@ inline sema_create(name,count, maxcount, scope,rtems_priority,sem_type,locking,t
                         model_semaphores[id].isGlobal = scope; //if local can only be used by node that created it
                         model_semaphores[id].Priority = rtems_priority;
                         model_semaphores[id].currPriority = task_priority;
+                        model_semaphores[id].prevPriority = task_priority;
                         model_semaphores[id].isInitialised = true;
                         model_semaphores[id].priorityCeiling = task_priority;
                         rc = RC_OK;
@@ -510,39 +511,45 @@ Priority_queue queueList[SEMA_MAX];
 
 
 /*
- * sema_set_priority(semaphore_id, scheduler_id, new_priority, old_priority, rc)
+ * sema_set_priority( semaphore_id, scheduler_id, new_priority, 
+ *                    old_prio_ptr, old_prio, rc )
  *
  * Simulates a call to rtems_semaphore_set_priority
- *   semaphore_id : identifier of the semaphore whose priority is to be set
- *   scheduler_id : identifier of the scheduler to which the new priority applies
- *   new_priority : the new priority to be set for the semaphore with respect to the specified scheduler
- *   old_priority : pointer to store the old priority of the semaphore before the update
+ *   semaphore_id : identifier semaphore whose priority is to be set
+ *   scheduler_id : identifies scheduler to which the new priority applies
+ *   new_priority : the new priority for the semaphore  w.r.t the scheduler
+ *   old_prio : the previous priority of the semaphore
  *   rc : updated with the return code when the directive completes
  *
  * Corresponding RTEMS call:
- *   rc = rtems_semaphore_set_priority(semaphore_id, scheduler_id, new_priority, old_priority);
- *     `semaphore_id` models `rtems_id id` of the semaphore
- *     `scheduler_id` models `rtems_id` of the scheduler associated with the new priority
- *     `new_priority` models `rtems_task_priority` for the new priority level
- *     `old_priority` models pointer to `rtems_task_priority` where the old priority is stored upon success
+ *   rc = rtems_semaphore_set_priority( 
+            sem_id, scheduler_id, new_priority, old_prio_ptr );
+ *     `sem_id` models the semaphore id.
+ *     `scheduler_id` models the scheduler id.
+ *     `new_priority` models the new priority level
+ *     `old_prio_ptr` models pointer to old priority store.
+ *     `old_prio` models the old priority value
+ *
+ *  We usually use `sem_id` to denote pointer to semaphore and old priority,
+ *  except when we want to distinguish between invalid id and address cases
  */
  #define INV_PRIO -1
 
-inline sema_set_priority(sem_id, scheduler_id, new_priority, old_priority, rc) 
+inline sema_set_priority( sema_id, scheduler_id, new_priority, 
+                          old_prio_ptr, old_prio, rc ) 
 { atomic {
-    printf("@@@ %d LOG SSP(id=%d, newp=%d, oldp=%d)\n",_pid,sem_id,new_priority,old_priority);
     if
-    :: sem_id == 0       -> rc = RC_InvId;
-    :: old_priority == 0 -> rc = RC_InvAddr;
+    :: sema_id == 0      -> rc = RC_InvId;
+    :: old_prio_ptr == 0 -> rc = RC_InvAddr;
     :: new_priority < 1  -> rc = RC_InvPrio;
-    :: model_semaphores[sem_id].LockingProtocol == NO_LOCKING ->
+    :: model_semaphores[sema_id].LockingProtocol == NO_LOCKING ->
         rc = RC_NotDefd;
     :: else ->
         if
-        :: model_semaphores[sem_id].Priority == PRIORITY &&
-            model_semaphores[sem_id].LockingProtocol == CEILING_LOCKING ->
-            old_priority = model_semaphores[sem_id].priorityCeiling;
-            model_semaphores[sem_id].priorityCeiling = new_priority;
+        :: model_semaphores[sema_id].Priority == PRIORITY &&
+            model_semaphores[sema_id].LockingProtocol == CEILING_LOCKING ->
+            old_prio = model_semaphores[sema_id].priorityCeiling;
+            model_semaphores[sema_id].priorityCeiling = new_priority;
             rc = RC_OK;
         :: else -> rc = RC_NotDefd;
         fi
@@ -970,6 +977,19 @@ inline sema_flush(self, sem_id, rc) {
 
 /*
  * Scenario Generation
+ *
+ *  (PLAN)
+ *
+ * We can create, ident, delete, obtain, release, flush, and set_priority
+ *
+ * One task can cover create, ident, delete (all kinds)
+ * Two or more tasks will exercise obtain, release, flush (FIFO, one core)
+ * Three tasks will exercise set_priority, obtain, release, flush 
+ *    (prio, one core)
+ * N tasks will exercise set_priority, obtain, release, flush 
+ *    (prio, two/three cores)
+ * 
+ *
  */
 
  /*
@@ -1059,7 +1079,6 @@ inline assignDefaults(defaults, opts) {
 int task1Sema;
 int task2Sema;
 int task3Sema;
-
 
 mtype = { onesema, twosemas, different_sema_counts
         , test_priority, test_set_priority };
@@ -1296,6 +1315,7 @@ inline chooseScenario() {
         // Invalid priority
         :: task_in[TASK1_ID].LockingProtocol = CEILING_LOCKING ->
             task_in[TASK1_ID].newTaskPrio = INV_PRIO;
+            // we need to ensure address is valid
             printf( "@@@ %d LOG sub-scenario set priority, invalid new priority\n", _pid); //RTEMS_INVALID_PRIORITY
         
         
@@ -1401,13 +1421,16 @@ proctype Runner (byte nid, taskid; TaskInputs opts) {
     if
     ::  opts.doSetPriority ->
         atomic {
-            int new_prio = opts.newTaskPrio;
-            int old_prio = model_semaphores[sem_id].priorityCeiling;
+            byte new_prio = opts.newTaskPrio;
+            byte old_prio = 10;
             sem_id=1;
-            printf("@@@ %d CALL sema_set_priority %d %d %d\n", 
-                _pid, sem_id, new_prio, old_prio);
-            sema_set_priority(sem_id, 1, new_prio, old_prio, rc);
+            printf( "@@@ %d CALL sema_set_priority %d %d %d %d\n", 
+                    _pid, sem_id, new_prio, sem_id, old_prio);
+            sema_set_priority(sem_id, 1, new_prio, sem_id, old_prio, rc);
             printf("@@@ %d SCALAR rc %d\n",_pid, rc);
+            if
+            :: rc==0 -> printf("@@@ %d SCALAR old_prio %d\n",_pid, old_prio);
+            fi
         }
     :: else -> skip;
     fi
