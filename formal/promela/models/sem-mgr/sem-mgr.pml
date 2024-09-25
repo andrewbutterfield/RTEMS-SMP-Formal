@@ -1421,8 +1421,8 @@ proctype Runner (byte nid, taskid; TaskInputs opts) {
     if
     ::  opts.doSetPriority ->
         atomic {
-            byte new_prio = opts.newTaskPrio;
-            byte old_prio = 10;
+            int new_prio = opts.newTaskPrio;
+            int old_prio = 10;
             sem_id=1;
             printf( "@@@ %d CALL sema_set_priority %d %d %d %d\n", 
                     _pid, sem_id, new_prio, sem_id, old_prio);

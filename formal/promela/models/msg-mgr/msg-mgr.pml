@@ -544,8 +544,9 @@ inline chooseScenario() {
         startSema = rcvSema1;
         tasks[SEND_ID].doSend = true;
         tasks[RCV1_ID].doReceive = true;
+        tasks[RCV1_ID].doWait = true;
+        tasks[RCV1_ID].rcvInterval = 5;
         tasks[RCV2_ID].doReceive = false;
-        tasks[RCV1_ID].doWait = true;  tasks[RCV1_ID].rcvInterval = 10;
         //tasks[SEND_ID].numSends = 2
         /*
         if

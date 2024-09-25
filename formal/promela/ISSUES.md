@@ -7,16 +7,19 @@
 
 ### STATUS
 
- * `allmodels` - 1 test fails, 1 deadlock
+ * `allmodels` - all tests 
  * `barrier-mgr` - all tests pass  
  * `chains` - all tests pass 
  * `event-mgr` - all tests pass
  * `msg-mgr` - 1 test fails
- * `sem-mgr` - no fails but 5th scenario deadlocks
+ * `sem-mgr` - all tests pass
 
  * `barrier-mgr` fixed by changing sis core argument from `-m 2` to `-m 4`.
  * `msg-mgr` now has only one test-fail: 
-    `F:0.17:0:@)/PML-MessageMgr022:tr-msg-mgr-model-22.c:194:RTEMS_SUCCESSFUL == RTEMS_TIMEOUT`
+    `F:0.17:0:@X/PML-MessageMgr017:tr-msg-mgr-model-17.c:194:RTEMS_SUCCESSFUL == RTEMS_TIMEOUT`
+
+This model always has a branch that allows the send to beat the timeout
+To get a timeout return we should use Receive to test.
 
 msg 
  
