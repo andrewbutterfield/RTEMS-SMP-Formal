@@ -18,10 +18,8 @@
  * `msg-mgr` now has only one test-fail: 
     `F:0.17:0:@X/PML-MessageMgr017:tr-msg-mgr-model-17.c:194:RTEMS_SUCCESSFUL == RTEMS_TIMEOUT`
 
-This model always has a branch that allows the send to beat the timeout
-To get a timeout return we should use Receive to test.
-
-msg 
+Maybe the issue is that when timeout occurs we first check to see if a message
+has (JUST!) arrived, in which case we are satisfied, otherwise we complain.
  
 ### TO DO
 
