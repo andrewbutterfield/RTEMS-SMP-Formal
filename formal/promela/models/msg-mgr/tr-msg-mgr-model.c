@@ -119,7 +119,7 @@ size_t RtemsModelMessageMgr_Scope( void *arg, char *buf, size_t n )
   char digit;
 
   ctx = arg;
-  p10 = POWER_OF_10;
+  p10 = MSG_PWR_OF_10;
 
   m = T_str_copy(buf, PromelaModelMessageMgr, n);
   buf += m;

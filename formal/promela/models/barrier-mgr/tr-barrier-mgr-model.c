@@ -102,7 +102,7 @@ size_t RtemsModelBarrierMgr_Scope( void *arg, char *buf, size_t n )
   char digit;
 
   ctx = arg;
-  p10 = POWER_OF_10;
+  p10 = BAR_PWR_OF_10;
 
   m = T_str_copy(buf, PromelaModelBarrierMgr, n);
   buf += m;
