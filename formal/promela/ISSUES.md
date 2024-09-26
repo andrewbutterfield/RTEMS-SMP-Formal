@@ -7,11 +7,11 @@
 
 ### STATUS
 
- * `allmodels` - all tests 
+ * `allmodels` - 1 test fails (msg-mgr)
  * `barrier-mgr` - all tests pass  
  * `chains` - all tests pass 
  * `event-mgr` - all tests pass
- * `msg-mgr` - 1 test fails
+ * `msg-mgr` - 1 test fails  - receive suceeds when timeout expected
  * `sem-mgr` - all tests pass
 
  * `barrier-mgr` fixed by changing sis core argument from `-m 2` to `-m 4`.
