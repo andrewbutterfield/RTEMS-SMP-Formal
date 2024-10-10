@@ -148,7 +148,7 @@ inline Release(sem_id){
  * but are intended to be used in an atomic context.
 */
 
-inline nl() { printf("\n") } // Useful shorthand
+
 
 /*
  * waitUntilReady(id) logs that task[id] is waiting,

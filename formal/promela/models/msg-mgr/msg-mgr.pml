@@ -212,7 +212,7 @@ inline outputDeclarations () {
   printf("@@@ %d DCLARRAY Semaphore semaphore SEMA_MAX\n",_pid);
 }
 
-inline nl() { printf("\n") }
+
 /*
  * Synchronisation Mechanisms
  *  Obtain(sem_id)   - call that waits to obtain semaphore `sem_id`

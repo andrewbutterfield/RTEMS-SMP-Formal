@@ -101,3 +101,9 @@ mtype = {
  * We don't need mtype values for these.
  *
  */
+
+ /*
+  *  We continue with bits of Promela code of general utility
+  */
+
+inline nl() { printf("\n") } // Useful shorthand

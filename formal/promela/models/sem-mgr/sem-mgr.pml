@@ -267,10 +267,6 @@ inline Release(sema_id){
 
 
 
-
-inline nl() { printf("\n") } // Useful shorthand
-
-
 /*
  * sema_create(name,count,sem_type,scope,locking,task_priority,id,rc)
  *
