@@ -1,5 +1,12 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
+
+/*
+ * PML Modlling code common to all/most models
+ *
+ * We start with return code, options, attributes
+ */
+
 // Return Values
 // Defined in cpukit/include/rtems/rtems/status.h
 #define RC_OK      0  // RTEMS_SUCCESSFUL 
@@ -21,10 +28,10 @@
 // Defined in cpukit/include/rtems/rtems/options.h
 /*** 
 #define RTEMS_DEFAULT_OPTIONS 0x00000000
-#define RTEMS_EVENT_ALL 0x00000000
-#define RTEMS_EVENT_ANY 0x00000002
-#define RTEMS_NO_WAIT 0x00000001
-#define RTEMS_WAIT 0x00000000
+#define RTEMS_EVENT_ALL       0x00000000
+#define RTEMS_EVENT_ANY       0x00000002
+#define RTEMS_NO_WAIT         0x00000001
+#define RTEMS_WAIT            0x00000000
 ***/
 
 mtype = {
