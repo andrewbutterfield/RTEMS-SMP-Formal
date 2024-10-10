@@ -62,11 +62,6 @@ inline outputDefines() {
 }
 
 
-mtype = {
-  Zombie, Ready, MsgWait, TimeWait, OtherWait, // Task states
-  Wait, NoWait // Option Set values
-};
-
 
 // Tasks
 typedef Task {
@@ -99,10 +94,6 @@ byte recout[TASK_MAX] ; // models receive 'out' location.
 
 
 bool semaphore[SEMA_MAX]; // Semaphore
-
-mtype = {
-  FIFO, PRIORITY
-};
 
 typedef Config {
     int name; //An integer is used to represent valid RTEMS_NAME

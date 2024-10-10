@@ -52,7 +52,7 @@
 #define THIS_CORE 0
 #define THAT_CORE 1
 
-// Wait optionset for semaphore_obtain
+// semWait optionset for semaphore_obtain
 #define RTEMS_WAIT 1
 #define RTEMS_NO_WAIT 0
 
@@ -102,10 +102,6 @@ int task3Core;
 // We use mutexes to synchronise the tasks
 #define SEMA_MAX 3
 
-mtype = {
-// Task states, SemaWait is same as TimeWait but with no timeout
-  Zombie, Ready, SemaWait, TimeWait, OtherWait 
-};
 
 typedef Task {
     byte nodeid; // So we can spot remote calls
@@ -845,9 +841,9 @@ inline set_default_priority_options() {
     task_in[TASK2_ID].semType = BINARY_S;
     task_in[TASK3_ID].semType = BINARY_S;
 
-    task_in[TASK1_ID].Wait = true;
-    task_in[TASK2_ID].Wait = true;
-    task_in[TASK3_ID].Wait = true;
+    task_in[TASK1_ID].semWait = true;
+    task_in[TASK2_ID].semWait = true;
+    task_in[TASK3_ID].semWait = true;
 
     task_in[TASK1_ID].taskPreempt = true;
     task_in[TASK2_ID].taskPreempt = true;
@@ -1016,7 +1012,7 @@ typedef TaskInputs {
     byte sName; // Name of semaphore to create or identify
     bool doAcquire; // will task aquire the semaphore
     bool doAcquire2;
-    bool Wait; //Will the task wait to obtain the semaphore
+    bool semWait; //Will the task wait to obtain the semaphore
     byte timeoutLength; // only relevant if doAcquire is true, gives wait time
     bool doDelete; // will task delete the semaphore
     bool doDelete2;
@@ -1053,7 +1049,7 @@ inline assignDefaults(defaults, opts) {
     opts.sName = defaults.sName;
     opts.doAcquire = defaults.doAcquire;
     opts.doAcquire2 = defaults.doAcquire2;
-    opts.Wait = defaults.Wait;
+    opts.semWait = defaults.semWait;
     opts.timeoutLength=defaults.timeoutLength;
     opts.doDelete=defaults.doDelete;
     opts.doDelete2=defaults.doDelete2;
@@ -1101,7 +1097,7 @@ inline chooseScenario() {
     defaults.doAcquire = false;
     defaults.doRelease = false;
     defaults.doRelease2 = false;
-    defaults.Wait = false;
+    defaults.semWait = false;
     defaults.timeoutLength = NO_TIMEOUT;
     defaults.doDelete = false;
     defaults.doDelete2 = false;
@@ -1180,7 +1176,7 @@ inline chooseScenario() {
 
         ::  task_in[TASK2_ID].doAcquire = true;
             task_in[TASK3_ID].doAcquire = true;
-            task_in[TASK3_ID].Wait = true;
+            task_in[TASK3_ID].semWait = true;
             task_in[TASK2_ID].doRelease=true;
             task_in[TASK3_ID].doRelease = false;
             printf( "@@@ %d LOG sub-scenario WAIT no timeout\n", _pid);   
@@ -1188,7 +1184,7 @@ inline chooseScenario() {
 
         ::  task_in[TASK2_ID].doAcquire = true;
             task_in[TASK3_ID].doAcquire = true;
-            task_in[TASK3_ID].Wait = true;
+            task_in[TASK3_ID].semWait = true;
             task_in[TASK3_ID].timeoutLength = 2;
             task_in[TASK2_ID].doRelease=true;
             task_in[TASK3_ID].doRelease = true;
@@ -1196,7 +1192,7 @@ inline chooseScenario() {
 
         ::  task_in[TASK2_ID].doAcquire= true;
             task_in[TASK3_ID].doAcquire = true;
-            task_in[TASK3_ID].Wait = true;
+            task_in[TASK3_ID].semWait = true;
             task_in[TASK2_ID].doRelease= false;
             task_in[TASK3_ID].doRelease = false;
             task_in[TASK2_ID].doFlush= true;
@@ -1229,7 +1225,7 @@ inline chooseScenario() {
         ::  task_in[TASK1_ID].doCreate2 = true;
             task_in[TASK2_ID].doAcquire = true;
             task_in[TASK3_ID].doAcquire = true;
-            task_in[TASK3_ID].Wait = true;
+            task_in[TASK3_ID].semWait = true;
             task_in[TASK2_ID].doRelease=true;
             task_in[TASK3_ID].doRelease = false;
             task_in[TASK2_ID].doAcquire2 = true;
@@ -1441,9 +1437,9 @@ proctype Runner (byte nid, taskid; TaskInputs opts) {
     ::  opts.doAcquire -> 
             sem_id=1
             printf("@@@ %d CALL sema_obtain %d %d %d\n",
-                    _pid, sem_id, opts.Wait, opts.timeoutLength);
+                    _pid, sem_id, opts.semWait, opts.timeoutLength);
                     /* (self,   sem_id, optionset, timeout,   rc) */
-            sema_obtain(taskid, sem_id, opts.Wait, opts.timeoutLength, rc);
+            sema_obtain(taskid, sem_id, opts.semWait, opts.timeoutLength, rc);
             printf("@@@ %d SCALAR rc %d\n",_pid, rc);
     ::  else -> skip;
     fi
@@ -1452,9 +1448,9 @@ proctype Runner (byte nid, taskid; TaskInputs opts) {
     ::  opts.doAcquire2 -> 
             sem_id=2;
             printf("@@@ %d CALL sema_obtain2 %d %d %d\n",
-                    _pid, sem_id, opts.Wait, opts.timeoutLength);
+                    _pid, sem_id, opts.semWait, opts.timeoutLength);
                     /* (self,   sem_id, optionset, timeout,   rc) */
-            sema_obtain(taskid, sem_id, opts.Wait, opts.timeoutLength, rc);
+            sema_obtain(taskid, sem_id, opts.semWait, opts.timeoutLength, rc);
             printf("@@@ %d SCALAR rc %d\n",_pid, rc);
     ::  else -> skip;
     fi
@@ -1619,7 +1615,7 @@ proctype Runner (byte nid, taskid; TaskInputs opts) {
         Obtain(task1Sema);
     fi
 
-    // Wait for other tasks to finish
+    // semWait for other tasks to finish
     Obtain(task2Sema);
     Obtain(task3Sema);
 
@@ -1737,9 +1733,9 @@ proctype Worker0 (byte nid, taskid; TaskInputs opts) {
             :: else -> Release(task3Sema); 
             fi
             printf("@@@ %d CALL sema_obtain %d %d %d\n",
-                    _pid, sem_id, opts.Wait, opts.timeoutLength);
+                    _pid, sem_id, opts.semWait, opts.timeoutLength);
                     /* (self,   sem_id, optionset, timeout,   rc) */
-            sema_obtain(taskid, sem_id, opts.Wait, opts.timeoutLength, rc);           
+            sema_obtain(taskid, sem_id, opts.semWait, opts.timeoutLength, rc);           
         }
         
         printf("@@@ %d SCALAR rc %d\n",_pid, rc);
@@ -1771,9 +1767,9 @@ proctype Worker0 (byte nid, taskid; TaskInputs opts) {
         atomic{
             sem_id=2;
             printf("@@@ %d CALL sema_obtain2 %d %d %d\n",
-                    _pid, sem_id, opts.Wait, opts.timeoutLength);
+                    _pid, sem_id, opts.semWait, opts.timeoutLength);
                     /* (self,   sem_id, optionset, timeout,   rc) */
-            sema_obtain(taskid, sem_id, opts.Wait, opts.timeoutLength, rc);
+            sema_obtain(taskid, sem_id, opts.semWait, opts.timeoutLength, rc);
            
         }
         
@@ -2000,9 +1996,9 @@ proctype Worker1 (byte nid, taskid; TaskInputs opts) {
             fi
             
             printf("@@@ %d CALL sema_obtain %d %d %d\n",
-                    _pid, sem_id, opts.Wait, opts.timeoutLength);
+                    _pid, sem_id, opts.semWait, opts.timeoutLength);
                     /* (self,   sem_id, optionset, timeout,   rc) */
-            sema_obtain(taskid, sem_id, opts.Wait, opts.timeoutLength, rc);
+            sema_obtain(taskid, sem_id, opts.semWait, opts.timeoutLength, rc);
             
  
         }
@@ -2018,9 +2014,9 @@ proctype Worker1 (byte nid, taskid; TaskInputs opts) {
             sem_id=2;
             
             printf("@@@ %d CALL sema_obtain2 %d %d %d\n",
-                    _pid, sem_id, opts.Wait, opts.timeoutLength);
+                    _pid, sem_id, opts.semWait, opts.timeoutLength);
                     /* (self,   sem_id, optionset, timeout,   rc) */
-            sema_obtain(taskid, sem_id, opts.Wait, opts.timeoutLength, rc);
+            sema_obtain(taskid, sem_id, opts.semWait, opts.timeoutLength, rc);
             
         }
         

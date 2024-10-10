@@ -96,18 +96,11 @@ inline outputDefines () {
 
 
 
-// Special values: task states, options, return codes
-mtype = {
-  Zombie, Ready, EventWait, TimeWait, OtherWait, // Task states
-  Wait, NoWait, All, Any, // Option Set values
-};
-
-
 // Tasks
 typedef Task {
   byte nodeid; // So we can spot remote calls
   byte pmlid; // Promela process id
-  mtype state ; // {Ready,EventWait,TickWait,OtherWait}
+  mtype state ; // {Ready,EventWait,TimeWait,OtherWait}
   bool preemptable ;
   byte prio ; // lower number is higher priority
   int ticks; //

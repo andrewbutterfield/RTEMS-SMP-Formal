@@ -78,11 +78,6 @@ inline outputDefines () {
    printf("@@@ %d DEF SEMA_MAX %d\n",_pid,SEMA_MAX);
 }
 
-// Special values: task states, options, return codes
-mtype = {
-  // Task states, BarrierWait is same as TimeWait but with no timeout
-  Zombie, Ready, BarrierWait, TimeWait, OtherWait,
-};
 
 // Tasks
 typedef Task {
