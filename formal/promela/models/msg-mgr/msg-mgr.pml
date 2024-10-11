@@ -36,16 +36,18 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#define TASK_MAX 4 //three rtems tasks
+#define SEMA_MAX 3
+
 #include "../common/rtems.pml"
 
 // Message queue attributes
 
-#define TASK_MAX 4 //three rtems tasks
 #define NULL 0
 
-#define SEMA_MAX 3
 
-#define BAD_ID TASK_MAX
+
+
 
 #define MAX_MESSAGE_QUEUES 3
 #define MAX_PENDING_MESSAGES 4

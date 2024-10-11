@@ -50,6 +50,14 @@
  * and use an inline to output them.
  */
 
+ // We envisage three RTEMS tasks involved.
+#define TASK_MAX 4 // These are the "RTEMS" tasks only, numbered 1, 2 & 3
+                   // We reserve 0 to model NULL pointers
+
+// We use semaphores to synchronise the tasks
+#define SEMA_MAX 3
+
+
 #include "../common/rtems.pml"
 
 // Barriers - we will test Automatic and Manual Barriers 
@@ -61,12 +69,6 @@
 #define MAX_WAITERS 3
 #define NO_TIMEOUT 0
 
-// We envisage three RTEMS tasks involved.
-#define TASK_MAX 4 // These are the "RTEMS" tasks only, numbered 1, 2 & 3
-                   // We reserve 0 to model NULL pointers
-
-// We use semaphores to synchronise the tasks
-#define SEMA_MAX 3
 
 // Output configuration
 inline outputDefines () {

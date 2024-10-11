@@ -1,11 +1,16 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
-
 /*
- * PML Modlling code common to all/most models
+ * PML Modelling code common to all/most models
+ *
+ * IMPORTANT: 
+ *  a model must #define TASK_MAX and SEMA_MAX *before* #including this file.
  *
  * We start with return code, options, attributes
  */
+
+// values equal or greater than this denote invalid task ids
+#define BAD_ID TASK_MAX   
 
 // Return Values
 // Defined in cpukit/include/rtems/rtems/status.h
@@ -99,7 +104,6 @@ mtype = {
  *   existent         --Deleting-->     Non-existent
  *
  * We don't need mtype values for these.
- *
  */
 
  /*

@@ -50,6 +50,14 @@
  * and use an inline to output them.
  */
 
+// We envisage two RTEMS tasks involved, at most.
+#define TASK_MAX 3 // These are the "RTEMS" tasks only, numbered 1 & 2
+                   // We reserve 0 to model NULL pointers
+
+// We use two semaphores to synchronise the tasks
+#define SEMA_MAX 2
+
+
 #include "../common/rtems.pml"
 
 // Event Sets - we only support 4 events, rather than 32
@@ -63,15 +71,7 @@
 #define EVTS_ALL 15
 #define NO_TIMEOUT 0
 
-// We envisage two RTEMS tasks involved, at most.
-#define TASK_MAX 3 // These are the "RTEMS" tasks only, numbered 1 & 2
-                   // We reserve 0 to model NULL pointers
 
-// We use two semaphores to synchronise the tasks
-#define SEMA_MAX 2
-
-// IDs here index an array, so we use the largest bad index as a bad id
-#define BAD_ID TASK_MAX
 
 
 inline outputDefines () {
