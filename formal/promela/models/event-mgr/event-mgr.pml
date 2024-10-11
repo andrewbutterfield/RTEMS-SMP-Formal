@@ -105,6 +105,7 @@ typedef Task {
   byte prio ; // lower number is higher priority
   int ticks; //
   bool tout; // true if woken by a timeout
+  // Event Model related
   unsigned wanted  : NO_OF_EVENTS ; // EvtSet, those expected by receiver
   unsigned pending : NO_OF_EVENTS ; // EvtSet, those already received
   bool all; // Do we want All?

@@ -108,12 +108,14 @@ typedef Task {
     byte pmlid; // Promela process id
     mtype state ; // {Ready,SemaWait,TimeWait,OtherWait}
     bool preemptable;
-    byte taskCeilingPriority; // task's ceiling priority - lower number is higher priority
-    byte initialPriority // task's initial/default priority
-    byte effectivePriority; // task's current active priority
-    bool blocked;
+    byte prio; // lower number is higher priority
     int ticks; // clock ticks to keep track of timeout
     bool tout; // true if woken by a timeout
+    // Semaphore Model Specific?
+    bool blocked;
+    byte taskCeilingPriority; // task's ceiling priority 
+    byte initialPriority // task's initial/default priority
+    byte effectivePriority; // task's current active priority
 };
 
 

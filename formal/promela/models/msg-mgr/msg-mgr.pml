@@ -72,16 +72,18 @@ typedef Task {
   byte prio ; // lower number is higher priority
   int ticks; //
   bool tout; // true if woken by a timeout
-  bool doCreate; // whether to create a queue
-  bool doSend; //whether task should send
-  bool doReceive; //whether task should receive
-  bool doWait; //whether task should wait message
+  // Message Model related
   int rcvInterval; //how many ticks to wait
   int rcvMsg; //hold value of message received, modelling receive buffer
   int sndMsg; //hold value of message to send, modelling send buffer
   int targetQueue; //queue id for task to interact with
   int numSends; //number of message send calls to make
   int msgSize; //size of message to send
+  // Scenario related?
+  bool doCreate; // whether to create a queue
+  bool doSend; //whether task should send
+  bool doReceive; //whether task should receive
+  bool doWait; //whether task should wait message
 };
 
 Task tasks[TASK_MAX]; // tasks[0] models a NULL dereference
