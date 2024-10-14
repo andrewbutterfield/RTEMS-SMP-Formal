@@ -11,7 +11,7 @@ SEGEND: "}"
 NAME: |
   /* Test Name is defined in the Test Case code (tc-model-msg-mgr.c) */
 
-semaphore_DCL: rtems_id {0}[SEMA_MAX];
+test_sync_sema_DCL: rtems_id {0}[SEMA_MAX];
 
 sendrc_DCL: rtems_status_code
 

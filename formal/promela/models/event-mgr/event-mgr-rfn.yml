@@ -36,7 +36,7 @@ NAME: |
 
 pending_DCL: rtems_event_set {0}[TASK_MAX];
 
-semaphore_DCL: rtems_id {0}[SEMA_MAX];
+test_sync_sema_DCL: rtems_id {0}[SEMA_MAX];
 
 sc_DCL: rtems_status_code
 

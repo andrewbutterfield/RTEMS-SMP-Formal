@@ -34,7 +34,7 @@ SEGEND: "}"
 NAME: |
   /* Test Name is defined in the Test Case code (tc-sem-mgr-model.c) */
 
-semaphore_DCL: rtems_id {0}[{1}];
+test_sync_sema_DCL: rtems_id {0}[{1}];
 
 sc_DCL: rtems_status_code
 

@@ -31,7 +31,7 @@ SEGNAMEPFX: TestSegment{} # segnumber
 NAME: |
   /* Test Name is defined in the Test Case code (tc-model-barrier-mgr.c) */
 
-semaphore_DCL: rtems_id {0}[{1}];
+test_sync_sema_DCL: rtems_id {0}[{1}];
 
 INIT: |
   initialise_semaphore( 0, ctx->runner_sema,  test_sync_sema );
