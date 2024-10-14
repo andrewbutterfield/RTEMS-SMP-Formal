@@ -36,10 +36,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "../common/rtems.pml"
 #define TASK_MAX 4 //three rtems tasks
 #define SEMA_MAX 3
-
-#include "../common/rtems.pml"
+#include "../common/model.pml"
 
 // Message queue attributes
 
@@ -63,7 +63,7 @@ inline outputDefines() {
     printf("@@@ %d DEF MAX_PENDING_MESSAGES %d\n",_pid, MAX_PENDING_MESSAGES);
 }
 
-
+mtype{ MsgWait } ;// need to know when Blocked waiting for message
 
 // Tasks
 typedef Task {

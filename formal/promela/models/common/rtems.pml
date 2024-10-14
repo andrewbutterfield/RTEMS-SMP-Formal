@@ -1,10 +1,8 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /*
- * PML Modelling code common to all/most models
+ * Models key RTEMS datatpyes
  *
- * IMPORTANT: 
- *  a model must #define TASK_MAX and SEMA_MAX *before* #including this file.
  *
  * We start with return code, options, attributes
  */
@@ -78,20 +76,20 @@ mtype = {
  *
  * We often want to model WHY something is Blocked:
  *   TimeWait  --  usually when waiting on a timeout
+ *   OtherWait -- other blocking conditions
+ * Individual models may add other specific variations for Blocked:
  *   BarrierWait --  waiting for a barrier to be released
  *   EventWait -- waiting for an event-set to be received
  *   MsgWait -- waiting for a message to be queued
  *   SemaWait -- waiting to acquire a semaphore
  *   PrioWait -- waiting for higher priority to yield/block/delete (?)
- *   OtherWait -- all other blocking conditions
  *
  *   We use Zombie for a deleted task at the end of a scenario
  *   We don't explicitly model Executing at present
  *   We haven't used Dormant yet but will need it for the Task Manager model
  */
 mtype = {
-  Zombie, Dormant, Ready , OtherWait, TimeWait, 
-, BarrierWait, EventWait, MsgWait, PrioWait, SemaWait
+  Zombie, Dormant, Ready, TimeWait, OtherWait
 }
 /*
  * Transitions  (from-state(s) --Transition--> to-state ):
@@ -105,9 +103,3 @@ mtype = {
  *
  * We don't need mtype values for these.
  */
-
- /*
-  *  We continue with bits of Promela code of general utility
-  */
-
-inline nl() { printf("\n") } // Useful shorthand

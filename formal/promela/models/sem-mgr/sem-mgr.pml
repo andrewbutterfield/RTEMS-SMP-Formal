@@ -36,16 +36,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// We envisage three RTEMS tasks involved.
-#define TASK_MAX 4 // These are the "RTEMS" tasks only, numbered 1 & 2 & 3,
-                   // We reserve 0 to model NULL pointers
-
-
-// We use mutexes to synchronise the tasks
-#define SEMA_MAX 3
-
-
 #include "../common/rtems.pml"
+#define TASK_MAX 4
+#define SEMA_MAX 3
+#include "../common/model.pml"
 
 #define MAX_MODEL_SEMAS 3 // 0 for NULL pointers
 #define NO_TIMEOUT 0
@@ -103,6 +97,7 @@ int task1Core;
 int task2Core;
 int task3Core;
 
+mtype{ SemaWait } ; // need to know when Blocked on a semaphore
 
 typedef Task {
     byte nodeid; // So we can spot remote calls

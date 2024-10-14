@@ -44,21 +44,18 @@
  *   Test Runner: model-events-mgr-run.h
  */
 
+
+#include "../common/rtems.pml"
+#define TASK_MAX 3 
+#define SEMA_MAX 2
+#include "../common/model.pml"
+
+
 /*
  * We need to output annotations for any #define we use.
  * It is simplest to keep them all together,
  * and use an inline to output them.
  */
-
-// We envisage two RTEMS tasks involved, at most.
-#define TASK_MAX 3 // These are the "RTEMS" tasks only, numbered 1 & 2
-                   // We reserve 0 to model NULL pointers
-
-// We use two semaphores to synchronise the tasks
-#define SEMA_MAX 2
-
-
-#include "../common/rtems.pml"
 
 // Event Sets - we only support 4 events, rather than 32
 #define NO_OF_EVENTS 4
@@ -70,9 +67,6 @@
 #define EVT_3 8
 #define EVTS_ALL 15
 #define NO_TIMEOUT 0
-
-
-
 
 inline outputDefines () {
    printf("@@@ %d DEF NO_OF_EVENTS %d\n",_pid,NO_OF_EVENTS);
@@ -94,7 +88,7 @@ inline outputDefines () {
    printf("@@@ %d DEF RC_Timeout RTEMS_TIMEOUT\n",_pid);
 }
 
-
+mtype{ EventWait } ; // need to know when Blocked by an event receive
 
 // Tasks
 typedef Task {

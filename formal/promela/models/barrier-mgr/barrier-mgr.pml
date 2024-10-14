@@ -44,21 +44,11 @@
  *   Test Runner: barrier-events-mgr-run.h
  */
 
-/*
- * We need to output annotations for any #define we use.
- * It is simplest to keep them all together,
- * and use an inline to output them.
- */
-
- // We envisage three RTEMS tasks involved.
-#define TASK_MAX 4 // These are the "RTEMS" tasks only, numbered 1, 2 & 3
-                   // We reserve 0 to model NULL pointers
-
-// We use semaphores to synchronise the tasks
-#define SEMA_MAX 3
-
 
 #include "../common/rtems.pml"
+#define TASK_MAX 4 
+#define SEMA_MAX 3
+#include "../common/model.pml"
 
 // Barriers - we will test Automatic and Manual Barriers 
 #define MAX_BARRIERS 2 // Max amount of barriers available to be created
@@ -70,6 +60,13 @@
 #define NO_TIMEOUT 0
 
 
+/*
+ * We need to output annotations for any #define we use.
+ * It is simplest to keep them all together,
+ * and use an inline to output them.
+ */
+
+
 // Output configuration
 inline outputDefines () {
    printf("@@@ %d DEF MAX_BARRIERS %d\n",_pid,MAX_BARRIERS);
@@ -79,6 +76,8 @@ inline outputDefines () {
    printf("@@@ %d DEF TASK_MAX %d\n",_pid,TASK_MAX);
    printf("@@@ %d DEF SEMA_MAX %d\n",_pid,SEMA_MAX);
 }
+
+mtype{ BarrierWait }; // need to know when Blocked by a barrier
 
 
 // Tasks

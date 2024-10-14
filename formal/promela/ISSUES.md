@@ -1,24 +1,11 @@
 # ISSUES
 
-## rtems.pml
+## CURRENT WORK
 
-We current include rtems.pml after defining TASK_MAX and SEMA_MAX in our models
-but these are not reallt RTEMS related, but our-model related
-
-Perhaps we should have a common/models.pml that does this calc?
-
-```
-#include "../common/rtems.pml"
-#define TASK_MAX M
-#define SEMA_MAX N
-#include "../common/model.pml"
-```
+Moving common parts in all models to `common/(rtems/model).pml` as appropriate.
 
 
 ## PUZZLING
-
-
-
 
 ### STATUS
 
