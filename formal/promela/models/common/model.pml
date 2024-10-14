@@ -27,13 +27,13 @@
  * Binary semaphores:  True means available, False means in use.
  */
 
-bool semaphore[SEMA_MAX]; // Semaphore
+bool test_sync_sema[SEMA_MAX]; // Semaphore
 
 inline TestSyncObtain(sem_id){
   atomic{
     printf("@@@ %d WAIT %d\n",_pid,sem_id);
-    semaphore[sem_id] ;        // wait until available
-    semaphore[sem_id] = false; // set as in use
+    test_sync_sema[sem_id] ;        // wait until available
+    test_sync_sema[sem_id] = false; // set as in use
     printf("@@@ %d LOG WAIT %d Over\n",_pid,sem_id);
   }
 }
@@ -41,13 +41,13 @@ inline TestSyncObtain(sem_id){
 inline TestSyncRelease(sem_id){
   atomic{
     printf("@@@ %d SIGNAL %d\n",_pid,sem_id);
-    semaphore[sem_id] = true ; // release
+    test_sync_sema[sem_id] = true ; // release
   }
 }
 
 inline TestSyncReleased(sem_id)
 {
-  semaphore[sem_id] = true ;
+  test_sync_sema[sem_id] = true ;
 }
 
 

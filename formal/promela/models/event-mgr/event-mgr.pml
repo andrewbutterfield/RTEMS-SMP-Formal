@@ -117,7 +117,7 @@ byte recout[TASK_MAX] ; // models receive 'out' location.
  *   Receive;;Send  =  Receive;TestSyncRelease(1) || TestSyncObtain(1);Send
  * Here ;; is "sequential" composition of *different* threads
  */
-// bool semaphore[SEMA_MAX]; // Semaphore
+
 
 inline outputDeclarations () {
   printf("@@@ %d DECL byte sendrc 0\n",_pid);
@@ -125,7 +125,7 @@ inline outputDeclarations () {
   // Rather than refine an entire Task array, we refine array 'slices'
   printf("@@@ %d DCLARRAY EvtSet pending TASK_MAX\n",_pid);
   printf("@@@ %d DCLARRAY byte recout TASK_MAX\n",_pid);
-  printf("@@@ %d DCLARRAY Semaphore semaphore SEMA_MAX\n",_pid);
+  printf("@@@ %d DCLARRAY Semaphore test_sync_sema SEMA_MAX\n",_pid);
 }
 
 inline printevents (evts) {
@@ -447,8 +447,8 @@ inline chooseScenario() {
   doReceive = true;
   sendTwice = false;
   sentFirst = false;
-  semaphore[0] = false;
-  semaphore[1] = false;
+  test_sync_sema[0] = false;
+  test_sync_sema[1] = false;
   sendPrio = 2;
   sendPreempt = false;
   sendTarget = RCV_ID;

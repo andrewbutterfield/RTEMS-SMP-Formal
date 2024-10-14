@@ -211,7 +211,7 @@ inline outputDeclarations () {
   printf("@@@ %d DCLARRAY RTEMS_MESSAGE_QUEUE_BUFFER queue_buffer MAX_PENDING_MESSAGES\n",_pid);
   // Rather than refine an entire Task array, we refine array 'slices'
   printf("@@@ %d DCLARRAY byte recout TASK_MAX\n",_pid);
-  printf("@@@ %d DCLARRAY Semaphore semaphore SEMA_MAX\n",_pid);
+  printf("@@@ %d DCLARRAY Semaphore test_sync_sema SEMA_MAX\n",_pid);
 }
 
 
@@ -395,9 +395,9 @@ mtype scenario;
 inline chooseScenario() {
 
   sendAgain = false;
-  semaphore[0] = false;
-  semaphore[1] = false;
-  semaphore[2] = false;
+  test_sync_sema[0] = false;
+  test_sync_sema[1] = false;
+  test_sync_sema[2] = false;
   sendSema = 0;
   rcvSema1 = 1;
   rcvSema2 = 2;

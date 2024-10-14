@@ -115,7 +115,7 @@ Barrier barriers[MAX_BARRIERS]; // barriers[0] models a NULL dereference
 
 
 inline outputDeclarations () {
-  printf("@@@ %d DCLARRAY Semaphore semaphore SEMA_MAX\n",_pid);
+  printf("@@@ %d DCLARRAY Semaphore test_sync_sema SEMA_MAX\n",_pid);
 }
 
 
@@ -608,11 +608,11 @@ inline chooseScenario() {
   assignDefaults(defaults, task_in[TASK3_ID]);
 
   // Semaphore initialization
-  semaphore[0] = false;
+  test_sync_sema[0] = false;
   task1Sema = 0;
-  semaphore[1] = false;
+  test_sync_sema[1] = false;
   task2Sema = 1;
-  semaphore[2] = false;
+  test_sync_sema[2] = false;
   task3Sema = 2;
 
   tasks[TASK1_ID].state = Ready;

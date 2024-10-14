@@ -41,9 +41,9 @@ sc_DCL: rtems_status_code
 prio_DCL: rtems_task_priority
 
 INIT: |
-  initialise_semaphore( 0, ctx->runner_sema, semaphore );
-  initialise_semaphore( 1, ctx->worker0_sema, semaphore );
-  initialise_semaphore( 2, ctx->worker1_sema, semaphore );
+  initialise_semaphore( 0, ctx->runner_sema, test_sync_sema );
+  initialise_semaphore( 1, ctx->worker0_sema, test_sync_sema );
+  initialise_semaphore( 2, ctx->worker1_sema, test_sync_sema );
 
 Runner: |
   checkTaskIs( ctx->runner_id );
@@ -55,11 +55,11 @@ Worker1: |
   checkTaskIs( ctx->worker1_id );
 
 SIGNAL: |
-  ReleaseTestSyncSema( semaphore[{}] );
+  ReleaseTestSyncSema( test_sync_sema[{}] );
 
 
 WAIT: |
-  ObtainTestSyncSema( semaphore[{0}] );
+  ObtainTestSyncSema( test_sync_sema[{0}] );
 
   
 merge_attribs: |

@@ -50,8 +50,8 @@ recout_DCL: rtems_event_set {0}[TASK_MAX];
 
 INIT: |
   initialise_pending( pending, TASK_MAX );
-  initialise_semaphore( 0, ctx->runner_wakeup, semaphore );
-  initialise_semaphore( 1, ctx->worker_wakeup, semaphore );
+  initialise_semaphore( 0, ctx->runner_wakeup, test_sync_sema );
+  initialise_semaphore( 1, ctx->worker_wakeup, test_sync_sema );
 
 Runner: |
   checkTaskIs( ctx->runner_id );
@@ -60,10 +60,10 @@ Worker: |
   checkTaskIs( ctx->worker_id );
 
 SIGNAL: |
-  ReleaseTestSyncSema( semaphore[{}] );
+  ReleaseTestSyncSema( test_sync_sema[{}] );
 
 WAIT: |
-  ObtainTestSyncSema( semaphore[{}] );
+  ObtainTestSyncSema( test_sync_sema[{}] );
 
 event_send: |
   T_log( T_NORMAL, "Calling Send(%d,%d)", mapid( ctx, {1}), {2} );
