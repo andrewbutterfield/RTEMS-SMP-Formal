@@ -107,48 +107,16 @@ Barrier barriers[MAX_BARRIERS]; // barriers[0] models a NULL dereference
 /*
  * Running Orders (maintained by simple global sync counter):
  *  Create;;Ident = Barrier Identified only after creating
- *  Acquire;;Release = Manual barrier is acquired and then released
+ *  Acquire;;TestSyncRelease = Manual barrier is acquired and then released
  *  Acquire;;Delete = Manual barrier is acquired and then deleted
  * Here ;; is "sequential" composition of *different* threads.
  * Additionally task 1 will always create a barrier before operations
  */
-bool semaphore[SEMA_MAX]; // Semaphore
+
 
 inline outputDeclarations () {
   printf("@@@ %d DCLARRAY Semaphore semaphore SEMA_MAX\n",_pid);
 }
-
-/*
- * Synchronisation Mechanisms
- *
- *  Obtained(sem_id) - call that waits if semaphore 
- *   `sem_id` is aquired by someone.
- *  Obtain(sem_id) - obttains semaphore `sem_id`
- *  Release(sem_id)  - call that releases semaphore `sem_id`
- *
- * Binary semaphores:  True means available, False means in use.
- */
-
-inline Obtain(sem_id){
-  atomic{
-    printf("@@@ %d WAIT %d\n",_pid,sem_id);
-    semaphore[sem_id] ;        // wait until available
-    semaphore[sem_id] = false; // set as in use
-    printf("@@@ %d LOG WAIT %d Over\n",_pid,sem_id);
-  }
-}
-
-inline Release(sem_id){
-  atomic{
-    printf("@@@ %d SIGNAL %d\n",_pid,sem_id);
-    semaphore[sem_id] = true ; // release
-  }
-}
-
-/* The following inlines are not given here as atomic,
- * but are intended to be used in an atomic context.
-*/
-
 
 
 /*
@@ -547,7 +515,7 @@ inline barrier_delete(self,bid,rc) {
 
  /*
  * Task variants:
- *   Task objectives - Barrier {Create, Acquire, Release, Delete}
+ *   Task objectives - Barrier {Create, Acquire, TestSyncRelease, Delete}
  *   timeout_length in {0,1,2...}
  *   
  * Task Scenarios:
@@ -764,7 +732,7 @@ proctype Runner (byte nid, taskid; TaskInputs opts) {
         barrier_ident(opts.bName,bid,rc);
         printf("@@@ %d SCALAR rc %d\n",_pid, rc);
   fi
-  Release(task2Sema);
+  TestSyncRelease(task2Sema);
 
   if
   ::  opts.doAcquire -> 
@@ -778,7 +746,7 @@ proctype Runner (byte nid, taskid; TaskInputs opts) {
 
   if
   ::  opts.doRelease -> 
-        Obtain(task1Sema);
+        TestSyncObtain(task1Sema);
         int nreleased;
         if
         :: opts.releasedNull -> nreleased = 0;
@@ -794,26 +762,26 @@ proctype Runner (byte nid, taskid; TaskInputs opts) {
         :: else -> skip;
         fi
         printf("@@@ %d SCALAR rc %d\n",_pid, rc);
-        Release(task1Sema);
+        TestSyncRelease(task1Sema);
   ::  else -> skip
   fi
 
   if
   ::  opts.doDelete -> 
-        Obtain(task1Sema);
+        TestSyncObtain(task1Sema);
         printf("@@@ %d CALL barrier_delete %d\n",_pid, bid);
                   /*  (self,   bid, rc) */
         barrier_delete(taskid, bid, rc);
         printf("@@@ %d SCALAR rc %d\n",_pid, rc);
-        Release(task1Sema);
+        TestSyncRelease(task1Sema);
   ::  else -> skip
   fi
 
   // Make sure everyone ran
-  Obtain(task1Sema);
+  TestSyncObtain(task1Sema);
   // Wait for other tasks to finish
-  Obtain(task2Sema);
-  Obtain(task3Sema);
+  TestSyncObtain(task2Sema);
+  TestSyncObtain(task3Sema);
 
   printf("@@@ %d LOG Task %d finished\n",_pid,taskid);
   tasks[taskid].state = Zombie;
@@ -846,7 +814,7 @@ proctype Worker0 (byte nid, taskid; TaskInputs opts) {
   :: else -> skip
   fi
 
-  Obtain(task2Sema);
+  TestSyncObtain(task2Sema);
   if
   ::  opts.doCreate -> 
         printf("@@@ %d CALL barrier_create %d %d %d %d\n"
@@ -869,14 +837,14 @@ proctype Worker0 (byte nid, taskid; TaskInputs opts) {
   if
   ::  opts.doAcquire -> 
         atomic{
-          Release(task3Sema);
+          TestSyncRelease(task3Sema);
           printf("@@@ %d CALL barrier_wait %d %d\n",
                     _pid, bid, opts.timeoutLength);          
                    /* (self,   bid, timeout,            rc) */
           barrier_wait(taskid, bid, opts.timeoutLength, rc);
         }
         printf("@@@ %d SCALAR rc %d\n",_pid, rc);
-  ::  else -> Release(task3Sema);
+  ::  else -> TestSyncRelease(task3Sema);
   fi
 
   if
@@ -908,7 +876,7 @@ proctype Worker0 (byte nid, taskid; TaskInputs opts) {
   ::  else -> skip
   fi
   atomic{
-    Release(task2Sema);
+    TestSyncRelease(task2Sema);
     printf("@@@ %d LOG Task %d finished\n",_pid,taskid);
     tasks[taskid].state = Zombie;
     printf("@@@ %d STATE %d Zombie\n",_pid,taskid)
@@ -940,7 +908,7 @@ proctype Worker1 (byte nid, taskid; TaskInputs opts) {
        printf("@@@ %d CALL SetProcessor %d\n", _pid, tasks[taskid].nodeid);
   :: else -> skip
   fi
-  Obtain(task3Sema);
+  TestSyncObtain(task3Sema);
 
   if
   ::  opts.doCreate -> 
@@ -964,14 +932,14 @@ proctype Worker1 (byte nid, taskid; TaskInputs opts) {
   if
   ::  opts.doAcquire -> 
         atomic{
-          Release(task1Sema);
+          TestSyncRelease(task1Sema);
           printf("@@@ %d CALL barrier_wait %d %d\n",
                     _pid, bid, opts.timeoutLength);          
                    /* (self,   bid, timeout,            rc) */
           barrier_wait(taskid, bid, opts.timeoutLength, rc);
         }
         printf("@@@ %d SCALAR rc %d\n",_pid, rc);
-  ::  else -> Release(task1Sema);
+  ::  else -> TestSyncRelease(task1Sema);
   fi
 
   if
@@ -1003,7 +971,7 @@ proctype Worker1 (byte nid, taskid; TaskInputs opts) {
   ::  else -> skip
   fi
   atomic {
-    Release(task3Sema);
+    TestSyncRelease(task3Sema);
     printf("@@@ %d LOG Task %d finished\n",_pid,taskid);
     tasks[taskid].state = Zombie;
     printf("@@@ %d STATE %d Zombie\n",_pid,taskid)

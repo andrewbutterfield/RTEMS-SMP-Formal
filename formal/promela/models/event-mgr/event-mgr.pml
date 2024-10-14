@@ -114,10 +114,10 @@ byte recout[TASK_MAX] ; // models receive 'out' location.
 
 /*
  * Running Orders (maintained by simple global sync counter):
- *   Receive;;Send  =  Receive;Release(1) || Obtain(1);Send
+ *   Receive;;Send  =  Receive;TestSyncRelease(1) || TestSyncObtain(1);Send
  * Here ;; is "sequential" composition of *different* threads
  */
-bool semaphore[SEMA_MAX]; // Semaphore
+// bool semaphore[SEMA_MAX]; // Semaphore
 
 inline outputDeclarations () {
   printf("@@@ %d DECL byte sendrc 0\n",_pid);
@@ -127,36 +127,6 @@ inline outputDeclarations () {
   printf("@@@ %d DCLARRAY byte recout TASK_MAX\n",_pid);
   printf("@@@ %d DCLARRAY Semaphore semaphore SEMA_MAX\n",_pid);
 }
-
-/*
- * Synchronisation Mechanisms
- *  Obtain(sem_id)   - call that waits to obtain semaphore `sem_id`
- *  Release(sem_id)  - call that releases semaphore `sem_id`
- *  Released(sem_id) - simulates ecosystem behaviour releases `sem_id`
- *
- * Binary semaphores:  True means available, False means in use.
- */
-inline Obtain(sem_id){
-  atomic{
-    printf("@@@ %d WAIT %d\n",_pid,sem_id);
-    semaphore[sem_id] ;        // wait until available
-    semaphore[sem_id] = false; // set as in use
-    printf("@@@ %d LOG WAIT %d Over\n",_pid,sem_id);
-  }
-}
-
-inline Release(sem_id){
-  atomic{
-    printf("@@@ %d SIGNAL %d\n",_pid,sem_id);
-    semaphore[sem_id] = true ; // release
-  }
-}
-
-inline Released(sem_id)
-{
-  semaphore[sem_id] = true ;
-}
-
 
 inline printevents (evts) {
   printf("{%d,%d,%d,%d}",(evts)/8%2,(evts)/4%2,(evts)/2%2,(evts)%2);
@@ -267,7 +237,7 @@ inline event_send(self,tid,evts,rc) {
             preemptIfRequired(self,tid) ;
             // tasks[self].state may now be OtherWait !
             /* if
-            :: tasks[self].state == OtherWait -> Released(sendSema)
+            :: tasks[self].state == OtherWait -> TestSyncReleased(sendSema)
             :: else
             fi */
             waitUntilReady(self);
@@ -348,7 +318,7 @@ inline event_receive(self,evts,wait,wantall,interval,out,rc){
             tasks[self].state = EventWait;
             printf("@@@ %d STATE %d EventWait\n",_pid,self)
             if
-            :: sendTwice && !sentFirst -> Released(sendSema);
+            :: sendTwice && !sentFirst -> TestSyncReleased(sendSema);
             :: else
             fi
             waitUntilReady(self);
@@ -592,7 +562,7 @@ proctype Sender (byte nid, taskid) {
 
 repeat:
 
-  Obtain(sendSema);
+  TestSyncObtain(sendSema);
 
   if
   :: doSend ->
@@ -615,7 +585,7 @@ repeat:
   :: else
   fi
 
-  Release(rcvSema);
+  TestSyncRelease(rcvSema);
 
   if
   :: sendTwice && !sentFirst ->
@@ -652,10 +622,10 @@ proctype Receiver (byte nid, taskid) {
   :: else
   fi
 
-  Release(startSema); // make sure stuff starts */
+  TestSyncRelease(startSema); // make sure stuff starts */
   /* printf("@@@ %d LOG Receiver Task %d running on Node %d\n",_pid,taskid,nid); */
 
-  Obtain(rcvSema);
+  TestSyncObtain(rcvSema);
 
   // If the receiver is higher priority then it will be running
   // The sender is either blocked waiting for its semaphore
@@ -663,7 +633,7 @@ proctype Receiver (byte nid, taskid) {
   // A high priority receiver needs to release the sender now, before it
   // gets blocked on its own event receive.
   if
-  :: rcvPrio < sendPrio -> Release(sendSema);  // Release send semaphore for preemption
+  :: rcvPrio < sendPrio -> TestSyncRelease(sendSema);  // TestSyncRelease send semaphore for preemption
   :: else
   fi
 
@@ -672,7 +642,7 @@ proctype Receiver (byte nid, taskid) {
     printf("@@@ %d SCALAR pending %d %d\n",_pid,taskid,tasks[taskid].pending);
 
     if
-    :: sendTwice && !sentFirst -> Release(sendSema)
+    :: sendTwice && !sentFirst -> TestSyncRelease(sendSema)
     :: else
     fi
 
@@ -694,12 +664,12 @@ proctype Receiver (byte nid, taskid) {
 
   /*  Again, not sure this is a good idea
   if
-  :: rcvPrio >= sendPrio -> Release(sendSema);
-  :: rcvPrio < sendPrio -> Obtain(rcvSema);  // Allow send task to complete after preemption
+  :: rcvPrio >= sendPrio -> TestSyncRelease(sendSema);
+  :: rcvPrio < sendPrio -> TestSyncObtain(rcvSema);  // Allow send task to complete after preemption
   :: else
   fi
   */
-  Release(sendSema);
+  TestSyncRelease(sendSema);
 
   printf("@@@ %d LOG Receiver %d finished\n",_pid,taskid);
   tasks[taskid].state = Zombie;
