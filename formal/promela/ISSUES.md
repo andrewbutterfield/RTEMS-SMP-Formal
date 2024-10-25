@@ -27,8 +27,16 @@ has (JUST!) arrived, in which case we are satisfied, otherwise we complain.
 
 * redo the sema_set_priority model - it is failing with error returns
 * move the following declarations to `tx-model-0`:
-  -  return values
-  -  task states
+  -  return values  DONE
+  -  task states    DONE
+* move the following Promela model components to common/*.pml
+  -  Task struct and tasks declaration  DONE
+  -  waitUntilReady DONE
+  -  preemptIfRequired is different in 3 models, not used in msg-mgr
+  -  stopclock   DONE
+  -  scenario   -- used by System  DONE
+  -  System  DONE
+  -  Clock   DONE
 
 NOTE: `GetPending` is only used here in the events manager.
 There is a `GetPendingEvents` in SH's `tr-event-send-receive.c`.
