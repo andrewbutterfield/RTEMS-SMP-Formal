@@ -23,6 +23,7 @@ typedef Task {
   byte prio; // lower number is higher priority
   int ticks; // clock ticks to keep track of timeout
   bool tout; // true if woken by a timeout
+  bool isr;     // If task is woken from Interrupt context
 };
 Task tasks[TASK_MAX]; // tasks[0] models a NULL dereference
 #define BAD_ID TASK_MAX   // this ID and higher are considered invalid
