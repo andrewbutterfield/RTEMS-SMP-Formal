@@ -91,22 +91,13 @@ inline outputDefines () {
 mtype{ EventWait } ; // need to know when Blocked by an event receive
 
 // Tasks
-typedef Task {
-  byte nodeid; // So we can spot remote calls
-  byte pmlid; // Promela process id
-  mtype state ; // {Ready,EventWait,TimeWait,OtherWait}
-  bool preemptable ;
-  byte prio ; // lower number is higher priority
-  int ticks; //
-  bool tout; // true if woken by a timeout
-  // Event Model related
+typedef EventState {
   unsigned wanted  : NO_OF_EVENTS ; // EvtSet, those expected by receiver
   unsigned pending : NO_OF_EVENTS ; // EvtSet, those already received
   bool all; // Do we want All?
 };
 
-
-Task tasks[TASK_MAX]; // tasks[0] models a NULL dereference
+EventState evtstate[TASK_MAX]; // evtstate[0] models a NULL dereference
 
 byte sendrc;            // Sender global variable
 byte recrc;             // Receiver global variable
@@ -165,19 +156,19 @@ inline waitUntilReady(id){
 }
 
 /*
- * satisfied(task,out,sat) checks if a recieve has been satisfied.
+ * satisfied(estate,out,sat) checks if a recieve has been satisfied.
  * It updates its `sat` argument to reflect the check outcome,
  * and logs relevant details.
  */
-inline satisfied(task,out,sat) {
-  out = task.pending & task.wanted;
+inline satisfied(estate,out,sat) {
+  out = estate.pending & estate.wanted;
   if
-  ::  task.all && out == task.wanted  ->  sat = true
-  ::  !task.all && out != EVTS_NONE   ->  sat = true
+  ::  estate.all && out == estate.wanted  ->  sat = true
+  ::  !estate.all && out != EVTS_NONE   ->  sat = true
   ::  else                            ->  sat = false
   fi
   printf("@@@ %d LOG satisfied(<pnd:%d wnt:%d all:%d>,out:%d,SAT:%d)\n",
-          _pid,task.pending,task.wanted,task.all,out,sat)
+          _pid,estate.pending,estate.wanted,estate.all,out,sat)
 }
 
 /*
@@ -225,11 +216,11 @@ inline event_send(self,tid,evts,rc) {
     if
     ::  tid >= BAD_ID -> rc = RC_InvId
     ::  tid < BAD_ID ->
-        tasks[tid].pending = tasks[tid].pending | evts
+        evtstate[tid].pending = evtstate[tid].pending | evts
         // at this point, have we woken the target task?
         unsigned got : NO_OF_EVENTS;
         bool sat;
-        satisfied(tasks[tid],got,sat);
+        satisfied(evtstate[tid],got,sat);
         if
         ::  sat ->
             tasks[tid].state = Ready;
@@ -278,26 +269,26 @@ inline event_send(self,tid,evts,rc) {
 inline event_receive(self,evts,wait,wantall,interval,out,rc){
   atomic{
     printf("@@@ %d LOG pending[%d] = ",_pid,self);
-    printevents(tasks[self].pending); nl();
-    tasks[self].wanted = evts;
-    tasks[self].all = wantall
+    printevents(evtstate[self].pending); nl();
+    evtstate[self].wanted = evts;
+    evtstate[self].all = wantall
     if
     ::  out == 0 ->
         printf("@@@ %d LOG Receive NULL out.\n",_pid);
         rc = RC_InvAddr ;
     ::  evts == EVTS_PENDING ->
         printf("@@@ %d LOG Receive Pending.\n",_pid);
-        recout[out] = tasks[self].pending;
+        recout[out] = evtstate[self].pending;
         rc = RC_OK
     ::  else ->
         bool sat;
-        retry:  satisfied(tasks[self],recout[out],sat);
+        retry:  satisfied(evtstate[self],recout[out],sat);
         if
         ::  sat ->
             printf("@@@ %d LOG Receive Satisfied!\n",_pid);
-            setminus(tasks[self].pending,tasks[self].pending,recout[out]);
+            setminus(evtstate[self].pending,evtstate[self].pending,recout[out]);
             printf("@@@ %d LOG pending'[%d] = ",_pid,self);
-            printevents(tasks[self].pending); nl();
+            printevents(evtstate[self].pending); nl();
             rc = RC_OK;
         ::  !sat && !wait ->
             printf("@@@ %d LOG Receive Not Satisfied (no wait)\n",_pid);
@@ -326,7 +317,7 @@ inline event_receive(self,evts,wait,wantall,interval,out,rc){
         fi
     fi
     printf("@@@ %d LOG pending'[%d] = ",_pid,self);
-    printevents(tasks[self].pending); nl();
+    printevents(evtstate[self].pending); nl();
   }
 }
 
@@ -639,7 +630,7 @@ proctype Receiver (byte nid, taskid) {
 
   if
   :: doReceive ->
-    printf("@@@ %d SCALAR pending %d %d\n",_pid,taskid,tasks[taskid].pending);
+    printf("@@@ %d SCALAR pending %d %d\n",_pid,taskid,evtstate[taskid].pending);
 
     if
     :: sendTwice && !sentFirst -> TestSyncRelease(sendSema)
@@ -658,7 +649,7 @@ proctype Receiver (byte nid, taskid) {
       printf("@@@ %d SCALAR recout %d %d\n",_pid,rcvOut,recout[rcvOut]);
     :: else
     fi
-    printf("@@@ %d SCALAR pending %d %d\n",_pid,taskid,tasks[taskid].pending);
+    printf("@@@ %d SCALAR pending %d %d\n",_pid,taskid,evtstate[taskid].pending);
   :: else
   fi
 

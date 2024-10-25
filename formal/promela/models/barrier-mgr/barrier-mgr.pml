@@ -80,17 +80,6 @@ inline outputDefines () {
 mtype{ BarrierWait }; // need to know when Blocked by a barrier
 
 
-// Tasks
-typedef Task {
-  byte nodeid; // So we can spot remote calls
-  byte pmlid; // Promela process id
-  mtype state ; // {Ready,BarrierWait,TimeWait,OtherWait}
-  bool preemptable;
-  byte prio; // lower number is higher priority
-  int ticks; // clock ticks to keep track of timeout
-  bool tout; // true if woken by a timeout
-};
-
 // Barriers
 typedef Barrier {
   byte b_name; // barrier name
@@ -101,7 +90,6 @@ typedef Barrier {
   bool isInitialised; // indicated whenever this barrier was created
 }
 
-Task tasks[TASK_MAX]; // tasks[0] models a NULL dereference
 Barrier barriers[MAX_BARRIERS]; // barriers[0] models a NULL dereference
 
 /*

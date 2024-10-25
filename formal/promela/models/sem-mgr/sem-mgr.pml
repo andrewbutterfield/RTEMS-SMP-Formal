@@ -99,20 +99,13 @@ int task3Core;
 
 mtype{ SemaWait } ; // need to know when Blocked on a semaphore
 
-typedef Task {
-    byte nodeid; // So we can spot remote calls
-    byte pmlid; // Promela process id
-    mtype state ; // {Ready,SemaWait,TimeWait,OtherWait}
-    bool preemptable;
-    byte prio; // lower number is higher priority
-    int ticks; // clock ticks to keep track of timeout
-    bool tout; // true if woken by a timeout
-    // Semaphore Model Specific?
+typedef SemState {
     bool blocked;
     byte taskCeilingPriority; // task's ceiling priority 
     byte initialPriority // task's initial/default priority
     byte effectivePriority; // task's current active priority
 };
+SemState semstate[TASK_MAX];
 
 
 inline checkHighestPriorityRunning(taskid, sem_id) {
@@ -122,20 +115,20 @@ inline checkHighestPriorityRunning(taskid, sem_id) {
 
         // Find the highest priority task in Ready state
         if
-        :: tasks[TASK1_ID].state == Ready && tasks[TASK1_ID].effectivePriority < highestReadyPriority ->
-            highestReadyPriority = tasks[TASK1_ID].effectivePriority;
+        :: tasks[TASK1_ID].state == Ready && semstate[TASK1_ID].effectivePriority < highestReadyPriority ->
+            highestReadyPriority = semstate[TASK1_ID].effectivePriority;
             highestPriorityTask = TASK1_ID;
         :: else -> skip;
         fi;
         if
-        :: tasks[TASK2_ID].state == Ready && tasks[TASK2_ID].effectivePriority < highestReadyPriority ->
-            highestReadyPriority = tasks[TASK2_ID].effectivePriority;
+        :: tasks[TASK2_ID].state == Ready && semstate[TASK2_ID].effectivePriority < highestReadyPriority ->
+            highestReadyPriority = semstate[TASK2_ID].effectivePriority;
             highestPriorityTask = TASK2_ID;
         :: else -> skip;
         fi;
         if
-        :: tasks[TASK3_ID].state == Ready && tasks[TASK3_ID].effectivePriority < highestReadyPriority ->
-            highestReadyPriority = tasks[TASK3_ID].effectivePriority;
+        :: tasks[TASK3_ID].state == Ready && semstate[TASK3_ID].effectivePriority < highestReadyPriority ->
+            highestReadyPriority = semstate[TASK3_ID].effectivePriority;
             highestPriorityTask = TASK3_ID;
         :: else -> skip;
         fi;
@@ -145,15 +138,15 @@ inline checkHighestPriorityRunning(taskid, sem_id) {
             if
             :: model_semaphores[sem_id].LockingProtocol == INHERIT_LOCKING ->
                 if 
-                :: tasks[taskid].effectivePriority <= highestReadyPriority &&
+                :: semstate[taskid].effectivePriority <= highestReadyPriority &&
                     model_semaphores[sem_id].holder != taskid ->
-                    assert(tasks[taskid].effectivePriority <= highestReadyPriority);                
+                    assert(semstate[taskid].effectivePriority <= highestReadyPriority);                
                 :: else -> skip;
                 fi
             :: model_semaphores[sem_id].LockingProtocol == CEILING_LOCKING ->
 
                 if :: model_semaphores[sem_id].holder != taskid ->
-                    assert(tasks[taskid].effectivePriority <= highestReadyPriority);
+                    assert(semstate[taskid].effectivePriority <= highestReadyPriority);
                 :: else -> skip;
                 fi
             :: model_semaphores[sem_id].LockingProtocol == NO_LOCKING ->
@@ -197,7 +190,6 @@ typedef Semaphore_model {
 };
 
 Semaphore_model model_semaphores[MAX_MODEL_SEMAS]; // semaphores[0] models a NULL dereference
-Task tasks[TASK_MAX];
 
 
 // Output configuration
@@ -218,8 +210,6 @@ inline outputDefines () {
    printf("@@@ %d DEF SEMA_MAX %d\n",_pid,SEMA_MAX);
 
 }
-
-
 
 
 /*
@@ -437,7 +427,7 @@ inline waitUntilReady(taskid) {
 inline preemptIfRequired(tid, preempting_tid, rc) {
   if
   ::  tasks[tid].preemptable  &&
-      tasks[preempting_tid].effectivePriority < tasks[tid].effectivePriority &&
+      semstate[preempting_tid].effectivePriority < semstate[tid].effectivePriority &&
       tasks[preempting_tid].state == Ready ->
         tasks[tid].state = OtherWait;
         printf( "@@@ %d LOG task %d preempted by task %d\n", 
@@ -604,18 +594,18 @@ inline sema_obtain(self, sem_id, optionset, interval,rc) {
                         if
                         :: model_semaphores[sem_id].holder != self ->
                             enqueue(sem_id, self); // Add the current task to the waiting queue
-                            tasks[self].blocked = true; // Mark the task as blocked
+                            semstate[self].blocked = true; // Mark the task as blocked
                             if
                             :: model_semaphores[sem_id].LockingProtocol == INHERIT_LOCKING &&
-                            tasks[model_semaphores[sem_id].holder].effectivePriority > tasks[self].effectivePriority ->
+                            semstate[model_semaphores[sem_id].holder].effectivePriority > semstate[self].effectivePriority ->
                                 // Priority inheritance
                                 printf("@@@ %d LOG Priority inheritance: Task %d (priority %d) inherits priority %d from Task %d\n",
                                     _pid,
                                     model_semaphores[sem_id].holder, 
-                                    tasks[model_semaphores[sem_id].holder].effectivePriority,
-                                    tasks[self].effectivePriority, 
+                                    semstate[model_semaphores[sem_id].holder].effectivePriority,
+                                    semstate[self].effectivePriority, 
                                     self);
-                                tasks[model_semaphores[sem_id].holder].effectivePriority = tasks[self].effectivePriority;
+                                semstate[model_semaphores[sem_id].holder].effectivePriority = semstate[self].effectivePriority;
                                 if
                                 ::  interval > NO_TIMEOUT ->
                                     tasks[self].tout = false;
@@ -643,7 +633,7 @@ inline sema_obtain(self, sem_id, optionset, interval,rc) {
                     printf("@@@ %d STATE %d Ready\n",_pid,self);
                     if
                     :: model_semaphores[sem_id].LockingProtocol == CEILING_LOCKING ->
-                        tasks[self].effectivePriority = model_semaphores[sem_id].priorityCeiling;
+                        semstate[self].effectivePriority = model_semaphores[sem_id].priorityCeiling;
                         printf("@@@ %d LOG Task %d priority raised to ceiling priority %d due to CEILING_LOCKING\n",
                             _pid, self, model_semaphores[sem_id].priorityCeiling);
                     :: else -> skip;
@@ -717,7 +707,7 @@ inline sema_release(self,sem_id,rc) {
                     :: model_semaphores[sem_id].task_queue_count > 0 ->
                         model_semaphores[sem_id].holder = dequeue(sem_id); // Assign to next highest priority task
                         //model_semaphores[sem_id].ownerPid = _pid;
-                        tasks[model_semaphores[sem_id].holder].blocked = false;
+                        semstate[model_semaphores[sem_id].holder].blocked = false;
                         tasks[model_semaphores[sem_id].holder].state = Ready;
                         printf("@@@ %d STATE %d Ready\n",_pid, model_semaphores[sem_id].holder);
                         model_semaphores[sem_id].Count = 0;
@@ -734,9 +724,9 @@ inline sema_release(self,sem_id,rc) {
                     if
                     :: model_semaphores[sem_id].LockingProtocol == CEILING_LOCKING ||
                     model_semaphores[sem_id].LockingProtocol == INHERIT_LOCKING ->
-                        tasks[taskid].effectivePriority = tasks[taskid].initialPriority;
+                        semstate[taskid].effectivePriority = semstate[taskid].initialPriority;
                         printf("@@@ %d LOG Task %d priority restored to initial priority %d after releasing semaphore\n",
-                            _pid, taskid, tasks[taskid].initialPriority);
+                            _pid, taskid, semstate[taskid].initialPriority);
                     :: else -> skip;
                     fi
                     printf("@@@ %d LOG Semaphore %d released by Task %d, now held by Task %d\n",
@@ -766,7 +756,7 @@ inline enqueue(sem_id, task_id) {
         // Insert task into the queue based on effectivePriority
         i = model_semaphores[sem_id].task_queue_count;
         do
-        :: i > 0 && tasks[model_semaphores[sem_id].queue[i-1]].effectivePriority > tasks[task_id].effectivePriority ->
+        :: i > 0 && semstate[model_semaphores[sem_id].queue[i-1]].effectivePriority > semstate[task_id].effectivePriority ->
             model_semaphores[sem_id].queue[i] = model_semaphores[sem_id].queue[i-1];
             i--;
         :: else -> break;
@@ -1298,20 +1288,20 @@ proctype Runner (byte nid, taskid; TaskInputs opts) {
 
     tasks[taskid].nodeid = nid;
     tasks[taskid].pmlid = _pid;
-    tasks[taskid].taskCeilingPriority = opts.taskPrio;
+    semstate[taskid].taskCeilingPriority = opts.taskPrio;
     tasks[taskid].preemptable = opts.taskPreempt;
-    tasks[taskid].initialPriority = opts.taskInitialPriority;
-    tasks[taskid].effectivePriority = opts.taskInitialPriority;
+    semstate[taskid].initialPriority = opts.taskInitialPriority;
+    semstate[taskid].effectivePriority = opts.taskInitialPriority;
     
    
 
     printf("@@@ %d TASK Runner\n",_pid);
     if 
-    :: tasks[taskid].initialPriority == HIGH_PRIORITY 
+    :: semstate[taskid].initialPriority == HIGH_PRIORITY 
          -> printf("@@@ %d CALL HighPriority\n", _pid);
-    :: tasks[taskid].initialPriority == MED_PRIORITY 
+    :: semstate[taskid].initialPriority == MED_PRIORITY 
          -> printf("@@@ %d CALL NormalPriority\n", _pid);
-    :: tasks[taskid].initialPriority == LOW_PRIORITY 
+    :: semstate[taskid].initialPriority == LOW_PRIORITY 
          -> printf("@@@ %d CALL LowPriority\n", _pid);
     fi
 
@@ -1586,7 +1576,7 @@ proctype Runner (byte nid, taskid; TaskInputs opts) {
 
     // If Runner at low priority, now set to medium for teardown.
     if 
-    :: tasks[taskid].initialPriority == LOW_PRIORITY 
+    :: semstate[taskid].initialPriority == LOW_PRIORITY 
          -> printf( "@@@ %d LOG Setting Task %d to Normal priority\n"
                    , _pid, taskid );
             printf( "@@@ %d CALL NormalPriority\n", _pid );
@@ -1609,17 +1599,17 @@ proctype Worker0 (byte nid, taskid; TaskInputs opts) {
 
     tasks[taskid].nodeid = nid;
     tasks[taskid].pmlid = _pid;
-    tasks[taskid].taskCeilingPriority = opts.taskPrio;
+    semstate[taskid].taskCeilingPriority = opts.taskPrio;
     tasks[taskid].preemptable = opts.taskPreempt;
-    tasks[taskid].initialPriority = opts.taskInitialPriority;
-    tasks[taskid].effectivePriority = opts.taskInitialPriority;
+    semstate[taskid].initialPriority = opts.taskInitialPriority;
+    semstate[taskid].effectivePriority = opts.taskInitialPriority;
 
 
     printf("@@@ %d TASK Worker0\n",_pid);
     if 
-    :: tasks[taskid].initialPriority == HIGH_PRIORITY -> printf("@@@ %d CALL HighPriority\n", _pid);
-    :: tasks[taskid].initialPriority == MED_PRIORITY -> printf("@@@ %d CALL NormalPriority\n", _pid);
-    :: tasks[taskid].initialPriority == LOW_PRIORITY -> printf("@@@ %d CALL LowPriority\n", _pid);
+    :: semstate[taskid].initialPriority == HIGH_PRIORITY -> printf("@@@ %d CALL HighPriority\n", _pid);
+    :: semstate[taskid].initialPriority == MED_PRIORITY -> printf("@@@ %d CALL NormalPriority\n", _pid);
+    :: semstate[taskid].initialPriority == LOW_PRIORITY -> printf("@@@ %d CALL LowPriority\n", _pid);
     fi
 
     // Preemption check setup, uncomment if necessary
@@ -1860,17 +1850,17 @@ proctype Worker1 (byte nid, taskid; TaskInputs opts) {
     
     tasks[taskid].nodeid = nid;
     tasks[taskid].pmlid = _pid;
-    tasks[taskid].taskCeilingPriority = opts.taskPrio;
+    semstate[taskid].taskCeilingPriority = opts.taskPrio;
     tasks[taskid].preemptable = opts.taskPreempt;
-    tasks[taskid].initialPriority = opts.taskInitialPriority;
-    tasks[taskid].effectivePriority = opts.taskInitialPriority;
+    semstate[taskid].initialPriority = opts.taskInitialPriority;
+    semstate[taskid].effectivePriority = opts.taskInitialPriority;
 
 
     printf("@@@ %d TASK Worker1\n",_pid);
     if 
-    :: tasks[taskid].initialPriority == HIGH_PRIORITY -> printf("@@@ %d CALL HighPriority\n", _pid);
-    :: tasks[taskid].initialPriority == MED_PRIORITY -> printf("@@@ %d CALL NormalPriority\n", _pid);
-    :: tasks[taskid].initialPriority == LOW_PRIORITY -> printf("@@@ %d CALL LowPriority\n", _pid);
+    :: semstate[taskid].initialPriority == HIGH_PRIORITY -> printf("@@@ %d CALL HighPriority\n", _pid);
+    :: semstate[taskid].initialPriority == MED_PRIORITY -> printf("@@@ %d CALL NormalPriority\n", _pid);
+    :: semstate[taskid].initialPriority == LOW_PRIORITY -> printf("@@@ %d CALL LowPriority\n", _pid);
     fi
 
     // Preemption check setup, uncomment if necessary

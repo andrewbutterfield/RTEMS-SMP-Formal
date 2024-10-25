@@ -3,14 +3,29 @@
 /*
  * PML Modelling code common to all/most models
  *
+ *  - Common Task Definition
  *  - Simple Binary Semaphores for Test Synchronisation
  *
  * IMPORTANT: 
  *  a model must #define TASK_MAX and SEMA_MAX *before* #including this file.
  */
 
-// values equal or greater than this denote invalid task ids
-#define BAD_ID TASK_MAX   
+ /*
+ *  Common Task Definition
+ *
+ *  need text here to explain usage
+ */
+typedef Task {
+  byte nodeid; // So we can spot remote calls
+  byte pmlid; // Promela process id
+  mtype state ; // {Zombie,Dormant,Ready,TimeWait,OtherWait,...}
+  bool preemptable;
+  byte prio; // lower number is higher priority
+  int ticks; // clock ticks to keep track of timeout
+  bool tout; // true if woken by a timeout
+};
+Task tasks[TASK_MAX]; // tasks[0] models a NULL dereference
+#define BAD_ID TASK_MAX   // this ID and higher are considered invalid
 
 /*
  *  Simple Binary Semaphores for Test Synchronisation
