@@ -3,6 +3,7 @@ chains: chains/chains
 event-mgr: event-mgr/event-mgr
 msg-mgr: msg-mgr/msg-mgr
 sem-mgr: sem-mgr/sem-mgr
+task-mgr: task-mgr/task-mgr
 # freechain: freechain/freechain
 
- 
+

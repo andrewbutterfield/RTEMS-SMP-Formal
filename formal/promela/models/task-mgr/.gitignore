@@ -1,0 +1,5 @@
+tr-model-events-mgr-*.c
+*.pml.trail
+pan*
+gen/*
+state-maps/*

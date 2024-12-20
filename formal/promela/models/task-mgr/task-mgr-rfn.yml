@@ -1,0 +1,250 @@
+# SPDX-License-Identifier: BSD-2-Clause
+# Task Manager: Promela to RTEMS Refinement
+
+# Copyright (C) 2019-2024 Trinity College Dublin (www.tcd.ie)
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+# 1. Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in the
+#    documentation and/or other materials provided with the distribution.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+# ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+# LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+# CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+# ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+# POSSIBILITY OF SUCH DAMAGE.
+LANGUAGE: C
+
+SEGNAMEPFX: TestSegment{} # segnumber
+SEGARG: Context* ctx
+SEGDECL: static void {}( {} )  # segnamepf{segnumber}, segarg,
+SEGBEGIN: " {"
+SEGEND: "}"
+
+NAME: |
+  /* Test Name is defined in the Test Case code (tc-model-task-mgr.c) */
+
+pending_DCL: rtems_event_set {0}[TASK_MAX];
+
+semaphore_DCL: rtems_id {0}[SEMA_MAX];
+
+sc_DCL: rtems_status_code
+
+prio_DCL: rtems_task_priority
+
+createRC_DCL: rtems_status_code
+
+startRC_DCL: rtems_status_code
+
+deleteRC_DCL: rtems_status_code
+
+suspendRC_DCL: rtems_status_code
+
+isSuspendRC_DCL: rtems_status_code
+
+resumeRC_DCL: rtems_status_code
+
+setPriorityRC_DCL: rtems_status_code
+
+priority_DCL: rtems_task_priority
+
+taskID_DCL: rtems_id {0}[TASK_MAX];
+
+tasks_DCL: void ( *{0}[TASK_MAX] )( rtems_task_argument );
+
+INIT: |
+  init_tid( taskID, TASK_MAX );
+  initialise_semaphore( 0, ctx->runner_wakeup, semaphore );
+  initialise_semaphore( 1, ctx->worker0_wakeup, semaphore );
+  initialise_semaphore( 2, ctx->worker1_wakeup, semaphore );
+  initialise_semaphore( 3, ctx->lock_0, semaphore );
+  initialise_semaphore( 4, ctx->worker0_flag, semaphore );
+  initialise_semaphore( 5, ctx->worker1_flag, semaphore );
+
+TASK_INIT: |
+  T_log( T_NORMAL, "Starting Task %d", {0});
+
+Runner: |
+  checkTaskIs( ctx->runner_id );
+
+Worker: |
+  checkTaskIs( ctx->worker_id );
+
+SIGNAL: |
+  Wakeup( semaphore[{}] );
+
+WAIT: |
+  Wait( semaphore[{}] );
+
+task_create: |
+  T_log( T_NORMAL, "Creating Task(%d, %d, %d, %d, RTEMS_MINIMUM_STACK_SIZE, %d)", {0}, {1}, {2}, {3}, {4}, {5});
+  {5} = ( *ctx->t_create )( mapName( {0} ), {1}, {2}, {3}, RTEMS_MINIMUM_STACK_SIZE, {4} ? &taskID[{4}] : NULL);
+  T_log( T_NORMAL, "Returned 0x%x from Create", {5} );
+
+task_start: |
+  T_log( T_NORMAL, "Starting Task(%d, %d, %d)", {0}, {1}, {2});
+  {2} = ( *ctx->t_start )( {0} ? taskID[{0}] : 0xffffffff, {1} ? tasks[{1}] : NULL, (rtems_task_argument)(void *)(ctx) );
+  T_log( T_NORMAL, "Returned 0x%x from Start", {2} );
+
+task_delete: |
+  T_log( T_NORMAL, "Deleting Task(%d)", {0}, {1} );
+  {1} = ( *ctx->t_delete )( {0} ? taskID[{0}] : 0xffffffff );
+  T_log( T_NORMAL, "Returned 0x%x from Delete", {1} );
+
+task_suspend: |
+  T_log( T_NORMAL, "Suspending Task(%d)", {0}, {1} );
+  {1} = ( *ctx->t_suspend )( {0} ? taskID[{0}] : 0xffffffff );
+  T_log( T_NORMAL, "Returned 0x%x from Suspend", {1} );
+
+task_isSuspended: |
+  T_log( T_NORMAL, "Is Task Suspended(%d)", {0}, {1} );
+  {1} = ( *ctx->t_isSuspend )( {0} ? taskID[{0}] : 0xffffffff );
+  T_log( T_NORMAL, "Returned 0x%x from Is Suspended", {1} );
+
+task_resume: |
+  T_log( T_NORMAL, "Suspending Task(%d)", {0}, {1} );
+  {1} = ( *ctx->t_resume )( {0} ? taskID[{0}] : 0xffffffff );
+  T_log( T_NORMAL, "Returned 0x%x from Resume", {1} );
+
+task_setPriority: |
+  T_log( T_NORMAL, "Setting Task Priority(%d)", {0}, {1}, {2}, {3} );
+  {3} = ( *ctx->t_setPriority )( {0} ? taskID[{0}] : 0xffffffff, {1} ? priority_inversion( {1} ) : RTEMS_CURRENT_PRIORITY, {2} ? &priority : NULL );
+  T_log( T_NORMAL, "Returned 0x%x from Set Priority", {3} );
+
+createRC: |
+  T_rsc( createRC, {0} );
+
+startRC: |
+  T_rsc( startRC, {0} );
+
+delRC: |
+  T_rsc( deleteRC, {0} );
+
+suspendRC: |
+  T_rsc( suspendRC, {0} );
+
+isSuspendRC: |
+  T_rsc( isSuspendRC, {0} );
+
+resumeRC: |
+  T_rsc( resumeRC, {0} );
+
+setPriorityRC: |
+  T_rsc( setPriorityRC, {0} );
+
+oldPrio: |
+  T_log( T_NORMAL, "Returned Priority: %d from Set Priority", priority );
+  T_rsc( priority, priority_inversion( {0} ))
+
+WaitForSuspend: |
+  T_log( T_NORMAL, "Waiting for Task(%d) to Suspend", {0}, {1} );
+  do {{
+    {1} = ( *ctx->t_isSuspend )( {0} ? taskID[{0}] : 0xffffffff );
+    rtems_task_wake_after( 100 );
+  }} while ({1} != RTEMS_ALREADY_SUSPENDED);
+
+TooMany: |
+  ctx->seized_objects = T_seize_objects( Create, ctx );
+
+Ready: |
+   /* We (Task {0}) must have been recently ready because we are running */
+
+Zombie:
+  /* Code to check that Task {0} has terminated */
+
+EventWait:
+  /* Code to check that Task {0} is waiting on events */
+
+TimeWait:
+  /* Code to check that Task {0} is waiting on a timer */
+
+OtherWait:
+  /* Code to check that Task {0} is waiting (after pre-emption) */
+
+SUSPEND:
+  /* SWITCH[{0}] Suspension of proc{1} in favour of proc{2} */
+
+WAKEUP:
+  /* SWITCH[{0}] ReleaseTestSyncSema of proc{1} (sometime) after proc{2} */
+
+LowerPriority: |
+  SetSelfPriority( M_PRIO_LOW );
+  sc = rtems_task_set_priority( RTEMS_SELF, RTEMS_CURRENT_PRIORITY, &prio );
+  T_rsc_success( sc );
+  T_eq_u32( prio, M_PRIO_LOW );
+
+EqualPriority: |
+  SetSelfPriority( M_PRIO_NORMAL );
+  sc = rtems_task_set_priority( RTEMS_SELF, RTEMS_CURRENT_PRIORITY, &prio );
+  T_rsc_success( sc );
+  T_eq_u32( prio, M_PRIO_NORMAL );
+
+HigherPriority: |
+  SetSelfPriority( M_PRIO_HIGH );
+  sc = rtems_task_set_priority( RTEMS_SELF, RTEMS_CURRENT_PRIORITY, &prio );
+  T_rsc_success( sc );
+  T_eq_u32( prio, M_PRIO_HIGH );
+
+StartLog: |
+  T_thread_switch_log *log;
+  log = T_thread_switch_record_4( &ctx->thread_switch_log );
+
+CheckPreemption: |
+  log = &ctx->thread_switch_log;
+  T_eq_sz( log->header.recorded, 2 );
+  T_eq_u32( log->events[ 0 ].heir, ctx->runner_id );
+  T_eq_u32( log->events[ 1 ].heir, ctx->worker_id );
+
+CheckNoPreemption: |
+  log = &ctx->thread_switch_log;
+  T_le_sz( log->header.recorded, 1 );
+  for ( size_t i = 0; i < log->header.recorded; ++i ) {
+    T_ne_u32( log->events[ i ].executing, ctx->worker_id );
+    T_eq_u32( log->events[ i ].heir, ctx->runner_id );
+  }
+
+RunnerScheduler: |
+  uint32_t processor = {};
+  rtems_status_code sc1;
+  rtems_id current_sched;
+  sc1 = rtems_task_get_scheduler( RTEMS_SELF, current_sched );
+  T_log( T_NORMAL, "current scheduler id: %d", &current_sched);
+  sc1 = rtems_scheduler_ident_by_processor( processor, &ctx->runner_sched );
+  T_rsc_success( sc1 );
+  T_log( T_NORMAL, "runner scheduler id: %d", &ctx->runner_sched);
+  sc1 = rtems_task_set_scheduler(RTEMS_SELF, &ctx->runner_sched, RTEMS_CURRENT_PRIORITY);
+  T_rsc_success( sc1 );
+  sc1 = rtems_task_get_scheduler( RTEMS_SELF, current_sched );
+  T_log( T_NORMAL, "current scheduler id: %d", &current_sched);
+
+OtherScheduler: |
+  uint32_t processor = {};
+  rtems_status_code sc1;
+  rtems_id current_sched;
+  sc1 = rtems_task_get_scheduler( RTEMS_SELF, current_sched );
+  T_log( T_NORMAL, "current scheduler id: %d", &current_sched);
+  sc1 = rtems_scheduler_ident_by_processor( processor, &ctx->other_sched );
+  T_rsc_success( sc1 );
+  T_log( T_NORMAL, "other scheduler id: %d", &ctx->other_sched);
+  sc1 = rtems_task_set_scheduler(RTEMS_SELF, &ctx->other_sched, RTEMS_CURRENT_PRIORITY);
+  T_rsc_success( sc1 );
+  sc1 = rtems_task_get_scheduler( RTEMS_SELF, current_sched );
+  T_log( T_NORMAL, "current scheduler id: %d", &current_sched);
+
+SetProcessor: |
+  T_ge_u32( rtems_scheduler_get_processor_maximum(), 2 );
+  uint32_t processor = {};
+  cpu_set_t cpuset;
+  CPU_ZERO(&cpuset);
+  CPU_SET(processor, &cpuset);
+

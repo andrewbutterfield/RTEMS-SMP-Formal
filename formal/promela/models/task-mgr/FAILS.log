@@ -1,0 +1,26 @@
+FAILS:
+
+287-298
+L:@@@ 4 SCALAR createRC 19
+F:0.6:0:RUN/PML-TaskMgr002:tr-task-mgr-model-2.c:125:RTEMS_SUCCESSFUL == RTEMS_INVALID_PRIORITY
+L:Runner finished
+L:Run Pop Fixture
+L:Worker0 wakeup semaphore = 436273153
+L:Runner Teardown
+L:Deleting Worker 0 ReleaseTestSyncSema Semaphore
+L:Deleting Worker 1 ReleaseTestSyncSema Semaphore
+L:Deleting Runner ReleaseTestSyncSema Semaphore
+L:Deleting Lock 0 ReleaseTestSyncSema Semaphore
+L:Deleting Worker Flags TestSync Semaphore
+F:*:0:RUN:*:*:RTEMS task leak (1)
+E:RtemsModelTaskMgr2:N:14:F:2:D:0.005859
+
+467
+E:RtemsModelTaskMgr17:N:37:F:1:D:0.016379
+
+954
+Z:TestsuitesModel0:C:19:N:363:F:3:D:0.560945
+
+
+
+
