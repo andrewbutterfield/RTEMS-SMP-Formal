@@ -24,6 +24,9 @@
 #define RC_NotDefd  11 // RTEMS_NOT_DEFINED
 #define RC_RsrcInUse 12 // RTEMS_RESOURCE_IN_USE
 #define RC_Unsat  13 // RTEMS_UNSATISFIED 
+#define RC_IncState 14 // RTEMS_INCORRECT_STATE 
+#define RC_AlrSuspd 15 // RTEMS_ALREADY_SUSPENDED 
+#define RC_FrmIsr   18  // RTEMS_CALLED_FROM_ISR 
 #define RC_InvPrio 19 // RTEMS_INVALID_PRIORITY
 #define RC_NotOwner 23 // RTEMS_NOT_OWNER_OF_RESOURCE
 
@@ -89,7 +92,7 @@ mtype = {
  *   We haven't used Dormant yet but will need it for the Task Manager model
  */
 mtype = {
-  Zombie, Dormant, Ready, TimeWait, OtherWait
+  Zombie, Dormant, Ready, Blocked, TimeWait, OtherWait
 }
 /*
  * Transitions  (from-state(s) --Transition--> to-state ):

@@ -66,6 +66,23 @@ rtems_id CreateTestSyncSema( char * name )
   return id;
 }
 
+rtems_id CreateTestSyncMutex( char * name )
+{
+  rtems_status_code sc;
+  rtems_id id;
+
+  sc = rtems_semaphore_create(
+    rtems_build_name( name[ 0 ], name[ 1 ], name[ 2 ], name[ 3 ] ),
+    0,
+    RTEMS_BINARY_SEMAPHORE & RTEMS_INHERIT_PRIORITY & RTEMS_PRIORITY,
+    0,
+    &id
+  );
+  T_assert_rsc_success( sc );
+
+  return id;
+}
+
 void DeleteTestSyncSema( rtems_id id )
 {
   if ( id != 0 ) {
