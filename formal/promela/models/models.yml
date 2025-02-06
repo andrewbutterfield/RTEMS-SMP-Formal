@@ -4,6 +4,7 @@ event-mgr: event-mgr/event-mgr
 msg-mgr: msg-mgr/msg-mgr
 sem-mgr: sem-mgr/sem-mgr
 task-mgr: task-mgr/task-mgr
+proto-sem: proto-sem/proto-sem
 # freechain: freechain/freechain
 
 
