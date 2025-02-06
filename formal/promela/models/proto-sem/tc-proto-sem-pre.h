@@ -55,7 +55,7 @@
 #include <rtems/score/statesimpl.h>
 #include <rtems/score/threadimpl.h>
 
-#include "tr-event-mgr-model.h"
+#include "tr-proto-sem-model.h"
 
 #include <rtems/test.h>
 

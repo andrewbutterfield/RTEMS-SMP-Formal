@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsModelEventsMgr
+ * @ingroup RTEMSTestCaseRtemsModelProtoSem
  */
 
 /*
@@ -48,4 +48,4 @@
 #include <rtems/score/threadimpl.h>
 
 
-#include "tr-event-mgr-model.h"
+#include "tr-proto-sem-model.h"

@@ -1,9 +1,9 @@
 /* SPDX-License-Identifier: BSD-2-Clause */
 
 /*
- * event-mgr.pml
+ * proto-sem.pml
  *
- * Copyright (C) 2019-2021 Trinity College Dublin (www.tcd.ie)
+ * Copyright (C) 2025 Trinity College Dublin (www.tcd.ie)
  *
  * All rights reserved.
  *

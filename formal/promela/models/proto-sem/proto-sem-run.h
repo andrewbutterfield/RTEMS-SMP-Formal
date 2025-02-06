@@ -38,8 +38,8 @@ static const rtems_task_config WorkerConfig{0} = {{
 }};
 
 
-static void RtemsModelEventsMgr_Setup{0}(
-  RtemsModelEventsMgr_Context *ctx
+static void RtemsModelProtoSem_Setup{0}(
+  RtemsModelProtoSem_Context *ctx
 )
 {{
   rtems_status_code   sc;
@@ -81,28 +81,28 @@ static void RtemsModelEventsMgr_Setup{0}(
 }}
 
 
-static void RtemsModelEventsMgr_Setup_Wrap{0}( void *arg )
+static void RtemsModelProtoSem_Setup_Wrap{0}( void *arg )
 {{
-  RtemsModelEventsMgr_Context *ctx;
+  RtemsModelProtoSem_Context *ctx;
 
   ctx = arg;
-  RtemsModelEventsMgr_Setup{0}( ctx );
+  RtemsModelProtoSem_Setup{0}( ctx );
 }}
 
 
-static RtemsModelEventsMgr_Context RtemsModelEventsMgr_Instance{0};
+static RtemsModelProtoSem_Context RtemsModelProtoSem_Instance{0};
 
-static T_fixture RtemsModelEventsMgr_Fixture{0} = {{
-  .setup = RtemsModelEventsMgr_Setup_Wrap{0},
+static T_fixture RtemsModelProtoSem_Fixture{0} = {{
+  .setup = RtemsModelProtoSem_Setup_Wrap{0},
   .stop = NULL,
-  .teardown = RtemsModelEventsMgr_Teardown_Wrap,
-  .scope = RtemsModelEventsMgr_Scope,
-  .initial_context = &RtemsModelEventsMgr_Instance{0}
+  .teardown = RtemsModelProtoSem_Teardown_Wrap,
+  .scope = RtemsModelProtoSem_Scope,
+  .initial_context = &RtemsModelProtoSem_Instance{0}
 }};
 
-static T_fixture_node RtemsModelEventsMgr_Node{0};
+static T_fixture_node RtemsModelProtoSem_Node{0};
 
-void RtemsModelEventsMgr_Run{0}(
+void RtemsModelProtoSem_Run{0}(
   rtems_status_code ( *send )( rtems_id, rtems_event_set ),
   rtems_status_code ( *receive )( rtems_event_set, rtems_option, rtems_interval, rtems_event_set * ),
   rtems_event_set (   *get_pending_events )( Thread_Control * ),
@@ -110,7 +110,7 @@ void RtemsModelEventsMgr_Run{0}(
   int                  waiting_for_event
 )
 {{
-  RtemsModelEventsMgr_Context *ctx;
+  RtemsModelProtoSem_Context *ctx;
 
   T_set_verbosity( T_NORMAL );
 
@@ -122,10 +122,10 @@ void RtemsModelEventsMgr_Run{0}(
 
 
   ctx = T_push_fixture(
-    &RtemsModelEventsMgr_Node{0},
-    &RtemsModelEventsMgr_Fixture{0}
+    &RtemsModelProtoSem_Node{0},
+    &RtemsModelProtoSem_Fixture{0}
   );
-  // This runs RtemsModelEventsMgr_Fixture
+  // This runs RtemsModelProtoSem_Fixture
 
   T_log( T_NORMAL, "Test Fixture Pushed" );
 
@@ -138,7 +138,7 @@ void RtemsModelEventsMgr_Run{0}(
 
   ctx->this_test_number = {0};
 
-  // RtemsModelEventsMgr_Prepare( ctx );
+  // RtemsModelProtoSem_Prepare( ctx );
   ctx->events_to_send = 0;
   ctx->send_status = RTEMS_INCORRECT_STATE;
   ctx->received_events = 0xffffffff;
@@ -153,7 +153,7 @@ void RtemsModelEventsMgr_Run{0}(
 
   Runner( ctx );
 
-  RtemsModelEventsMgr_Cleanup( ctx );
+  RtemsModelProtoSem_Cleanup( ctx );
 
   T_log( T_NORMAL, "Run Pop Fixture" );
   ShowWorkerSemaId( ctx->worker_id, ctx->worker_wakeup );

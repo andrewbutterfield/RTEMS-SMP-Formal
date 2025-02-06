@@ -2,9 +2,9 @@
 /**
  * @fn void T_case_body_RtemsEventValSendReceive( void )
  */
-T_TEST_CASE( RtemsModelEventsMgr{0} )
+T_TEST_CASE( RtemsModelProtoSem{0} )
 {{
-  RtemsModelEventsMgr_Run{0}(
+  RtemsModelProtoSem_Run{0}(
     EventSend,
     EventReceive,
     GetPendingEvents,
@@ -16,9 +16,9 @@ T_TEST_CASE( RtemsModelEventsMgr{0} )
 /**
  * @fn void T_case_body_RtemsEventValSystemSendReceive( void )
  */
-T_TEST_CASE( RtemsModelSystemEventsMgr{0} )
+T_TEST_CASE( RtemsModelSystemProtoSem{0} )
 {{
-  RtemsModelEventsMgr_Run{0}(
+  RtemsModelProtoSem_Run{0}(
     EventSystemSend,
     EventSystemReceive,
     GetPendingSystemEvents,

@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsModelEventsMgr
+ * @ingroup RTEMSTestCaseRtemsModelProtoSem
  */
 
 /*
@@ -47,9 +47,9 @@
 
 #include <rtems/score/threadimpl.h>
 
-#include "tr-event-mgr-model.h"
+#include "tr-proto-sem-model.h"
 
-static const char PromelaModelEventsMgr[] = "/PML-EventsMgr";
+static const char PromelaModelProtoSem[] = "/PML-EventsMgr";
 
 #define INPUT_EVENTS ( RTEMS_EVENT_5 | RTEMS_EVENT_23 )
 
@@ -100,8 +100,8 @@ void initialise_pending( rtems_event_set pending[], int max )
 }
 
 
-static void RtemsModelEventsMgr_Teardown(
-  RtemsModelEventsMgr_Context *ctx
+static void RtemsModelProtoSem_Teardown(
+  RtemsModelProtoSem_Context *ctx
 )
 {
   rtems_status_code   sc;
@@ -126,18 +126,18 @@ static void RtemsModelEventsMgr_Teardown(
   DeleteTestSyncSema( ctx->runner_wakeup );
 }
 
-void RtemsModelEventsMgr_Teardown_Wrap( void *arg )
+void RtemsModelProtoSem_Teardown_Wrap( void *arg )
 {
-  RtemsModelEventsMgr_Context *ctx;
+  RtemsModelProtoSem_Context *ctx;
 
   ctx = arg;
-  RtemsModelEventsMgr_Teardown( ctx );
+  RtemsModelProtoSem_Teardown( ctx );
 }
 
 
-size_t RtemsModelEventsMgr_Scope( void *arg, char *buf, size_t n )
+size_t RtemsModelProtoSem_Scope( void *arg, char *buf, size_t n )
 {
-  RtemsModelEventsMgr_Context *ctx;
+  RtemsModelProtoSem_Context *ctx;
   size_t m;
   int p10;
   int tnum ;
@@ -146,7 +146,7 @@ size_t RtemsModelEventsMgr_Scope( void *arg, char *buf, size_t n )
   ctx = arg;
   p10 = EVT_PWR_OF_10;
 
-  m = T_str_copy(buf, PromelaModelEventsMgr, n);
+  m = T_str_copy(buf, PromelaModelProtoSem, n);
   buf += m;
   tnum = ctx->this_test_number;
   while( p10 > 0 && m < n )
@@ -161,8 +161,8 @@ size_t RtemsModelEventsMgr_Scope( void *arg, char *buf, size_t n )
   return m;
 }
 
-void RtemsModelEventsMgr_Cleanup(
-  RtemsModelEventsMgr_Context *ctx
+void RtemsModelProtoSem_Cleanup(
+  RtemsModelProtoSem_Context *ctx
 )
 {
   rtems_status_code sc;

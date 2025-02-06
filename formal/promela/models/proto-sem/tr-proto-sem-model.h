@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSTestCaseRtemsModelEventsMgr_Run
+ * @ingroup RTEMSTestCaseRtemsModelProtoSem_Run
  */
 
 /*
@@ -45,8 +45,8 @@
  * https://docs.rtems.org/branches/master/eng/req/howto.html
  */
 
-#ifndef _TR_MODEL_EVENTS_MGR_H
-#define _TR_MODEL_EVENTS_MGR_H
+#ifndef _TR_MODEL_PROTO_SEM_H
+#define _TR_MODEL_PROTO_SEM_H
 
 #include "tx-model-0.h"
 
@@ -67,17 +67,17 @@ extern "C" {
  */
 typedef struct {
   rtems_status_code ( *send )( rtems_id, rtems_event_set ); // copy of the
-                       // corresponding RtemsModelEventsMgr_Run() parameter
+                       // corresponding RtemsModelProtoSem_Run() parameter
   rtems_status_code ( *receive )
                     ( rtems_event_set, rtems_option
                     , rtems_interval, rtems_event_set * ); // copy of the
-                 // corresponding RtemsModelEventsMgr_Run() parameter
+                 // corresponding RtemsModelProtoSem_Run() parameter
   rtems_event_set ( *get_pending_events )( Thread_Control * ); // copy of the
-                    // corresponding RtemsModelEventsMgr_Run() parameter
+                    // corresponding RtemsModelProtoSem_Run() parameter
   unsigned int wait_class; // copy of the corresponding
-                           // RtemsModelEventsMgr_Run() parameter
+                           // RtemsModelProtoSem_Run() parameter
   int waiting_for_event; // copy of the corresponding
-                         // RtemsModelEventsMgr_Run() parameter
+                         // RtemsModelProtoSem_Run() parameter
   int this_test_number; // test number used to identify a test runner instance
   rtems_id receiver_id; // receiver ID used for the event send action.
   rtems_event_set events_to_send; // events to send for the event send action
@@ -97,7 +97,7 @@ typedef struct {
   rtems_id other_sched; // scheduler ID of another scheduler
                         // which is not used by the runner task
   T_thread_switch_log_4 thread_switch_log; // thread switch log
-} RtemsModelEventsMgr_Context;
+} RtemsModelProtoSem_Context;
 
 #define EVT_PWR_OF_10 100 // defines no of digits to align scenario numbers
 
@@ -105,7 +105,7 @@ typedef struct {
 
 #define MAX_TLS_SIZE RTEMS_ALIGN_UP( 64, RTEMS_TASK_STORAGE_ALIGNMENT )
 
-typedef RtemsModelEventsMgr_Context Context;
+typedef RtemsModelProtoSem_Context Context;
 
 rtems_event_set GetPending( Context *ctx );
 
@@ -113,16 +113,16 @@ rtems_id mapid( Context *ctx, int pid ) ;
 
 void initialise_pending( rtems_event_set pending[], int max );
 
-void RtemsModelEventsMgr_Setup_Wrap( void *arg ) ;
+void RtemsModelProtoSem_Setup_Wrap( void *arg ) ;
 
-void RtemsModelEventsMgr_Teardown_Wrap( void *arg ) ;
+void RtemsModelProtoSem_Teardown_Wrap( void *arg ) ;
 
-size_t RtemsModelEventsMgr_Scope( void *arg, char *buf, size_t n ) ;
+size_t RtemsModelProtoSem_Scope( void *arg, char *buf, size_t n ) ;
 
-void RtemsModelEventsMgr_Cleanup( RtemsModelEventsMgr_Context *ctx );
+void RtemsModelProtoSem_Cleanup( RtemsModelProtoSem_Context *ctx );
 
 /**
- * @addtogroup RTEMSTestCaseRtemsModelEventsMgr_Run
+ * @addtogroup RTEMSTestCaseRtemsModelProtoSem_Run
  *
  * @{
  */
@@ -141,7 +141,7 @@ void RtemsModelEventsMgr_Cleanup( RtemsModelEventsMgr_Context *ctx );
  * @param waiting_for_event is the thread waiting for event state.
  */
 
-void RtemsModelEventsMgr_Run0(
+void RtemsModelProtoSem_Run0(
   rtems_status_code ( *send )( rtems_id, rtems_event_set ),
   rtems_status_code ( *receive )( rtems_event_set, rtems_option, rtems_interval, rtems_event_set * ),
   rtems_event_set (   *get_pending_events )( Thread_Control * ),
@@ -149,7 +149,7 @@ void RtemsModelEventsMgr_Run0(
   int                  waiting_for_event
 );
 
-void RtemsModelEventsMgr_Run1(
+void RtemsModelProtoSem_Run1(
   rtems_status_code ( *send )( rtems_id, rtems_event_set ),
   rtems_status_code ( *receive )( rtems_event_set, rtems_option, rtems_interval, rtems_event_set * ),
   rtems_event_set (   *get_pending_events )( Thread_Control * ),
@@ -157,7 +157,7 @@ void RtemsModelEventsMgr_Run1(
   int                  waiting_for_event
 );
 
-void RtemsModelEventsMgr_Run2(
+void RtemsModelProtoSem_Run2(
   rtems_status_code ( *send )( rtems_id, rtems_event_set ),
   rtems_status_code ( *receive )( rtems_event_set, rtems_option, rtems_interval, rtems_event_set * ),
   rtems_event_set (   *get_pending_events )( Thread_Control * ),
@@ -165,7 +165,7 @@ void RtemsModelEventsMgr_Run2(
   int                  waiting_for_event
 );
 
-void RtemsModelEventsMgr_Run3(
+void RtemsModelProtoSem_Run3(
   rtems_status_code ( *send )( rtems_id, rtems_event_set ),
   rtems_status_code ( *receive )( rtems_event_set, rtems_option, rtems_interval, rtems_event_set * ),
   rtems_event_set (   *get_pending_events )( Thread_Control * ),
@@ -173,7 +173,7 @@ void RtemsModelEventsMgr_Run3(
   int                  waiting_for_event
 );
 
-void RtemsModelEventsMgr_Run4(
+void RtemsModelProtoSem_Run4(
   rtems_status_code ( *send )( rtems_id, rtems_event_set ),
   rtems_status_code ( *receive )( rtems_event_set, rtems_option, rtems_interval, rtems_event_set * ),
   rtems_event_set (   *get_pending_events )( Thread_Control * ),
@@ -181,7 +181,7 @@ void RtemsModelEventsMgr_Run4(
   int                  waiting_for_event
 );
 
-void RtemsModelEventsMgr_Run5(
+void RtemsModelProtoSem_Run5(
   rtems_status_code ( *send )( rtems_id, rtems_event_set ),
   rtems_status_code ( *receive )( rtems_event_set, rtems_option, rtems_interval, rtems_event_set * ),
   rtems_event_set (   *get_pending_events )( Thread_Control * ),
@@ -189,7 +189,7 @@ void RtemsModelEventsMgr_Run5(
   int                  waiting_for_event
 );
 
-void RtemsModelEventsMgr_Run6(
+void RtemsModelProtoSem_Run6(
   rtems_status_code ( *send )( rtems_id, rtems_event_set ),
   rtems_status_code ( *receive )( rtems_event_set, rtems_option, rtems_interval, rtems_event_set * ),
   rtems_event_set (   *get_pending_events )( Thread_Control * ),
@@ -197,7 +197,7 @@ void RtemsModelEventsMgr_Run6(
   int                  waiting_for_event
 );
 
-void RtemsModelEventsMgr_Run7(
+void RtemsModelProtoSem_Run7(
   rtems_status_code ( *send )( rtems_id, rtems_event_set ),
   rtems_status_code ( *receive )( rtems_event_set, rtems_option, rtems_interval, rtems_event_set * ),
   rtems_event_set (   *get_pending_events )( Thread_Control * ),
@@ -205,7 +205,7 @@ void RtemsModelEventsMgr_Run7(
   int                  waiting_for_event
 );
 
-void RtemsModelEventsMgr_Run8(
+void RtemsModelProtoSem_Run8(
   rtems_status_code ( *send )( rtems_id, rtems_event_set ),
   rtems_status_code ( *receive )( rtems_event_set, rtems_option, rtems_interval, rtems_event_set * ),
   rtems_event_set (   *get_pending_events )( Thread_Control * ),
@@ -213,7 +213,7 @@ void RtemsModelEventsMgr_Run8(
   int                  waiting_for_event
 );
 
-void RtemsModelEventsMgr_Run9(
+void RtemsModelProtoSem_Run9(
   rtems_status_code ( *send )( rtems_id, rtems_event_set ),
   rtems_status_code ( *receive )( rtems_event_set, rtems_option, rtems_interval, rtems_event_set * ),
   rtems_event_set (   *get_pending_events )( Thread_Control * ),
@@ -221,7 +221,7 @@ void RtemsModelEventsMgr_Run9(
   int                  waiting_for_event
 );
 
-void RtemsModelEventsMgr_Run10(
+void RtemsModelProtoSem_Run10(
   rtems_status_code ( *send )( rtems_id, rtems_event_set ),
   rtems_status_code ( *receive )( rtems_event_set, rtems_option, rtems_interval, rtems_event_set * ),
   rtems_event_set (   *get_pending_events )( Thread_Control * ),
@@ -235,4 +235,4 @@ void RtemsModelEventsMgr_Run10(
 }
 #endif
 
-#endif /* _TR_MODEL_EVENTS_MGR_H */
+#endif /* _TR_MODEL_PROTO_SEM_H */
