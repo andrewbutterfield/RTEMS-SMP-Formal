@@ -19,7 +19,7 @@ inline nl() { printf("\n") } // Useful shorthand
  *
  *  need text here to explain usage
  */
-typedef Task {
+typedef Task {  // rename as Task_Common ? Common_Task
   byte nodeid; // So we can spot remote calls
   byte pmlid; // Promela process id
   mtype state = Zombie ; // {Zombie,Dormant,Ready,TimeWait,OtherWait,...}
@@ -28,7 +28,8 @@ typedef Task {
   int ticks; // clock ticks to keep track of timeout
   bool tout; // true if woken by a timeout
   bool isr;     // If task is woken from Interrupt context
-  //
+  // BELOW ARE task_mgr specific, should probably not be here.
+  // Called Task_Manager ?
   byte start;
   bool HoldingMutex;
   bool mutexs[SEMA_MAX]; // List of Semaphores the task is currently holding.
