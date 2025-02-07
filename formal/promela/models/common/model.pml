@@ -71,9 +71,9 @@ inline waitUntilReady(id){
 }
 
 
-bool stopclock = false; // used by System to stop the Clock
-
 mtype scenario; // used in models to identify top-level scenario
+
+bool stopclock = false; // used by System to stop the Clock
 
 /*
  * We need a process that periodically wakes up blocked processes.
