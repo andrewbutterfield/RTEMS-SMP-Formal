@@ -38,10 +38,10 @@
 
 /*
  * The model presented here is designed to work with the following files:
- *   Refinement:   model-events-mgr-rfn.yml
- *   Test Preamble: model-events-mgr-pre.h
- *   Test Postamble: model-events-mgr-post.h
- *   Test Runner: model-events-mgr-run.h
+ *   Refinement:   proto-sem-rfn.yml
+ *   Test Preamble: proto-sem-pre.h
+ *   Test Postamble: proto-sem-post.h
+ *   Test Runner: proto-sem-run.h
  */
 
 
@@ -59,10 +59,34 @@ inline outputDefines () {
 }
 
 
+/*
+ * We define: 
+ *  - two global variables g1,g2.
+ *  - two functions that update both, differently
+ *  - two tasks that each call one of the above functions.
+ *
+ *  Initially the functions are atomic.
+ *  Later we might weaken this and mix the calls a bit.
+ */
+
+int g1,g2 ;
+
 inline outputDeclarations () {
-  // printf("@@@ %d DECL byte sendrc 0\n",_pid);
-  atomic{printf("Nothing declared at present\n");}
+  printf("@@@ %d DECL int g1\n",_pid);
+  printf("@@@ %d DECL int g2\n",_pid);
 }
+
+
+inline update1() {
+  atomic{ g1 = g2+10; g2 = g1*2 }
+}
+
+inline update2() {
+  atomic{ g2 = g1+5 ; g1 = g2*3 }
+}
+
+
+
 
 
 
@@ -86,15 +110,55 @@ inline chooseScenario() {
 
 proctype Runner (byte nid, taskid) {
 
-  atomic{printf("Runner running...\n")}
+  atomic{ 
+    printf("Runner running...\n") ;
+    printf("@@@ %d TASK Runner\n",_pid);
+  } ;
+
+  atomic{
+    printf("Runner: before update1\n");
+    printf("@@@ %d SCALAR g1 %d\n",_pid,g1);
+    printf("@@@ %d SCALAR g2 %d\n",_pid,g2);
+
+    update1();
+    printf("@@@ %d CALL update1\n",_pid);
+
+    printf("Runner: after update1\n");
+    printf("@@@ %d SCALAR g1 %d\n",_pid,g1);
+    printf("@@@ %d SCALAR g2 %d\n",_pid,g2);
+  }
+
+  printf("@@@ %d LOG Sender %d finished\n",_pid,taskid);
+  tasks[taskid].state = Zombie;
+  printf("@@@ %d STATE %d Zombie\n",_pid,taskid)
+
 }
 
 
 proctype Worker (byte nid, taskid) {
 
-  atomic{printf("Worker running...")}
+  atomic{
+    printf("Worker running...\n") ;
+    printf("@@@ %d TASK Worker\n",_pid);
+  } ;
+  
+  atomic{
+    printf("Worker: before update2\n");
+    printf("@@@ %d SCALAR g1 %d\n",_pid,g1);
+    printf("@@@ %d SCALAR g2 %d\n",_pid,g2);
 
+    update2();
+    printf("@@@ %d CALL update2\n",_pid);
+  
+    printf("Worker: after update2\n");
+    printf("@@@ %d SCALAR g1 %d\n",_pid,g1);
+    printf("@@@ %d SCALAR g2 %d\n",_pid,g2);
   }
+
+  printf("@@@ %d LOG Sender %d finished\n",_pid,taskid);
+  tasks[taskid].state = Zombie;
+  printf("@@@ %d STATE %d Zombie\n",_pid,taskid)
+}
 
 init {
   pid nr;
@@ -120,6 +184,7 @@ init {
   run Worker(0,2);
 
   _nr_pr == 1;
+
 
 #ifdef TEST_GEN
   assert(false);

@@ -49,7 +49,19 @@
 
 #include "tr-proto-sem-model.h"
 
-static const char PromelaModelProtoSem[] = "/PML-EventsMgr";
+static const char PromelaModelProtoSem[] = "/PML-ProtoSem";
+
+
+int update1(int *p1, int *p2) {
+  *p1 = *p2+10 ; 
+  *p2 = *p1*2  ;
+}
+
+int update2(int* p1, int *p2) {
+  *p1 = *p2+5 ; 
+  *p2 = *p1*3  ;
+}
+
 
 #define INPUT_EVENTS ( RTEMS_EVENT_5 | RTEMS_EVENT_23 )
 
