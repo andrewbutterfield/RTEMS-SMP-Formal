@@ -33,7 +33,11 @@ logger = logging.getLogger (__name__)
 
 class command:
 
-    def __init__(self, ref_dict, outputLOG = False, annoteComments = True, outputSWITCH = False):
+    def __init__(self, ref_dict
+                 , outputLOG = False
+                 , annoteComments = True
+                 , outputSWITCH = True
+                 ):
         self.ref_dict = ref_dict
         self.ref_dict_keys = ref_dict.keys()
 
