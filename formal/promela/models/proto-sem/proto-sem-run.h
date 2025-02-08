@@ -8,7 +8,7 @@ static void Worker{0}( rtems_task_argument arg )
   ctx = (Context *) arg;
 
   T_log( T_NORMAL, "Worker Running" );
-  TestSegment3( ctx );
+  TestSegment4( ctx );
   T_log( T_NORMAL, "Worker finished" );
 
   // (void) rtems_task_suspend( RTEMS_SELF );

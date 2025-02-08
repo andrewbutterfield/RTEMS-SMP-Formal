@@ -3,6 +3,6 @@
 static void Runner( RtemsModelProtoSem_Context *ctx )
 {
   T_log( T_NORMAL, "Runner running" );
-  TestSegment4( ctx );
+  TestSegment3( ctx );
   T_log( T_NORMAL, "Runner finished" );
 }
