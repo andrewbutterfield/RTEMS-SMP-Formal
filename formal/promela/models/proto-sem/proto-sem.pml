@@ -79,10 +79,14 @@ inline outputDeclarations () {
 
 inline update1() {
   atomic{ g1 = g2+10; g2 = g1*2 }
+  // g1 = g2+10 ; 
+  // g2 = g1*2 
 }
 
 inline update2() {
   atomic{ g2 = g1+5 ; g1 = g2*3 }
+  // g2 = g1+5 ; 
+  // g1 = g2*3 
 }
 
 
@@ -110,24 +114,21 @@ inline chooseScenario() {
 
 proctype Runner (byte nid, taskid) {
 
-  atomic{ 
+  
     printf("Runner running...\n") ;
     printf("@@@ %d TASK Runner\n",_pid);
-  } ;
-
-  atomic{
+  
     printf("Runner: before update1\n");
     printf("@@@ %d SCALAR g1 %d\n",_pid,g1);
     printf("@@@ %d SCALAR g2 %d\n",_pid,g2);
 
-    update1();
     printf("@@@ %d CALL update1\n",_pid);
-
+    update1();
+    
     printf("Runner: after update1\n");
     printf("@@@ %d SCALAR g1 %d\n",_pid,g1);
     printf("@@@ %d SCALAR g2 %d\n",_pid,g2);
-  }
-
+  
   printf("@@@ %d LOG Sender %d finished\n",_pid,taskid);
   tasks[taskid].state = Zombie;
   printf("@@@ %d STATE %d Zombie\n",_pid,taskid)
@@ -137,23 +138,22 @@ proctype Runner (byte nid, taskid) {
 
 proctype Worker (byte nid, taskid) {
 
-  atomic{
+
     printf("Worker running...\n") ;
     printf("@@@ %d TASK Worker\n",_pid);
-  } ;
   
-  atomic{
+
     printf("Worker: before update2\n");
     printf("@@@ %d SCALAR g1 %d\n",_pid,g1);
     printf("@@@ %d SCALAR g2 %d\n",_pid,g2);
 
-    update2();
     printf("@@@ %d CALL update2\n",_pid);
-  
+    update2();
+     
     printf("Worker: after update2\n");
     printf("@@@ %d SCALAR g1 %d\n",_pid,g1);
     printf("@@@ %d SCALAR g2 %d\n",_pid,g2);
-  }
+
 
   printf("@@@ %d LOG Sender %d finished\n",_pid,taskid);
   tasks[taskid].state = Zombie;
