@@ -142,7 +142,7 @@ proctype theScenario() {
   g1=0; g2=0; g3=0;
   k1(13); k2(42); k3(99); k2(13); k3(13); k3(42); k1(99); k1(42); k2(99)
   gbackup(ts1,ts2,ts3);
-  printf("theScenario: (ts1,ts2,ts3)=(%d,%d,%d)\n",ts1,ts2,ts3) ;
+  printf("Scenario: (ts1,ts2,ts3)=(%d,%d,%d)\n",ts1,ts2,ts3) ;
 }
 
 /*
@@ -159,7 +159,48 @@ proctype theScenario() {
  *
  * We need to care when a process has ended but needs to explicitly handover to
  * another waiting process (as per scenario above).
+ *
+ * First, we need 3 SBSs:
  */
+
+ bool sbs1, sbs2, sbs3 ; // Initialised as released by default
+
+/*
+ * We have the following "segments" for each process in this scenario:
+ *
+ * p1 :  [ k1(13) k2(42) k3(99) ] -> p2
+ * p2 :  [ k2(13) ] -> p3 ;  [ k3(42) k1(99) ] -> p3 ;
+ * p3 :  [ k3(13) ] -> p2 ;  [ k1(42) k2(99) ] -> stop
+ *
+ * This yields the following test processes:
+ */
+
+proctype test1() {
+   Obtain(sbs1);
+   k1(13); k2(42); k3(99);
+   Release(sbs2)
+}
+
+proctype test2() {
+  Obtain(sbs2);
+  k2(13) ;
+  Release(sbs3);
+  Obtain(sbs2);
+  k3(42); k1(99);
+  Release(sbs3)
+}
+
+proctype test3() {
+  Obtain(sbs3);
+  k3(13) ;
+  Release(sbs2);
+  Obtain(sbs3);
+  k1(42); k2(99);
+}
+
+// storage for test outcome
+byte tt1, tt2, tt3;
+
 
 
 /*
@@ -174,8 +215,28 @@ init {
 
   _nr_pr == 1;
 
-  printf("Done, (g1,g2,g3)=(%d,%d,%d)\n",g1,g2,g3) ;
+  printf("Random: (g1,g2,g3)=(%d,%d,%d)\n",g1,g2,g3) ;
 
   run theScenario() ;
+
+  _nr_pr == 1;
+
+  g1=0; g2=0; g3=0;
+  Release(sbs1); Obtain(sbs2); Obtain(sbs3);
+  run test1();
+  run test2();
+  run test3();
+  
+  _nr_pr == 1;
+
+  gbackup(tt1,tt2,tt3);
+  printf("Test: (tt1,tt2,tt3)=(%d,%d,%d)\n",tt1,tt2,tt3) ;
+
+  #ifndef TEST_GEN
+  assert(tt1==ts1 && tt2==ts2 && tt3==ts3);
+  #endif
+  #ifdef TEST_GEN
+  assert(tt1!=ts1 || tt2!=ts2 || tt3!=ts3);
+  #endif
   
 }
