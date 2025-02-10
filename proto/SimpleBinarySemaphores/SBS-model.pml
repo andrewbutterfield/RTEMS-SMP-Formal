@@ -36,6 +36,66 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  ******************************************************************************/
 
+/*
+ * We first model a Simple Binary Semaphore (SBS).
+ *
+ * It has two states: released, and obtained.
+ * There is no concept of ownership.
+ *
+ * It has two operations: Release, and Obtain.
+ *
+ * Release sets its state to released.
+ *
+ * Obtain checks its state:
+ *  if released, it sets it to obtained and returns;
+ *  if obtained, the call blocks until *another* process does a Release,
+ *  then it sets it (back) to obtained and returns.
+ *
+ * We simply model such a semaphore with a single-bit.
+ */
+
+inline Release(sbs) {
+  sbs = 0 ; 
+}
+
+inline Obtain(sbs) {
+  atomic{
+    sbs == 0 ;
+    sbs = 1;
+  }
+}
+
+/*
+ * Scenario:
+ *
+ * We have several processes performing atomic state-change actions,
+ * on global shared state. These processes, as initially given, do not use any
+ * synchronisation, so we obtain arbitrary interleavings.
+ *
+ * However, when we want to develop tests, we want to be able to choose any such
+ * interleaving, and construct test code that *always* reproduces it, while
+ * running in a real environment with the usual "capricious" scheduler. This is
+ * achieved by adding in simple binary semaphores and inserting in appropriate
+ * Obtain and Release calls. We call this process "orchestration".
+ *
+ * We define a scenario as a list of atomic actions, each tagged with the
+ * identity of the process that performs it. Orchestration involves using the
+ * changes in process tags between steps in a scenario to insert approproiate
+ * SBS calls in both processes to enforce the suspension of the "before"
+ * process, and the resumption of the "after" process.
+ *
+ * We seek an approach that is easy to automate
+ */
+
+
+
+
 init {
-  printf("Hello World!\n")
+
+  bool sbs ;
+
+  Obtain(sbs);  
+  printf("Hello\n")
+  Release(sbs);
+  printf("World!\n")
 }
