@@ -145,9 +145,6 @@ proctype theScenario() {
   printf("theScenario: (ts1,ts2,ts3)=(%d,%d,%d)\n",ts1,ts2,ts3) ;
 }
 
-// It helps to be able to backup a scenario final outcome
-inline gbackup(b1,b2,b3) { b1=g1; b2=g2; b3=g3 }
-
 /*
  * Reproducing the scenario:
  * 
