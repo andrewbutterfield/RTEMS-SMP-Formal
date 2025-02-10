@@ -2,8 +2,9 @@
 
 ## CURRENT WORK
 
-Moving common parts in all models to `common/(rtems/model).pml` as appropriate.
-DONE
+Developing `proto_sem` to aid in developing formal semantics for the whole `spin2test` language chain: Promela, Observations, Refinement, RTEMS C Testcode.
+
+In `proto/SimpleBinarySemaphores` we use Promela/SPIN to explore the automatic use of simple binary semaphores to orchestrate test code.
 
 ## PUZZLING
 
