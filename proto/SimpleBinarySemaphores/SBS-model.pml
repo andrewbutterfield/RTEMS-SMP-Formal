@@ -99,15 +99,86 @@ inline Obtain(sbs) {
  * finiteness of the process action lists.
  */
 
+/* Setup:
+ * we will have three global variables, a predefined list of atomic actions, and
+ * three processes.
+ */
+
+byte g1,g2,g3;
+
+inline k1(val) { atomic{ g1 = val ; printf("p%d.k1(%d)\n",_pid,val) } }
+inline k2(val) { atomic{ g2 = val ; printf("p%d.k2(%d)\n",_pid,val) } }
+inline k3(val) { atomic{ g3 = val ; printf("p%d.k3(%d)\n",_pid,val) } }
+
+proctype p1() { k1(13); k2(42); k3(99); }
+proctype p2() { k2(13); k3(42); k1(99); }
+proctype p3() { k3(13); k1(42); k2(99); }
+
+/*
+ * After some runs we obtained the following scenario:
+ *
+ *      p1.k1(13)
+ *      p1.k2(42)
+ *      p1.k3(99)
+ *          p2.k2(13)
+ *              p3.k3(13)
+ *          p2.k3(42)
+ *          p2.k1(99)
+ *              p3.k1(42)
+ *              p3.k2(99)
+ *  Done, (g1,g2,g3)=(42,99,42)
+ * 
+ * So we shall now orchestrate this.
+ */
+
+// It helps to be able to backup a scenario final outcome
+inline gbackup(b1,b2,b3) { b1=g1; b2=g2; b3=g3 }
 
 
+// First, a single process that reproduces the scenario
+byte ts1,ts2,ts3 ;
+
+proctype theScenario() {
+  g1=0; g2=0; g3=0;
+  k1(13); k2(42); k3(99); k2(13); k3(13); k3(42); k1(99); k1(42); k2(99)
+  gbackup(ts1,ts2,ts3);
+  printf("theScenario: (ts1,ts2,ts3)=(%d,%d,%d)\n",ts1,ts2,ts3) ;
+}
+
+// It helps to be able to backup a scenario final outcome
+inline gbackup(b1,b2,b3) { b1=g1; b2=g2; b3=g3 }
+
+/*
+ * Reproducing the scenario:
+ * 
+ * Every process has to obtain its own SBS at the start.
+ * We "pre-Obtain" those of the processes that don't run first.
+ *
+ * When we switch from the running process to a designated waiting process, the
+ * running process performs:
+ *  1. Release the waiting SBS, which the waiting process now obtains.
+ *  2. Obtain its own (as this is obtained, we block here.)
+ * The invariant is that when a process is running its SBS is obtained.
+ *
+ * We need to care when a process has ended but needs to explicitly handover to
+ * another waiting process (as per scenario above).
+ */
+
+
+/*
+ * Model mainline
+ */
 
 init {
 
-  bool sbs ;
+  run p1() ;
+  run p2() ;
+  run p3() ;
 
-  Obtain(sbs);  
-  printf("Hello\n")
-  Release(sbs);
-  printf("World!\n")
+  _nr_pr == 1;
+
+  printf("Done, (g1,g2,g3)=(%d,%d,%d)\n",g1,g2,g3) ;
+
+  run theScenario() ;
+  
 }
