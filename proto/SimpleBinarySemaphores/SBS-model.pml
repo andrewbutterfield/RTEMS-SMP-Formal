@@ -37,6 +37,14 @@
  ******************************************************************************/
 
 /*
+ * Goal:
+ *
+ * To formally model an automatable way of "orchestrating" concurrent test code
+ * to make it deterministic, and to use Promela/SPIN to verify that the solution
+ * is deadlock- and livelock-free.
+ */
+
+/*
  * We first model a Simple Binary Semaphore (SBS).
  *
  * It has two states: released, and obtained.
@@ -78,13 +86,17 @@ inline Obtain(sbs) {
  * achieved by adding in simple binary semaphores and inserting in appropriate
  * Obtain and Release calls. We call this process "orchestration".
  *
+ * We define a process as a pair consisting of its identity, and a list of the 
+ * atomic actions it performs. For now we assume the list is finite.
+ *
  * We define a scenario as a list of atomic actions, each tagged with the
  * identity of the process that performs it. Orchestration involves using the
- * changes in process tags between steps in a scenario to insert approproiate
+ * changes in process tags between steps in a scenario to insert appropriate
  * SBS calls in both processes to enforce the suspension of the "before"
  * process, and the resumption of the "after" process.
  *
- * We seek an approach that is easy to automate
+ * We seek an approach that is easy to automate, and not dependent on the 
+ * finiteness of the process action lists.
  */
 
 
