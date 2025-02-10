@@ -1,0 +1,46 @@
+                  p3.k3(13)
+                  p3.k1(42)
+                  p3.k2(99)
+              p2.k2(13)
+              p2.k3(42)
+              p2.k1(99)
+          p1.k1(13)
+          p1.k2(42)
+          p1.k3(99)
+      Random: (g1,g2,g3)=(13,42,99)
+          p1.k1(13)
+          p1.k2(42)
+          p1.k3(99)
+          p1.k2(13)
+          p1.k3(13)
+          p1.k3(42)
+          p1.k1(99)
+          p1.k1(42)
+          p1.k2(99)
+          Scenario: (ts1,ts2,ts3)=(42,99,42)
+          p1.k1(13)
+          p1.k2(42)
+          p1.k3(99)
+              p2.k2(13)
+                  p3.k3(13)
+              p2.k3(42)
+              p2.k1(99)
+                  p3.k1(42)
+                  p3.k2(99)
+      Test: (tt1,tt2,tt3)=(42,99,42)
+spin: trail ends after 72 steps
+#processes: 1
+		g1 = 42
+		g2 = 99
+		g3 = 42
+		ts1 = 42
+		ts2 = 99
+		ts3 = 42
+		sbs1 = 1
+		sbs2 = 1
+		sbs3 = 1
+		tt1 = 42
+		tt2 = 99
+		tt3 = 42
+ 72:	proc  0 (:init::1) SBS-model.pml:242 (state 31) <valid end state>
+8 processes created
