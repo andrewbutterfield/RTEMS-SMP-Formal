@@ -177,8 +177,8 @@ init {
 
   printf("Run...\n");
 
-  run System();
-  run Clock();
+  // run System();
+  // run Clock();
 
   run Runner(0,1);
   run Worker(0,2);
