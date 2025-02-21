@@ -6,7 +6,10 @@ Developing `proto_sem` to aid in developing formal semantics for the whole `spin
 
 If we don't run System and Clock, the Promela model works,
 but the code generation fails because the the Segment 1  & 2 slots get filled with Runner/Worker code, but the C boilerplate code expects those to being Segments3 onwards.
-We need a better way to relate Promela proctypes and their process ids to C trest code "Segments">
+We need a better way to relate Promela proctypes and their process ids to C test code "Segments"
+
+Should we have "tiny" versions of System and Clock for when they are not needed?
+
 
 In `proto/SimpleBinarySemaphores` we use Promela/SPIN to explore the automatic use of simple binary semaphores to orchestrate test code.
 
