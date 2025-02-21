@@ -67,8 +67,11 @@ update2: |
   T_log( T_NORMAL, "Calling update2()" );
   update2(&g1,&g2);
 
-SUSPEND:
-  /* SWITCH[{0}] Suspension of proc{1} in favour of proc{2} */
+SUSPEND: |
+  /* SUSPEND[{0}] release proc{2} suspend proc{1} (us) */
+  T_log( T_NORMAL, "SWITCH-{0}");
+  T_log( T_NORMAL, "Release-{2}");
+  T_log( T_NORMAL, "Obtain-{1}");
 
 WAKEUP:
-  /* SWITCH[{0}] ReleaseTestSyncSema of proc{1} (sometime) after proc{2} */
+  /* WAKEUP[{0}] do nothing here, we should resume now. */
