@@ -166,12 +166,15 @@ def generate_spin_files( model_name, model_dir, model_root
     print(f"Generating spin files for {model_name}")
     subprocess.run(f"spin {spinallscenarios} {model_root}.pml",
                    check=True, shell=True)
+# the following glob finds all .trails in model and model/gen !!!!
     no_of_trails = len(glob.glob(f"{model_root}*.trail"))
     if no_of_trails == 0:
         print("no trail files generated")
     else:
+        print(f"{no_of_trails} trail files generated")
         for i in range(no_of_trails):
-            subprocess.run(f"spin -T -t{i + 1} {model_root}.pml > gen/{model_root}-{i}.spn",
+            print(f"Process trail file {i+1} to give spn file {i}")
+            subprocess.run(f"spin -T -t{i+1} {model_root}.pml > gen/{model_root}-{i}.spn",
                            check=True, shell=True)
             subprocess.run( 
                 f"mv {model_root}.pml{i+1}.trail gen/{model_root}.pml{i+1}.trail",
