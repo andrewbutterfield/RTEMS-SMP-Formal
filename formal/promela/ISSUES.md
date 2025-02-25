@@ -21,7 +21,7 @@ In `proto/SimpleBinarySemaphores` we use Promela/SPIN to explore the automatic u
  * `barrier-mgr` - all tests pass  
  * `chains` - all tests pass 
  * `event-mgr` - all tests pass
- * `msg-mgr` - 1 test fails  - receive suceeds when timeout expected
+ * `msg-mgr` - 1 test fails  - receive succeeds when timeout expected
  * `sem-mgr` - all tests pass
 
  * `barrier-mgr` fixed by changing sis core argument from `-m 2` to `-m 4`.
@@ -32,7 +32,7 @@ Maybe the issue is that when timeout occurs we first check to see if a message
 has (JUST!) arrived, in which case we are satisfied, otherwise we complain.
  
 
-### Current command behaviour:
+### Current(???) command behaviour:
  
  * `zero`,`clean`,`spin`,`gentests`, `copy`, `allsteps` require `xxx-mgr`
 
