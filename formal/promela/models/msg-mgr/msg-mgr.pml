@@ -374,6 +374,9 @@ inline chooseScenario() {
   rcvSema2 = 2;
   startSema = sendSema;
   msgstate[SEND_ID].doCreate = true;
+  tasks[SEND_ID].state = Ready;
+  tasks[RCV1_ID].state = Ready;
+  tasks[RCV2_ID].state = Ready;
 
   //Queue parameters
   queueCreated = false;
