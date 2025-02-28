@@ -47,15 +47,15 @@
 
 #include "../common/rtems.pml"
 #define TASK_MAX 3 
-#define SEMA_MAX 2
+#define SEMA_MAX 5
 #include "../common/model.pml"
 
 
 
 
 inline outputDefines () {
-   // printf("@@@ %d DEF NO_OF_EVENTS %d\n",_pid,NO_OF_EVENTS);
-   atomic{printf("Nothing DEFINEd at present\n");}
+   printf("@@@ %d DEF TASK_MAX %d\n",_pid,TASK_MAX);
+   printf("@@@ %d DEF SEMA_MAX %d\n",_pid,SEMA_MAX);
 }
 
 
@@ -74,19 +74,20 @@ int g1,g2 ;
 inline outputDeclarations () {
   printf("@@@ %d DECL int g1\n",_pid);
   printf("@@@ %d DECL int g2\n",_pid);
+  printf("@@@ %d DCLARRAY Semaphore test_sync_sema SEMA_MAX\n",_pid);  
 }
 
 
 inline update1() {
-  atomic{ g1 = g2+10; g2 = g1*2 }
-  // g1 = g2+10 ; 
-  // g2 = g1*2 
+  //atomic{ g1 = g2+10; g2 = g1*2 }
+  g1 = g2+10 ; 
+  g2 = g1*2 
 }
 
 inline update2() {
-  atomic{ g2 = g1+5 ; g1 = g2*3 }
-  // g2 = g1+5 ; 
-  // g1 = g2*3 
+  // atomic{ g2 = g1+5 ; g1 = g2*3 }
+  g2 = g1+5 ; 
+  g1 = g2*3 
 }
 
 
@@ -99,7 +100,7 @@ inline update2() {
  * Model Processes
  * We shall use four processes in this model.
  *  Two will represent RTEMS Tasks
- *  Two will be the common System and CLock processes
+ *  Two will be the common System and Clock processes
  */
 
 

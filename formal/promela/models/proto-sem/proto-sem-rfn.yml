@@ -34,8 +34,11 @@ SEGEND: "}"
 NAME: |
   /* Test Name is defined in the Test Case code (tc-model-events-mgr.c) */
 
+test_sync_sema_DCL: rtems_id {0}[{1}];
+
 INIT: |
-  /* No Initialisation */
+  initialise_semaphore( 0, ctx->runner_wakeup, test_sync_sema );
+  initialise_semaphore( 1, ctx->worker_wakeup, test_sync_sema );
 
 Runner: |
   checkTaskIs( ctx->runner_id );
@@ -69,8 +72,10 @@ update2: |
 
 SUSPEND: |
   /* SUSPEND[{0}] release proc{2} suspend proc{1} (us) */
-  T_log( T_NORMAL, "SWITCH-{0}");
+  T_log( T_NORMAL, "SWITCH-COUNT{0}");
+  ReleaseTestSyncSema( test_sync_sema[{2}] );
   T_log( T_NORMAL, "Release-{2}");
+  ObtainTestSyncSema( test_sync_sema[{1}] );
   T_log( T_NORMAL, "Obtain-{1}");
 
 WAKEUP:
