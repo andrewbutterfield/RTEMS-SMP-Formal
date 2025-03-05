@@ -1,5 +1,26 @@
 # ISSUES
 
+## URGENT
+
+We haven't initialised SBS properly in `proto_sem`:
+
+```
+F:0.*:0:WORK/PML-ProtoSem004:tx-model-0.c:109:RTEMS_INVALID_ID == RTEMS_SUCCESSFUL
+```
+
+which points at
+
+```
+void ReleaseTestSyncSema( rtems_id id )
+{
+  rtems_status_code sc;
+
+  sc = rtems_semaphore_release( id );
+  T_quiet_rsc_success( sc ); // <======= THIS FAILS
+}
+
+```
+
 ## CURRENT WORK
 
 Developing `proto_sem` to aid in developing formal semantics for the whole `spin2test` language chain: Promela, Observations, Refinement, RTEMS C Testcode.
