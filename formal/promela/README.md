@@ -77,11 +77,13 @@ Seems complete
 
 While all API calls are covered, the full range of options are not.
 
-### Status of `task-mgr` [n/N]
+### Status of `task-mgr` [n/21]
 
 **New** Actively under development
 
-### Status of `proto_sem`
+### Status of `proto_sem` [n/a]
+
+This does not models RTEMS APIs, but is used to explore various sematic issues.
 
 **New** Actively under development
 
