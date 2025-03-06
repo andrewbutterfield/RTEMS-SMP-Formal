@@ -14,7 +14,7 @@ In `rtems/src/rtems/testsuites/validation/` we find:
 
 Top-Level Sources:
 
-```sh
+```
 ts-model-0.c
 tx-support.h
 tx-support.c
@@ -26,7 +26,7 @@ tx-model-0.c
 
 For each API model XXX:
 
-```sh
+```
 tc-XXX.c
 tr-XXX.h
 tr-XXX.c
@@ -265,6 +265,89 @@ void ShowWorkerSemaId( int worker_num, rtems_id work_wake ) ;
 
 Implemented in `tx-model-0.c`.
 
+### models/XXX/tc-XXX-pre.h
+
+####  Includes
+
+```c
+#include <rtems/rtems/eventimpl.h>
+#include <rtems/rtems/tasksdata.h>
+#include <rtems/score/statesimpl.h>
+#include <rtems/score/threadimpl.h>
+#include "tr-event-mgr-model.h"
+#include <rtems/test.h>
+```
+
+
+#### Defines
+
+This defines C functions that wrap API calls 
+
+```c
+static rtems_status_code EventSend(...)
+  { return rtems_event_send( id, event_in ); }
+
+static rtems_status_code EventReceive(...)
+{ return rtems_event_receive( event_in, option_set, ticks, event_out ); }
+
+static rtems_event_set GetPendingEvents( Thread_Control *thread )
+{ RTEMS_API_Control *api;
+  api = thread->API_Extensions[ THREAD_API_RTEMS ];
+  return api->Event.pending_events;
+}
+
+static rtems_status_code EventSystemSend(...)
+{ return rtems_event_system_send( id, event_in ); }
+
+static rtems_status_code EventSystemReceive(...)
+{ return rtems_event_system_receive(event_in,...,event_out); }
+
+static rtems_event_set GetPendingSystemEvents( Thread_Control *thread )
+{ RTEMS_API_Control *api;
+  api = thread->API_Extensions[ THREAD_API_RTEMS ];
+  return api->System_event.pending_events;
+}
+```
+
+
+### models/XXX/tc-XXX-run.h
+
+Defines test cases 
+(usually just one, 
+ but event manager has regular and system variants)
+ 
+```c
+T_TEST_CASE( RtemsModelEventsMgr{0} )
+{{
+  RtemsModelEventsMgr_Run{0}(
+    EventSend,
+    EventReceive,
+    GetPendingEvents,
+    THREAD_WAIT_CLASS_EVENT,
+    STATES_WAITING_FOR_EVENT
+  );
+}}
+T_TEST_CASE( RtemsModelSystemEventsMgr{0} )
+{{
+  RtemsModelEventsMgr_Run{0}(
+    EventSystemSend,
+    EventSystemReceive,
+    GetPendingSystemEvents,
+    THREAD_WAIT_CLASS_SYSTEM_EVENT,
+    STATES_WAITING_FOR_SYSTEM_EVENT
+  );
+}}```
+
+
+### models/XXX/tc-XXX-post.h
+
+Very simple:
+
+```c
+/** @} */
+```
+
+
 ### models/XXX/XXX-model.h
 
 #### Includes
@@ -277,7 +360,7 @@ Implemented in `tx-model-0.c`.
 #include "ts-config.h"
 ```
 
-### XXX-pre.h
+### models/XXX/XXX-pre.h
 
 #### Includes
 
@@ -287,9 +370,52 @@ Implemented in `tx-model-0.c`.
 #include "tr-event-mgr-model.h"
 ```
 
-### Generated Code
+### Generated Code 
+
+### models/XXX/tc-XXX-model.c
+
+#### Includes
+
+```c
+#include <rtems/rtems/eventimpl.h>
+#include <rtems/rtems/tasksdata.h>
+#include <rtems/score/statesimpl.h>
+#include <rtems/score/threadimpl.h>
+#include "tr-event-mgr-model.h"
+#include <rtems/test.h>
+```
+
+#### Defines
+
+Contents of `tc-XXX-pre.h` plus, for I=0..N :
+
+```c
+T_TEST_CASE( RtemsModelEventsMgrI )
+{  RtemsModelEventsMgr_Run0(
+    EventSend,
+    EventReceive,
+    GetPendingEvents,
+    THREAD_WAIT_CLASS_EVENT,
+    STATES_WAITING_FOR_EVENT
+  );
+}
+T_TEST_CASE( RtemsModelSystemEventsMgr0 )
+{ RtemsModelEventsMgr_Run0(
+    EventSystemSend,
+    EventSystemReceive,
+    GetPendingSystemEvents,
+    THREAD_WAIT_CLASS_SYSTEM_EVENT,
+    STATES_WAITING_FOR_SYSTEM_EVENT
+  );
+}```
+
+
+
+### models/XXX/tr-XXX-model-N.c
+
 
 #### Declarations
+
 Declarations ensure, from model, as well as:
 
 ```c
