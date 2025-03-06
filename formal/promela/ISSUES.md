@@ -21,6 +21,11 @@ void ReleaseTestSyncSema( rtems_id id )
 
 ```
 
+### Less URGENT
+
+Generated file `tc-XXX-model.c` currently appears in `models/XXX`.
+It should appear in `models/XXX/gen`.
+
 ## CURRENT WORK
 
 Developing `proto_sem` to aid in developing formal semantics for the whole `spin2test` language chain: Promela, Observations, Refinement, RTEMS C Testcode.
