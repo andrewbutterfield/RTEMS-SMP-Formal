@@ -658,4 +658,188 @@ static T_fixture_node RtemsModelEventsMgr_Node<N>;
 void RtemsModelEventsMgr_Run<N>(..)
 ```
 
+### Test Fixture
+
+####  Fixture Declaration
+
+From `rtems/src/rtems/cpukit/include/rtems/test.h` (extract):
+
+```c
+typedef struct T_fixture {
+	void (*setup)(void *);
+	void (*stop)(void *);
+	void (*teardown)(void *);
+	size_t (*scope)(void *, char *, size_t);
+	void *initial_context;
+} T_fixture;
+
+typedef struct T_fixture_node {
+	struct T_fixture_node *next;
+	struct T_fixture_node *previous;
+	const T_fixture *fixture;
+	void *context;
+	unsigned int next_planned_steps;
+	unsigned int next_steps;
+	unsigned int failures;
+} T_fixture_node
+```
+
+####  Fixture Code
+
+From `rtems/src/rtems/cpukit/libtest/t-test.c` (extract):
+
+```c
+void *
+T_push_fixture(T_fixture_node *node, const T_fixture *fixture)
+{
+	T_context *ctx;
+	T_fixture_node *old;
+	void *context;
+
+	ctx = &T_instance;
+	old = ctx->fixtures;
+	old->previous = node;
+	node->next = old;
+	node->previous = NULL;
+	node->fixture = fixture;
+	context = fixture->initial_context;
+	node->context = context;
+	node->next_planned_steps = atomic_exchange_explicit(
+	    &ctx->planned_steps, UINT_MAX, memory_order_relaxed);
+	node->next_steps = atomic_exchange_explicit(&ctx->steps, 0,
+	    memory_order_relaxed);
+	node->failures = atomic_fetch_add_explicit(&ctx->failures, 0,
+	    memory_order_relaxed);
+	ctx->fixtures = node;
+
+	if (fixture->setup != NULL) {
+		(*fixture->setup)(context);
+	}
+
+	return context;
+}
+
+static void
+T_do_pop_fixture(T_context *ctx)
+{
+	T_fixture_node *node;
+	const T_fixture *fixture;
+	T_fixture_node *next;
+
+	node = ctx->fixtures;
+	next = node->next;
+	ctx->fixtures = next;
+	fixture = node->fixture;
+
+	if (fixture != NULL && fixture->teardown != NULL) {
+		(*fixture->teardown)(node->context);
+	}
+
+	if (next != NULL) {
+		unsigned int planned_steps;
+		unsigned int steps;
+		unsigned int failures;
+
+		next->previous = NULL;
+		planned_steps = atomic_exchange_explicit(&ctx->planned_steps,
+		    node->next_planned_steps, memory_order_relaxed);
+		steps = atomic_exchange_explicit(&ctx->steps, node->next_steps,
+		    memory_order_relaxed);
+		failures = atomic_fetch_add_explicit(&ctx->failures, 0,
+		    memory_order_relaxed);
+		ctx->fixture_steps += steps;
+		T_check_steps(planned_steps, steps, node->failures - failures);
+	}
+
+	memset(node, 0, sizeof(*node));
+}
+```
+
+
+### Test Execution Sequence
+
 So we now start with `RtemsModelEventsMgr_Run<N>` and establish execution order.
+
+The highlights are:
+
+#### Start: RtemsModelXXX_Run
+
+```c
+ctx = T_push_fixture(
+    &RtemsModelEventsMgr_Node<N>,
+    &RtemsModelEventsMgr_Fixture<N>
+  );
+```
+This pushes the fixture onto a stack and then 
+runs `RtemsModelEventsMgr_Setup_Wrap<N>` 
+on `RtemsModelEventsMgr_Instance<N>`.
+
+This is just `RtemsModelEventsMgr_Setup<N>()` 
+on an uninitialised `RtemsModelEventsMgr_Context`.
+
+#### Into: RtemsModelXXX_Setup
+
+This logs as "Runner Setup"
+
+Sets itself as the runner thread in the test context.
+
+Creates  worker and runner testsync semaphores (`CreateTestSyncSema`)
+
+Assigns the runner scheduler to self
+
+if `RTEMS_SMP` does something with other scheduler.
+
+Set own priority to `M_PRIO_NORMAL` 
+and checks that previous priority was `M_PRIO_HIGH`.
+
+Constructs Worker using `WorkerConfig<N>` and starts it running `Worker<N>`.
+
+#### Start: Worker
+
+Initial priority is `M_PRIO_LOW`.
+
+Logs as "Worker Running"
+
+Executes `TestSegment3`
+
+Releases both testsync semaphores
+
+Calls `rtems_event_receive` to enter blocking state.
+
+#### Back to: RtemsModelXXX_Run
+
+initialises context, including the test_number
+
+sets up thread switch logging? 
+Sets thread wait flags
+
+Executes `TestSegment0`
+
+Executes `Runner` which excutes `TestSegment4`
+
+Invokes `RtemsModelEventsMgr_Cleanup`
+
+#### Into: RtemsModelXXX_Cleanup
+
+This *just* does a receive for any of all possible events, 
+without waiting, and reports the outcomes.
+
+#### Back to: RtemsModelXXX_Run
+
+Runs `ShowWorkerSemaId`
+
+Calls `T_pop_fixture` which invokes `T_do_pop_fixture`
+
+This performs a teardown if present
+
+#### Into: RtemsModelXXX_Teardown
+
+Sets own priority to high
+
+Deletes the worker task
+
+Deletes the testsync semaphores
+
+#### Back to: RtemsModelXXX_RunN
+
+Test run now complete!
