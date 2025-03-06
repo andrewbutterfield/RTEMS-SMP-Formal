@@ -23,17 +23,20 @@ ts-config.h
 tx-model-0.h
 tx-model-0.c
 ```
+(versions of these can be be found in `models/toplevel`)
 
-For each API model XXX:
+For each API model XXX, (in `models/XXX`)
 
 ```
-tc-XXX.c
-tr-XXX.h
-tr-XXX.c
-tr-XXX-0.c
+tc-XXX-model.c 
+tr-XXX-model.h
+tr-XXX-model.c
+tr-XXX-model-0.c
 ...
-tr-XXX-N.c
+tr-XXX-model-N.c
 ```
+
+
 
 ### validation/ts-model-0.c
 
