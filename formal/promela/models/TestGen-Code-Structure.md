@@ -620,3 +620,42 @@ void RtemsModelEventsMgr_Run{0}(
 
 ## Code Flow
 
+### Test Suite (`ts-`)
+
+We start by looking at `validation/ts-model-0.c`.
+Basically this just pulls in `validation/ts-default.h`.
+There is no sign of a main program here.
+
+### Test Case (`tc-`)
+
+If we look at `models/XXX/tc-XXX-model.c` we find all the `T_TEST_CASE`s,
+which invoke `RtemsModelXXX_RunN()`.
+This looks like the starting point for a test.
+
+### Test Run (`tr-`)
+
+Looking in `models/XXX/tr-XXX-model.c` we find model-specific C code,
+as well as the following:
+
+```c
+static void RtemsModelEventsMgr_Teardown()
+void RtemsModelEventsMgr_Teardown_Wrap()
+size_t RtemsModelEventsMgr_Scope()
+void RtemsModelEventsMgr_Cleanup()
+```
+
+Looking at `models/XXX/gen/tr-XXX-model-<N>.c` we find test segments,
+runner and worker code and:
+
+```c
+RTEMS_ALIGNED( RTEMS_TASK_STORAGE_ALIGNMENT ) static char WorkerStorage<N>[..];
+static const rtems_task_config WorkerConfig<N> = {..}
+static void RtemsModelEventsMgr_Setup<N>()
+static void RtemsModelEventsMgr_Setup_Wrap<N>()
+static RtemsModelEventsMgr_Context RtemsModelEventsMgr_Instance<N>;
+static T_fixture RtemsModelEventsMgr_Fixture<N> = {..}
+static T_fixture_node RtemsModelEventsMgr_Node<N>;
+void RtemsModelEventsMgr_Run<N>(..)
+```
+
+So we now start with `RtemsModelEventsMgr_Run<N>` and establish execution order.
