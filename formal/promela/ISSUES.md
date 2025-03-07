@@ -39,6 +39,7 @@ were the workers are also in `barrier-mgr-post.h`.
 - Barrier Manager: Runner(3) Workers(4,5)
 - Semaphore Manager: Runner(3) Workers(4,5)
 - Task Manager: Runner(4) Workers(5,6)
+- Prototype Semantics: Runner(3) Workers(4)
 
 ## CURRENT WORK
 

@@ -39,6 +39,49 @@ We abstract away from:
 | using[N] | true if worker[N] is used in scenario |
 | --- | --- |
 
+
+### Abstract Prototype Semantics
+
+```
+PS_runner() = TestSegment3()
+```
+
+```
+Worker() 
+  = TestSegment4(); RelTSS(worktss); RelTSS(runtss); Hang()
+```
+
+```
+Run([worker]) = Setup(worker) ; ( RunRest() + worker() )
+```
+
+```
+Setup(worker)
+ = MkTSS(worktss) ; MkTSS(runtss) ; GetSched(self,runsched) ;
+   (if RTEMS_SMP then SchedIdProc(1,worksched) else Skip) ;
+   SetPrio(self,NORMAL); 
+   ConsTask(workconfig,workid); StartTask(workid,worker)
+```
+
+```
+RunRest() 
+  = ThreadSetup(); TestSegment0(); PS_runner();
+    Cleanup(); ShowWSemaId(workid,workwkup ); TearDown();  
+```
+
+```
+Cleanup () = TstRcv() ; reports outcome (success/unsat)
+```
+
+```
+TearDown()
+  = SetPrio(self,HIGH) ; 
+    (if using1 then DelTask(workid) else Skip) ; 
+    DelTSS(worktss) ; DelTSS(runtss)
+```
+
+
+
 ### Abstract Message Manager
 
 ```
@@ -113,6 +156,46 @@ Setup(worker)
 ```
 RunRest() 
   = ThreadSetup(); TestSegment0(); EM_runner();
+    Cleanup(); ShowWSemaId(workid,workwkup ); TearDown();  
+```
+
+```
+Cleanup () = TstRcv() ; reports outcome (success/unsat)
+```
+
+```
+TearDown()
+  = SetPrio(self,HIGH) ; 
+    (if using1 then DelTask(workid) else Skip) ; 
+    DelTSS(worktss) ; DelTSS(runtss)
+```
+
+### Abstract TEMPLATE
+
+```
+_runner() = TestSegmentR()
+```
+
+```
+Worker[W]() 
+  = TestSegment[f(W)](); RelTSS(worktss); RelTSS(runtss); Hang()
+```
+
+```
+Run([worker]) = Setup(worker) ; ( RunRest() + worker() )
+```
+
+```
+Setup(worker)
+ = MkTSS(worktss) ; MkTSS(runtss) ; GetSched(self,runsched) ;
+   (if RTEMS_SMP then SchedIdProc(1,worksched) else Skip) ;
+   SetPrio(self,NORMAL); 
+   ConsTask(workconfig,workid); StartTask(workid,worker)
+```
+
+```
+RunRest() 
+  = ThreadSetup(); TestSegment0(); _runner();
     Cleanup(); ShowWSemaId(workid,workwkup ); TearDown();  
 ```
 
