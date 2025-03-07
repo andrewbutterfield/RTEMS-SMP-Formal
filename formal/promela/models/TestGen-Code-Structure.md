@@ -24,17 +24,67 @@ We abstract away from:
 | RunRest | rest of Run once worker is started |
 | MkTSS | `CreateTestSyncSema(tss)` |
 | RelTSS | `ReleaseTestSyncSema(tss)` |
-| DelTSS | `DeleteTestSyncSema(tss` |)
+| DelTSS | `DeleteTestSyncSema(tss` |
+| DelQ | `rtems_message_queue_delete(qid)` |
 | ShowWSemaId | `ShowWorkerSemaId(id,wkup )
 | GetSched | `rtems_task_get_scheduler(tid,scheduler)` |
 | SchedIdProc | `rtems_scheduler_ident_by_processor(cpu,scheduler)` |
 | SetPrio | `rtems_task_set_priority(id,newprio,oldprio)` |
 | ConsTask | `rtems_task_construct(config,tid)` |
 | StartTask | `rtems_task_start(id,code,arg)` |
+| CreateTask | `rtems_task_create(nm,prio,tid)` (ignoring attr) |
 | Hang | `rtems_event_receive(ALL_EVENTS, WAIT, 0, _)` |
 | TstRcv | `rtems_event_receive(ALL_EVENTS, NOWAIT+ANY, 0, _)` |
 | DelTask | `rtems_task_delete(tid)` |
+| using[N] | true if worker[N] is used in scenario |
 | --- | --- |
+
+### Abstract Message Manager
+
+```
+MM_runner() = TestSegment3()
+```
+
+```
+Worker1() = TestSegment4(); Hang()
+```
+
+```
+Worker2() = TestSegment5(); Hang()
+```
+
+```
+Run([worker1,worker2]) 
+  = Setup([worker1,worker2]) ; ( RunRest() + worker1() + worker2() )
+```
+
+```
+Setup([worker1,worker2])
+ = MkTSS(work1tss) ; MkTSS(work2tss) ; MkTSS(runtss) ; 
+   GetSched(self,runsched) ;
+   (if RTEMS_SMP then SchedIdProc(1,worksched) else Skip) ;
+   SetPrio(self,NORMAL); 
+   CreateTask(WRKR,NORMAL,work1id);  StartTask(work1id,worker1) ;
+   CreateTask(WRKR,NORMAL,work2id);  StartTask(work2id,worker2)
+```
+
+```
+RunRest() 
+  = ThreadSetup(); TestSegment0(); MM_runner();
+    Cleanup(); ShowWSemaId(workid,workwkup ); TearDown();  
+```
+
+```
+Cleanup () = DelQ() ; reports outcome (success/unsat)
+```
+
+```
+TearDown()
+  = SetPrio(self,HIGH) ; 
+    (if using1 then DelTask(work1id) else Skip) ; DelTSS(work1tss) ;
+    (if using2 then DelTask(work2id) else Skip) ; DelTSS(work2tss) ; DelTSS(runtss)
+```
+
 
 
 ### Abstract Event Manager
@@ -72,7 +122,8 @@ Cleanup () = TstRcv() ; reports outcome (success/unsat)
 
 ```
 TearDown()
-  = SetPrio(self,HIGH) ; DelTask(workid); 
+  = SetPrio(self,HIGH) ; 
+    (if using1 then DelTask(workid) else Skip) ; 
     DelTSS(worktss) ; DelTSS(runtss)
 ```
 
