@@ -28,6 +28,12 @@ It should appear in `models/XXX/gen`.
 
 #### Segment Numbering
 
+The Runner occurs in `XXX-post.h`,
+and in most models the Workers occur in `XXX-run.h`.
+The exceptions are the Chains API with only segment zero,
+and the Barrier Manager 
+were the workers are also in `barrier-mgr-post.h`.
+
 - Event Manager: Runner(4), Workers(3)
 - Message Manager: Runner(3) Workers(4,5)
 - Barrier Manager: Runner(3) Workers(4,5)
