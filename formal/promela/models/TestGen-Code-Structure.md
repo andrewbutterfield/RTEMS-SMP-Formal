@@ -605,10 +605,10 @@ static T_fixture RtemsModelEventsMgr_Fixture{0} = {{
 
 static T_fixture_node RtemsModelEventsMgr_Node{0};
 
-void RtemsModelEventsMgr_Run{0}(
+void RtemsModelEventsMgr_Run{0}(ctx)
    ctx = T_push_fixture(
     &RtemsModelEventsMgr_Node{0},
-    &RtemsModelEventsMgr_Fixture{0}
+    &RtemsModelEventsMgr_Fixture{0})
    TestSegment0( ctx );
   Runner( ctx );
   RtemsModelEventsMgr_Cleanup( ctx );
@@ -843,3 +843,177 @@ Deletes the testsync semaphores
 #### Back to: RtemsModelXXX_RunN
 
 Test run now complete!
+
+
+## Abstract Code Flow
+
+Here we use a terse abstraction of code using Concurrent Kleene Algebra (CKA)
+to make it easier to understand and compare.
+
+### Code Abstractions
+
+We abstract away from:
+
+- the  "run number" <N>
+- fixture push and pop
+
+| Abstract | Concrete |
+| --- | --- |
+| Runner | The RTEMS Test Runner Task |
+| Worker<n> | The RTEMS Test Worker Task(s) |
+| Run | `X_Run(context)` |
+| Setup | `T_push_fixture()` a.k.a. `X_Setup(X_Context)`  |
+| ThreadSetup | thread switch logging and wait flags  |
+| Cleanup | `X_Cleanup(ctx)` |
+| Teardown | `T_pop_fixture()` a.k.a. `X_Teardown(X_Context)`  |
+| RunRest | rest of Run once worker is started |
+| MkTSS | `CreateTestSyncSema(tss)` |
+| GetSched | `rtems_task_get_scheduler(tid,scheduler)` |
+| SchedIdProc | `rtems_scheduler_ident_by_processor(cpu,scheduler)` |
+| SetPrio | `rtems_task_set_priority(id,newprio,oldprio)` |
+| ConsTask | `rtems_task_construct(config,tid)` |
+| StartTask | `rtems_task_start(id,code,arg)` |
+| Release | `ReleaseTestSyncSema(tss)` |
+| ShowWSemaId | `ShowWorkerSemaId(id,wkup )
+| Hang | `rtems_event_receive(ALL_EVENTS, WAIT, 0, _)` |
+| TstRcv | `rtems_event_receive(ALL_EVENTS, NOWAIT+ANY, 0, _)` |
+
+
+```
+Run() = Setup ; ( RunRest() + Worker() )
+```
+
+```
+RunRest() 
+  = ThreadSetup(); TestSegment0(); Runner();
+    Cleanup(); ShowWSemaId(workid,workwkup ); TearDown();  
+```
+
+
+
+```
+Setup()
+ = MkTSS(worktss) ; MkTSS(runtss) ; GetSched(self,schedrun) ;
+   (if RTEMS_SMP then SchedIdProc(1,schedwork) else Skip) ;
+   SetPrio(self,NORMAL); 
+   ConsTask(workconfig,workid); StartTask(workid,Worker)
+```
+
+```
+Worker() 
+  = TestSegment3(); Release(worktss); Release(runtss); Hang()
+```
+
+```
+Cleanup () = TstRcv() ; reports outcome (success/unsat)
+```
+
+
+#### Back to: RtemsModelXXX_Run
+
+Runs `ShowWorkerSemaId`
+
+Calls `T_pop_fixture` which invokes `T_do_pop_fixture`
+
+This performs a teardown if present
+
+#### Into: RtemsModelXXX_Teardown
+
+Sets own priority to high
+
+Deletes the worker task
+
+Deletes the testsync semaphores
+
+#### Back to: RtemsModelXXX_RunN
+
+Test run now complete!
+
+
+
+
+
+### Abstract Event Manager
+
+#### Start: RtemsModelXXX_Run
+
+```c
+ctx = T_push_fixture(
+    &RtemsModelEventsMgr_Node<N>,
+    &RtemsModelEventsMgr_Fixture<N>
+  );
+```
+This pushes the fixture onto a stack and then 
+runs `RtemsModelEventsMgr_Setup_Wrap<N>` 
+on `RtemsModelEventsMgr_Instance<N>`.
+
+This is just `RtemsModelEventsMgr_Setup<N>()` 
+on an uninitialised `RtemsModelEventsMgr_Context`.
+
+#### Into: RtemsModelXXX_Setup
+
+This logs as "Runner Setup"
+
+Sets itself as the runner thread in the test context.
+
+Creates  worker and runner testsync semaphores (`CreateTestSyncSema`)
+
+Assigns the runner scheduler to self
+
+if `RTEMS_SMP` does something with other scheduler.
+
+Set own priority to `M_PRIO_NORMAL` 
+and checks that previous priority was `M_PRIO_HIGH`.
+
+Constructs Worker using `WorkerConfig<N>` and starts it running `Worker<N>`.
+
+#### Start: Worker
+
+Initial priority is `M_PRIO_LOW`.
+
+Logs as "Worker Running"
+
+Executes `TestSegment3`
+
+Releases both testsync semaphores
+
+Calls `rtems_event_receive` to enter blocking state.
+
+#### Back to: RtemsModelXXX_Run
+
+initialises context, including the test_number
+
+sets up thread switch logging? 
+Sets thread wait flags
+
+Executes `TestSegment0`
+
+Executes `Runner` which excutes `TestSegment4`
+
+Invokes `RtemsModelEventsMgr_Cleanup`
+
+#### Into: RtemsModelXXX_Cleanup
+
+This *just* does a receive for any of all possible events, 
+without waiting, and reports the outcomes.
+
+#### Back to: RtemsModelXXX_Run
+
+Runs `ShowWorkerSemaId`
+
+Calls `T_pop_fixture` which invokes `T_do_pop_fixture`
+
+This performs a teardown if present
+
+#### Into: RtemsModelXXX_Teardown
+
+Sets own priority to high
+
+Deletes the worker task
+
+Deletes the testsync semaphores
+
+#### Back to: RtemsModelXXX_RunN
+
+Test run now complete!
+
