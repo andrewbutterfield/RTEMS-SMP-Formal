@@ -2,6 +2,8 @@
 
 ## URGENT
 
+### proto_sem
+
 We haven't initialised SBS properly in `proto_sem`:
 
 ```
@@ -21,10 +23,16 @@ void ReleaseTestSyncSema( rtems_id id )
 
 ```
 
+### Abstract Flows 
+
+Need to show abstract flows for scenarios that emphasise SBS usage
+
 ### Less URGENT
 
 Generated file `tc-XXX-model.c` currently appears in `models/XXX`.
 It should appear in `models/XXX/gen`.
+
+
 
 #### Segment Numbering
 
