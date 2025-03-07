@@ -26,6 +26,14 @@ void ReleaseTestSyncSema( rtems_id id )
 Generated file `tc-XXX-model.c` currently appears in `models/XXX`.
 It should appear in `models/XXX/gen`.
 
+#### Segment Numbering
+
+- Event Manager: Runner(4), Workers(3)
+- Message Manager: Runner(3) Workers(4,5)
+- Barrier Manager: Runner(3) Workers(4,5)
+- Semaphore Manager: Runner(3) Workers(4,5)
+- Task Manager: Runner(4) Workers(5,6)
+
 ## CURRENT WORK
 
 Developing `proto_sem` to aid in developing formal semantics for the whole `spin2test` language chain: Promela, Observations, Refinement, RTEMS C Testcode.
