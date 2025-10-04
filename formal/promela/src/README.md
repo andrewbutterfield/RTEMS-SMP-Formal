@@ -11,6 +11,8 @@ This directory contains tools that use SPIN to do test generation from Promela m
 * Robert Jennings
 * James Gooding Hunt
 
+Who else contributed to the python code?
+
 ## License
 
 This project is licensed under the
