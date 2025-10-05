@@ -52,6 +52,10 @@ picksup sem-mgr work
 
 ### Conor Bowler
 
-task-mgr (in-process) (added to `RTEMS_SMP-FORMAL` on 2024-12-20)
+task-mgr (in-process) (added to `RTEMS_SMP-FORMAL` on 2024-12-20),
+regular merges from `RTEMS_SMP-FORMAL`  continue until 2025-02-18,
+develops independently until 2025-04-18.
+
+Key feature: new comprehensive model of the Scheduler !
 
 ### Leo Lee
