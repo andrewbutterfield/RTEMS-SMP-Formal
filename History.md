@@ -52,4 +52,6 @@ picksup sem-mgr work
 
 ### Conor Bowler
 
+task-mgr (in-process) (added to `RTEMS_SMP-FORMAL` on 2024-12-20)
+
 ### Leo Lee
