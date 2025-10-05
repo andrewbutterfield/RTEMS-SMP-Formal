@@ -22,17 +22,31 @@ test-semaphore, testbuilder, re-factored and extended event-mgr.
 
 ### Eoin Lynch 
 
+msg-mgr (initial cut) (added to `RTEMS_SMP-FORMAL` on 2022-11-02)
+
 ### Jerzy Jaskuc
+
+barrier-mgr, test code coverage analysis (added to `RTEMS_SMP-FORMAL` on 2022-11-02)
 
 ## 2022-23
 
+### 2022-09-13 
+
+initial upload for `RTEMS-SMP-Formal` with only chain and event managers present.
+
 ### James Gooding Hunt
 
+major testbuilder re-work (continuous branch merging over project lifetime, last merge on 2023-04-20)
+
 ### Paddy Flanagan
+
+sem-mgr (initial cut)  (added to `RTEMS_SMP-FORMAL` on 2022-11-02)
 
 ## 2023-24
 
 ### Donnchadh Griffin-Carroll
+
+picksup sem-mgr work
 
 ## 2024-25
 
