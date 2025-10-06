@@ -14,6 +14,8 @@ The tool is invoked as follows:
 
 A `<command>` is one of the following:
 
+`locations` will display the contents of `testbuilder.yml`
+
 `zero [model]` 
   - removes all generated C filenames from the RTEMS configuration yaml file. 
   - does NOT remove the test sources from the RTEMS test source directory

@@ -449,6 +449,7 @@ def main():
     """generates and deploys C tests from Promela models"""
     source_dir = os.path.dirname(os.path.realpath(__file__))
     if not (len(sys.argv) == 2 and sys.argv[1] == "help"
+            or len(sys.argv) == 2 and sys.argv[1] == "locations"
             or len(sys.argv) >= 3 and sys.argv[1] == "allsteps"
             or len(sys.argv) == 3 and sys.argv[1] == "clean"
             or len(sys.argv) == 3 and sys.argv[1] == "archive"
@@ -487,6 +488,11 @@ def main():
     if sys.argv[1] == "help":
         with open(f"{source_dir}/testbuilder.help") as helpfile:
             print(helpfile.read())
+
+    if sys.argv[1] == "locations":
+        print("testbuilder.yml:")
+        print(f"{config}")
+        sys.exit(None)
 
     if sys.argv[1] == "allsteps":
         all_steps(sys.argv[2::], model_to_path, source_dir)
