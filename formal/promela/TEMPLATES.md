@@ -18,7 +18,38 @@ Given interest in other OSes, it is now necessary to refactor this.
 
   * Step 1 - identify these linkages - DONE
   * Step 2 - plan how to disentangle them
-  * Step 3 - disentsngle them
+  * Step 3 - disentangle them
+  * Step 4 - generalise them.
+  * Step 5 - instantiate another OS
+
+### Step 2 (Plan)
+
+We initially imagine two repositories, one for testbuilder, the other for all of the Promela models, YAML refinement, and RTEMS C test code pieces. We then envisage a third repository for another OSes' models, refinement and C test code.
+
+The testbuilder repository will provide templates,
+but not contain the ones instantiated for a given model/OS installation.
+Instead we change to the relevant model directory,
+and have it look there for the relevent instantiations of the configuration data.
+
+The plan is to ultimately remove the line:
+```
+source_dir = os.path.dirname(os.path.realpath(__file__))
+```
+from `testbuilder.py`.
+
+
+### Step 3 (Disentangle)
+
+ 1. Add the contents of `automatic_testgen.py` next to Spin-related stuff in `testbuilder.py`.
+
+### Step 4 (Generalise)
+
+1. Rename the five keys in `testbuilder.py` that are too specific.
+2. Specific handling needed for `testyamldir` which is used in commands `zero` and `copy`. The code for those will need a flag that enables this aspect of those commands.
+
+ 
+
+### Step 5 (Instantiate other OS)
 
 ## Linkages
 
@@ -33,12 +64,14 @@ while the third is were site-sprecific customisation is necessary.
 ### Automatic Test Generation
 
 #### About 
+
 This is all about negating `assert()` and `ltl` predicates, 
 and parses and edits the Promela model itself.
 
 #### Usage
 
 Read from `automatic_testgen.py` which seems to be a standalone version of `testbuilder` that does selective `assert`/`ltl` negation.
+
 
 #### Template 
 
@@ -56,6 +89,11 @@ spin_ltl: -run -E -c0 -e -ltl
 
 See Template above
 
+#### Resolution
+
+This template should live wherever Promela/Spin relevant material is found. Currently this is under the `formal/promela/models` directory.
+
+We also need to consider if `automatic_testgen.py` should be integrated into `testbuilder.py`. Then this template would be merged with whatever happens to the Promela/Spin material currently in `testbuilder.yml`.
 
 ### Refinement configuration
 
@@ -84,7 +122,9 @@ refinefile: -rfn.yml #<model><refinefile>
 
 See Template above
 
-#### Usage
+#### Resolution
+
+This material should exist wherever the test code and model-checker refinements are defined. Currently this happens under the `formal/promela/models` directory.
 
 ### Test Builder
 
@@ -129,3 +169,12 @@ testsuite: model-0
 simulatorargs: -leon3 -r s -m 4 
 spinallscenarios: -DTEST_GEN -run -E -c0 -e 
 ```
+
+#### Resolution
+
+Hmmmm. Where to begin?
+
+First, some of the keys are far too Promela/Spin specific: `spin2test`, `spinallscenarios`, and other keys are far too RTEMS specific: `rtems`, `rsb`, `testyamldir`. The latter is unlikely to have any counterpart in other operating systems,
+and is used to create `testyaml` which points to a testsuite specification item. It is used in the `zero` and `copy` commands.
+
+Currently this all resides under the `formal/promela/src` directory.
