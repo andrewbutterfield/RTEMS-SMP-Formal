@@ -448,6 +448,9 @@ def check_models_exist(modelnames, model_to_path, config):
 def main():
     """generates and deploys C tests from Promela models"""
     source_dir = os.path.dirname(os.path.realpath(__file__))
+    print(f"Testbuilder running from:\n    {source_dir}")
+    cwd = os.getcwd()
+    print(f"Current Directory:\n   {cwd}")
     if not (len(sys.argv) == 2 and sys.argv[1] == "help"
             or len(sys.argv) == 2 and sys.argv[1] == "locations"
             or len(sys.argv) >= 3 and sys.argv[1] == "allsteps"
