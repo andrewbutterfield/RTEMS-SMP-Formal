@@ -37,19 +37,30 @@ source_dir = os.path.dirname(os.path.realpath(__file__))
 ```
 from `testbuilder.py`.
 
+Initially we will work in the current repository, until we are sure that everything that has to move from `src` to `models` has done so. This involves both the disentangling and generalising steps.
+
+A design choice: do we keep all settings in one YAML file (`testbuilder`) or do we split out various aspects such as model-checker, OS-specifics, and test-framework?
+
+**Note:** *`testbuilder` currently looks in `src` for "global" settings, and in `models` for "local" settings.*
+
 
 ### Step 3 (Disentangle)
 
- 1. Add the contents of `automatic_testgen.py` next to Spin-related stuff in `testbuilder.py`.
+ 1. Add the contents of `automatic-testgen(-template).yml` next to Spin-related stuff in `testbuilder(-template).yml`, and modify `automatic_testgen.py` to refer to `testbuilder.yml`. Note that it already looks up its stuff from `model_dir` and not `source_dir`.
+ 2. Move instantiated config YAML files to `models/`, and remove any attempts to lookup `src` for "global" settings.
+
 
 ### Step 4 (Generalise)
 
-1. Rename the five keys in `testbuilder.py` that are too specific.
-2. Specific handling needed for `testyamldir` which is used in commands `zero` and `copy`. The code for those will need a flag that enables this aspect of those commands.
+ 1. Rename the five keys formely from `testbuilder.py` that are too specific.
+ 2. Specific handling needed for `testyamldir` which is used in commands `zero` and `copy`. The code for those will need a flag that enables this aspect of those commands.
 
- 
 
 ### Step 5 (Instantiate other OS)
+
+ 1. Split the RTEMS-SMP-Formal repo into separate Testbuilder and RTEMS-Model repositories.
+ 2. Copy the Model repo and switch it to work with another operating system.
+
 
 ## Linkages
 
