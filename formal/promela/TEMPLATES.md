@@ -90,6 +90,31 @@ src/testgen.py                                                (via Coconut)
      src.syntax_yaml, src.modules.promela_yacc.promela (ast,lex,yacc)
 ```
 
+#### Testbuilder Startup
+
+We focus on which config files get read when...
+
+```
+ 478 : config = get_config(source_dir)
+ 369 :    with open(f"{source_dir}/testbuilder.yml") as file:
+ 370 :    global_config = yaml.load(file, Loader=yaml.FullLoader)
+ 482+: if len(sys.argv) >= 3: config = get_config(source_dir, sys.argv[2])
+ 373 :    if model_name and model_name != "allmodels":
+ 376 :    local_config_path = Path(model_path / "testbuilder.yml")
+ 486+: if sys.argv[2] != "allmodels": refine_config 
+        = get_refine_config(source_dir, sys.argv[2],
+                           model_to_path[sys.argv[2]],
+                           model_to_roots[sys.argv[2]])
+ 403:      with open(f"{source_dir}/refine-config.yml") as file:
+ 404 :     global_config = yaml.load(file, Loader=yaml.FullLoader)
+ 407+:     if Path(f"{model_dir}/refine-config.yml").exists():
+           with open(f"{model_dir}/refine-config.yml") as file:
+           local_config = yaml.load(file, Loader=yaml.FullLoader)
+```
+
+What is clear is that `global_config` needs to come from the `promela/model` directory,
+rather than the `promela/src` one. The overall logic is unchanged.
+
 
 ### Step 3 (Disentangle)
 
