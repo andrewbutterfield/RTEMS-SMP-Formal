@@ -43,6 +43,53 @@ A design choice: do we keep all settings in one YAML file (`testbuilder`) or do 
 
 **Note:** *`testbuilder` currently looks in `src` for "global" settings, and in `models` for "local" settings.*
 
+#### Python Sources
+```
+automatic_testgen.py
+gentest.py
+metrics.py
+spin2test.py
+testbuilder.py
+testgen_ml.py
+testgen_yaml.py
+src/__init__.py
+src/library.py
+src/refine_command.py
+src/spin2test.py
+src/syntax_ml.py
+src/syntax_pml.py
+src/syntax_yaml.py
+src/testgen.py
+src/modules/comment_filter/comment_filter/language.py
+src/modules/comment_filter/comment_filter/rfc.py
+src/modules/promela_yacc/promela/ast.py
+src/modules/promela_yacc/promela/lex.py
+src/modules/promela_yacc/promela/yacc.py
+```
+
+#### Python Explicit Import Structure
+
+```
+automatic_testgen <- testbuilder
+gentest <- src.spin2test as s2t
+metrics
+spin2test <-  src.spin2test
+testbuilder
+testgen_ml <- src.testgen                                     (via Coconut)
+testgen_yaml <- src.testgen                                   (via Coconut)
+src/__init__.py
+src/library.py                                                (via Coconut)
+src/refine_command.py
+src/spin2test.py <- src.refine_command as refine
+src/syntax_ml.py                                              (via Coconut)
+  <- src.modules.comment_filter.comment_filter (language,rfc)
+src/syntax_pml.py <- src.library, src.syntax_pml              (via Coconut)
+src/syntax_yaml.py <- src.library, src.syntax_pml             (via Coconut)
+src/testgen.py                                                (via Coconut)
+  <- src.library, src.refine_command, src.syntax_ml, src.syntax_pml
+     src.syntax_yaml, src.modules.promela_yacc.promela (ast,lex,yacc)
+```
+
 
 ### Step 3 (Disentangle)
 
