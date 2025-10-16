@@ -50,19 +50,19 @@ def catch_subprocess_errors(func):
         return result
     return wrapper
 
-def all_steps(models, model_to_path, source_dir):
+def all_steps(models, model_to_path, models_dir):
     if models == ["allmodels"]:
         models = list(model_to_path.keys())
 
     for model_name in models:
         path = model_to_path[model_name]
-        config = get_config(source_dir, model_name)
+        config = get_config(models_dir, model_name)
         model_to_roots = get_model_roots(config)
         model_root = model_to_roots[model_name]
-        refine_config = get_refine_config(source_dir, 
+        refine_config = get_refine_config(models_dir, 
                                           model_name, path, model_root)
         # TODO: work from <model_name>, and accessing <model_name>/gen
-        clean(model_name, model_to_path, model_to_roots, source_dir)
+        clean(model_name, model_to_path, model_to_roots, models_dir)
         # TODO: runs in <model_name> but puts .trail/.spn into <model_name>/gen
         generate_spin_files(model_name, path, model_root,
                             config["spinallscenarios"],
@@ -81,9 +81,9 @@ def all_steps(models, model_to_path, source_dir):
                   config["testexe"], config["testsuite"])
 
 # TODO: work from <model_name>, and accessing <model_name>/gen
-def clean(model_name, model_to_path, model_to_roots, source_dir):
+def clean(model_name, model_to_path, model_to_roots, models_dir):
     """Cleans out generated files in <model_name> directory"""
-    cwd = os.getcwd()
+    models_dir = os.getcwd()
     if model_name == "allmodels":
         models = list(model_to_path.keys())
     else:
@@ -91,8 +91,8 @@ def clean(model_name, model_to_path, model_to_roots, source_dir):
     for model_name in models:
         model_dir = model_to_path[model_name]
         model_root = model_to_roots[model_name]
-        config = get_config(source_dir, model_name)
-        refine_config = get_refine_config(source_dir, 
+        config = get_config(models_dir, model_name)
+        refine_config = get_refine_config(models_dir, 
                                           model_name, model_dir, model_root)
         os.chdir(Path(model_dir,"gen"))
         print(f"Removing spin and test files for {model_name}")
@@ -100,11 +100,11 @@ def clean(model_name, model_to_path, model_to_roots, source_dir):
                                     refine_config["testfiletype"])
         for file in files:
             os.remove(file)
-    os.chdir(cwd)
+    os.chdir(models_dir)
 
 #TODO: work from <model_name>/gen, by calling with 2nd arg being <model_name>/gen
 def archive(model_name, model_dir, model_root, testsuite, test_extension):
-    cwd = os.getcwd()
+    models_dir = os.getcwd()
     os.chdir(Path(model_dir,"gen"))
     print(f"Archiving spin and test files for {model_name}")
     files = get_generated_files(model_name, testsuite, test_extension)
@@ -114,7 +114,7 @@ def archive(model_name, model_dir, model_root, testsuite, test_extension):
     for file in files:
         shutil.copy2(file, archive_dir)
     print(f"Files archived to {archive_dir}")
-    os.chdir(cwd)
+    os.chdir(models_dir)
 
 
 def zero(model_file, testsuite_name):
@@ -159,7 +159,7 @@ def ready_to_generate(model_root, refine_config):
 def generate_spin_files( model_name, model_dir, model_root
                        , spinallscenarios, refine_config):
     """Create spin files from model_name"""
-    cwd = os.getcwd()
+    models_dir = os.getcwd()
     os.chdir(model_dir)
     if not ready_to_generate(model_root, refine_config):
         sys.exit(1)
@@ -180,14 +180,14 @@ def generate_spin_files( model_name, model_dir, model_root
                 f"mv {model_root}.pml{i+1}.trail gen/{model_root}.pml{i+1}.trail",
                 check=True, shell=True )
     os.remove('pan')
-    os.chdir(cwd)
+    os.chdir(models_dir)
 
 # TODO:  runs in <model_name>/gen - do this by changing model_dir in call
 @catch_subprocess_errors
 def generate_test_files(model_name, model_dir, model_root, 
                         testgen, refine_config):
     """Create test files from spin files"""
-    cwd = os.getcwd()
+    models_dir = os.getcwd()
     print(f"model_dir is {model_dir}.")
     os.chdir(model_dir)
     if not ready_to_generate(model_root, refine_config):
@@ -208,7 +208,7 @@ def generate_test_files(model_name, model_dir, model_root,
                            check=True, shell=True)
 
     generate_testcase_file(model_root, refine_config, no_of_trails)
-    os.chdir(cwd)
+    os.chdir(models_dir)
 
 
 def generate_testcase_file(model_root, refine_config, no_of_trails):
@@ -239,7 +239,7 @@ def copy(model_root, model_path, codedir, rtems, modfile, testsuite_name,
          test_file_extension):
     """Copies C testfiles to test directory and updates the model_root file """
 
-    cwd = os.getcwd()
+    models_dir = os.getcwd()
     os.chdir(model_path)
 
     # Remove old test files
@@ -296,16 +296,16 @@ def copy(model_root, model_path, codedir, rtems, modfile, testsuite_name,
     model_yaml['source'] = sorted(new_list)
     with open(modfile, 'w') as file:
         yaml.dump(model_yaml, file)
-    os.chdir(cwd)
+    os.chdir(models_dir)
 
 
 @catch_subprocess_errors
 def compile(rtems_dir):
-    cwd = os.getcwd()
+    models_dir = os.getcwd()
     os.chdir(rtems_dir)
     subprocess.run("./waf configure", check=True, shell=True)
     subprocess.run("./waf", check=True, shell=True)
-    os.chdir(cwd)
+    os.chdir(models_dir)
 
 
 @catch_subprocess_errors
@@ -364,9 +364,9 @@ def get_model_roots(config):
     return model_to_roots
 
 
-def get_config(source_dir, model_name=""):
+def get_config(models_dir, model_name=""):
     config = dict()
-    with open(f"{source_dir}/testbuilder.yml") as file:
+    with open("testbuilder.yml") as file:
         global_config = yaml.load(file, Loader=yaml.FullLoader)
         for key, val in global_config.items():
             config[key] = val
@@ -398,9 +398,9 @@ def get_config(source_dir, model_name=""):
     return config
 
 
-def get_refine_config(source_dir, model_name, model_dir, model_root):
+def get_refine_config(models_dir, model_name, model_dir, model_root):
     refine_config = dict()
-    with open(f"{source_dir}/refine-config.yml") as file:
+    with open(f"{models_dir}/refine-config.yml") as file:
         global_config = yaml.load(file, Loader=yaml.FullLoader)
         for key, val in global_config.items():
             refine_config[key] = val
@@ -448,9 +448,8 @@ def check_models_exist(modelnames, model_to_path, config):
 def main():
     """generates and deploys C tests from Promela models"""
     source_dir = os.path.dirname(os.path.realpath(__file__))
-    print(f"Testbuilder running from:\n    {source_dir}")
-    cwd = os.getcwd()
-    print(f"Current Directory:\n   {cwd}")
+    models_dir = os.getcwd()
+    print(f"Testbuilder running in:\n    {models_dir}")
     if not (len(sys.argv) == 2 and sys.argv[1] == "help"
             or len(sys.argv) == 2 and sys.argv[1] == "locations"
             or len(sys.argv) >= 3 and sys.argv[1] == "allsteps"
@@ -475,21 +474,22 @@ def main():
         print(f". {source_dir}/env/bin/activate")
         sys.exit(1)
 
-    config = get_config(source_dir)
+    # config = get_config(source_dir)
+    config = get_config(models_dir)
     model_to_path = get_model_paths(config)
     model_to_roots = get_model_roots(config)
     refine_config = dict()
     if len(sys.argv) >= 3:
-        config = get_config(source_dir, sys.argv[2])
+        config = get_config(models_dir, sys.argv[2])
         # model_to_path = get_model_paths(config)
         check_models_exist(sys.argv[2::], model_to_roots, config)
         if sys.argv[2] != "allmodels":
-            refine_config = get_refine_config(source_dir, sys.argv[2],
+            refine_config = get_refine_config(models_dir, sys.argv[2],
                                               model_to_path[sys.argv[2]],
                                               model_to_roots[sys.argv[2]])
 
     if sys.argv[1] == "help":
-        with open(f"{source_dir}/testbuilder.help") as helpfile:
+        with open(f"{models_dir}/testbuilder.help") as helpfile:
             print(helpfile.read())
 
     if sys.argv[1] == "locations":
@@ -498,7 +498,7 @@ def main():
         sys.exit(None)
 
     if sys.argv[1] == "allsteps":
-        all_steps(sys.argv[2::], model_to_path, source_dir)
+        all_steps(sys.argv[2::], model_to_path, models_dir)
         sys.exit(None)
 
     if sys.argv[1] == "spin":
@@ -513,7 +513,7 @@ def main():
                             config["spin2test"], refine_config)
 
     if sys.argv[1] == "clean":
-        clean(sys.argv[2], model_to_path, model_to_roots, source_dir)
+        clean(sys.argv[2], model_to_path, model_to_roots, models_dir)
 
     if sys.argv[1] == "archive":
         archive(sys.argv[2], model_to_path[sys.argv[2]], "", config["testsuite"],
