@@ -118,13 +118,14 @@ rather than the `promela/src` one. The overall logic is unchanged.
 
 ### Step 3 (Disentangle)
 
- 1. Add the contents of `automatic-testgen(-template).yml` next to Spin-related stuff in `testbuilder(-template).yml`, and modify `automatic_testgen.py` to refer to `testbuilder.yml`. Note that it already looks up its stuff from `model_dir` and not `source_dir`.
- 2. Move instantiated config YAML files to `models/`, and remove any attempts to lookup `src` for "global" settings.
+  1. Move instantiated config YAML files to `models/` (DONE).
+  2. Add the contents of `automatic-testgen(-template).yml` next to Spin-related stuff in `testbuilder(-template).yml`, and modify `automatic_testgen.py` to refer to `testbuilder.yml`. Note that it already looks up its stuff from `model_dir` and not `source_dir`.
+  3. Remove any attempts to lookup `src` for "global" settings. Instead these live at the top-level of `models/`.
 
 
 ### Step 4 (Generalise)
 
- 1. Rename the five keys formely from `testbuilder.py` that are too specific.
+ 1. Rename the five keys formerly from `testbuilder.py` that are too specific. This will also affect the template file.
  2. Specific handling needed for `testyamldir` which is used in commands `zero` and `copy`. The code for those will need a flag that enables this aspect of those commands.
 
 
