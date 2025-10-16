@@ -17,8 +17,8 @@ We need to separate `models` and `src`. Currently there are major linkages betwe
 Given interest in other OSes, it is now necessary to refactor this.
 
   * Step 1 - identify these linkages - DONE
-  * Step 2 - plan how to disentangle them
-  * Step 3 - disentangle them
+  * Step 2 - plan how to disentangle them - DONE
+  * Step 3 - disentangle them - IN PROGRESS
   * Step 4 - generalise them.
   * Step 5 - instantiate another OS
 
