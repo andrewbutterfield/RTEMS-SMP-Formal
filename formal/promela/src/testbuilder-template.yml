@@ -42,3 +42,6 @@ testexedir:  <rtems>/build/.../testsuites/validation/ # directory containing ts-
 testsuite: model-0
 simulatorargs: -leon3 -r s -m 2  # run command executes "<simulator> <simargs> <testexedir>/ts-<testsuite>.exe"
 spinallscenarios: -DTEST_GEN -run -E -c0 -e # trail generation "spin <spinallscenarios> <model>.pml"
+disable_negation_at: [] # list of node names containing assertions not to negate
+spin_assert: -run -E -c0 -e # trail generation for files with negated Assert "spin <spin_assert> <file_name>.pml"
+spin_ltl: -run -E -c0 -e -ltl # trail generation for files with negated LTL "spin <spin_ltl><ltl_name> <file_name>.pml"

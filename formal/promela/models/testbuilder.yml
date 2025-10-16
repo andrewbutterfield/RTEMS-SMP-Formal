@@ -32,12 +32,15 @@
 
 spin2test: /Users/butrfeld/REPOS/RTEMS-SMP-Formal/formal/promela/src/spin2test.py
 modelsfile: /Users/butrfeld/REPOS/RTEMS-SMP-Formal/formal/promela/models/models.yml
-rtems: /Users/butrfeld/rtems/src/rtems/  # rtems.git, or ..../modules/rtems/
+rtems: /Users/butrfeld/rtems/src/rtems/  
 rsb: /Users/butrfeld/rtems/6/bin/
 simulator: /Users/butrfeld/rtems/6/bin/sparc-rtems6-sis
-testyamldir: /Users/butrfeld/rtems/src/rtems/spec/build/testsuites/validation/ # directory containing <modelname>.yml
+testyamldir: /Users/butrfeld/rtems/src/rtems/spec/build/testsuites/validation/ 
 testcode: /Users/butrfeld/rtems/src/rtems/testsuites/validation/
-testexedir:  /Users/butrfeld/rtems/src/rtems/build/sparc/leon3/testsuites/validation/ # directory containing ts-<modelname>.exe
+testexedir:  /Users/butrfeld/rtems/src/rtems/build/sparc/leon3/testsuites/validation/ 
 testsuite: model-0
-simulatorargs: -leon3 -r s -m 4  # run command executes "<simulator> <simargs> <testexedir>/ts-<testsuite>.exe"
-spinallscenarios: -DTEST_GEN -run -E -c0 -e # trail generation "spin <spinallscenarios> <model>.pml"
+simulatorargs: -leon3 -r s -m 4  
+spinallscenarios: -DTEST_GEN -run -E -c0 -e 
+disable_negation_at: [] 
+spin_assert: -run -E -c0 -e 
+spin_ltl: -run -E -c0 -e -ltl 
