@@ -366,7 +366,7 @@ def get_model_roots(config):
 
 def get_config(models_dir, model_name=""):
     config = dict()
-    with open("testbuilder.yml") as file:
+    with open(f"{models_dir}/testbuilder.yml") as file:
         global_config = yaml.load(file, Loader=yaml.FullLoader)
         for key, val in global_config.items():
             config[key] = val
