@@ -121,7 +121,9 @@ rather than the `promela/src` one. The overall logic is unchanged.
   1. Move instantiated config YAML files to `models/` (DONE).
   2. Remove any attempts to lookup `src` for "global" settings. Instead these live at the top-level of `models/` (DONE).
   3. Add the contents of `automatic-testgen(-template).yml` next to Spin-related stuff in `testbuilder(-template).yml`(DONE).
-  4. Modify `automatic_testgen.py` to refer to `testbuilder.yml`. Note that it already looks up its stuff from `model_dir` and not `source_dir`.
+  4. Modify `automatic_testgen.py` to refer to `testbuilder.yml`. Note that it already looks up its stuff from `model_dir` and not `source_dir`. (EFFECTIVELY*  DONE)
+
+(*) AutoGen Promela Parser fails on `event-mgr`and others...
 
 
 
