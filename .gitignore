@@ -33,3 +33,5 @@ tc-*.c
 
 model-0-test.log
 pan*
+formal/promela/src/__pycache__
+formal/promela/src/src/modules/promela_yacc/promela/__pycache__
