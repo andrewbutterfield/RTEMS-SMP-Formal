@@ -196,15 +196,15 @@ def write_file(file_name, program):
         f.write(program.__str__())
 
 
-def get_config(source_dir, model_dir=""):
+def get_config(models_dir, model_dir=""):
     config = dict()
     required_keys = {"disable_negation_at", "spin_assert", "spin_ltl"}
-    with open(f"{source_dir}/automatic-testgen.yml") as file:
+    with open(f"{models_dir}/testbuilder.yml") as file:
         global_config = yaml.load(file, Loader=yaml.FullLoader)
         for key, val in global_config.items():
             config[key] = val
     if model_dir:
-        local_config_path = Path(f"{model_dir}/automatic-testgen.yml")
+        local_config_path = Path(f"{model_dir}/testbuilder.yml")
         if local_config_path.exists():
             with open(local_config_path) as file:
                 local_config = yaml.load(file, Loader=yaml.FullLoader)
@@ -213,7 +213,7 @@ def get_config(source_dir, model_dir=""):
                         config[key] = val
     missing_keys = required_keys - config.keys()
     if missing_keys:
-        print("automatic-testgen.yml configuration is incomplete")
+        print("testbuilder.yml configuration is incomplete")
         print("The following configuration items are missing:")
         for key in missing_keys:
             print(key)
@@ -366,6 +366,7 @@ def copy(model_dir, testbuilder_config, refine_config):
 def main(args):
     """generates and deploys C tests from Promela models"""
     source_dir = os.path.dirname(os.path.realpath(__file__))
+    models_dir = os.getcwd()
     if not (len(args) == 2 and args[1] == "help"
             or len(args) == 3 and args[1] == "clean"
             or len(args) == 3 and args[1] == "archive"
@@ -385,19 +386,21 @@ def main(args):
         print(f". {source_dir}/env/bin/activate")
         sys.exit(1)
 
-    config = get_config(source_dir)
-    testbuilder_config = testbuilder.get_config(source_dir)
+    config = get_config(models_dir)
+    testbuilder_config = testbuilder.get_config(models_dir)
     model_to_path = testbuilder.get_model_paths(testbuilder_config)
+    model_to_roots = testbuilder.get_model_roots(config)
     refine_config = dict()
     command = args[1]
     model_name = ""
     if len(args) == 3:
         model_name = args[2]
-        config = get_config(source_dir, model_to_path[model_name])
+        config = get_config(models_dir, model_to_path[model_name])
         testbuilder.check_models_exist([model_name], model_to_path,
                                        testbuilder_config)
-        refine_config = testbuilder.get_refine_config(source_dir, model_name,
-                                                      model_to_path[model_name])
+        refine_config = testbuilder.get_refine_config(models_dir, model_name,
+                                                      model_to_path[model_name],
+                                                      model_to_roots[model_name])
 
     if command == "help":
         with open(f"{source_dir}/automatic_testgen.help") as helpfile:
