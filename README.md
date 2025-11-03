@@ -1,6 +1,13 @@
 # RTEMS SMP Formal
 
-This repository contains the models and tooling developed as part of the ESA-sponsored activity ***Qualification of RTEMS Symmetric Multiprocessing(SMP)***, as well as result of ongoing contributions by students at Trinity College Dublin to improve and extend them.
+This repository contains the models and tooling developed as part of the ESA-sponsored activity ***Qualification of RTEMS Symmetric Multiprocessing
+(SMP)***, as well as result of ongoing contributions by students at Trinity College Dublin to improve and extend them.
+
+**NOTE** This repository is now deprecated as it has now been split into two seperate repos:
+
+* The testbuilder python scripts that implement the test generation and deployment in [PromelaTestBuilder](https://github.com/andrewbutterfield/PromelaTestbuilder). This is the contents of `formal/promela/src`.
+* The Promela models of RTEMS, YAML refinement files, and YAML configuration files that define an RTEMS installation in [RTEMS-SPIN-Tests](https://github.com/andrewbutterfield/RTEMS-SPIN-Tests). This is the contents of `formal/promela/models`.
+  
 
 ## Contributors
 
